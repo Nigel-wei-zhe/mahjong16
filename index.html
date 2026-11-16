@@ -448,10 +448,26 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #lobbyCard .lt .inv{margin-left:auto;padding:5px 10px;border-radius:6px;border:1px solid #e9c46a;background:#e9c46a22;color:var(--gold);font:700 12px/1 inherit;font-family:inherit;letter-spacing:1px}
 #netBan{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:20;background:#2a0d0ee8;border:1px solid #ff8a80;color:#ffd6d0;border-radius:18px;padding:6px 16px;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 14px #000a;animation:tglow 1.4s ease-in-out infinite}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@700&display=swap&text=%E5%90%83%E7%A2%B0%E6%A7%93%E8%83%A1%E8%87%AA%E6%91%B8%E6%B5%81%E5%B1%80%E4%B8%80%E5%9C%88%E5%B0%87%E7%B5%90%E6%9D%9F%E5%86%A0%E8%BB%8D%E5%A2%8A%E5%BA%95%E9%80%A3%E8%8E%8A%E7%89%8C%E5%8F%B0%E6%B4%97%E7%99%BC%E8%A3%9C%E8%8A%B1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@700&display=swap&text=%E5%90%83%E7%A2%B0%E6%A7%93%E8%83%A1%E8%87%AA%E6%91%B8%E6%B5%81%E5%B1%80%E4%B8%80%E5%9C%88%E5%B0%87%E7%B5%90%E6%9D%9F%E5%86%A0%E8%BB%8D%E5%A2%8A%E5%BA%95%E9%80%A3%E8%8E%8A%E7%89%8C%E5%8F%B0%E6%B4%97%E7%99%BC%E8%A3%9C%E8%8A%B1" media="print" onload="this.media='all'">
+<link rel="preload" href="avatars.js" as="script"><link rel="preload" href="voices.js" as="script">
 <script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
+<style>
+#boot{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(ellipse at 50% 40%,#3a1119,#0e0508 75%);color:#f3e9d2;font-family:"Noto Serif TC","Songti TC",serif;transition:opacity .5s}
+#boot.out{opacity:0;pointer-events:none}
+#boot .bl{font-size:clamp(28px,8vmin,46px);font-weight:900;letter-spacing:6px;color:#f6dc8c;text-shadow:0 2px 0 #3a1a06,0 0 18px #ffb84d55}
+#boot .bs{font-size:13px;letter-spacing:3px;opacity:.7}
+#boot .bt{display:flex;gap:6px}#boot .bt i{width:18px;height:24px;border-radius:3px;background:linear-gradient(#fffaf0,#e9dcc0);box-shadow:0 3px 0 #c9922f;animation:bootTile 1.2s ease-in-out infinite}
+#boot .bt i:nth-child(2){animation-delay:.15s}#boot .bt i:nth-child(3){animation-delay:.3s}#boot .bt i:nth-child(4){animation-delay:.45s}
+@keyframes bootTile{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-10px)}}
+#boot .bb{width:min(240px,60vw);height:4px;border-radius:2px;background:#ffffff1a;overflow:hidden}#boot .bb b{display:block;height:100%;width:6%;background:linear-gradient(90deg,#c9922f,#f6dc8c);transition:width .4s}
+</style>
 </head>
 <body>
+<div id="boot"><div class="bl">十六張麻將</div><div class="bt"><i></i><i></i><i></i><i></i></div><div class="bb"><b id="bootBar"></b></div><div class="bs" id="bootMsg">進站中…</div></div>
+<script>function bootStep(t,p){var m=document.getElementById('bootMsg'),b=document.getElementById('bootBar');if(m)m.textContent=t;if(b)b.style.width=p+'%'}
+function bootDone(){var b=document.getElementById('boot');if(!b)return;b.classList.add('out');setTimeout(function(){b.remove()},600)}
+addEventListener('load',function(){setTimeout(bootDone,300)});   // fallback if the game script failed half way
+setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.getElementById('boot')&&!document.getElementById('boot').classList.contains('out'))m.textContent+='（網路較慢，請稍候）'},9000)</script>
 <div id="root">
   <div id="table" class="hide">
     <div id="room"></div>
@@ -480,10 +496,15 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
   <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
   <div class="panel hide" id="result"><div class="card wide res" id="resCard"></div></div>
 </div>
+<script>bootStep('準備牌桌…',12)</script>
 <script src="lib/peerjs.min.js"></script>
+<script>bootStep('載入牌面…',22)</script>
 <script src="tiles.js"></script>
+<script>bootStep('她們正在梳妝打扮…（立繪約 3.5 MB）',35)</script>
 <script src="avatars.js"></script>
+<script>bootStep('載入語音…',82)</script>
 <script src="voices.js"></script>
+<script>bootStep('入座中…',95)</script>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
@@ -1320,6 +1341,7 @@ $('auto').onclick=$('autoBan').onclick=()=>{myAuto=!myAuto;if(R)R.presence({au:m
 window.onT3=()=>{resize();if(!inMenu&&G.st==='play')try{render()}catch(e){}};
 setTimeout(()=>{if(!window.T3)$('glmsg').classList.remove('hide')},12000);   // three.js never loaded
 window.__dbg={G:()=>G,set:(k,v)=>{if(k==='AUTO')AUTO=v;if(k==='SPEED')SPEED=v;if(k==='SIDEK')SIDEK=v},hostTick,canWin,cnt,shanten,calcTai,act,mySeat,setG:g=>{G=g}};
+bootDone();
 </script>
 <script type="module">
 import * as THREE from 'three';
@@ -1393,14 +1415,16 @@ async function init(){
       if(on){q.addColorStop(0,'#fff3c0');q.addColorStop(1,'#d39a2c')}else if(dl){q.addColorStop(0,'#ff6b55');q.addColorStop(1,'#8e1610')}else{q.addColorStop(0,'#3a4658');q.addColorStop(1,'#1a212c')}
       g.fillStyle=q;g.beginPath();g.arc(bx,by,36,0,7);g.fill();g.shadowBlur=0;
       g.lineWidth=3;g.strokeStyle=on||dl?gold(by-36,by+36):'#5a6a80';g.stroke();
-      g.fillStyle=on?'#3a1c04':'#fff';g.font=`900 44px ${SERIF}`;g.textAlign='center';g.textBaseline='middle';g.fillText(v.winds[pos],bx,by+2);
+      const up=(x,y,f)=>{g.save();g.translate(x,y);if(window.UPRIGHT)g.rotate(-a);f();g.restore()};   // UPRIGHT: text faces me whatever side it sits on
+      g.fillStyle=on?'#3a1c04':'#fff';g.font=`900 44px ${SERIF}`;g.textAlign='center';g.textBaseline='middle';up(bx,by+2,()=>g.fillText(v.winds[pos],0,0));
       // score
-      const sc=v.scores[pos];g.textAlign='left';g.font=`800 52px ${SANS}`;
+      const sc=v.scores[pos];g.font=`800 52px ${SANS}`;
       g.fillStyle=sc<0?'#ff8a80':on?'#fff6d8':'#e9d39a';if(on){g.shadowColor='#ffcf5a88';g.shadowBlur=12}
-      g.fillText(String(sc),-110,by+4);g.shadowBlur=0;
+      if(window.UPRIGHT){const side=pos%2===1,mw=side?88:200,w=g.measureText(String(sc)).width;if(w>mw)g.font=`800 ${Math.floor(52*mw/w)}px ${SANS}`;g.textAlign='center';up(-10,by+4,()=>g.fillText(String(sc),0,0))}
+      else{g.textAlign='left';g.fillText(String(sc),-110,by+4)}g.shadowBlur=0;
       // dealer tag
       if(dl){const tx=112,ty=by;g.fillStyle='#b81e18';rr(tx,ty-23,48,46,10);g.fill();g.lineWidth=2.5;g.strokeStyle=gold(ty-23,ty+23);g.stroke();
-        g.fillStyle='#fff';g.font=`900 32px ${SERIF}`;g.textAlign='center';g.fillText('莊',tx+24,ty+2)}
+        g.fillStyle='#fff';g.font=`900 32px ${SERIF}`;g.textAlign='center';up(tx+24,ty+2,()=>g.fillText('莊',0,0))}
       g.restore()});
     // centre window
     g.save();g.shadowColor='#000';g.shadowBlur=18;q=g.createLinearGradient(0,146,0,366);q.addColorStop(0,'#03050a');q.addColorStop(1,'#141b26');
