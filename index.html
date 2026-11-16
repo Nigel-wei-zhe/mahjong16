@@ -325,8 +325,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .hufx.r img{left:auto;right:2%;animation-name:artInR}
 @keyframes artIn{from{transform:translateX(-60%);opacity:0}}@keyframes artInR{from{transform:translateX(60%);opacity:0}}
 .hufx .hut{position:absolute;left:78%;top:46%;transform:translate(-50%,-50%);font:700 min(40vmin,20vw,230px)/1 var(--brush);white-space:nowrap;letter-spacing:.04em;
-  background:linear-gradient(105deg,#e09a1c 0,#fff1b8 18%,#ffe27a 32%,#c97a10 50%,#fff6cf 62%,#ffd54a 78%,#b8660a 100%) 0 0/220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:4px #2a0d04;
-  filter:drop-shadow(0 6px 0 #2a0d04) drop-shadow(0 0 26px var(--c1)) drop-shadow(0 0 6px #fff8);animation:hutIn .55s .42s cubic-bezier(.2,1.6,.35,1) both,shine 1.1s .9s ease-in-out both}
+  color:#ffe490;-webkit-text-stroke:0;   /* solid bright gold; the dark rim is drawn by shadows so thin brush strokes keep their fill */
+  text-shadow:2px 2px 0 #2a0d04,-2px 2px 0 #2a0d04,2px -2px 0 #2a0d04,-2px -2px 0 #2a0d04,0 3px 0 #2a0d04,3px 0 0 #2a0d04,-3px 0 0 #2a0d04,0 -3px 0 #2a0d04,0 7px 0 #2a0d04,0 0 22px #fff3c0,0 0 40px var(--c1);
+  animation:hutIn .55s .42s cubic-bezier(.2,1.6,.35,1) both}
 .hufx.r .hut{left:22%}.hufx .hut.z{font-size:min(30vmin,11vw,180px);letter-spacing:-.04em}
 @keyframes hutIn{0%{transform:translate(-50%,-50%) scale(3.2) rotate(-10deg);opacity:0}45%{transform:translate(-50%,-50%) scale(.92) rotate(-4deg);opacity:1}70%{transform:translate(-50%,-50%) scale(1.05) rotate(-4deg)}100%{transform:translate(-50%,-50%) scale(1) rotate(-4deg);opacity:1}}
 @keyframes shine{from{background-position:100% 0}to{background-position:-20% 0}}
@@ -463,6 +464,43 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #boot .bt i:nth-child(2){animation-delay:.15s}#boot .bt i:nth-child(3){animation-delay:.3s}#boot .bt i:nth-child(4){animation-delay:.45s}
 @keyframes bootTile{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-10px)}}
 #boot .bb{width:min(240px,60vw);height:4px;border-radius:2px;background:#ffffff1a;overflow:hidden}#boot .bb b{display:block;height:100%;width:6%;background:linear-gradient(90deg,#c9922f,#f6dc8c);transition:width .4s}
+
+.cband{position:absolute;left:0;right:0;top:50%;height:min(46%,190px);z-index:12;pointer-events:none;translate:0 -54%;animation:cbandIn 1.1s cubic-bezier(.2,.9,.25,1) forwards}
+.cband .bb{position:absolute;inset:0;clip-path:polygon(0 14%,100% 0,100% 86%,0 100%);background:linear-gradient(90deg,color-mix(in srgb,var(--c2) 85%,#000) 0,#14060cf0 38%,#14060cf0 62%,color-mix(in srgb,var(--c2) 70%,#000) 100%);box-shadow:0 0 30px #000c}
+.cband .bl{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,#0000,var(--c1),#fff3c8,var(--c1),#0000);filter:drop-shadow(0 0 6px var(--c1))}
+.cband .bl.t{display:none}.band .bl.b{bottom:0}
+.cband img{position:absolute;left:6%;bottom:0;height:150%;width:auto;-webkit-mask-image:linear-gradient(#000 70%,#0000);mask-image:linear-gradient(#000 70%,#0000);filter:drop-shadow(0 6px 14px #000c);animation:cbandArt 1.1s cubic-bezier(.2,.9,.25,1) forwards}
+.cband .bt{position:absolute;right:10%;top:50%;translate:0 -50%;text-align:center;animation:cbandTxt 1.1s cubic-bezier(.2,1.4,.3,1) forwards}
+.cband .bt b{display:block;font:900 min(26vmin,118px)/1 "LXGW WenKai TC",var(--serif);color:#ffe7a6;-webkit-text-stroke:2px #3a1a06;text-shadow:0 4px 0 #3a1a06,0 0 26px var(--c1),0 0 60px #ffb84d88}
+.cband .bt span{display:block;margin-top:2px;font:800 min(4vmin,17px)/1.2 system-ui;letter-spacing:5px;color:#fff3d6;text-shadow:0 1px 3px #000}
+.cband .sh{position:absolute;inset:0;clip-path:polygon(0 14%,100% 0,100% 86%,0 100%);background:linear-gradient(100deg,#0000 30%,#fff6 48%,#0000 56%) -60% 0/60% 100% no-repeat;animation:cbandShine .7s .12s ease-out forwards}
+.cband.kan .bt b{color:#fff;text-shadow:0 4px 0 #3a1a06,0 0 30px #ff6a4a,0 0 70px #ff3a2a}
+@keyframes cbandIn{0%{opacity:0;scale:1 .1}12%{opacity:1;scale:1 1}82%{opacity:1;scale:1 1}100%{opacity:0;scale:1 .6}}
+@keyframes cbandArt{0%{translate:-60% 0;opacity:0}16%{translate:0 0;opacity:1}82%{translate:3% 0;opacity:1}100%{translate:12% 0;opacity:0}}
+@keyframes cbandTxt{0%{scale:2.6;opacity:0}18%{scale:1;opacity:1}82%{scale:1.04;opacity:1}100%{scale:1.15;opacity:0}}
+@keyframes cbandShine{to{background-position:160% 0}}
+@media (prefers-reduced-motion:reduce){.cband,.cband img,.cband .bt,.cband .sh{animation-duration:.01s}}
+
+/* duel */
+.duedge{position:absolute;inset:0;z-index:13;pointer-events:none;animation:duEdge 2.6s ease-out forwards}
+.duedge.gold{box-shadow:inset 0 0 60px 10px #ffcf5aaa,inset 0 0 0 3px #ffe08a}.duedge.red{box-shadow:inset 0 0 70px 14px #8a0a10cc,inset 0 0 0 3px #c0241c}
+@keyframes duEdge{0%{opacity:0}15%{opacity:1}75%{opacity:1}100%{opacity:0}}
+.sw.struck{animation:duShake .45s cubic-bezier(.3,.6,.4,1);filter:grayscale(.85) brightness(.7) contrast(1.05)!important;transition:filter .2s}
+@keyframes duShake{0%,100%{translate:0}20%{translate:-7px 2px}40%{translate:6px -2px}60%{translate:-4px 1px}80%{translate:3px 0}}
+.duhit{position:absolute;z-index:11;pointer-events:none;width:0;height:0}
+.duhit .ring{position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;border:3px solid #ffe08a;box-shadow:0 0 22px #ffcf5a,inset 0 0 18px #fff8;animation:duRing .55s ease-out forwards}
+.duhit .crack{position:absolute;left:-40px;top:-40px;width:80px;height:80px;background:radial-gradient(closest-side,#fff,#ffe08a 35%,#0000 70%);mix-blend-mode:screen;animation:duRing .4s ease-out forwards}
+@keyframes duRing{0%{scale:.2;opacity:1}100%{scale:1.6;opacity:0}}
+.duseal{position:absolute;z-index:12;pointer-events:none;translate:-50% 0;padding:3px 12px;border:2px solid #ff6a5a;border-radius:6px;color:#ffd8d0;background:#5a0a10e6;font:900 18px/1.2 "LXGW WenKai TC",var(--serif);letter-spacing:4px;box-shadow:0 0 14px #c0241caa;rotate:-8deg;animation:duSeal 2.4s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes duSeal{0%{scale:2.4;opacity:0}12%{scale:1;opacity:1}80%{opacity:1}100%{opacity:0}}
+.t.dufly{position:absolute;z-index:12;pointer-events:none;width:calc(var(--tw)*.9);height:calc(var(--tw)*1.2);translate:-50% -50%;box-shadow:0 0 18px #ffcf5a,0 0 4px #fff;animation:duFly .62s cubic-bezier(.5,0,.3,1) forwards}
+@keyframes duFly{0%{transform:scale(1) rotate(0)}25%{transform:translate(0,-26px) scale(1.25) rotate(-8deg)}100%{transform:translate(var(--tx),var(--ty)) scale(.7) rotate(12deg);opacity:.2}}
+.sw.dimmed{filter:brightness(.45) saturate(.5)!important;transition:filter .3s}
+.hufx .dulo{position:absolute;left:50%;translate:-50% 0;bottom:2%;width:min(22%,138px);text-align:center;animation:duLo .5s .45s cubic-bezier(.2,.9,.3,1) both}
+.hufx .dulo img{position:static;display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:50% 6%;max-width:none;max-height:none;-webkit-mask-image:linear-gradient(#000 70%,#0000),linear-gradient(90deg,#0000,#000 14%,#000 86%,#0000);-webkit-mask-composite:source-in;mask-image:linear-gradient(#000 70%,#0000),linear-gradient(90deg,#0000,#000 14%,#000 86%,#0000);mask-composite:intersect;filter:saturate(.6) brightness(.82);animation:none}   /* no drop-shadow: the mask would cut its glow into a box */
+.hufx .dulo span{display:block;margin-top:4px;font:800 min(3.6vmin,15px)/1.2 system-ui;letter-spacing:3px;color:#c8d4ea;text-shadow:0 1px 3px #000}
+.hufx .dulo em{font-style:normal;margin-left:6px;color:#ff8a80}
+@keyframes duLo{0%{opacity:0;margin-bottom:-30px}100%{opacity:1;margin-bottom:0}}
 </style>
 </head>
 <body>
@@ -1092,7 +1130,7 @@ function renderTable(){
   if(G.res&&G.res.d&&ms>=0)lastDelta=G.res.d[ms];
   // windows light up for the seat to act; while others may claim, the one who just discarded stays lit
   WINK.forEach((k,pos)=>{const s=(me+pos)%4,lit=live&&(G.ph==='claim'&&G.last?G.last.f===s:G.turn===s);
-    placeWin(k,s,lit,live,pos===0&&ms>=0&&lastDelta?`<span class="delta">${fmt(lastDelta)}</span>`:'')});
+    placeWin(k,s,lit,live,'')});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
   const lastKey=G.last&&live?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k:'',isNew=!!lastKey&&lastKey!==shownLast;
   if(isNew){sfx('clack');voice(G.last.f,'t'+G.last.k,1.3)}shownLast=lastKey;
   {const hk=G.dealer+':'+G.ju+':'+G.lian+':'+(G.score||[]).join(',');if(hk!==flHand){flHand=hk;WPOSE=WPOSE.map(()=>Math.random()*3|0);flSeen=G.fl.map(x=>x.length);if(G.st==='play'&&G.ph!=='end'&&G.first&&G.disc.every(d=>!d))startIntro();if(G.st==='play'&&G.ph!=='end'){if(lastResD){const me=mySeat();lastResD.forEach((v,i)=>{if(v<0&&i!==me&&isBot(i))setMood(i,'L',9000)});lastResD=null}if(G.lian>0)quip(G.dealer,'lian',900)}}else G.fl.forEach((x,i)=>{if(x.length>flSeen[i]){flSeen[i]=x.length;voice(i,'flower',1.3)}})}
@@ -1260,23 +1298,41 @@ function cutIn(seat,text){
   const sw=pos>0?$('sw'+WINK[pos]):null;if(sw){sw.classList.remove('pop');void sw.offsetWidth;sw.classList.add('pop')}
   if(big){const art=a&&(a.w||a.p||a.t)||'';return whenArt([art],700,()=>winFx(seat,pos,text,a,col))}
   // chow / pong / kong: the character's call art from her side, plus a brush stamp in front of her seat
-  const asrc=a&&(text==='吃'&&a.c?a.c:text==='碰'&&a.p?a.p:'');
+  const asrc=a&&(text==='吃'&&a.c?a.c:a.p||a.c||'');   // kong has no art of its own: borrow the pong one
   whenArt([asrc],400,()=>actFx(seat,pos,text,asrc,col,sw))}
+/* chow / pong / kong, same for all four seats: a slanted band sweeps across the middle of the screen,
+   her call art slides in on the left, a big gold brush character lands on the right with her seat wind and name */
 function actFx(seat,pos,text,asrc,col,sw){
-  if(asrc){
-    const d=document.createElement('div');d.className='cut act p'+pos;d.style.setProperty('--c1',col[0]);d.style.setProperty('--c2',col[1]);
-    d.innerHTML=`<div class="cb"></div><img alt="" class="ai" src="${asrc}"><span class="cn">${esc(nameOf(seat))}</span>`;
-    if(sw){sw.classList.add('cuthide');setTimeout(()=>sw.classList.remove('cuthide'),820)}root.appendChild(d);setTimeout(()=>d.remove(),900)}
-  let pt=window.T3&&T3.ptSeat?T3.ptSeat(pos,pos===0?2.5:pos===2?0:-1.5,pos===0?8.6:pos===2?7.6:5.4):{x:RW/2,y:RH/2};   // side seats: toward the centre, clear of the call art
-  if(pos===0){pt.y=Math.min(pt.y,RH*.62);if(asrc){pt.x=RW*.4;pt.y=RH*.44}}
-  else if(pos===2&&asrc){pt.x=RW*.64;pt.y=RH*.27}   // beside her art, not on her face
-  const st=document.createElement('div');st.className='stamp'+(text==='槓'?' kan':'');st.style.left=pt.x+'px';st.style.top=pt.y+'px';st.style.setProperty('--c1',col[0]);
-  st.innerHTML=`<i class="rays"></i><svg class="ink" viewBox="-100 -100 200 200"><g filter="url(#inkf)" fill="${col[1]}"><circle r="52"/><circle cx="58" cy="-30" r="12"/><circle cx="-62" cy="22" r="9"/><circle cx="30" cy="62" r="7"/><circle cx="-36" cy="-60" r="6"/></g></svg><i class="ring"></i><b>${text}</b>`;
-  root.appendChild(st);setTimeout(()=>st.remove(),1100);
-  if(window.T3&&T3.shake)T3.shake(text==='槓'?420:220,text==='槓'?.55:.22)}
+  const d=document.createElement('div');d.className='cband'+(text==='槓'?' kan':'');d.style.setProperty('--c1',col[0]);d.style.setProperty('--c2',col[1]);
+  const wind=G&&G.dealer!=null?WIND[(seat-G.dealer+4)%4]:'';
+  d.innerHTML=`<div class="bb"></div><i class="bl t"></i><i class="bl b"></i>${asrc?`<img alt="" src="${asrc}">`:''}<div class="bt"><b>${text}</b><span>${esc(wind?wind+'家・':'')}${esc(nameOf(seat))}</span></div><i class="sh"></i>`;
+  if(sw){sw.classList.add('cuthide');setTimeout(()=>sw.classList.remove('cuthide'),1000)}
+  root.appendChild(d);setTimeout(()=>d.remove(),1150);
+  if(window.T3&&T3.shake)T3.shake(text==='槓'?420:200,text==='槓'?.55:.2)}
 // win: dim + zoom lines, lightning onto the winning tile (or the winner's seat on a self-draw), flash, character band, giant gold text, sparks
+/* win and deal-in as one beat: the tile is struck in the loser's river (her window greys out, red 放槍 seal),
+   it flies to the winner, then the win banner opens with the loser shown small and cold on the other side.
+   self-draw: only the winner, the other three dim. your own stake tints the screen edge (gold you won / dark red you paid) */
 function winFx(seat,pos,text,a,col){
+  const zimo=text==='自摸',lo=!zimo&&G.res&&G.res.f>=0?G.res.f:-1,ms=Math.max(0,mySeat()),me=mySeat();
+  const edge=me<0?'':seat===me?'gold':(lo===me||(zimo&&G.res&&G.res.d&&G.res.d[me]<0))?'red':'';
+  if(edge){const e=document.createElement('i');e.className='duedge '+edge;root.appendChild(e);setTimeout(()=>e.remove(),2700)}
+  if(lo<0){winCore(seat,pos,text,a,col,null);return}
+  const lpos=(lo-ms+4)%4,lsw=lpos>0?$('sw'+WINK[lpos]):$('swB'),tg=(window.T3&&T3.ptLast&&T3.ptLast())||{x:RW/2,y:RH/2};
+  if(lsw){lsw.classList.remove('struck');void lsw.offsetWidth;lsw.classList.add('struck');setTimeout(()=>lsw.classList.remove('struck'),2600)}
+  const hit=document.createElement('div');hit.className='duhit';hit.style.left=tg.x+'px';hit.style.top=tg.y+'px';hit.innerHTML='<i class="ring"></i><i class="crack"></i>';root.appendChild(hit);setTimeout(()=>hit.remove(),900);
+  if(lsw){const r=lsw.getBoundingClientRect?{x:lsw.offsetLeft+lsw.offsetWidth/2,y:lsw.offsetTop+lsw.offsetHeight}:null;
+    if(r){const sl=document.createElement('div');sl.className='duseal';sl.textContent='放槍';sl.style.left=r.x+'px';sl.style.top=Math.min(RH-40,r.y+4)+'px';root.appendChild(sl);setTimeout(()=>sl.remove(),760)}}
+  // the winning tile flies from the river to the winner
+  const wsw=pos>0?$('sw'+WINK[pos]):$('swB'),k=G.res&&G.res.k!=null?G.res.k:(G.last?G.last.k:-1);
+  if(k>=0&&wsw){const f=document.createElement('div');f.className='t dufly k'+k;f.style.left=tg.x+'px';f.style.top=tg.y+'px';
+    f.style.setProperty('--tx',(wsw.offsetLeft+wsw.offsetWidth/2-tg.x)+'px');f.style.setProperty('--ty',(wsw.offsetTop+wsw.offsetHeight*.5-tg.y)+'px');root.appendChild(f);setTimeout(()=>f.remove(),800)}
+  try{sfx('pon')}catch(_){}
+  const la=window.AVATARS&&window.AVATARS[chr(lo)];
+  setTimeout(()=>winCore(seat,pos,text,a,col,{seat:lo,art:la&&(la.X||la.n||la.t)||''}),620)}
+function winCore(seat,pos,text,a,col,loser){
   const d=document.createElement('div'),R=pos===1,zimo=text==='自摸';d.className='hufx'+(R?' r':'');d.style.setProperty('--c1',col[0]);d.style.setProperty('--c2',col[1]);
+  if(zimo){const ms=Math.max(0,mySeat());for(let s=0;s<4;s++)if(s!==seat){const w=(s-ms+4)%4,el=w>0?$('sw'+WINK[w]):$('swB');if(el){el.classList.add('dimmed');setTimeout(()=>el.classList.remove('dimmed'),2200)}}}
   let tg=(!zimo&&window.T3&&T3.ptLast&&T3.ptLast())||(window.T3&&T3.ptSeat?T3.ptSeat(pos,0,pos===0?8.6:7.6):{x:RW/2,y:RH/2});
   // a jagged bolt from above the screen to the target, with two short branches
   const pts=[];let x=tg.x+(Math.random()*2-1)*RW*.12,y=-20;const n=9;
@@ -1287,7 +1343,8 @@ function winFx(seat,pos,text,a,col){
   let sp='';for(let i=0;i<18;i++)sp+=`<i class="sp" style="--a:${(i*20+Math.random()*12).toFixed(0)}deg;--d:${(90+Math.random()*110).toFixed(0)}px;--dl:${(Math.random()*.12).toFixed(2)}s"></i>`;
   d.innerHTML=`<i class="dim"></i><i class="zoom"></i><svg class="bolt" viewBox="0 0 ${RW} ${RH}"><path class="g" d="${P(pts)}"/><path class="w" d="${P(pts)}"/>${br.map(b=>`<path class="br" d="${b}"/>`).join('')}</svg>`+
     `<i class="hit" style="left:${tg.x}px;top:${tg.y}px"></i><i class="flash"></i><div class="band"></div>${art?`<img alt="" src="${art}">`:''}`+
-    `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`;
+    `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`+
+    (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>放槍</em></span></div>`:'');
   root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9)},170);setTimeout(()=>d.remove(),2000)}
 function render(){
   if(G.v!==lastV){lastV=G.v;pending=false;sel=-1;phaseStart=performance.now()}
