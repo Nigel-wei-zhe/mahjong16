@@ -1357,30 +1357,63 @@ async function init(){
     const lip=new THREE.Mesh(new THREE.BoxGeometry(FELT+.5,.25,FELT+.5),new THREE.MeshStandardMaterial({color:0xc9973f,roughness:.4,metalness:.6}));lip.position.y=-.2;scene.add(lip)}
 
   // centre compass: round, tiles left, the four winds and scores facing their seats; redrawn when any of it changes
-  const cc=document.createElement('canvas');cc.width=cc.height=512;const cg=cc.getContext('2d');
+  const cc=document.createElement('canvas');cc.width=cc.height=1024;const cg=cc.getContext('2d');
   const ctex=new THREE.CanvasTexture(cc);ctex.colorSpace=THREE.SRGBColorSpace;ctex.anisotropy=8;
-  const cside=new THREE.MeshStandardMaterial({color:0x1b2430,roughness:.5}),ctop=new THREE.MeshStandardMaterial({map:ctex,roughness:.5});
+  const cside=new THREE.MeshStandardMaterial({color:0x9a7430,metalness:.65,roughness:.32}),ctop=new THREE.MeshStandardMaterial({map:ctex,roughness:.38,metalness:.05});
   const cbox=new THREE.Mesh(new RoundedBoxGeometry(5.6,.35,5.6,2,.3),[cside,cside,ctop,cside,cside,cside]);
   cbox.position.y=.17;cbox.castShadow=true;cbox.receiveShadow=true;scene.add(cbox);
   const SERIF='"Noto Serif TC","Songti TC","PMingLiU",serif',SANS='system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif';
   let cKey='';
+  /* Mahjong Soul style: glossy black plate, double gold rim, a recessed round window, the seat to play lit by a gold bar on its side */
   function drawCompass(v){
     const key=[v.round,v.lian,v.left,v.winds,v.scores,v.dealer,v.turn].join('|');if(key===cKey)return;cKey=key;
-    const g=cg;g.clearRect(0,0,512,512);
-    g.fillStyle='#1b2430';g.beginPath();g.roundRect(16,16,480,480,70);g.fill();g.strokeStyle='#c9973f';g.lineWidth=8;g.stroke();
-    g.fillStyle='#0c1218';g.beginPath();g.roundRect(150,150,212,212,30);g.fill();
-    g.textAlign='center';g.textBaseline='middle';
-    g.fillStyle='#ffd54a';g.font=`bold 44px ${SANS}`;g.fillText(v.round,256,v.lian?205:222);
-    if(v.lian){g.fillStyle='#ff9d80';g.font=`bold 28px ${SANS}`;g.fillText('連'+v.lian,256,244)}
-    g.fillStyle='#7fe3ff';g.font=`bold 64px ${SANS}`;g.fillText(String(v.left),256,v.lian?302:296);
+    const g=cg;g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,512,512);
+    const rr=(x,y,w,h,r)=>{g.beginPath();g.roundRect(x,y,w,h,r)};
+    const gold=(y0,y1)=>{const q=g.createLinearGradient(0,y0,0,y1);q.addColorStop(0,'#fff0b8');q.addColorStop(.45,'#e0b456');q.addColorStop(1,'#8a5f1c');return q};
+    // plate
+    let q=g.createRadialGradient(200,150,20,256,256,380);q.addColorStop(0,'#2e3646');q.addColorStop(.55,'#161b25');q.addColorStop(1,'#07090d');
+    g.fillStyle=q;rr(8,8,496,496,64);g.fill();
+    g.lineWidth=7;g.strokeStyle=gold(8,504);rr(12,12,488,488,60);g.stroke();
+    g.lineWidth=1.5;g.strokeStyle='#c9973f99';rr(30,30,452,452,46);g.stroke();
+    // faint fan pattern
+    g.save();g.translate(256,256);g.strokeStyle='#ffffff08';g.lineWidth=1;for(let i=0;i<48;i++){g.rotate(Math.PI/24);g.beginPath();g.moveTo(0,130);g.lineTo(0,220);g.stroke()}g.restore();
+    // corner diamonds
+    for(const [x,y] of [[46,46],[466,46],[46,466],[466,466]]){g.save();g.translate(x,y);g.rotate(Math.PI/4);g.fillStyle=gold(-7,7);g.fillRect(-6,-6,12,12);g.restore()}
+    // seats: turn bar, wind badge, score
     [0,-Math.PI/2,Math.PI,Math.PI/2].forEach((a,pos)=>{
-      const on=v.turn===pos;g.save();g.translate(256,256);g.rotate(a);
-      if(on){g.fillStyle='#ffd54a';g.shadowColor='#ffd54a';g.shadowBlur=22;g.beginPath();g.roundRect(-126,224,252,9,4);g.fill()}
-      g.fillStyle=on?'#ffd54a':pos===v.dealer?'#c0241c':'#2a3644';g.beginPath();g.roundRect(-200,150,64,64,10);g.fill();g.shadowBlur=0;
-      g.fillStyle=on?'#2a1406':'#fff';g.font=`bold 42px ${SERIF}`;g.fillText(v.winds[pos],-168,184);
-      g.fillStyle=v.scores[pos]<0?'#ff8a80':on?'#fff3c4':'#f0d27a';g.font=`bold 40px ${SANS}`;g.fillText(String(v.scores[pos]),pos===v.dealer?-6:8,188);
-      if(pos===v.dealer){g.fillStyle='#c0241c';g.beginPath();g.roundRect(100,162,52,52,10);g.fill();g.strokeStyle='#ffd54a';g.lineWidth=3;g.stroke();g.fillStyle='#fff';g.font=`bold 34px ${SERIF}`;g.fillText('莊',126,189)}   // the dealer mark stays even when her turn lights the wind box
+      const on=v.turn===pos,dl=pos===v.dealer;g.save();g.translate(256,256);g.rotate(a);
+      // light bar along the window
+      if(on){g.shadowColor='#ffcf5a';g.shadowBlur=26;q=g.createLinearGradient(-118,0,118,0);q.addColorStop(0,'#ffcf5a00');q.addColorStop(.2,'#ffd76a');q.addColorStop(.5,'#fff6cf');q.addColorStop(.8,'#ffd76a');q.addColorStop(1,'#ffcf5a00');g.fillStyle=q}
+      else g.fillStyle='#2b3442';
+      rr(-112,124,224,8,4);g.fill();g.shadowBlur=0;
+      // wind badge
+      const bx=-160,by=186;
+      if(on){g.shadowColor='#ffcf5a';g.shadowBlur=18}
+      q=g.createRadialGradient(bx-8,by-10,4,bx,by,38);
+      if(on){q.addColorStop(0,'#fff3c0');q.addColorStop(1,'#d39a2c')}else if(dl){q.addColorStop(0,'#ff6b55');q.addColorStop(1,'#8e1610')}else{q.addColorStop(0,'#3a4658');q.addColorStop(1,'#1a212c')}
+      g.fillStyle=q;g.beginPath();g.arc(bx,by,36,0,7);g.fill();g.shadowBlur=0;
+      g.lineWidth=3;g.strokeStyle=on||dl?gold(by-36,by+36):'#5a6a80';g.stroke();
+      g.fillStyle=on?'#3a1c04':'#fff';g.font=`900 44px ${SERIF}`;g.textAlign='center';g.textBaseline='middle';g.fillText(v.winds[pos],bx,by+2);
+      // score
+      const sc=v.scores[pos];g.textAlign='left';g.font=`800 52px ${SANS}`;
+      g.fillStyle=sc<0?'#ff8a80':on?'#fff6d8':'#e9d39a';if(on){g.shadowColor='#ffcf5a88';g.shadowBlur=12}
+      g.fillText(String(sc),-110,by+4);g.shadowBlur=0;
+      // dealer tag
+      if(dl){const tx=112,ty=by;g.fillStyle='#b81e18';rr(tx,ty-23,48,46,10);g.fill();g.lineWidth=2.5;g.strokeStyle=gold(ty-23,ty+23);g.stroke();
+        g.fillStyle='#fff';g.font=`900 32px ${SERIF}`;g.textAlign='center';g.fillText('莊',tx+24,ty+2)}
       g.restore()});
+    // centre window
+    g.save();g.shadowColor='#000';g.shadowBlur=18;q=g.createLinearGradient(0,146,0,366);q.addColorStop(0,'#03050a');q.addColorStop(1,'#141b26');
+    g.fillStyle=q;rr(146,146,220,220,34);g.fill();g.restore();
+    g.lineWidth=2;g.strokeStyle='#c9973f';rr(146,146,220,220,34);g.stroke();
+    g.lineWidth=1;g.strokeStyle='#ffffff14';rr(154,154,204,204,28);g.stroke();
+    g.textAlign='center';g.textBaseline='middle';
+    const r=String(v.round),r1=r.slice(0,2),r2=r.slice(2);
+    g.fillStyle='#c9a45a';g.font=`700 28px ${SERIF}`;g.fillText(r1+'圈',256,182);
+    g.fillStyle=gold(196,250);g.font=`900 64px ${SERIF}`;g.shadowColor='#000';g.shadowBlur=6;g.fillText(r2,256,228);g.shadowBlur=0;
+    if(v.lian){g.fillStyle='#b81e18';rr(204,262,104,30,15);g.fill();g.fillStyle='#ffe4d8';g.font=`800 22px ${SANS}`;g.fillText('連莊 '+v.lian,256,278)}
+    g.fillStyle='#8aa6c0';g.font=`700 24px ${SANS}`;g.fillText('餘',208,326);
+    g.fillStyle='#7fe3ff';g.font=`800 56px ${SANS}`;g.shadowColor='#3fc8ff';g.shadowBlur=14;g.fillText(String(v.left),266,326);g.shadowBlur=0;
     ctex.needsUpdate=true}
 
   scene.add(new THREE.HemisphereLight(0xfff2dc,0x40202a,1.1));
