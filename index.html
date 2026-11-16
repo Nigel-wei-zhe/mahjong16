@@ -438,6 +438,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #menu .card .or{display:flex;align-items:center;gap:8px;margin:2px 0;font-size:11px;color:#f3e9d266;letter-spacing:2px}#menu .card .or::before,#menu .card .or::after{content:"";flex:1;height:1px;background:#b8862b44}
 #menu .card #solo.prime,#menu .card #create:not(:disabled){background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6;box-shadow:inset 0 1px 0 #fff8,0 3px 0 #6a4510}
 #menu .card #create:disabled{background:#0000;color:#e6d3a066;border-color:#e6d3a033}
+
+#lobbyCard .lt .inv{margin-left:auto;padding:5px 10px;border-radius:6px;border:1px solid #e9c46a;background:#e9c46a22;color:var(--gold);font:700 12px/1 inherit;font-family:inherit;letter-spacing:1px}
+#netBan{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:20;background:#2a0d0ee8;border:1px solid #ff8a80;color:#ffd6d0;border-radius:18px;padding:6px 16px;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 14px #000a;animation:tglow 1.4s ease-in-out infinite}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@700&display=swap&text=%E5%90%83%E7%A2%B0%E6%A7%93%E8%83%A1%E8%87%AA%E6%91%B8%E6%B5%81%E5%B1%80%E4%B8%80%E5%9C%88%E5%B0%87%E7%B5%90%E6%9D%9F%E5%86%A0%E8%BB%8D%E5%A2%8A%E5%BA%95%E9%80%A3%E8%8E%8A%E7%89%8C%E5%8F%B0%E6%B4%97%E7%99%BC%E8%A3%9C%E8%8A%B1">
 <script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
@@ -467,6 +470,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
 
+  <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
   <div class="panel hide" id="result"><div class="card wide res" id="resCard"></div></div>
 </div>
 <script src="lib/peerjs.min.js"></script>
@@ -701,60 +705,87 @@ function hostTick(){
   else if(G.ph==='end'){if(AUTO&&now>=tAt)nextHand()}}
 
 
-/* ---------- PeerJS room: the same surface the game uses from claude.ai's room (join → presence / peers) ----------
-   star topology: whoever holds the peer id "mj16-<code>" is the hub; everyone else connects to it.
-   each player has a stable id for this tab (seats are keyed by it), sends its whole presence to the hub, the hub rebroadcasts the table.
-   if the hub drops, the others race to take over its id and everyone resends their presence, so the game carries on. */
-function peerNet(){
-  let cid='';try{cid=sessionStorage.getItem('mjCid')||''}catch(e){}
-  if(!cid){cid=Math.random().toString(36).slice(2,10);try{sessionStorage.setItem('mjCid',cid)}catch(e){}}
-  return{join(name){
-    const HUB='mj16-'+name.replace(/[^a-z0-9-]/gi,'').toLowerCase();
-    let me={},table=new Map(),peer=null,hubConn=null,conns=new Map(),isHubNow=false,bt=0,dead=false,ready;
-    const sendHub=()=>{if(isHubNow){table.set(cid,me);bcast()}else if(hubConn&&hubConn.open)try{hubConn.send({t:'p',cid,pres:me})}catch(e){}};
-    const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;const tbl=[...table];for(const c of conns.values())if(c.open)try{c.send({t:'tbl',tbl})}catch(e){}},40)};
-    // signalling dropped (not the data links): reconnect that same peer, unless it was thrown away
-    const keep=pp=>pp.on('disconnected',()=>{if(pp===peer&&!pp.destroyed)try{pp.reconnect()}catch(_){}});
-    function start(first){
-      return new Promise((res,rej)=>{
-        let done=false;const ok=()=>{if(!done){done=true;res()}},bad=e=>{if(!done){done=true;rej(e)}};
-        setTimeout(()=>bad({code:'逾時'}),12000);
-        peer=new Peer(HUB,{debug:0});keep(peer);
-        peer.on('open',()=>{isHubNow=true;table=new Map([[cid,me]]);bcast();ok()});
-        peer.on('connection',c=>{c.on('data',m=>{if(!m||m.t!=='p'||typeof m.cid!=='string')return;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast()});
-          c.on('close',()=>{if(c._cid&&conns.get(c._cid)===c){conns.delete(c._cid);table.delete(c._cid);bcast()}})});
-        peer.on('error',e=>{
-          if(e.type==='unavailable-id'){   // the hub exists: join it as a client
-            try{peer.destroy()}catch(_){}
-            peer=new Peer({debug:0});keep(peer);
-            peer.on('open',()=>{hubConn=peer.connect(HUB,{reliable:true});
-              hubConn.on('open',()=>{isHubNow=false;sendHub();ok()});
-              hubConn.on('data',m=>{if(m&&m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);table.set(cid,me)}});
-              hubConn.on('close',()=>lost());hubConn.on('error',()=>lost())});
-            peer.on('error',e2=>{if(e2.type==='peer-unavailable'){if(!done)setTimeout(()=>{try{peer.destroy()}catch(_){}start().then(ok,bad)},300+Math.random()*500);else lost()}else bad({code:e2.type})});
-          }else if(first)bad({code:e.type});else lost()});
-      })}
-    let relosing=false;
-    function lost(){   // hub gone: take over or reconnect, with a little random delay so one of us wins the id
-      if(dead||relosing)return;relosing=true;hubConn=null;
-      table=new Map([[cid,me]]);   // the others re-add themselves when they reconnect
-      setTimeout(()=>{try{peer.destroy()}catch(_){}start(false).then(()=>{relosing=false;sendHub()},()=>{relosing=false;setTimeout(lost,1500)})},200+Math.random()*900)}
-    ready=start(true);
-    const room={
-      presence(patch){for(const k in patch){if(patch[k]===null)delete me[k];else me[k]=patch[k]}table.set(cid,me);sendHub();return Promise.resolve()},
-      peers(){return [...table].map(([id,pr])=>({peer:id,isMe:id===cid,sameTab:id===cid,kind:'viewer',presence:pr}))},
-      leave(){dead=true;try{peer.destroy()}catch(e){}}};
+/* ---------- PeerJS room (outside claude.ai): the same surface the game uses from claude.ai's room (join → presence / peers), plus private state ----------
+   star topology: the host claims the peer id "mj16-<code>" (the room code) and is the game server; everyone else connects to it.
+   players are keyed by a stable id kept per tab (seats use it), so a refresh keeps your seat.
+   the host's full state never leaves its machine: each client gets its own view (setG → redact), with the wall and the other hands hidden.
+   a client that loses the host retries the same room every few seconds; a host that refreshes takes its old id back (see resumeHost). */
+const PEER_CFG={debug:0,config:{iceServers:[
+  {urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},
+  // TURN for strict NATs / mobile carriers, fill in and uncomment:
+  // {urls:'turn:turn.example.com:3478',username:'user',credential:'pass'},
+]}};
+const HID='~';   // a hidden tile
+function redact(G,seat){
+  if(!G||!G.hands)return G;const g=JSON.parse(JSON.stringify(G)),end=G.ph==='end';
+  if(typeof g.wall==='string')g.wall=HID.repeat(g.wall.length);
+  for(let s=0;s<4;s++){if(s===seat||(end&&G.res&&G.res.w===s))continue;
+    g.hands[s]=HID.repeat(g.hands[s].length);g.melds[s]=g.melds[s].map(m=>m[0]==='a'?'a'+HID:m)}
+  if(g.turn!==seat)g.drawn=null;return g}
+function peerNet(opt){
+  opt=opt||{};let cid=opt.cid||'';try{cid=cid||sessionStorage.getItem('mjCid')||''}catch(e){}
+  if(!cid)cid=Math.random().toString(36).slice(2,10);try{sessionStorage.setItem('mjCid',cid)}catch(e){}
+  return{cid,join(name,jo){
+    jo=jo||{};const HUB='mj16-'+name.replace(/[^a-z0-9-]/gi,'').toLowerCase();
+    let me={},table=new Map(),peer=null,hubConn=null,hubCid='',conns=new Map(),hub=false,bt=0,dead=false,hostG=null,lastG=null,retry=0;
+    const room={status:'connecting',cid};
+    const viewFor=c=>redact(lastG,lastG&&lastG.seats?lastG.seats.indexOf(c):-1);
+    const sendTo=(c,id)=>{try{c.send({t:'tbl',hub:cid,tbl:[...table]});if(lastG)c.send({t:'G',G:viewFor(id)})}catch(e){}};
+    const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;for(const [id,c] of conns)if(c.open)try{c.send({t:'tbl',hub:cid,tbl:[...table]})}catch(e){}},40)};
+    const keep=pp=>pp.on('disconnected',()=>{if(pp===peer&&!pp.destroyed&&!dead)try{pp.reconnect()}catch(_){}});
+    function asHub(res){hub=true;room.status='ok';table=new Map([[cid,me]]);hubCid=cid;
+      peer.on('connection',c=>{c.on('data',m=>{if(!m||m.t!=='p'||typeof m.cid!=='string')return;const fresh=conns.get(m.cid)!==c;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast();if(fresh)sendTo(c,m.cid)});
+        c.on('close',()=>{if(c._cid&&conns.get(c._cid)===c){conns.delete(c._cid);table.delete(c._cid);bcast()}})});res()}
+    function asClient(res,rej){hub=false;
+      const pp=new Peer(PEER_CFG);peer=pp;keep(pp);
+      pp.on('open',()=>{const c=pp.connect(HUB,{reliable:true});hubConn=c;
+        c.on('open',()=>{retry=0;room.status='ok';try{c.send({t:'p',cid,pres:me})}catch(e){}res&&res();res=null});
+        c.on('data',m=>{if(!m)return;if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
+        c.on('close',lost);c.on('error',lost)});
+      pp.on('error',e=>{if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
+    function lost(){   // the host went away: keep trying the same room (the host may be refreshing)
+      if(dead||hub||room.status==='retry')return;room.status='retry';hubConn=null;
+      const go=()=>{if(dead)return;try{peer&&peer.destroy()}catch(_){}room.status='retry';
+        asClient(null,()=>{});setTimeout(()=>{if(room.status!=='ok'&&!dead)go()},4000)};
+      setTimeout(go,1500)}
+    room.presence=patch=>{for(const k in patch){if(patch[k]===null)delete me[k];else me[k]=patch[k]}table.set(cid,me);
+      if(hub)bcast();else if(hubConn&&hubConn.open)try{hubConn.send({t:'p',cid,pres:me})}catch(e){}return Promise.resolve()};
+    room.setG=G=>{lastG=G;if(!hub)return;for(const [id,c] of conns)if(c.open)try{c.send({t:'G',G:viewFor(id)})}catch(e){}};
+    room.peers=()=>[...table].map(([id,pr])=>({peer:id,isMe:id===cid,sameTab:id===cid,kind:'viewer',presence:!hub&&id===hubCid&&hostG?Object.assign({},pr,{G:hostG}):pr}));
+    room.isHub=()=>hub;
+    room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
     addEventListener('pagehide',()=>room.leave());
-    return ready.then(()=>room)}}}
+    return new Promise((res,rej)=>{
+      let tries=0;const claim=()=>{const pp=new Peer(HUB,PEER_CFG);peer=pp;keep(pp);
+        pp.on('open',()=>asHub(()=>res(room)));
+        pp.on('error',e=>{if(e.type!=='unavailable-id'){if(!hub)rej({code:e.type});return}
+          try{pp.destroy()}catch(_){}
+          // our own old id is still held for a few seconds after a refresh: keep claiming it
+          if(jo.resume&&++tries<20)setTimeout(claim,2000);
+          else if(jo.create)rej({code:'房號已被使用'});
+          else asClient(()=>res(room),rej)})};
+      if(jo.join)asClient(()=>res(room),rej);else claim();
+      setTimeout(()=>rej({code:'逾時'}),jo.resume?45000:15000)})}}}
 
 /* ---------- net ---------- */
 (async()=>{
   for(let i=0;i<30&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,100));
   try{if(window.claude&&window.claude.use)lobbyNs=await window.claude.use('room')}catch(e){}
   if(!lobbyNs&&!window.claude&&window.Peer)lobbyNs=peerNet();   // outside claude.ai (GitHub Pages): WebRTC through PeerJS
-  if(lobbyNs){$('create').disabled=false;$('join').disabled=false;$('netmsg').textContent='開包廂後把房號給牌友就能同桌。'}
+  if(lobbyNs){$('create').disabled=false;$('join').disabled=false;$('netmsg').textContent='開包廂後把房號給牌友就能同桌。';autoRoom()}
   else{$('netmsg').textContent='這裡無法連線，可以先和她們打單機。';$('solo').classList.add('prime')}
 })();
+/* invite links (?room=CODE): a refreshed host takes its game back from localStorage, anyone else joins */
+const HOSTKEY='mjHost';
+function savedHost(){try{const h=JSON.parse(localStorage.getItem(HOSTKEY)||'null');return h&&Date.now()-h.t<6*3600e3?h:null}catch(e){return null}}
+function urlRoom(){try{return (new URLSearchParams(location.search).get('room')||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}catch(e){return ''}}
+function autoRoom(){const code=urlRoom();if(code.length<4)return;const h=savedHost();
+  if(h&&h.code===code&&lobbyNs.join.length>1){$('netmsg').textContent='正在回到你的包廂…';joinCode(code,{resume:true},h)}
+  else{if(!myName)$('nameIn').value=myName='牌友';joinCode(code,{join:true,wait:false})}}
+let hostSaveT=0;
+function backupHost(){   // the whole game, so a refresh can pick it up again
+  if(!R||!isHost||!R.cid)return;if(Date.now()-hostSaveT<500){clearTimeout(backupHost.t);backupHost.t=setTimeout(backupHost,520);return}hostSaveT=Date.now();
+  try{localStorage.setItem(HOSTKEY,JSON.stringify({code:roomCode,cid:R.cid,j:myJ,G,t:Date.now()}))}catch(e){}}
 function readPeers(){
   let ps=[];try{ps=R.peers()}catch(e){}
   const mine=ps.find(p=>p.isMe&&p.sameTab);myPeer=mine?mine.peer:null;
@@ -781,11 +812,14 @@ function tick(){
       wasHost=false;if(sentG){sentG=false;R.presence({G:null}).catch(()=>{})}
     }else{
       if(!wasHost){wasHost=true;srcHost=myPeer;hostTimers();dirty=true}
-      readActions()}
+      readActions();
+      // a full table starts by itself
+      if(G.st==='lobby'&&plist.length>=4&&performance.now()-joinedAt>2500)newGame()}
+    netBanner();
     const pl=plist.map(p=>p.id).join(',')+isHost;if(pl!==lastPl){lastPl=pl;dirty=true}
   }
   if(isHost)hostTick();
-  if(dirty){dirty=false;if(R&&isHost){sentG=true;R.presence({G}).catch(()=>{})}render()}
+  if(dirty){dirty=false;if(R&&isHost){sentG=true;if(R.setG)R.setG(G);else R.presence({G}).catch(()=>{});backupHost()}render()}
   updateTimer()}
 setInterval(tick,150);
 
@@ -1049,13 +1083,13 @@ function renderLobby(){
       :`<div class="pl emp"><span class="wd">${WIND[i]}</span><span class="nm">虛位以待</span><span class="tg">由她們補位</span></div>`)}
   const settling=R&&performance.now()-joinedAt<1800,c=cfg(),n=R?Math.min(4,plist.length):1,A=window.AVATARS||[];
   const cast=`<div class="cast">${[0,1,2,3].map(i=>`<span title="${BOTS[i]}">${face(i)}<i>${BOTS[i]}</i></span>`).join('')}</div>`;
-  const h=`<div class="lcol"><div class="lt">${R?'包廂 <b class="rc">'+esc(roomCode)+'</b><small>把房號給牌友就能同桌</small>':'單機包廂'}</div>${rows.join('')}
+  const h=`<div class="lcol"><div class="lt">${R?'包廂 <b class="rc">'+esc(roomCode)+'</b><button class="inv" id="inv">邀請連結</button>':'單機包廂'}</div>${rows.join('')}
    <div class="lcast"><div class="lsub">今晚的牌搭子・開局隨機入座</div>${cast}</div></div>
    <div class="lcol"><div class="lt">牌局設定${isHost?'':'<small>由房主決定</small>'}</div>
    <div class="opt"><span>局數</span>${seg('r',[[1,'一圈','4 局'],[4,'一將','16 局']])}</div>
    <div class="opt"><span>底／台</span>${seg('b',[[100,'小玩','100／20'],[300,'中注','300／50'],[500,'豪賭','500／100']])}</div>
    <div class="opt"><span>出牌</span>${seg('s',[[15,'快手','15 秒'],[30,'標準','30 秒'],[60,'悠閒','60 秒']])}</div>
-   <div class="lmsg">${settling?'連線中…':isHost?`每人帶 <b>$${(c.b*30).toLocaleString()}</b> 入座${n<4?`・${4-n} 個空位由她們補上`:''}`:'等房主開局…'}</div>
+   <div class="lmsg">${settling?'連線中…':isHost?`每人帶 <b>$${(c.b*30).toLocaleString()}</b> 入座${n<4?`・${4-n} 個空位由她們補上${R?'・滿 4 人自動開局':''}`:''}`:'等房主開局…'}</div>
    <div class="lbtn">${isHost&&!settling?'<button class="big" id="start">入座開局</button>':''}<button class="big alt" id="leave">返回</button></div></div>`;
   if(h!==lobbyHTML){lobbyHTML=h;$('lobbyCard').innerHTML=h}}
 const QUIPS=[
@@ -1205,19 +1239,32 @@ $('hand').addEventListener('click',e=>{
   if(sel===i){sel=-1;doAct({t:'d',k})}else{sel=i;sfx('pick');[...$('hand').children].forEach(c=>c.classList.toggle('sel',+c.dataset.i===i));showTips(k)}});
 $('acts').addEventListener('click',e=>{const b=e.target.closest('.ab');if(!b)return;try{doAct(JSON.parse(b.dataset.a))}catch(err){}});
 $('resCard').addEventListener('click',e=>{if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
-function enterRoom(code,room){
-  R=room;roomCode=code;joinedAt=performance.now();G={st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
-  show('menu',false);show('lobby',true);
-  saveName();R.presence({j:Date.now(),nm:myName}).catch(()=>{});dirty=true}
-async function joinCode(code){
+let myJ=0;
+function enterRoom(code,room,saved){
+  R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
+  show('menu',false);show('lobby',G.st==='lobby');myJ=saved&&saved.j||Date.now();
+  try{history.replaceState(null,'','?room='+code)}catch(e){}
+  saveName();R.presence({j:myJ,nm:myName}).catch(()=>{});dirty=true}
+function newCode(){const cs='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=cs[Math.random()*cs.length|0];return c}
+async function joinCode(code,jo,saved){
   code=code.toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<4||!lobbyNs)return;
-  $('netmsg').textContent='加入中…';
-  try{enterRoom(code,await lobbyNs.join('mj-'+code.toLowerCase()))}catch(e){$('netmsg').textContent='無法加入房間（'+((e&&e.code)||'連線失敗')+'），可稍後再試，或先打單機。'}}
-$('create').onclick=()=>{const cs='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=cs[Math.random()*cs.length|0];joinCode(c)};
-$('join').onclick=()=>joinCode($('codeIn').value);
+  $('netmsg').textContent=jo&&jo.resume?'正在回到你的包廂…':'加入中…';
+  if(saved)lobbyNs=peerNet({cid:saved.cid});
+  try{enterRoom(code,await lobbyNs.join('mj-'+code.toLowerCase(),jo||{}),saved)}
+  catch(e){if(jo&&jo.create&&e&&e.code==='房號已被使用')return joinCode(newCode(),jo);
+    $('netmsg').textContent='無法加入包廂（'+((e&&e.code)||'連線失敗')+'），可稍後再試，或先打單機。'}}
+$('create').onclick=()=>joinCode(newCode(),{create:true});
+$('join').onclick=()=>joinCode($('codeIn').value,{join:true});
+/* lost the host: a banner while we keep retrying */
+function netBanner(){const b=$('netBan'),on=!!(R&&R.status==='retry');if(b.classList.contains('hide')===on)b.classList.toggle('hide',!on)}
+function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode}
+async function invite(){const u=inviteUrl();
+  try{if(navigator.share){await navigator.share({title:'十六張麻將',text:'來同桌打麻將，房號 '+roomCode,url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(u);flashMsg('邀請連結已複製')}catch(e){prompt('複製邀請連結',u)}}
+function flashMsg(t){const m=document.querySelector('#lobbyCard .lmsg');if(m){m.textContent=t;lobbyHTML=''}}
 $('solo').onclick=()=>{saveName();inMenu=false;isHost=true;show('menu',false);G={st:'lobby',v:0,cfg:loadCfg(),co:Math.random()*3|0};dirty=true};
 $('lobbyCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.id==='start'){if(isHost)newGame()}else if(b.id==='leave')location.reload();else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
+  if(b.id==='start'){if(isHost)newGame()}else if(b.id==='inv')invite();else if(b.id==='leave'){try{const h=savedHost();if(h&&h.code===roomCode)localStorage.removeItem(HOSTKEY);history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
 $('auto').onclick=$('autoBan').onclick=()=>{myAuto=!myAuto;if(R)R.presence({au:myAuto?1:0}).catch(()=>{});dirty=true;render()};
 window.onT3=()=>{resize();if(!inMenu&&G.st==='play')try{render()}catch(e){}};
 setTimeout(()=>{if(!window.T3)$('glmsg').classList.remove('hide')},12000);   // three.js never loaded
