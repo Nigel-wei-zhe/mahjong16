@@ -715,6 +715,16 @@ const PEER_CFG={debug:0,config:{iceServers:[
   // TURN for strict NATs / mobile carriers, fill in and uncomment:
   // {urls:'turn:turn.example.com:3478',username:'user',credential:'pass'},
 ]}};
+// TURN: short-lived credentials from our own function (the secret key never reaches the page); STUN only if it cannot be reached
+const TURN_URL='https://turn.nigel-lee.com/api/ice';let iceP=null;
+function getIce(){
+  if(iceP)return iceP;
+  iceP=Promise.race([fetch(TURN_URL,{cache:'no-store'}).then(r=>r.ok?r.json():null),new Promise(r=>setTimeout(()=>r(null),4000))])
+    .then(j=>{if(j&&Array.isArray(j.iceServers)&&j.iceServers.length){PEER_CFG.config.iceServers=PEER_CFG.config.iceServers.filter(x=>String(x.urls).startsWith('stun:')).concat(j.iceServers);
+      setTimeout(()=>{iceP=null},Math.max(600,(j.ttl||7200)-600)*1000)}else iceP=null})   // refetch well before they expire
+    .catch(()=>{iceP=null});
+  return iceP||Promise.resolve()}
+try{if(new URLSearchParams(location.search).get('relay')==='1')PEER_CFG.config.iceTransportPolicy='relay'}catch(e){}   // test: force the TURN path
 const HID='~';   // a hidden tile
 function redact(G,seat){
   if(!G||!G.hands)return G;const g=JSON.parse(JSON.stringify(G)),end=G.ph==='end';
@@ -746,7 +756,7 @@ function peerNet(opt){
     function lost(){   // the host went away: keep trying the same room (the host may be refreshing)
       if(dead||hub||room.status==='retry')return;room.status='retry';hubConn=null;
       const go=()=>{if(dead)return;try{peer&&peer.destroy()}catch(_){}room.status='retry';
-        asClient(null,()=>{});setTimeout(()=>{if(room.status!=='ok'&&!dead)go()},4000)};
+        getIce().then(()=>{if(!dead)asClient(null,()=>{})});setTimeout(()=>{if(room.status!=='ok'&&!dead)go()},4000)};
       setTimeout(go,1500)}
     room.presence=patch=>{for(const k in patch){if(patch[k]===null)delete me[k];else me[k]=patch[k]}table.set(cid,me);
       if(hub)bcast();else if(hubConn&&hubConn.open)try{hubConn.send({t:'p',cid,pres:me})}catch(e){}return Promise.resolve()};
@@ -755,7 +765,7 @@ function peerNet(opt){
     room.isHub=()=>hub;
     room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
     addEventListener('pagehide',()=>room.leave());
-    return new Promise((res,rej)=>{
+    return getIce().then(()=>new Promise((res,rej)=>{
       let tries=0;const claim=()=>{const pp=new Peer(HUB,PEER_CFG);peer=pp;keep(pp);
         pp.on('open',()=>asHub(()=>res(room)));
         pp.on('error',e=>{if(e.type!=='unavailable-id'){if(!hub)rej({code:e.type});return}
@@ -765,7 +775,7 @@ function peerNet(opt){
           else if(jo.create)rej({code:'房號已被使用'});
           else asClient(()=>res(room),rej)})};
       if(jo.join)asClient(()=>res(room),rej);else claim();
-      setTimeout(()=>rej({code:room.stage==='signal'?'連不上配對伺服器':room.stage==='ice'?'找到房主但網路打不通':'逾時'}),jo.resume?45000:20000)})}}}
+      setTimeout(()=>rej({code:room.stage==='signal'?'連不上配對伺服器':room.stage==='ice'?'找到房主但網路打不通':'逾時'}),jo.resume?45000:20000)}))}}}
 
 /* ---------- net ---------- */
 (async()=>{
