@@ -145,6 +145,12 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #menu::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0d0407f0 0,#0d0407b0 38%,#0d040730 70%,#0d040755)}
 #lobby{background:#12060a center/cover no-repeat}#lobby::before{content:"";position:absolute;inset:0;background:#0d0407c4}#lobby .card{position:relative}
 #menu .card{max-width:300px;z-index:2}
+#pause{justify-content:flex-start;padding-left:5%;z-index:25;background:#0d0407a8}
+#pause::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0d0407f2 0,#0d0407c0 38%,#0d040740 70%,#0d040766)}
+#pause .card{max-width:300px;z-index:2;position:relative}
+#pause #kv::after{display:none}#pause #kv{-webkit-mask-image:linear-gradient(90deg,#0000,#000 12%),linear-gradient(#000 78%,#0000);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,#0000,#000 12%),linear-gradient(#000 78%,#0000);mask-composite:intersect}
+#pause .pzn{color:#ffc2d4}#pause .pzt{margin:4px 0}#pause .pzt b{font:700 24px var(--serif);color:#f6dc8c;letter-spacing:2px}
+#pause .pzh{font-size:11.5px;opacity:.7;margin:4px 0 8px}#pause #pzSub{background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6}
 #kv{position:absolute;right:0;bottom:0;top:0;width:58%;pointer-events:none;overflow:hidden}
 /* rose spotlight behind the group, warm floor glow, fog at the feet */
 #kv .kvl{position:absolute;inset:0;background:radial-gradient(ellipse 46% 62% at 52% 58%,#ff8fb04a,#ff6a8a1c 45%,#0000 72%),radial-gradient(ellipse 60% 14% at 52% 98%,#ffcf8a55,#0000 70%);animation:kvGlow 6s ease-in-out infinite}
@@ -470,6 +476,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
 
+  <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
   <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
   <div class="panel hide" id="result"><div class="card wide res" id="resCard"></div></div>
 </div>
@@ -559,7 +566,7 @@ function assignSeats(){
   if(!R){G.seats=['me','','',''];return}
   const ids=plist.map(p=>p.id),seats=(G.seats||['','','','']).map(p=>ids.includes(p)?p:'');
   for(const id of ids){if(seats.includes(id))continue;const i=seats.indexOf('');if(i<0)break;seats[i]=id}
-  G.seats=seats}
+  G.seats=seats;G.nm=seats.map((id,i)=>id?peerName(id,i):'')}
 function newGame(){const c0=cfg(),st0=c0.b*30;G={st:'play',v:G.v,ev:G.ev,seats:G.seats,cfg:c0,score:[st0,st0,st0,st0],dealer:0,wind:0,ju:0,lian:0,co:R?0:(G.st==='over'?Math.random()*3|0:G.co|0)};G.stat=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];assignSeats();G.chs=dealChs();startHand()}
 function startHand(){
   const w=[];for(let k=0;k<34;k++)for(let i=0;i<4;i++)w.push(k);for(let k=34;k<42;k++)w.push(k);
@@ -610,7 +617,7 @@ function resolve(){
   else if(r.t==='kan'){G.hands[s]=rm(G.hands[s],k,3);G.melds[s].push('k'+ch(k));if(drawFor(s,true)){G.kong=1;bump({s,t:'槓',f})}}
   else{const a=r.a;for(let x=a;x<a+3;x++)if(x!==k)G.hands[s]=rm(G.hands[s],x);G.melds[s].push('c'+ch(a)+ch(a+1)+ch(a+2));G.turn=s;G.ph='discard';G.nd=1;bump({s,t:'吃',f})}}
 function act(seat,a){
-  if(!a||typeof a.t!=='string')return;
+  if(!a||typeof a.t!=='string'||(G.pz&&a.t!=='next'))return;
   if(a.t==='next'){if(G.st==='over')newGame();else if(G.st==='play'&&G.ph==='end')nextHand();return}
   if(G.st!=='play'||seat<0)return;
   if(G.ph==='discard'&&seat===G.turn){
@@ -695,7 +702,7 @@ function botClaim(s,o){
     if(ba>=0)return{t:'chi',a:ba}}
   return null}
 function hostTick(){
-  if(G.st!=='play')return;const now=Date.now();if(now<introUntil)return;
+  if(G.st!=='play'||G.pz)return;const now=Date.now();if(now<introUntil)return;
   if(G.ph==='discard'){const s=G.turn;if(isBot(s)&&tAt-now>1000*SPEED)tAt=now+700*SPEED;if(now<tAt)return;
     if(isBot(s))botTurn(s);
     else{const h=G.hands[s];act(s,{t:'d',k:G.drawn!=null&&h.includes(ch(G.drawn))?G.drawn:kd(h[h.length-1])})}}
@@ -817,6 +824,30 @@ function doAct(a){
   if(pending)return;
   if(isHost)act(mySeat(),a);
   else if(R){pending=true;an++;R.presence({a:Object.assign({n:an,v:G.v},a)}).catch(()=>{});renderActs();setTimeout(()=>{if(pending){pending=false;renderActs()}},2500)}}
+/* anyone seated who drops out pauses the hand (G.pz) until they are back; the host can let the girls play for them (G.sub), and they take the seat back on return */
+const NM={};
+function awaySeats(){if(!R||G.st!=='play'||!G.seats||G.ph==='end')return [];const pr=present(),sub=G.sub||[];
+  return G.seats.map((id,s)=>id&&id!==myPeer&&!pr.has(id)&&!sub.includes(id)?s:-1).filter(s=>s>=0)}
+function pauseCheck(){
+  for(const p of plist)if(typeof p.pr.nm==='string'&&p.pr.nm.trim())NM[p.id]=p.pr.nm.trim().slice(0,8);
+  if(G.sub&&G.sub.length){const pr=present(),k=G.sub.filter(id=>!pr.has(id));if(k.length!==G.sub.length){G.sub=k;dirty=true}}
+  const aw=awaySeats();if(aw.join()===(G.pz?G.pz.s.join():''))return;
+  if(aw.length){G.pz={s:aw,n:aw.map(s=>NM[G.seats[s]]||(G.nm&&G.nm[s])||'玩家'+(s+1))};G.v++;dirty=true}
+  else{delete G.pz;introUntil=0;bump()}}   // everyone is back: the turn restarts with a full clock
+let pzOn=false,pzAt=0,pzHTML='';
+function renderPause(){
+  const gone=!isHost&&R.status==='retry'&&G.st==='play',pz=G.st==='play'&&G.pz,on=!inMenu&&!!(gone||pz);
+  if(on!==pzOn){pzOn=on;pzAt=performance.now();pzHTML='';show('pause',on);kvWait=on;
+    const kv=$('kv'),dst=on?$('pause'):$('menu');if(kv.parentNode!==dst){dst.insertBefore(kv,dst.firstChild);kvBuild()}}
+  if(!on)return;const el=(performance.now()-pzAt)/1000|0,mm=(el/60|0)+':'+String(el%60).padStart(2,'0');
+  const h=`<div class="logo"><small>牌局暫停</small>${gone?'重新連線中':'等牌友回來'}</div>
+    <p>${gone?'和房主的連線中斷了，正在自動重新連線…':`<b class="pzn">${pz.n.map(esc).join('、')}</b> 斷線了，正在等${pz.n.length>1?'他們':'對方'}重新連線。`}</p>
+    <p class="pzt">已等 <b>${mm}</b></p>
+    <p class="pzh">${gone?'連上就會回到牌桌，不用重開。':'回來就接著打，牌局不會重開。'}<br>等待時，點點她們吧。</p>
+    ${isHost&&pz&&el>=20?'<button class="big" id="pzSub">先讓她們代打</button><p class="pzh">對方回來後可以接手原本的位子。</p>':''}
+    ${el>=60?'<button class="big alt" id="pzLeave">離開包廂</button>':''}`;
+  if(h!==pzHTML){pzHTML=h;$('pzCard').innerHTML=h}}
+function leaveRoom(){try{const h=savedHost();if(h&&h.code===roomCode)localStorage.removeItem(HOSTKEY);history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}
 let lastPl='';
 function tick(){
   if(inMenu)return;
@@ -828,10 +859,8 @@ function tick(){
       wasHost=false;if(sentG){sentG=false;R.presence({G:null}).catch(()=>{})}
     }else{
       if(!wasHost){wasHost=true;srcHost=myPeer;hostTimers();dirty=true}
-      readActions();
-      // a full table starts by itself
-      if(G.st==='lobby'&&plist.length>=4&&performance.now()-joinedAt>2500)newGame()}
-    netBanner();
+      readActions();pauseCheck()}
+    netBanner();renderPause();
     const pl=plist.map(p=>p.id).join(',')+isHost;if(pl!==lastPl){lastPl=pl;dirty=true}
   }
   if(isHost)hostTick();
@@ -855,7 +884,11 @@ const KVQ=[['今晚，留下來陪我打一圈？','別急著走，牌桌上還�
  ['來啊！輸了可要聽我的喔！','坐我旁邊，我罩你。','磨蹭什麼？位子都幫你暖好了。'],
  ['喵～你終於來了！','陪我玩嘛，好不好～','今天也要摸摸頭才開始喔～'],
  ['你今晚的行程，我已經排好了。','議程只有一項：陪我打牌。','準時入座，遲到要扣分的。']];
-let kvT=0,kvSel=-1,kvLast=-1;
+const KVW=[['人還沒回來……那你先陪我聊聊？','等人的時候，看著我就好。','別急，夜還很長。'],
+ ['也太慢了吧！回來先罰一杯！','無聊死了，你陪我說話！','趁現在，偷看一下你的牌～開玩笑的啦！'],
+ ['喵～趁空檔摸摸我嘛～','是不是迷路了呀？','等的時候……可以靠著你嗎～'],
+ ['暫停中。等待時間我會記在帳上。','網路問題？我順便幫你看看……開玩笑的。','利用空檔，我們來對一下今晚的行程。']];
+let kvT=0,kvSel=-1,kvLast=-1,kvWait=false;
 function kvBuild(){
   const A=window.AVATARS||[],kv=$('kv'),o=[0,1,2,3].sort(()=>Math.random()-.5);
   // slots left to right: back, front, front, back
@@ -864,7 +897,7 @@ function kvBuild(){
   kv.onclick=e=>{const g=e.target.closest('.g');if(g){kvSay(g,true);try{sfx('pick')}catch(_){}}};
   clearTimeout(kvT);kvT=setTimeout(kvCycle,1400)}
 function kvSay(g,tap){
-  const kv=$('kv'),c=+g.dataset.c,L=KVQ[c],q=$('kvq');
+  const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c],q=$('kvq');
   kv.querySelectorAll('.g').forEach(x=>x.classList.toggle('sel',x===g));kv.classList.add('focus');
   q.innerHTML=`<b>${esc(BOTS[c])}</b>${esc(L[Math.random()*L.length|0])}`;q.classList.remove('on','sl','sr');
   // layout coordinates (offset*, not screen rects: the root is rotated on portrait phones); above her head if it fits, else beside her head; always inside the picture
@@ -875,7 +908,7 @@ function kvSay(g,tap){
   q.style.left=x+'px';q.style.top=y+'px';q.style.setProperty('--ax',Math.max(14,Math.min(qw-14,cx-x))+'px');void q.offsetWidth;q.classList.add('on');
   kvSel=c;clearTimeout(kvT);kvT=setTimeout(kvCycle,tap?6000:4200)}
 function kvCycle(){
-  const kv=$('kv');if(!kv||$('menu').classList.contains('hide')){kvT=setTimeout(kvCycle,3000);return}
+  const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
   const gs=[...kv.querySelectorAll('.g')];if(!gs.length)return;
   // every other beat everyone relaxes back into the group shot
   if(kv.classList.contains('focus')){kv.classList.remove('focus');gs.forEach(x=>x.classList.remove('sel'));$('kvq').classList.remove('on');kvT=setTimeout(kvCycle,2200);return}
@@ -1105,7 +1138,7 @@ function renderLobby(){
    <div class="opt"><span>局數</span>${seg('r',[[1,'一圈','4 局'],[4,'一將','16 局']])}</div>
    <div class="opt"><span>底／台</span>${seg('b',[[100,'小玩','100／20'],[300,'中注','300／50'],[500,'豪賭','500／100']])}</div>
    <div class="opt"><span>出牌</span>${seg('s',[[15,'快手','15 秒'],[30,'標準','30 秒'],[60,'悠閒','60 秒']])}</div>
-   <div class="lmsg">${settling?'連線中…':isHost?`每人帶 <b>$${(c.b*30).toLocaleString()}</b> 入座${n<4?`・${4-n} 個空位由她們補上${R?'・滿 4 人自動開局':''}`:''}`:'等房主開局…'}</div>
+   <div class="lmsg">${settling?'連線中…':isHost?`每人帶 <b>$${(c.b*30).toLocaleString()}</b> 入座${n<4?`・${4-n} 個空位由她們補上`:R?'・人到齊了':''}${R?'<br>準備好就按「入座開局」':''}`:'人到齊後由房主按開局…'}</div>
    <div class="lbtn">${isHost&&!settling?'<button class="big" id="start">入座開局</button>':''}<button class="big alt" id="leave">返回</button></div></div>`;
   if(h!==lobbyHTML){lobbyHTML=h;$('lobbyCard').innerHTML=h}}
 const QUIPS=[
@@ -1243,7 +1276,7 @@ function render(){
 function updateTimer(){
   if(G.st==='lobby'&&!inMenu)renderLobby();
   const el=$('timer');if(!el)return;
-  if(G.st==='play'&&G.tl>0&&G.ph!=='end'){const left=Math.max(0,Math.ceil(G.tl-(performance.now()-phaseStart)/1000));
+  if(G.st==='play'&&G.tl>0&&G.ph!=='end'&&!G.pz){const left=Math.max(0,Math.ceil(G.tl-(performance.now()-phaseStart)/1000));
     const mine=mySeat()>=0&&((G.ph==='discard'&&G.turn===mySeat())||(G.ph==='claim'&&G.wait.includes(mySeat())));
     el.textContent=left;el.classList.toggle('mine',mine);placeTimer(el);if(mine&&left<=5&&left>0&&left!==lastTick){lastTick=left;sfx('tick')}}else el.textContent=''}
 
@@ -1280,7 +1313,9 @@ async function invite(){const u=inviteUrl();
 function flashMsg(t){const m=document.querySelector('#lobbyCard .lmsg');if(m){m.textContent=t;lobbyHTML=''}}
 $('solo').onclick=()=>{saveName();inMenu=false;isHost=true;show('menu',false);G={st:'lobby',v:0,cfg:loadCfg(),co:Math.random()*3|0};dirty=true};
 $('lobbyCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.id==='start'){if(isHost)newGame()}else if(b.id==='inv')invite();else if(b.id==='leave'){try{const h=savedHost();if(h&&h.code===roomCode)localStorage.removeItem(HOSTKEY);history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
+  if(b.id==='start'){if(isHost)newGame()}else if(b.id==='inv')invite();else if(b.id==='leave'){leaveRoom()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
+$('pzCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave')leaveRoom()});
 $('auto').onclick=$('autoBan').onclick=()=>{myAuto=!myAuto;if(R)R.presence({au:myAuto?1:0}).catch(()=>{});dirty=true;render()};
 window.onT3=()=>{resize();if(!inMenu&&G.st==='play')try{render()}catch(e){}};
 setTimeout(()=>{if(!window.T3)$('glmsg').classList.remove('hide')},12000);   // three.js never loaded
