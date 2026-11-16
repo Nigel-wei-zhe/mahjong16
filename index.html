@@ -95,8 +95,8 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 #timer{top:auto;bottom:auto;width:28px;height:28px;padding:0;border-radius:50%;font-size:13px;line-height:26px;text-align:center}#timer.mine{background:linear-gradient(#f3d27e,#b8862b);color:#2a1406;border-color:#ffe08a}
 #ginfo{left:4px;top:4px;font-size:11px;color:#cfe6ff;line-height:1.4;padding:1px 6px}#ginfo:empty{display:none}
 .plate .chips{margin-left:5px;font-size:inherit}.plate .nm{margin-right:1px}
-#snd{position:absolute;right:6px;bottom:calc(var(--bh) + var(--tw)*1.333 + 6px);z-index:7;width:32px;height:24px;border:1px solid #c9973f88;border-radius:8px;background:#000000a6;color:#ffd54a;font-size:13px;line-height:1;padding:0;font-family:inherit}
-#snd.off{color:#777;border-color:#444}
+
+
 #acts{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--bh) + var(--tw)*1.333 + 6px);display:flex;gap:8px;align-items:center;z-index:7;white-space:nowrap}
 .ab{border:0;border-radius:12px;padding:10px 18px;font-size:18px;font-weight:800;color:#fff;font-family:inherit;box-shadow:0 3px 0 #0006;display:inline-flex;align-items:center;gap:4px;line-height:1}
 .ab.hu{background:#c0241c}.ab.pon{background:#1b56a0}.ab.kan{background:#7a3fb0}.ab.chi{background:#19743f}.ab.pass{background:#555}
@@ -215,7 +215,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rtot{font:700 13px/1 var(--serif);color:#e9c46a;white-space:nowrap}.rtot b{font:900 40px/0.9 var(--serif);margin-right:3px;color:#ffe08a;text-shadow:0 2px 0 #5a3a0e,0 0 16px #e9c46a66}
 .res .rhand{margin:0;padding:8px 6px 3px;background:#0d2a1e;border:1px solid #2f8f6655;border-radius:6px;box-shadow:inset 0 2px 8px #0008}
 .tl{display:grid;grid-template-columns:1fr 1fr;gap:3px 22px;font-size:13px;text-align:left;padding:0 4px}
-.tl>div{display:flex;align-items:baseline}.tl span{color:#f3e9d2}.tl i{flex:1;border-bottom:1px dotted #b8862b77;margin:0 7px;transform:translateY(-3px)}.tl b{color:var(--gold);font-weight:800;white-space:nowrap}.tl .dx span{color:#f3e9d299}
+.tl>div{display:flex;align-items:baseline}.tl span{color:#f3e9d2}.tl i{flex:1;border-bottom:1px dotted #b8862b77;margin:0 7px;transform:translateY(-3px)}.tl b{color:var(--gold);font-weight:800;white-space:nowrap}.tl .dx span{color:#f3e9d299}.pay .pt{font:700 10.5px/1.2 system-ui;color:#f3e9d299;letter-spacing:1px}.tl .sub span{color:#f3e9d2aa}.tl .sub{border-top:1px solid #b8862b55;padding-top:3px;margin-top:2px}.tl .sub,.tl .dx{grid-column:1/-1}.pay .pn:has(.badge) .wd{display:none}.res.hu .rk{white-space:nowrap;flex:none}.res.hu .rwc{min-width:0}.rw .nm{overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:6.5em}.pay .pn{overflow:hidden;justify-content:flex-start;padding:0 4px}.pay .pn .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}.pay .pn .badge{flex:none;font-size:0!important;padding:2px 5px}.pay .pn .badge::before{content:'莊';font-size:11px}.res.hu .pay .pn{justify-content:center!important;overflow:hidden;align-self:stretch;max-width:100%;min-width:0;width:100%}.rtot small{display:block;font:700 11px/1.2 system-ui;color:#f3e9d2aa;letter-spacing:1px}
 .res .pay{margin:0;gap:7px}
 .res .pay>div{padding:6px 4px 5px;border-radius:6px;background:#00000059;border:1px solid #b8862b33;display:flex;flex-direction:column;align-items:center;gap:3px}
 .res .pay>div>div{background:none;border:0;padding:0;border-radius:0}
@@ -249,9 +249,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .ab{border:1px solid #ffffff55;border-radius:12px;padding:10px 20px;font-size:19px;font-weight:900;letter-spacing:2px;box-shadow:inset 0 1px 0 #fff6,inset 0 -8px 12px #0003,0 3px 0 #0008,0 6px 14px #0009;text-shadow:0 1px 2px #0008}
 .ab:active{transform:translateY(2px)}
 .ab.hu{background:linear-gradient(#f0524a,#a81810)}.ab.pon{background:linear-gradient(#3f86d8,#174a8c)}.ab.kan{background:linear-gradient(#a269d8,#5d2b93)}.ab.chi{background:linear-gradient(#35a866,#12643a)}.ab.pass{background:linear-gradient(#77706a,#3d3834)}
-#snd,#auto{position:absolute;top:12px;z-index:7;height:36px;border:1px solid #c9973f;border-radius:11px;background:linear-gradient(#34151e,#14070b);color:var(--gold);font:800 15px/1 inherit;font-family:inherit;letter-spacing:1px;padding:0 14px;box-shadow:inset 0 1px 0 #fff3,0 3px 8px #000a}
-#snd{right:14px;width:42px;padding:0;font-size:17px}#snd::after,#auto::after{content:"";position:absolute;inset:-6px -4px}#auto{right:64px}#auto.on{background:linear-gradient(#f3d27e,#b8862b);color:#2a1406}
-#snd:active,#auto:active{transform:translateY(1px)}
+#cfgBtn,#auto{position:absolute;top:12px;z-index:7;height:36px;border:1px solid #c9973f;border-radius:11px;background:linear-gradient(#34151e,#14070b);color:var(--gold);font:800 15px/1 inherit;font-family:inherit;letter-spacing:1px;padding:0 14px;box-shadow:inset 0 1px 0 #fff3,0 3px 8px #000a}
+#cfgBtn{right:14px;width:42px;padding:0;display:flex;align-items:center;justify-content:center}#cfgBtn::after,#auto::after{content:"";position:absolute;inset:-6px -4px}#auto{right:64px}#auto.on{background:linear-gradient(#f3d27e,#b8862b);color:#2a1406}
+#cfgBtn:active,#auto:active{transform:translateY(1px)}
 #autoBan{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--tw)*.5);z-index:8;background:#000c;border:1px solid var(--gold);color:var(--gold);border-radius:20px;padding:6px 18px;font-weight:800;letter-spacing:2px}
 /* tenpai hints */
 #hand .t.tp::after{content:"聽";position:absolute;right:-3px;top:-7px;width:calc(var(--tw)*.4);height:calc(var(--tw)*.4);border-radius:50%;background:linear-gradient(#f0524a,#a81810);color:#fff;font:800 calc(var(--tw)*.24)/calc(var(--tw)*.4) system-ui,sans-serif;text-align:center;box-shadow:0 1px 3px #000a;border:1px solid #fff8}
@@ -438,7 +438,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #lobbyCard .pl{padding:7px 10px;margin:4px 0;gap:10px}#lobbyCard .pl.me{border-color:#e9c46a88;background:linear-gradient(90deg,#e9c46a1f,#0000)}
 #lobbyCard .pl.emp{background:#0000002e;border-style:dashed;border-color:#b8862b40}#lobbyCard .pl.emp .nm{font-weight:600;color:#f3e9d299}#lobbyCard .pl.emp .tg{color:#ffb3c8;opacity:.8}
 .lcast{margin-top:auto;padding-top:8px}.lsub{font-size:11px;color:#f3e9d288;letter-spacing:1px;margin-bottom:5px}
-.cast{display:flex;gap:8px}.cast>span{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}.cast .fc{width:36px;height:36px;border-color:#e9a0b8;box-shadow:0 0 8px #ff8fb033}.cast i{font-style:normal;font-size:11px;color:#f6ead0}
+.cast{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 8px}.cast>span{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}.cast .fc{width:36px;height:36px;border-color:#e9a0b8;box-shadow:0 0 8px #ff8fb033}.cast i{font-style:normal;font-size:11px;color:#f6ead0}
 #lobbyCard .opt{margin:6px 0}#lobbyCard .opt>span{flex:0 0 3.2em;font-weight:700;opacity:.85}
 #lobbyCard .seg button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px}#lobbyCard .seg button b{font:800 14px/1 var(--serif)}#lobbyCard .seg button small{font:600 10.5px/1 system-ui,sans-serif;opacity:.7;font-variant-numeric:tabular-nums}
 #lobbyCard .seg button.on{background:linear-gradient(#f6dc8c,#d9a945);color:#2a1406;box-shadow:inset 0 1px 0 #fff8}#lobbyCard .seg button.on small{opacity:.85}
@@ -501,6 +501,101 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .hufx .dulo span{display:block;margin-top:4px;font:800 min(3.6vmin,15px)/1.2 system-ui;letter-spacing:3px;color:#c8d4ea;text-shadow:0 1px 3px #000}
 .hufx .dulo em{font-style:normal;margin-left:6px;color:#ff8a80}
 @keyframes duLo{0%{opacity:0;margin-bottom:-30px}100%{opacity:1;margin-bottom:0}}
+/* ===== menu v3: eight on a turning ring, RPG dialogue box, two buttons, 包廂 modal ===== */
+
+/* menu v3: eight on stage, online-game frame */
+#menu{padding-left:2.5%}
+#menu .card{max-width:232px;padding:10px 13px;margin-top:26px}
+#menu .card .logo{font-size:26px}
+#kv{width:68%}
+#kv .g.bk{--b:.93;--sa:.96;z-index:1}#kv .g.fr{z-index:3}
+#kv .g.c2{--k:.66}
+#mtop{position:absolute;left:0;right:0;top:0;height:30px;z-index:6;display:flex;align-items:center;gap:10px;padding:0 12px;background:linear-gradient(#0d0407ee,#0d040700);font:700 12px system-ui;color:#f3e9d2cc;letter-spacing:1px}
+#mtop .dot{width:7px;height:7px;border-radius:50%;background:#5fd38a;box-shadow:0 0 6px #5fd38a}
+#mtop>*{flex:none;white-space:nowrap;writing-mode:horizontal-tb}#mtop .sp{flex:1}#mtop .mchip{display:inline-block;line-height:18px;padding:3px 10px;border:1px solid #c9973f66;border-radius:12px;background:#1a0a10aa}
+#mtop .cnt{color:#f6dc8c}
+#kv .nm8{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);z-index:8;font:700 10px system-ui;letter-spacing:2px;color:#ffe9c0;text-shadow:0 1px 3px #000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#kv .g:hover .nm8,#kv .g.sel .nm8{opacity:1}
+
+
+/* menu v3 v2: no card box; logo, buttons and nickname float over the scene */
+#menu{padding:0;align-items:stretch;justify-content:flex-start}
+#menu::before{background:linear-gradient(90deg,#0d0407f2 0,#0d0407c8 24%,#0d040760 44%,#0d040700 62%),linear-gradient(0deg,#0d0407cc,#0d040700 30%)}
+#menu .card{z-index:6;position:absolute;left:4%;top:40px;bottom:14px;width:min(250px,34%);max-width:none;margin:0;padding:0;background:none;border:0;box-shadow:none;border-radius:0;display:flex;flex-direction:column;justify-content:flex-start;gap:7px;-webkit-backdrop-filter:none;backdrop-filter:none}
+#menu .card::before,#menu .card::after{display:none}
+#menu .card .logo{text-align:left;font-size:40px;letter-spacing:6px;margin:0 0 2px;color:#fff3d6;text-shadow:0 2px 0 #3a1a06,0 0 22px #ffb84d66}
+#menu .card .logo small{text-align:left;letter-spacing:6px;font-size:11px}
+#menu .card .big{border-radius:24px;height:40px;font-size:15px;background:#1a0a10a8;border:1px solid #e9c46a66;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#menu .card #create{height:46px;font-size:17px;margin-top:auto}
+#menu .card .row{gap:6px}#menu .card .row input{border-radius:24px;height:40px;background:#1a0a10a8}
+#menu .card .or{display:none}
+#menu .card #netmsg{text-align:left;font-size:11px;opacity:.75;margin:2px 0 0}
+#menu .card p:last-of-type{text-align:left;font-size:9px!important;margin:0!important;opacity:.5!important}
+#mtop #nameIn{width:132px;height:22px;margin:0!important;border-radius:12px;font-size:12px;padding:0 10px;background:#1a0a10cc;border:1px solid #c9973f88;text-align:left}
+#kv{width:74%}
+/* menu v3: two buttons on the menu; 包廂 opens a modal with nickname / create / join */
+#menu .card #roomBtn{height:48px;font-size:18px;margin-top:auto;background:linear-gradient(#f6dc8c,#c9922f)!important;color:#2a1406;border-color:#ffe9a6!important;box-shadow:inset 0 1px 0 #fff8,0 3px 0 #6a4510}
+#menu .card #solo{height:44px;font-size:16px}
+#rmodal{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:#07020599;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#rmodal.hide{display:none}
+#rmodal .rm{position:relative;width:min(330px,80%);padding:26px 26px 18px;border-radius:8px;display:flex;flex-direction:column;gap:9px;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,#ff9fbf18,#0000 60%),repeating-radial-gradient(circle at 0 0,#ffffff05 0 2px,#0000 2px 9px),linear-gradient(#26091b,#12040c 70%,#0b0207);
+  border:1px solid #6e4a1c;box-shadow:inset 0 0 0 3px #12040c,inset 0 0 0 4px #e3b55c,inset 0 0 0 6px #12040c,inset 0 0 0 7px #8a6224,inset 0 0 30px #000,0 14px 40px #000e}
+#rmodal h3{margin:0 0 4px;text-align:center;font:900 20px var(--serif);letter-spacing:8px;color:#f6dc8c;text-shadow:0 2px 0 #3a1a06,0 0 14px #ffb84d55}
+#rmodal label{font:700 11px system-ui;letter-spacing:3px;color:#e9c46acc;margin-bottom:-4px}
+#rmodal input{height:40px;border-radius:22px;background:#0d0407cc;border:1px solid #c9973f88;color:#f6efd9;text-align:center;font-size:15px;letter-spacing:2px;margin:0!important;width:100%}
+#rmodal .big{height:42px;border-radius:22px;font-size:15px;margin:0}
+#rmodal #create{background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6}
+#rmodal #create:disabled,#rmodal #join:disabled{opacity:.45}
+#rmodal .rrow{display:flex;gap:8px}#rmodal .rrow input{flex:1}#rmodal .rrow .big{width:96px;flex:none}
+#rmodal .rsep{display:flex;align-items:center;gap:8px;font-size:11px;color:#f3e9d266;letter-spacing:3px}#rmodal .rsep::before,#rmodal .rsep::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#0000,#c9973f88,#0000)}
+#rmodal #netmsg{text-align:center;font-size:12px;color:#ffc2d4;min-height:0;margin:0}
+#rmodal .rx{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;padding:0}
+#rmodal .cn{position:absolute;width:24px;height:24px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat}
+#rmodal .cn.a{left:3px;top:3px}#rmodal .cn.b{right:3px;top:3px;transform:scaleX(-1)}#rmodal .cn.c{left:3px;bottom:3px;transform:scaleY(-1)}#rmodal .cn.d{right:3px;bottom:3px;transform:scale(-1,-1)}
+
+#kv .kq{display:none!important}
+#kvdlg{position:absolute;left:17%;right:2.5%;bottom:12px;z-index:30;min-height:66px;padding:18px 26px 12px;border-radius:6px;
+  background:radial-gradient(ellipse 60% 120% at 50% 0%,#ff9fbf14,#0000 60%),repeating-radial-gradient(circle at 0 0,#ffffff05 0 2px,#0000 2px 9px),linear-gradient(#24091a,#12040c 70%,#0b0207);
+  border:1px solid #6e4a1c;box-shadow:inset 0 0 0 3px #12040c,inset 0 0 0 4px #e3b55c,inset 0 0 0 6px #12040c,inset 0 0 0 7px #8a6224,inset 0 0 28px #000,0 8px 22px #000d,0 0 0 1px #000;
+  color:#fbeef2;font:600 15px/1.6 var(--serif);letter-spacing:1.5px;text-shadow:0 1px 2px #000;opacity:0;translate:0 8px;transition:opacity .3s,translate .3s;pointer-events:none}
+#kvdlg::before{content:"";position:absolute;left:14%;right:14%;top:0;height:1px;background:linear-gradient(90deg,#0000,#fff3c8,#0000)}
+#kvdlg .cn{position:absolute;width:26px;height:26px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 1px 1px #000)}
+#kvdlg .cn.a{left:2px;top:2px}#kvdlg .cn.b{right:2px;top:2px;transform:scaleX(-1)}#kvdlg .cn.c{left:2px;bottom:2px;transform:scaleY(-1)}#kvdlg .cn.d{right:2px;bottom:2px;transform:scale(-1,-1)}
+#kvdlg.on{opacity:1;translate:0 0}
+#kvdlg b{position:absolute;left:30px;top:-14px;padding:3px 22px 3px;background:linear-gradient(#fff0b8,#e2b45a 45%,#a8761f);color:#2a1406;font:900 13px/1.3 var(--serif);letter-spacing:4px;text-shadow:0 1px 0 #ffe9a888;
+  clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%);filter:drop-shadow(0 2px 3px #000)}
+#kvdlg b::before{content:"";position:absolute;inset:2px 9px;border-top:1px solid #fff8;border-bottom:1px solid #6a451288}
+#kvdlg i{position:absolute;right:30px;bottom:9px;width:0;height:0;border:6px solid #0000;border-top-color:#f6dc8c;filter:drop-shadow(0 0 4px #ffcf5a);animation:dlgNext 1s ease-in-out infinite;opacity:0}#kvdlg.done i{opacity:1}
+@keyframes dlgNext{50%{translate:0 4px}}
+#kv .g{transition:scale .4s!important}#menu .card{z-index:40!important}#kv .kq{z-index:30!important}#kv::after{z-index:25!important}#kv .pt{z-index:26!important}#kv.focus .g{--b:.55!important;--sa:.7!important}#kv.focus .g.sel{--b:1.1!important;--sa:1.06!important}#kv .g.sel img{filter:brightness(var(--b)) saturate(var(--sa)) drop-shadow(0 0 16px #ffd7a066) drop-shadow(0 6px 12px #000b)!important}
+
+
+/* settings */
+#setm{position:absolute;inset:0;z-index:85;display:flex;align-items:center;justify-content:center;background:#07020599;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#setm.hide{display:none}
+#setm .rm{position:relative;width:min(400px,86%);max-height:90%;display:flex;flex-direction:column;padding:22px 24px 16px;border-radius:8px;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,#ff9fbf18,#0000 60%),repeating-radial-gradient(circle at 0 0,#ffffff05 0 2px,#0000 2px 9px),linear-gradient(#26091b,#12040c 70%,#0b0207);
+  border:1px solid #6e4a1c;box-shadow:inset 0 0 0 3px #12040c,inset 0 0 0 4px #e3b55c,inset 0 0 0 6px #12040c,inset 0 0 0 7px #8a6224,inset 0 0 30px #000,0 14px 40px #000e;color:#f3e9d2}
+#setm .cn{position:absolute;width:24px;height:24px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat}
+#setm .cn.a{left:3px;top:3px}#setm .cn.b{right:3px;top:3px;transform:scaleX(-1)}#setm .cn.c{left:3px;bottom:3px;transform:scaleY(-1)}#setm .cn.d{right:3px;bottom:3px;transform:scale(-1,-1)}
+#setm .rx{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;padding:0;z-index:2}
+#setm section{display:flex;flex-direction:column;gap:8px;min-height:0}#setm section[hidden]{display:none}
+#setm h3{margin:0 0 4px;text-align:center;font:900 20px var(--serif);letter-spacing:8px;color:#f6dc8c;text-shadow:0 2px 0 #3a1a06,0 0 14px #ffb84d55}
+#setm .srow{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 6px 0 16px;border-radius:22px;background:#0d0407aa;border:1px solid #c9973f55;font:700 15px var(--serif);letter-spacing:2px}
+#setm #snd{width:64px;height:32px;border-radius:16px;border:1px solid #e9c46a;background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;font:800 14px system-ui;cursor:pointer}#setm #snd.off{background:#1a0a10;color:#a08a70;border-color:#6e4a1c}
+#setm .sbtn{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 16px;border-radius:22px;background:#0d0407aa;border:1px solid #c9973f55;color:#f3e9d2;font:700 15px var(--serif);letter-spacing:2px;cursor:pointer}
+#setm .sbtn em{font-style:normal;color:#e9c46a;font-size:20px}#setm .sbtn.danger{color:#ffb4a8;border-color:#c0241c88}
+#setm .ver{margin:6px 0 0;text-align:center;font:600 11px system-ui;color:#f3e9d277;letter-spacing:1px}
+#setm .shd{position:relative;display:flex;align-items:center;justify-content:center;flex:none}#setm .shd h3{margin:0}
+#setm .back{position:absolute;left:0;top:50%;translate:0 -50%;height:30px;padding:0 12px;border-radius:15px;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 13px system-ui;cursor:pointer}
+#setm .scroll{overflow:auto;min-height:0;max-height:min(62vh,300px);padding-right:4px;-webkit-overflow-scrolling:touch}
+#setm table{width:100%;border-collapse:collapse;font-size:13px}#setm td{padding:5px 4px;border-bottom:1px solid #b8862b33}#setm td:first-child{font:700 14px var(--serif);color:#f6dc8c;white-space:nowrap}#setm td:nth-child(2){color:#f3e9d2aa;font-size:11.5px}#setm td:last-child{text-align:right;font-weight:800;color:#ffe490;white-space:nowrap}#setm td:last-child::after{content:" 台";font-size:11px;color:#f3e9d299}
+#setm .note{font-size:11.5px;color:#f3e9d2aa;line-height:1.5;margin:6px 0 0}
+#setm h4{margin:10px 0 2px;font:800 14px var(--serif);color:#f6dc8c;letter-spacing:2px}#setm h4:first-child{margin-top:0}#setm .scroll p{margin:0;font-size:13px;line-height:1.6;color:#f3e9d2dd}
+#setm .qrow{display:flex;gap:10px;margin-top:6px}#setm .qrow .big{flex:1;height:42px;border-radius:22px;margin:0}#setm #quitGo{background:linear-gradient(#e2584a,#9a1c14);border-color:#ff9a8a;color:#fff}
+#setm .qtxt{text-align:center;font-size:13px;color:#f3e9d2cc;margin:0}
+.verline{opacity:.5}
 </style>
 </head>
 <body>
@@ -516,24 +611,43 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="sw l" id="swL"></div><div class="sw t" id="swT"></div><div class="sw r" id="swR"></div><div class="sw b" id="swB"></div>
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
     <div id="mine"><div id="hand"></div><div id="mr"><div id="myFl"></div><div id="myMelds"></div></div></div>
-    <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="snd" aria-label="音效">♪</button>
+    <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button>
   </div>
 
-  <div class="panel" id="menu"><div id="kv"></div><div class="card">
+  <div class="panel" id="menu"><div id="kv"></div><div id="mtop"><span class="dot"></span><span>線上</span><span class="sp"></span></div><div class="card">
     <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
-    <p>今晚，她們都在等你入座。</p>
-    <input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off" style="letter-spacing:2px;text-transform:none;margin-bottom:6px">
-    <button class="big" id="create" disabled>開包廂邀牌友</button>
-    <div class="row"><input id="codeIn" maxlength="4" placeholder="輸入房號" autocomplete="off"><button class="big alt" id="join" disabled>入座</button></div>
-    <div class="or">或</div>
+    <button class="big" id="roomBtn">包廂</button>
     <button class="big alt" id="solo">練習</button>
-    <p id="netmsg">連線檢查中…</p>
-    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0</p>
+    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
+  <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><h3>包廂</h3>
+    <label>暱稱</label><input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off">
+    <button class="big" id="create" disabled>建立包廂</button>
+    <div class="rsep">或</div><label>包廂號</label>
+    <div class="rrow"><input id="codeIn" maxlength="4" placeholder="輸入 4 碼" autocomplete="off"><button class="big alt" id="join" disabled>進入</button></div>
+    <p id="netmsg">連線檢查中…</p></div></div>
 
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
 
   <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
+  <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉">✕</button>
+    <section data-p="main"><h3>設定</h3>
+      <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
+      <button class="sbtn" data-go="tai">台數表<em>›</em></button>
+      <button class="sbtn" data-go="rule">規則說明<em>›</em></button>
+      <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
+      <p class="ver">版本 <span class="verv"></span></p></section>
+    <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>台數表</h3></div>
+      <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
+    <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
+<h4>吃、碰、槓</h4><p>上家打的牌可以吃（湊順子）；任何人打的牌都可以碰（湊刻子）或槓。同時有人要時，胡＞碰／槓＞吃。</p>
+<h4>胡牌與付錢</h4><p>胡別人打的牌叫「放槍」，由放槍的人付；自己摸到叫「自摸」，三家都付。每家付「底＋台數×每台」，底和每台在開局前的牌局設定選。莊家胡、或莊家付錢時，另加莊家與連莊的台數。</p>
+<h4>莊家與局數</h4><p>莊家胡牌或流局就連莊，否則換下家當莊。一圈 4 局、一將 16 局。牌牆剩 16 張還沒人胡就流局。</p>
+<h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦代打。</p>
+<h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先讓她們代打。</p></div></section>
+    <section data-p="quit" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>離開遊戲</h3></div>
+      <p class="qtxt" id="quitTxt"></p><div class="qrow"><button class="big alt" data-go="main">取消</button><button class="big" id="quitGo">離開</button></div></section>
+  </div></div>
   <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
   <div class="panel hide" id="result"><div class="card wide res" id="resCard"></div></div>
 </div>
@@ -705,7 +819,7 @@ function endHand(w,f,k){
   const payers=self?[0,1,2,3].filter(s=>s!==w):[f];
   for(const p of payers){const t=T.tot+((w===G.dealer||p===G.dealer)?dx:0),amt=cfg().b+cfg().t*t;d[p]-=amt;d[w]+=amt}
   for(let i=0;i<4;i++)G.score[i]+=d[i];
-  G.res={w,f,k,tai:T.list,tot:T.tot,dx,d};
+  G.res={w,f,k,tai:T.list,tot:T.tot,dx,d,dl:G.dealer,ln:G.lian|0};
   if(G.stat){const S=G.stat;S[w][0]++;if(self)S[w][1]++;else S[f][2]++;S[w][3]=Math.max(S[w][3],T.tot)}
   bump({s:w,t:self?'自摸':'胡',f})}
 function calcTai(w,k,self){
@@ -857,7 +971,7 @@ function peerNet(opt){
   for(let i=0;i<30&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,100));
   try{if(window.claude&&window.claude.use)lobbyNs=await window.claude.use('room')}catch(e){}
   if(!lobbyNs&&!window.claude&&window.Peer)lobbyNs=peerNet();   // outside claude.ai (GitHub Pages): WebRTC through PeerJS
-  if(lobbyNs){$('create').disabled=false;$('join').disabled=false;$('netmsg').textContent='開包廂後把房號給牌友就能同桌。';autoRoom()}
+  if(lobbyNs){$('create').disabled=false;$('join').disabled=false;$('netmsg').textContent='';autoRoom()}
   else{$('netmsg').textContent='這裡無法連線，可以先練習。';$('solo').classList.add('prime')}
 })();
 /* invite links (?room=CODE): a refreshed host takes its game back from localStorage, anyone else joins */
@@ -941,52 +1055,63 @@ function resize(){
   px('--bh',bh);px('--tw',tw);px('--sw',sw);px('--mw',tw*.74);px('--fs',Math.max(12,Math.min(17,RH*.031)));
   // the 3D table is framed around my hand row: everything on it stays above the top of my tiles
   if(window.T3&&T3.resize)T3.resize(RW,RH,RH-bh-tw*1.6)}
-/* menu key visual, harem style: the four gathered around you in two rows, a different pair in front each visit; they take turns inviting you to sit down, tap one to bring her forward */
+/* menu key visual, harem style: every girl stands on an invisible ring that turns slowly; whoever passes the front is the biggest and brightest
+   and speaks in the RPG dialogue box at the bottom; tap a girl and the ring brings her to the front. each visit picks one of her lobby poses (Wp) */
 const KVQ=[['今晚，留下來陪我打一圈？','別急著走，牌桌上還有我。','坐近一點……我又不會吃了你。'],
  ['來啊！輸了可要聽我的喔！','坐我旁邊，我罩你。','磨蹭什麼？位子都幫你暖好了。'],
  ['喵～你終於來了！','陪我玩嘛，好不好～','今天也要摸摸頭才開始喔～'],
- ['你今晚的行程，我已經排好了。','議程只有一項：陪我打牌。','準時入座，遲到要扣分的。']];
+ ['你今晚的行程，我已經排好了。','議程只有一項：陪我打牌。','準時入座，遲到要扣分的。'],
+ ['報告長官……不對，今晚你才是我的目標。','坐下，不准逃。這是命令。','今晚，我值你的班。'],
+ ['本宮等你，已經等了三百年呢。','坐近些，讓我看清你的牌……和心思。','今夜的籤，說你會輸給我喔。'],
+ ['主人，您的位子已經暖好了。','今晚由我服侍您……打牌，才怪。','請慢用，輸了可是要罰的喔。'],
+ ['今晚的歌單，第一首就是你。','嘿，帥哥，來陪我嗨一圈！','節奏我帶，你只要跟上。']];
 const KVW=[['人還沒回來……那你先陪我聊聊？','等人的時候，看著我就好。','別急，夜還很長。'],
  ['也太慢了吧！回來先罰一杯！','無聊死了，你陪我說話！','趁現在，偷看一下你的牌～開玩笑的啦！'],
  ['喵～趁空檔摸摸我嘛～','是不是迷路了呀？','等的時候……可以靠著你嗎～'],
- ['暫停中。等待時間我會記在帳上。','網路問題？我順便幫你看看……開玩笑的。','利用空檔，我們來對一下今晚的行程。']];
-let kvT=0,kvSel=-1,kvLast=-1,kvWait=false;
+ ['暫停中。等待時間我會記在帳上。','網路問題？我順便幫你看看……開玩笑的。','利用空檔，我們來對一下今晚的行程。'],
+ ['人呢？我去把他抓回來。','擅離牌桌，記一支警告。','等待期間，你先接受我的盤問。'],
+ ['不急，本宮最擅長的就是等待。','趁這空檔，讓我替你算一卦？','呵呵，人間的網路真是脆弱呢。'],
+ ['主人，要不要先來杯紅茶？','請稍候，我幫您捏捏肩。','等待的時間，也由我來服侍您。'],
+ ['斷線？那我先放首歌墊檔！','空檔太無聊了，陪我聊天啦！','等他回來，我們再嗨一圈！']];
+let kvT=0,kvSel=-1,kvLast=-1,kvWait=false,dlgT=0,kvAng=0,kvTarget=null,kvHold=0;
 function kvBuild(){
-  const A=window.AVATARS||[],kv=$('kv'),o=[0,1,2,3].sort(()=>Math.random()-.5);
-  // slots left to right: back, front, front, back
-  kv.innerHTML='<i class="kvl"></i>'+[o[2],o[0],o[1],o[3]].map((c,n)=>A[c]&&A[c].W?`<div class="g s${n} c${c}" data-c="${c}"><img alt="" src="${A[c].W}"></div>`:'').join('')+
-    '<div class="kq" id="kvq"></div>'+Array.from({length:16},(_,i)=>`<i class="pt${i%3?'':' bk'}" style="left:${(Math.random()*100).toFixed(0)}%;--d:${(7+Math.random()*7).toFixed(1)}s;--dl:-${(Math.random()*14).toFixed(1)}s;--x:${(Math.random()*80-40).toFixed(0)}px;--s:${(.6+Math.random()*.8).toFixed(2)}"></i>`).join('');
-  kv.onclick=e=>{const g=e.target.closest('.g');if(g){kvSay(g,true);try{sfx('pick')}catch(_){}}};
-  clearTimeout(kvT);kvT=setTimeout(kvCycle,1400)}
-function kvSay(g,tap){
-  const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c],q=$('kvq');
+  const A=window.AVATARS||[],kv=$('kv'),o=[...A.keys()].filter(c=>A[c]&&(A[c].Wp||A[c].W)).sort(()=>Math.random()-.5);
+  kv.innerHTML='<i class="kvl"></i>'+o.map(c=>`<div class="g c${c}" data-c="${c}"><img alt="" src="${A[c].Wp?A[c].Wp[Math.random()*A[c].Wp.length|0]:A[c].W}"><span class="nm8">${esc(BOTS[c])}</span></div>`).join('')+
+    Array.from({length:16},(_,i)=>`<i class="pt${i%3?'':' bk'}" style="left:${(Math.random()*100).toFixed(0)}%;--d:${(7+Math.random()*7).toFixed(1)}s;--dl:-${(Math.random()*14).toFixed(1)}s;--x:${(Math.random()*80-40).toFixed(0)}px;--s:${(.6+Math.random()*.8).toFixed(2)}"></i>`).join('');
+  kv.onclick=e=>{const g=e.target.closest('.g');if(g){kvFront(g);setTimeout(()=>kvSay(g,true),700);try{sfx('pick')}catch(_){}}};
+  clearTimeout(kvT);kvT=setTimeout(kvCycle,2400)}
+function kvFront(g){const n=$('kv').querySelectorAll('.g').length,i=+g.dataset.i;kvTarget=-i*2*Math.PI/n}
+{let last=performance.now();const tick=now=>{requestAnimationFrame(tick);const dt=Math.min(50,now-last);last=now;const kv=$('kv');if(!kv||!kv.offsetParent)return;
+  const gs=[...kv.querySelectorAll('.g')],n=gs.length;if(!n)return;
+  if(kvTarget!=null){const d=((kvTarget-kvAng)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI;if(Math.abs(d)<.002){kvAng=kvTarget;kvTarget=null;kvHold=now+5000}else kvAng+=d*Math.min(1,dt*.006)}
+  else if(now>kvHold&&!kv.classList.contains('focus')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)kvAng+=dt*.00012;
+  gs.forEach((g,i)=>{const a=kvAng+i*2*Math.PI/n,x=Math.sin(a),z=Math.cos(a),k=.62+.38*(z+1)/2;
+    g.style.left=(55+x*40)+'%';g.style.bottom=(10-10*(z+1)/2)+'%';g.style.height=`calc(${86*k}% * var(--k))`;g.style.zIndex=Math.round(10+z*10);
+    g.style.setProperty('--b',(.62+.4*(z+1)/2).toFixed(2));g.style.setProperty('--sa',(.75+.25*(z+1)/2).toFixed(2));g.dataset.i=i})};requestAnimationFrame(tick)}
+function kvSay(g,tap){const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c]||KVQ[0];let d=$('kvdlg');
+  if(!d){d=document.createElement('div');d.id='kvdlg';kv.appendChild(d)}
   kv.querySelectorAll('.g').forEach(x=>x.classList.toggle('sel',x===g));kv.classList.add('focus');
-  q.innerHTML=`<b>${esc(BOTS[c])}</b>${esc(L[Math.random()*L.length|0])}`;q.classList.remove('on','sl','sr');
-  // layout coordinates (offset*, not screen rects: the root is rotated on portrait phones); above her head if it fits, else beside her head; always inside the picture
-  const W=kv.clientWidth,H=kv.clientHeight,qw=q.offsetWidth,qh=q.offsetHeight,gw=g.offsetWidth,gh=g.offsetHeight,gx=g.offsetLeft-gw/2,gy=g.offsetTop,cx=gx+gw/2,pad=6;
-  let x,y;if(gy-qh-10>=pad){x=cx-qw/2;y=gy-qh-10}
-  else{const right=cx<W/2;x=right?cx+gw*.16:cx-gw*.16-qw;y=gy+gh*.06;q.classList.add(right?'sl':'sr')}
-  x=Math.max(pad,Math.min(W-qw-pad,x));y=Math.max(pad,Math.min(H-qh-pad,y));
-  q.style.left=x+'px';q.style.top=y+'px';q.style.setProperty('--ax',Math.max(14,Math.min(qw-14,cx-x))+'px');void q.offsetWidth;q.classList.add('on');
-  kvSel=c;clearTimeout(kvT);kvT=setTimeout(kvCycle,tap?6000:4200)}
-function kvCycle(){
-  const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
-  const gs=[...kv.querySelectorAll('.g')];if(!gs.length)return;
-  // every other beat everyone relaxes back into the group shot
-  if(kv.classList.contains('focus')){kv.classList.remove('focus');gs.forEach(x=>x.classList.remove('sel'));$('kvq').classList.remove('on');kvT=setTimeout(kvCycle,2200);return}
-  let g;do g=gs[Math.random()*gs.length|0];while(gs.length>1&&+g.dataset.c===kvLast);kvLast=+g.dataset.c;kvSay(g,false)}
+  const t=L[Math.random()*L.length|0];d.innerHTML=`<span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><b>${esc(BOTS[c])}</b><span class="tx"></span><i></i>`;d.classList.remove('done');d.classList.add('on');
+  const sp=d.querySelector('.tx');let n=0;clearInterval(dlgT);dlgT=setInterval(()=>{n++;sp.textContent=t.slice(0,n);if(n>=t.length){clearInterval(dlgT);d.classList.add('done')}},55);
+  kvSel=c;clearTimeout(kvT);kvT=setTimeout(kvCycle,tap?6500:5000)}
+function kvCycle(){const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
+  if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
+  const g=[...kv.querySelectorAll('.g')].sort((a,b)=>(+b.style.zIndex)-(+a.style.zIndex))[0];if(g)kvSay(g,false)}
+// 包廂 modal and a nickname that is never empty
+$('roomBtn').onclick=()=>$('rmodal').classList.remove('hide');$('rmx').onclick=()=>$('rmodal').classList.add('hide');$('rmodal').onclick=e=>{if(e.target.id==='rmodal')$('rmodal').classList.add('hide')};
 setTimeout(warmArt,1200);   // decode the effect art while the player is still in the menu
 addEventListener('resize',()=>{resize();if(!inMenu)try{render()}catch(e){}});resize();root.classList.add('art');
 {const st=document.createElement('style');st.textContent=(window.AVATARS||[]).map((a,i)=>a&&(a.a||a.t)?`.fc.c${i}{background-image:url(${a.a||a.t})}`:'').join('');document.head.appendChild(st);
-  kvBuild();
+  setTimeout(kvBuild,0);   // after BOTS / esc further down are defined
   if(window.BG){document.documentElement.style.setProperty('--bgi','url('+window.BG+')');$('menu').style.backgroundImage=$('lobby').style.backgroundImage='url('+window.BG+')'}}
 const show=(id,on)=>$(id).classList.toggle('hide',!on);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const BOTS=['瑟琳','蕾歐','薇拉','蜜雅'];
+const BOTS=['瑟琳','蕾歐','薇拉','蜜雅','凜','白音','艾莉絲','露娜'];
 /* the four characters are dealt to the four seats at random when a game starts; nobody picks */
-function dealChs(){const p=[0,1,2,3];for(let i=3;i>0;i--){const j=Math.random()*(i+1)|0;[p[i],p[j]]=[p[j],p[i]]}return p}
+function dealChs(){const n=Math.min(BOTS.length,(window.AVATARS||[]).length||4),p=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=Math.random()*(i+1)|0;[p[i],p[j]]=[p[j],p[i]]}return p.slice(0,4)}   // four of the cast at the table
 function chr(seat){return G&&G.chs?G.chs[seat]|0:seat&3}
 let myName='';try{myName=localStorage.getItem('mjName')||''}catch(e){}
+if(!myName){const A=['夜歸人','風流客','雀神','手氣王','小賭怡情','今晚不睡','包廂常客','聽牌高手','夜貓','紅中哥','清一色','好運來'];myName=A[Math.random()*A.length|0]+(Math.random()*90+10|0)}
 $('nameIn').value=myName;
 function saveName(){myName=$('nameIn').value.trim().slice(0,8);try{localStorage.setItem('mjName',myName)}catch(e){}}
 function peerName(id,i){const p=plist.find(x=>x.id===id),n=p&&typeof p.pr.nm==='string'?p.pr.nm.trim().slice(0,8):'';return n||'玩家'+(i+1)}
@@ -1082,13 +1207,13 @@ function audio(){
   if(!SND.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;try{SND.ctx=new C()}catch(e){return null}}
   if(SND.ctx.state==='suspended'){try{SND.ctx.resume().catch(()=>{})}catch(e){}}
   return SND.ctx}
-const VB=[{},{},{},{}];
+const VB=BOTS.map(()=>({}));
 function playBuf(buf,gain){try{const c=SND.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=gain;src.buffer=buf;src.connect(g);g.connect(c.destination);src.start()}catch(e){}}
 function decodeVoice(vi,k,then){
   const d=window.VOICES&&window.VOICES[vi]&&window.VOICES[vi][k];if(!d||VB[vi][k])return;VB[vi][k]='pending';
   try{const b=atob(d.split(',')[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
     SND.ctx.decodeAudioData(u.buffer,buf=>{VB[vi][k]=buf;if(then)then(buf)},()=>{VB[vi][k]=null})}catch(e){VB[vi][k]=null}}
-function loadVoices(){if(!SND.ctx)return;for(let vi=0;vi<4;vi++)for(const k of ['chi','pon','kan','hu','zimo'])decodeVoice(vi,k)}
+function loadVoices(){if(!SND.ctx)return;for(let vi=0;vi<VB.length;vi++)for(const k of ['chi','pon','kan','hu','zimo'])decodeVoice(vi,k)}
 function voice(seat,k,gain){
   if(!SND.on||seat<0||seat>3)return;const c=audio();if(!c||c.state!=='running')return;
   const vi=chr(seat),buf=VB[vi][k];
@@ -1118,7 +1243,13 @@ function sfx(name){
     case 'drawgame':tone(t,392,.22,.18,'sine');tone(t+.22,330,.4,.18,'sine');break;
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
-function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'♪':'×'}
+function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
+const VER='2026.1117.0127';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
+  if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
+$('cfgBtn').onclick=()=>{setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
+$('setm').addEventListener('click',e=>{const t=e.target;if(t.id==='setm'||t.closest('[data-x]')){$('setm').classList.add('hide');return}const g=t.closest('[data-go]');if(g)setPage(g.dataset.go)});
+$('quitGo').onclick=()=>leaveRoom();
 $('snd').onclick=()=>{SND.on=!SND.on;try{localStorage.setItem('mjSnd',SND.on?'1':'0')}catch(e){}sndBtn();if(SND.on){audio();sfx('pick')}};sndBtn();
 let wasMine=false,lastTick=-1;
 function soundHooks(){
@@ -1193,9 +1324,9 @@ function renderLobby(){
     rows.push(p?`<div class="pl${me?' me':''}"><span class="wd">${WIND[i]}</span><span class="nm">${esc(me?(myName||'我'):peerName(p.id,i))}</span><span class="tg">${me?'你':'牌友'}${i===0&&R?'・房主':''}</span></div>`
       :`<div class="pl emp"><span class="wd">${WIND[i]}</span><span class="nm">虛位以待</span><span class="tg">由她們補位</span></div>`)}
   const settling=R&&performance.now()-joinedAt<1800,c=cfg(),n=R?Math.min(4,plist.length):1,A=window.AVATARS||[];
-  const cast=`<div class="cast">${[0,1,2,3].map(i=>`<span title="${BOTS[i]}">${face(i)}<i>${BOTS[i]}</i></span>`).join('')}</div>`;
+  const cast=`<div class="cast">${BOTS.map((_,i)=>!A[i]?'':`<span title="${BOTS[i]}">${face(i)}<i>${BOTS[i]}</i></span>`).join('')}</div>`;
   const h=`<div class="lcol"><div class="lt">${R?'包廂 <b class="rc">'+esc(roomCode)+'</b><button class="inv" id="inv">邀請連結</button>':'單機包廂'}</div>${rows.join('')}
-   <div class="lcast"><div class="lsub">今晚的牌搭子・開局隨機入座</div>${cast}</div></div>
+   <div class="lcast"><div class="lsub">今晚的牌搭子・開局隨機抽 4 位入座</div>${cast}</div></div>
    <div class="lcol"><div class="lt">牌局設定${isHost?'':'<small>由房主決定</small>'}</div>
    <div class="opt"><span>局數</span>${seg('r',[[1,'一圈','4 局'],[4,'一將','16 局']])}</div>
    <div class="opt"><span>底／台</span>${seg('b',[[100,'小玩','100／20'],[300,'中注','300／50'],[500,'豪賭','500／100']])}</div>
@@ -1207,7 +1338,11 @@ const QUIPS=[
  {take:['原來，你一直等著我這張。','拿去吧，算我請你的。'],took:['謝謝招待，你真貼心。','這張，我就收下了。'],dealin:['讓你一次……下次可沒這麼好說話。','被你看穿了呢。'],beatme:['承讓了，親愛的。','別皺眉，輸給我不丟臉。'],zimo:['運氣，也是魅力的一種。','不好意思，我自己來。'],lian:['還想再陪我一局嗎？','莊家的位子，我坐得很舒服。']},
  {take:['眼光不錯嘛，敢搶我的牌？','好啊，敢搶就要敢接招！'],took:['謝啦！這張我等好久了！','送上門的，不吃白不吃！'],dealin:['哼，算你厲害，下一把討回來！','好，這把我認了！'],beatme:['胡啦！今晚你請客！','怎樣，服不服？'],zimo:['手氣正旺，擋都擋不住！','看好了，這就是實力！'],lian:['還不換人？那就繼續陪我。','莊家是我的，誰都別想搶！']},
  {take:['這麼會接，下一張也接得住嗎？','欸～那張我捨不得的耶。'],took:['嘿嘿，謝謝你餵我～','你是故意的吧？我收下囉～'],dealin:['嗚，被你逮到了……','好啦好啦，這次算你贏。'],beatme:['抓到你了～','這把是我的囉～'],zimo:['自己摸到的才最甜～','欸嘿，我很厲害對吧？'],lian:['再一局嘛，好不好～','我還沒玩夠呢～']},
- {take:['……計算之外。你記住了。','這張被你拿走，帳我會記著。'],took:['效率很好，謝謝配合。','這張，正好在我的計畫裡。'],dealin:['這筆先記著。下一局，我會算回來。','失誤一次，不會有第二次。'],beatme:['結帳時間到了。','都在預料之中。'],zimo:['完美收支。','流程順利，結案。'],lian:['延長加班，你奉陪嗎？','下一局，照計畫進行。']}];
+ {take:['……計算之外。你記住了。','這張被你拿走，帳我會記著。'],took:['效率很好，謝謝配合。','這張，正好在我的計畫裡。'],dealin:['這筆先記著。下一局，我會算回來。','失誤一次，不會有第二次。'],beatme:['結帳時間到了。','都在預料之中。'],zimo:['完美收支。','流程順利，結案。'],lian:['延長加班，你奉陪嗎？','下一局，照計畫進行。']},
+ {take:['想搶我的牌？膽子不小。','這張被你攔下，我記住了。'],took:['這張，依法沒收。','謝謝配合調查。'],dealin:['……這次算你逮到我。','失誤，下不為例。'],beatme:['你被逮捕了，罪名是輸給我。','乖乖認罪吧。'],zimo:['證據確鑿，自摸。','一切都在掌握之中。'],lian:['延長執勤，你繼續陪我。','莊家這個位子，我要守住。']},
+ {take:['呵呵，被你搶先了呢。','這張，本宮就讓給你吧。'],took:['這張牌，與本宮有緣。','謝謝你的供奉呢～'],dealin:['哎呀，被你看穿了。','三百年來，你是第一個。'],beatme:['輸給本宮，不丟臉喔。','天意如此，呵呵。'],zimo:['自己摸到的，才是緣分。','籤上早就寫了呢～'],lian:['再陪本宮一局吧。','這莊，本宮還沒坐夠。']},
+ {take:['主人好眼光，這張請收下。','是，這張讓給主人。'],took:['謝謝主人的賞賜～','這張，我就不客氣了。'],dealin:['啊，是我服務不周……','主人真是壞心眼呢。'],beatme:['主人，結帳時間到了～','承惠了，請慢走～'],zimo:['不好意思，我自己來了～','服務完畢，請笑納。'],lian:['讓我繼續為您服務吧。','莊家的位子，我先幫您暖著。']},
+ {take:['哇，你也聽到這個拍子？','好啦，這段 solo 給你！'],took:['謝啦，這拍我接了！','送我這張，愛死你了！'],dealin:['欸——這段我打錯拍了啦！','好啦好啦，這首算你的！'],beatme:['胡啦！全場為我歡呼！','這首歌叫做，你輸了！'],zimo:['自摸！音量開到最大！','節奏完全在我手上！'],lian:['安可！再來一局！','莊家這首，我還要唱下去！']}];
 let quipN={},quipHand='',MOOD={},lastResD=null;
 /* short-lived table expression: S = smiling at you, L = lost a hand, smile gone */
 function setMood(seat,e,ms){MOOD[seat]={e,until:Date.now()+ms};requestAnimationFrame(render);setTimeout(()=>requestAnimationFrame(render),ms+50)}
@@ -1257,11 +1392,18 @@ function renderResult(){
   else{
     const self=r.f<0,hand=[...G.hands[r.w]].map(kd);if(self){const i=hand.lastIndexOf(r.k);if(i>=0)hand.splice(i,1)}
     const lo=loserOf(r);
-    h=`<div class="rh"><div class="rt"><span class="rk">${self?'自摸':'胡牌'}</span><div class="rwc"><span class="rw">${seatLabel(r.w)}</span>${self?'<span class="rf">三家付</span>':`<span class="rf">放槍<em>${esc(nameOf(r.f))}</em></span>`}</div></div><div class="rtot"><b data-cnt="${r.tot}">${r.tot}</b>台</div></div>`+
+    // dealer tai (莊 1 + 2 per streak) only counts on payments that involve the dealer: all of them when the dealer wins, the discarder's when the dealer dealt in,
+    // and only the dealer's own share on a self-draw by someone else. the big number is what the list adds up to
+    const dl=r.dl!=null?r.dl:G.dealer,ln=r.ln!=null?r.ln:G.lian|0,ex=r.dx||0,allEx=ex&&(r.w===dl||(!self&&r.f===dl)),dlPays=ex&&self&&r.w!==dl;
+    const big=r.tot+(allEx?ex:0),dname=r.w===dl?'莊家':'放槍的莊家';
+    const dlRow=allEx?`<div class="sub"><span>牌型小計</span><i></i><b>${r.tot} 台</b></div><div class="dx"><span>${dname}${ln?'・連'+ln+'拉'+ln:''}</span><i></i><b>+${ex} 台</b></div>`
+      :dlPays?`<div class="dx"><span>莊家${ln?'連'+ln+'拉'+ln:''}另付</span><i></i><b>+${ex} 台</b></div>`:'';
+    const bigNote=dlPays?`<small>莊家付 ${r.tot+ex} 台</small>`:'';
+    h=`<div class="rh"><div class="rt"><span class="rk">${self?'自摸':'胡牌'}</span><div class="rwc"><span class="rw">${seatLabel(r.w)}</span>${self?'<span class="rf">三家付</span>':`<span class="rf">放槍<em>${esc(nameOf(r.f))}</em></span>`}</div></div><div class="rtot"><b data-cnt="${big}">${big}</b>台${bigNote}</div></div>`+
       `<div class="rhand sm">${G.melds[r.w].map(m=>meldHTML(m,'',true)).join('')}<span style="width:6px"></span>${hand.map(k=>tile(k)).join('')}<span style="width:8px"></span>${tile(r.k,'last')}`+
       (G.fl[r.w]?`<span style="width:8px"></span>${[...G.fl[r.w]].map(x=>tile(kd(x),'dim')).join('')}`:'')+`</div>`+
-      `<div class="tl">${(r.tai.length?r.tai:[['無台',0]]).map(t=>`<div><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')}${r.dx?`<div class="dx"><span>莊家${G.lian?'連'+G.lian:''}另計</span><i></i><b>${r.dx} 台</b></div>`:''}</div>`+
-      `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}"><div class="pn">${seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div><div class="pb">${chips(G.score[s])}</div></div>`).join('')}</div>`+
+      `<div class="tl">${(r.tai.length?r.tai:[['無台',0]]).map(t=>`<div><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')}${dlRow}</div>`+
+      `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}"><div class="pn">${seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div>${r.d[s]<0?`<div class="pt">${r.tot+((r.w===dl||s===dl)?ex:0)} 台</div>`:''}<div class="pb">${chips(G.score[s])}</div></div>`).join('')}</div>`+
       `<div class="rfoot"><span>底 ${cfg().b}・每台 ${cfg().t}</span><button class="big" data-next="1">下一局</button></div>`}
   const me=mySeat(),lo=r.w>=0?loserOf(r):-1,qw=r.w>=0&&r.w!==me?(r.f===me?resQuip(r.w,'beatme'):r.f<0?resQuip(r.w,'zimo'):''):'',ql=r.w===me?resQuip(lo,'dealin'):'';
   const html=(r.w>=0?fullImg(r.w,false,qw):'')+`<div class="rb${r.w<0?' dr':''}">`+h+(r.w<0?`<button class="big" data-next="1">下一局</button>`:'')+`</div>`+(r.w>=0?fullImg(lo,true,ql):'');
@@ -1283,7 +1425,7 @@ function toast(seat,text){
   const xy=pos===0?[.5,.64]:pos===1?[.85,.45]:pos===2?[.5,.18]:pos===3?[.15,.45]:[.5,.5];
   if(pos>0){const av=$('sw'+WINK[pos]);av.classList.remove('pop');void av.offsetWidth;av.classList.add('pop')}
   d.style.left=xy[0]*RW+'px';d.style.top=xy[1]*RH+'px';root.appendChild(d);setTimeout(()=>d.remove(),1200)}
-const CUT={'吃':1,'碰':1,'槓':1,'胡':2,'自摸':2},CCOL=[['#8a55c9','#2a1248'],['#d2332b','#5a0d12'],['#2f7fd0','#0b2a4a'],['#3f9a6b','#0f3a26']];
+const CUT={'吃':1,'碰':1,'槓':1,'胡':2,'自摸':2},CCOL=[['#8a55c9','#2a1248'],['#d2332b','#5a0d12'],['#2f7fd0','#0b2a4a'],['#3f9a6b','#0f3a26'],['#3a64c0','#0e1d3e'],['#e0475a','#4a0d18'],['#d9a93a','#2a1d08'],['#d94fc2','#3a0f3a']];
 /* art used by effects is decoded once up front and kept referenced, so an effect never starts before its picture can show */
 const ARTC={};
 function warmArt(){
@@ -1376,7 +1518,7 @@ $('resCard').addEventListener('click',e=>{if(e.target.closest('[data-next]'))doA
 let myJ=0;
 function enterRoom(code,room,saved){
   R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
-  show('menu',false);show('lobby',G.st==='lobby');myJ=saved&&saved.j||Date.now();
+  show('menu',false);$('rmodal').classList.add('hide');show('lobby',G.st==='lobby');myJ=saved&&saved.j||Date.now();
   try{history.replaceState(null,'','?room='+code)}catch(e){}
   saveName();R.presence({j:myJ,nm:myName}).catch(()=>{});dirty=true}
 function newCode(){const cs='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=cs[Math.random()*cs.length|0];return c}
