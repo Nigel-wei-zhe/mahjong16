@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>十六張麻將</title>
+<title>今夜有局｜台灣十六張麻將</title>
+<meta name="description" content="今夜有局：台灣十六張麻將，和她們同桌，或開包廂邀牌友連線。">
+<meta property="og:title" content="今夜有局｜台灣十六張麻將">
+<meta property="og:description" content="今晚，她們都在等你入座。開包廂邀牌友，或和她們打一圈。">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;background:#1a0a10;color:#f3efe2;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation}
@@ -463,7 +466,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bl">十六張麻將</div><div class="bt"><i></i><i></i><i></i><i></i></div><div class="bb"><b id="bootBar"></b></div><div class="bs" id="bootMsg">進站中…</div></div>
+<div id="boot"><div class="bl">今夜有局</div><div class="bs" style="margin-top:-8px">台灣十六張麻將</div><div class="bt"><i></i><i></i><i></i><i></i></div><div class="bb"><b id="bootBar"></b></div><div class="bs" id="bootMsg">進站中…</div></div>
 <script>function bootStep(t,p){var m=document.getElementById('bootMsg'),b=document.getElementById('bootBar');if(m)m.textContent=t;if(b)b.style.width=p+'%'}
 function bootDone(){var b=document.getElementById('boot');if(!b)return;b.classList.add('out');setTimeout(function(){b.remove()},600)}
 addEventListener('load',function(){setTimeout(bootDone,300)});   // fallback if the game script failed half way
@@ -479,7 +482,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   </div>
 
   <div class="panel" id="menu"><div id="kv"></div><div class="card">
-    <div class="logo"><small>四人連線</small>十六張麻將</div>
+    <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
     <p>今晚，她們都在等你入座。</p>
     <input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off" style="letter-spacing:2px;text-transform:none;margin-bottom:6px">
     <button class="big" id="create" disabled>開包廂邀牌友</button>
@@ -1329,7 +1332,7 @@ $('join').onclick=()=>joinCode($('codeIn').value,{join:true});
 function netBanner(){const b=$('netBan'),on=!!(R&&R.status==='retry');if(b.classList.contains('hide')===on)b.classList.toggle('hide',!on)}
 function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode}
 async function invite(){const u=inviteUrl();
-  try{if(navigator.share){await navigator.share({title:'十六張麻將',text:'來同桌打麻將，房號 '+roomCode,url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{if(navigator.share){await navigator.share({title:'今夜有局',text:'今夜有局，來同桌打十六張，房號 '+roomCode,url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(u);flashMsg('邀請連結已複製')}catch(e){prompt('複製邀請連結',u)}}
 function flashMsg(t){const m=document.querySelector('#lobbyCard .lmsg');if(m){m.textContent=t;lobbyHTML=''}}
 $('solo').onclick=()=>{saveName();inMenu=false;isHost=true;show('menu',false);G={st:'lobby',v:0,cfg:loadCfg(),co:Math.random()*3|0};dirty=true};
