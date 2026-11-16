@@ -947,7 +947,7 @@ function placeWin(k,s,lit,live,extra){
   if(!d.firstChild)d.innerHTML='<div class="fr"></div><div class="wn"><img alt=""></div><div class="lb"></div>';
   const img=d.querySelector('img');if(a&&img.dataset.k!==c+vk){const was=img.dataset.k;img.dataset.k=c+vk;img.src=a[vk]||a[bk];
     if(was&&was[0]===c){d.classList.remove('mood');void d.offsetWidth;d.classList.add('mood')}}
-  const nm=`${seatLabel(s)}${extra||''}`,el=d.lastChild;if(el.innerHTML!==nm)el.innerHTML=nm;
+  const nm=`<span class="nm">${esc(nameOf(s))}</span>${extra||''}`,el=d.lastChild;if(el.innerHTML!==nm)el.innerHTML=nm;
   d.classList.toggle('nw',bk==='n');d.classList.toggle('on',lit);d.classList.toggle('off',live&&!lit)}
 /* idle moves: every few seconds one window (rarely mine) plays a random small motion, never the same one twice in a row */
 const IA_MS=[0,2600,2400,1100,2800,2400,2400];let iaLast=0;
@@ -1378,7 +1378,8 @@ async function init(){
       if(on){g.fillStyle='#ffd54a';g.shadowColor='#ffd54a';g.shadowBlur=22;g.beginPath();g.roundRect(-126,224,252,9,4);g.fill()}
       g.fillStyle=on?'#ffd54a':pos===v.dealer?'#c0241c':'#2a3644';g.beginPath();g.roundRect(-200,150,64,64,10);g.fill();g.shadowBlur=0;
       g.fillStyle=on?'#2a1406':'#fff';g.font=`bold 42px ${SERIF}`;g.fillText(v.winds[pos],-168,184);
-      g.fillStyle=v.scores[pos]<0?'#ff8a80':on?'#fff3c4':'#f0d27a';g.font=`bold 40px ${SANS}`;g.fillText(String(v.scores[pos]),8,188);
+      g.fillStyle=v.scores[pos]<0?'#ff8a80':on?'#fff3c4':'#f0d27a';g.font=`bold 40px ${SANS}`;g.fillText(String(v.scores[pos]),pos===v.dealer?-6:8,188);
+      if(pos===v.dealer){g.fillStyle='#c0241c';g.beginPath();g.roundRect(100,162,52,52,10);g.fill();g.strokeStyle='#ffd54a';g.lineWidth=3;g.stroke();g.fillStyle='#fff';g.font=`bold 34px ${SERIF}`;g.fillText('莊',126,189)}   // the dealer mark stays even when her turn lights the wind box
       g.restore()});
     ctex.needsUpdate=true}
 
