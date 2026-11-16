@@ -744,13 +744,19 @@ function peerNet(opt){
     const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;for(const [id,c] of conns)if(c.open)try{c.send({t:'tbl',hub:cid,tbl:[...table]})}catch(e){}},40)};
     const keep=pp=>pp.on('disconnected',()=>{if(pp===peer&&!pp.destroyed&&!dead)try{pp.reconnect()}catch(_){}});
     function asHub(res){hub=true;room.status='ok';table=new Map([[cid,me]]);hubCid=cid;
-      peer.on('connection',c=>{c.on('data',m=>{if(!m||m.t!=='p'||typeof m.cid!=='string')return;const fresh=conns.get(m.cid)!==c;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast();if(fresh)sendTo(c,m.cid)});
-        c.on('close',()=>{if(c._cid&&conns.get(c._cid)===c){conns.delete(c._cid);table.delete(c._cid);bcast()}})});res()}
+      peer.on('connection',c=>{c.on('data',m=>{if(m&&m.t==='hb'){c._seen=Date.now();if(c._cid)try{c.send({t:'hb'})}catch(e){}return}
+          if(!m||m.t!=='p'||typeof m.cid!=='string')return;c._seen=Date.now();const fresh=conns.get(m.cid)!==c;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast();if(fresh)sendTo(c,m.cid)});
+        c.on('close',()=>drop(c))});
+      setInterval(()=>{if(dead)return;const now=Date.now();for(const c of [...conns.values()])if(now-(c._seen||0)>12000){try{c.close()}catch(e){}drop(c)}},3000);res()}
+    function drop(c){if(c._cid&&conns.get(c._cid)===c){conns.delete(c._cid);table.delete(c._cid);bcast()}}
     function asClient(res,rej){hub=false;room.stage='signal';
       const pp=new Peer(PEER_CFG);peer=pp;keep(pp);
       pp.on('open',()=>{room.stage='ice';const c=pp.connect(HUB,{reliable:true});hubConn=c;
         c.on('open',()=>{retry=0;room.status='ok';try{c.send({t:'p',cid,pres:me})}catch(e){}res&&res();res=null});
-        c.on('data',m=>{if(!m)return;if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
+        c._seen=Date.now();
+        const hb=setInterval(()=>{if(dead||hubConn!==c){clearInterval(hb);return}
+          if(Date.now()-c._seen>12000){clearInterval(hb);try{c.close()}catch(e){}lost();return}try{c.send({t:'hb'})}catch(e){}},4000);
+        c.on('data',m=>{if(!m)return;c._seen=Date.now();if(m.t==='hb')return;if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
         c.on('close',lost);c.on('error',lost)});
       pp.on('error',e=>{if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
     function lost(){   // the host went away: keep trying the same room (the host may be refreshing)
