@@ -947,7 +947,7 @@ function placeWin(k,s,lit,live,extra){
   if(!d.firstChild)d.innerHTML='<div class="fr"></div><div class="wn"><img alt=""></div><div class="lb"></div>';
   const img=d.querySelector('img');if(a&&img.dataset.k!==c+vk){const was=img.dataset.k;img.dataset.k=c+vk;img.src=a[vk]||a[bk];
     if(was&&was[0]===c){d.classList.remove('mood');void d.offsetWidth;d.classList.add('mood')}}
-  const nm=`${seatLabel(s)}${chips(G.score[s])}${extra||''}`,el=d.lastChild;if(el.innerHTML!==nm)el.innerHTML=nm;
+  const nm=`${seatLabel(s)}${extra||''}`,el=d.lastChild;if(el.innerHTML!==nm)el.innerHTML=nm;
   d.classList.toggle('nw',bk==='n');d.classList.toggle('on',lit);d.classList.toggle('off',live&&!lit)}
 /* idle moves: every few seconds one window (rarely mine) plays a random small motion, never the same one twice in a row */
 const IA_MS=[0,2600,2400,1100,2800,2400,2400];let iaLast=0;
