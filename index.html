@@ -215,7 +215,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rtot{font:700 13px/1 var(--serif);color:#e9c46a;white-space:nowrap}.rtot b{font:900 40px/0.9 var(--serif);margin-right:3px;color:#ffe08a;text-shadow:0 2px 0 #5a3a0e,0 0 16px #e9c46a66}
 .res .rhand{margin:0;padding:8px 6px 3px;background:#0d2a1e;border:1px solid #2f8f6655;border-radius:6px;box-shadow:inset 0 2px 8px #0008}
 .tl{display:grid;grid-template-columns:1fr 1fr;gap:3px 22px;font-size:13px;text-align:left;padding:0 4px}
-.tl>div{display:flex;align-items:baseline}.tl span{color:#f3e9d2}.tl i{flex:1;border-bottom:1px dotted #b8862b77;margin:0 7px;transform:translateY(-3px)}.tl b{color:var(--gold);font-weight:800;white-space:nowrap}.tl .dx span{color:#f3e9d299}.pay .pt{font:700 10.5px/1.2 system-ui;color:#f3e9d299;letter-spacing:1px}.tl .sub span{color:#f3e9d2aa}.tl .sub{border-top:1px solid #b8862b55;padding-top:3px;margin-top:2px}.tl .sub,.tl .dx{grid-column:1/-1}.pay .pn:has(.badge) .wd{display:none}.res.hu .rk{white-space:nowrap;flex:none}.res.hu .rwc{min-width:0}.rw .nm{overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:6.5em}.pay .pn{overflow:hidden;justify-content:flex-start;padding:0 4px}.pay .pn .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}.pay .pn .badge{flex:none;font-size:0!important;padding:2px 5px}.pay .pn .badge::before{content:'莊';font-size:11px}.res.hu .pay .pn{justify-content:center!important;overflow:hidden;align-self:stretch;max-width:100%;min-width:0;width:100%}.rtot small{display:block;font:700 11px/1.2 system-ui;color:#f3e9d2aa;letter-spacing:1px}
+.tl>div{display:flex;align-items:baseline}.tl span{color:#f3e9d2}.tl i{flex:1;border-bottom:1px dotted #b8862b77;margin:0 7px;transform:translateY(-3px)}.tl b{color:var(--gold);font-weight:800;white-space:nowrap}.tl .dx span{color:#f3e9d299}.pay .pt{font:700 10.5px/1.2 system-ui;color:#f3e9d299;letter-spacing:1px}.tl .sub span{color:#f3e9d2aa}.tl .sub{border-top:1px solid #b8862b55;padding-top:3px;margin-top:2px}.pay .pn:has(.badge) .wd{display:none}.res.hu .rk{white-space:nowrap;flex:none}.res.hu .rwc{min-width:0}.rw .nm{overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:6.5em}.pay .pn{overflow:hidden;justify-content:flex-start;padding:0 4px}.pay .pn .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}.pay .pn .badge{flex:none;font-size:0!important;padding:2px 5px}.pay .pn .badge::before{content:'莊';font-size:11px}.res.hu .pay .pn{justify-content:center!important;overflow:hidden;align-self:stretch;max-width:100%;min-width:0;width:100%}.rtot small{display:block;font:700 11px/1.2 system-ui;color:#f3e9d2aa;letter-spacing:1px}
 .res .pay{margin:0;gap:7px}
 .res .pay>div{padding:6px 4px 5px;border-radius:6px;background:#00000059;border:1px solid #b8862b33;display:flex;flex-direction:column;align-items:center;gap:3px}
 .res .pay>div>div{background:none;border:0;padding:0;border-radius:0}
@@ -596,6 +596,12 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #setm .qrow{display:flex;gap:10px;margin-top:6px}#setm .qrow .big{flex:1;height:42px;border-radius:22px;margin:0}#setm #quitGo{background:linear-gradient(#e2584a,#9a1c14);border-color:#ff9a8a;color:#fff}
 #setm .qtxt{text-align:center;font-size:13px;color:#f3e9d2cc;margin:0}
 .verline{opacity:.5}
+.res.hu .ttl{position:relative;display:flex;align-items:center;gap:10px;margin:4px 0 0;padding:2px 14px;border-radius:6px;background:linear-gradient(90deg,#c9922f33,#f6dc8c22 50%,#c9922f11);border:1px solid #c9973f88;animation:fadeR .35s .9s both}
+.res.hu .ttl span{font:800 14px var(--serif);letter-spacing:4px;color:#f6dc8c}.res.hu .ttl b{margin-left:auto;font:900 20px/1 var(--serif);color:#ffe490}.res.hu .ttl b em{font-style:normal;font-size:24px}
+.res.hu .ttl small{order:2;margin-left:auto;font:700 11px system-ui;color:#f3e9d2aa;letter-spacing:1px}.res.hu .ttl b{order:3}.res.hu .ttl small+b,.res.hu .ttl small~b{margin-left:10px}
+.res.hu .ttl .tier{font-style:normal;padding:2px 9px;border:2px solid #ff6a5a;border-radius:4px;color:#ffd8d0;background:#7a0d14;font:900 13px/1.2 "LXGW WenKai TC",var(--serif);letter-spacing:3px;rotate:-6deg;animation:tierIn .5s 1.1s cubic-bezier(.2,1.6,.4,1) both}@keyframes tierIn{0%{scale:2.4;opacity:0}100%{scale:1;opacity:1}}.res.hu .rtot{position:relative}.res.hu .rtot .tier{position:absolute;right:-14px;top:-8px;z-index:2;white-space:nowrap;font-size:12px!important;padding:1px 7px!important;rotate:12deg!important;box-shadow:0 0 10px #c0241caa}
+.tl .dx.dp em{font-style:normal;margin-left:6px;padding:0 5px;border-radius:3px;background:#a8231c;color:#ffe4d8;font:700 10px/1.5 system-ui}
+.pay .pt{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1244,7 +1250,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.0127';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.0140';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 $('cfgBtn').onclick=()=>{setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
@@ -1396,15 +1402,19 @@ function renderResult(){
     // and only the dealer's own share on a self-draw by someone else. the big number is what the list adds up to
     const dl=r.dl!=null?r.dl:G.dealer,ln=r.ln!=null?r.ln:G.lian|0,ex=r.dx||0,allEx=ex&&(r.w===dl||(!self&&r.f===dl)),dlPays=ex&&self&&r.w!==dl;
     const big=r.tot+(allEx?ex:0),dname=r.w===dl?'莊家':'放槍的莊家';
-    const dlRow=allEx?`<div class="sub"><span>牌型小計</span><i></i><b>${r.tot} 台</b></div><div class="dx"><span>${dname}${ln?'・連'+ln+'拉'+ln:''}</span><i></i><b>+${ex} 台</b></div>`
-      :dlPays?`<div class="dx"><span>莊家${ln?'連'+ln+'拉'+ln:''}另付</span><i></i><b>+${ex} 台</b></div>`:'';
-    const bigNote=dlPays?`<small>莊家付 ${r.tot+ex} 台</small>`:'';
+    // Taiwan apps list 莊家 and 連N拉N as ordinary rows; on someone else's self-draw they only apply to the dealer's share (tagged 莊家付)
+    const drows=ex?[['莊家',1]].concat(ln?[['連'+ln+'拉'+ln,2*ln]]:[]):[];
+    const dlRow=allEx?drows.map(t=>`<div class="dx"><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')
+      :dlPays?drows.map(t=>`<div class="dx dp"><span>${t[0]}<em>莊家付</em></span><i></i><b>${t[1]} 台</b></div>`).join(''):'';
+    const tier=big>=16?'超大牌':big>=8?'大牌':'';
+    const ttl=`<div class="ttl"><span>合計</span><b><em data-cnt="${big}">${big}</em> 台</b>${tier?`<i class="tier">${tier}</i>`:''}${dlPays?`<small>莊家付 ${r.tot+ex} 台</small>`:''}</div>`;
+    const bigNote=(tier?`<i class="tier">${tier}</i>`:'')+(dlPays?`<small>莊家付 ${r.tot+ex} 台</small>`:'');
     h=`<div class="rh"><div class="rt"><span class="rk">${self?'自摸':'胡牌'}</span><div class="rwc"><span class="rw">${seatLabel(r.w)}</span>${self?'<span class="rf">三家付</span>':`<span class="rf">放槍<em>${esc(nameOf(r.f))}</em></span>`}</div></div><div class="rtot"><b data-cnt="${big}">${big}</b>台${bigNote}</div></div>`+
       `<div class="rhand sm">${G.melds[r.w].map(m=>meldHTML(m,'',true)).join('')}<span style="width:6px"></span>${hand.map(k=>tile(k)).join('')}<span style="width:8px"></span>${tile(r.k,'last')}`+
       (G.fl[r.w]?`<span style="width:8px"></span>${[...G.fl[r.w]].map(x=>tile(kd(x),'dim')).join('')}`:'')+`</div>`+
       `<div class="tl">${(r.tai.length?r.tai:[['無台',0]]).map(t=>`<div><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')}${dlRow}</div>`+
       `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}"><div class="pn">${seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div>${r.d[s]<0?`<div class="pt">${r.tot+((r.w===dl||s===dl)?ex:0)} 台</div>`:''}<div class="pb">${chips(G.score[s])}</div></div>`).join('')}</div>`+
-      `<div class="rfoot"><span>底 ${cfg().b}・每台 ${cfg().t}</span><button class="big" data-next="1">下一局</button></div>`}
+      `<div class="rfoot"><span>每家付：底 ${cfg().b}＋台數×${cfg().t}</span><button class="big" data-next="1">下一局</button></div>`}
   const me=mySeat(),lo=r.w>=0?loserOf(r):-1,qw=r.w>=0&&r.w!==me?(r.f===me?resQuip(r.w,'beatme'):r.f<0?resQuip(r.w,'zimo'):''):'',ql=r.w===me?resQuip(lo,'dealin'):'';
   const html=(r.w>=0?fullImg(r.w,false,qw):'')+`<div class="rb${r.w<0?' dr':''}">`+h+(r.w<0?`<button class="big" data-next="1">下一局</button>`:'')+`</div>`+(r.w>=0?fullImg(lo,true,ql):'');
   // only rebuild when the content changes, so the entrance plays once per hand
