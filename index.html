@@ -558,7 +558,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rm-lb{position:relative;display:flex;align-items:center;gap:6px;padding:3px 14px;border-radius:2px;max-width:82%;box-sizing:border-box;background:linear-gradient(#3a1420,#1a070d 60%,#0f0408);border:1px solid #d9a957;box-shadow:inset 0 0 0 1px #5e2a17,inset 0 1px 0 #ffe6a033,0 0 0 1px #0009,0 3px 8px #000b;font:700 14px/1.35 var(--serif);letter-spacing:1px;color:#fbecc8;text-shadow:0 1px 1px #000;white-space:nowrap}
 .rm-lb span{overflow:hidden;text-overflow:ellipsis;min-width:0}
 .rm-lb::before,.rm-lb::after{content:"";position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;rotate:45deg;background:linear-gradient(135deg,#fff1c2,#c8902f);box-shadow:0 0 0 1px #3a1806}
-.rm-lb::before{left:-5px}.rm-lb::after{right:-5px}.rm-lb b{flex:none;font:700 12px/1 system-ui;color:var(--gold);margin-left:2px}
+.rm-lb::before{left:-5px}.rm-lb::after{right:-5px}.rm-lb b{position:absolute;right:-17px;top:50%;margin-top:-14px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(#ff8fb4,#e8336f 60%,#b01650);border:1.5px solid #fff0f5;box-shadow:0 0 12px #ff4f8acc,0 2px 6px #000b;animation:penGlow 2.2s ease-in-out infinite}.rm-lb b svg{width:18px;height:18px;overflow:visible}.rm-lb b svg *{fill:#fff;stroke:none}.rm-me .rm-lb::after{display:none}.rm-me .rm-lb{padding-right:20px}@keyframes penGlow{0%,100%{box-shadow:0 0 8px #ff4f8a99,0 2px 6px #000b}50%{box-shadow:0 0 18px #ff6f9cff,0 2px 6px #000b}}@media (prefers-reduced-motion:reduce){.rm-lb b{animation:none}}
 .rm-lb[data-nm]{cursor:pointer}
 .rm-sub{font:700 11px/1 system-ui;color:#f3e9d2b0;letter-spacing:1px;display:flex;align-items:center;gap:6px;white-space:nowrap}.rm-sub em{font-style:normal;color:var(--gold)}
 #lobbyCard .aig1{position:static;font-size:11px;padding:1px 4px 2px;border-width:1.5px}
@@ -586,7 +586,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rm-pk i{position:absolute;left:0;right:0;bottom:0;padding:12px 0 4px;text-align:center;font:700 12px var(--serif);font-style:normal;color:#fbecc8;background:linear-gradient(#0000,#0b0306ee 60%);pointer-events:none}
 .rm-pk .aig1{position:absolute!important;right:4px;top:4px}
 .rm-pk .rm-pi{position:absolute;left:4px;bottom:4px;z-index:2;width:22px;height:22px;padding:0;border-radius:50%;border:1px solid #e9c46aaa;background:#14070bd0;color:var(--gold);font:italic 900 12px/1 Georgia,serif;cursor:pointer}
-.rm-pk>div.rm-tk{opacity:.35;cursor:default}.rm-pk>div.rm-tk::after{content:"已入座";position:absolute;left:4px;top:5px;font:700 10px system-ui;color:#fff;background:#0009;padding:1px 4px;border-radius:3px}
+.rm-pk>div.rm-tk{cursor:default;border-color:#ffffff33}.rm-pk>div.rm-tk img{filter:brightness(.72) saturate(.8)}.rm-pk>div.rm-tk::after{content:attr(data-at);position:absolute;left:4px;top:5px;font:800 10.5px/1.3 system-ui;color:#2a1406;background:linear-gradient(#fff1c2,#d9a94a);padding:1px 5px;border-radius:3px;box-shadow:0 1px 3px #000a}
 .rm-pk>div.rm-cur{border-color:#ffe08a;box-shadow:inset 0 0 0 2px #ffe08a;cursor:default}
 #prof .pfgo{position:absolute;right:6%;bottom:12%;z-index:3;height:36px;padding:0 22px;border-radius:8px;border:1px solid #ffe9a6;background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;font:900 15px/1 var(--serif);letter-spacing:4px;box-shadow:inset 0 1px 0 #fff8,0 3px 0 #6a4510,0 6px 14px #000a;cursor:pointer}
 #prof .pfgo:disabled{opacity:.45;cursor:default}
@@ -1687,7 +1687,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1819';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1833';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1797,7 +1797,7 @@ function renderLobby(){
   const col=k=>{const x=CCOL[k]||CCOL[0];return `--c1:${x[0]}cc;--c2:${x[1]}`},g=k=>AIP[k]?`<b class="aig1 g${AIP[k].g}">${AIP[k].g}</b>`:'';
   const cards=[];for(let i=0;i<4;i++){const p=R?plist[i]:(i===0?{id:'me'}:null),me=p&&(R?p.id===myPeer:true),k=L[i],a=k!=null?A[k]||{}:{};
     let inf;
-    if(p)inf=`<div class="rm-lb"${me?' data-nm="1"':''}><span>${esc(me?(myName||'我'):peerName(p.id,i))}</span>${me?'<b>✎</b>':''}</div><div class="rm-sub">${me?'你':'牌友'}${k!=null?'・扮'+BOTS[k]:''}</div>`;
+    if(p)inf=`<div class="rm-lb"${me?' data-nm="1"':''}><span>${esc(me?(myName||'我'):peerName(p.id,i))}</span>${me?'<b title="改暱稱"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><rect x="9" y="1.5" width="6" height="3.5" rx="1.2"/><rect x="9" y="6.2" width="6" height="11"/><path d="M9 18.4h6L12 23.2z"/></g></svg></b>':''}</div><div class="rm-sub">${me?'你':'牌友'}${k!=null?'・扮'+BOTS[k]:''}</div>`;
     else if(R)inf=`<div class="rm-lb"><span>虛位以待</span></div><div class="rm-sub">${k!=null?`沒人來就 <em>${BOTS[k]}</em> ${g(k)}`:''}</div>`;
     else inf=`<div class="rm-lb"><span>${k!=null?BOTS[k]:'?'}</span></div><div class="rm-sub">${k!=null?g(k):''} 陪你打</div>`;
     cards.push(`<div class="rm-cd${me?' rm-me':''}${!p&&R?' rm-emp':''}"${k!=null?` data-c="${k}" style="${col(k)}"`:''}><div class="rm-fr">${a.n||a.w?`<img alt="" src="${a.n||a.w}">`:''}<div class="rm-sh"></div></div>`+
@@ -1815,7 +1815,7 @@ function renderLobby(){
    <div class="opt"><span>出牌</span>${seg('s',[[15,'快手','15 秒'],[30,'標準','30 秒'],[60,'悠閒','60 秒']])}</div>
    <button class="lok" data-sx="1">確定</button></div></div>`;
   else if(lobS[0]==='p'){const i=+lobS.slice(1);sh=`<div class="lmask" data-sx="1"><div class="lsheet rm-pks"><h3>${WIND[i]}家換誰坐？<small>ⓘ 看介紹</small></h3><div class="rm-pk">${
-    BOTS.map((n,k)=>!A[k]?'':`<div class="${k===L[i]?'rm-cur':L.includes(k)?'rm-tk':''}" data-pk="${k}" style="${col(k)}"><img alt="" src="${A[k].n||A[k].w||''}"><i>${n}</i>${g(k)}<button class="rm-pi" data-pi="${k}" aria-label="看介紹">i</button></div>`).join('')}</div></div></div>`}
+    BOTS.map((n,k)=>!A[k]?'':`<div class="${k===L[i]?'rm-cur':L.includes(k)?'rm-tk':''}"${k!==L[i]&&L.includes(k)?` data-at="在${WIND[L.indexOf(k)]}家"`:''} data-pk="${k}" style="${col(k)}"><img alt="" src="${A[k].n||A[k].w||''}"><i>${n}</i>${g(k)}<button class="rm-pi" data-pi="${k}" aria-label="看介紹">i</button></div>`).join('')}</div></div></div>`}
   const h=top+`<div class="rm-cds">${cards.join('')}</div>`+bot+sh;
   if(h!==lobbyHTML){const m=document.querySelector('#lobbyCard .lmsg'),t=m&&m.textContent;lobbyHTML=h;$('lobbyCard').innerHTML=h;if(t)flashMsg(t,1)}}
 const QUIPS=[
