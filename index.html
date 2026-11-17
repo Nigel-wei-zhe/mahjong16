@@ -453,7 +453,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #prof .pfbar.bad u{background:linear-gradient(90deg,#c0241c,#ff8a80)}#prof .pfbar b{width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
 #prof .pfnote{font-size:10.5px;color:#f3e9d266;margin-top:-4px}
 #prof .pfq{display:flex;flex-direction:column;gap:6px;margin-top:2px}
-#prof .pfl{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;padding:7px 12px;border-radius:10px;border:1px solid #b8862b77;background:#0e0508cc;color:#f6ead0;font:600 13px/1.45 var(--serif);cursor:pointer}#prof .pfl i{font-style:normal;color:#e9c46a;font-size:11px}
+#prof .pfl{margin:0;padding:7px 12px;border-radius:10px;border:1px solid #b8862b77;background:#0e0508cc;color:#f6ead0;font:600 13px/1.45 var(--serif)}
 #prof .pfx{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;z-index:2}
 #prof .pfnav{position:absolute;top:50%;translate:0 -50%;width:34px;height:54px;border-radius:8px;border:1px solid #c9973f66;background:#0d0407aa;color:#f6dc8c;font:700 24px system-ui;cursor:pointer;z-index:2}#prof .pfnav.l{left:8px}#prof .pfnav.r{right:8px}
 #prof .pfdots{position:absolute;left:44%;right:6%;bottom:5%;display:flex;gap:6px;justify-content:center}#prof .pfdots i{width:6px;height:6px;border-radius:50%;background:#ffffff33}#prof .pfdots i.on{background:#ffd96e;box-shadow:0 0 6px #ffd96e}
@@ -943,7 +943,7 @@ function tileVal(c,k){
 // grades come from test/aisim.py (one seat vs three plain greedy bots, 1600 hands, money per hand): S +17, A +10, B about 0, C -13, D -34 or worse
 const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'D',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'B',st:'守備',lv:2,def:2,call:1},
   {g:'S',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'D',st:'保守',lv:0,def:1,call:0,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
-function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}" title="${p.st}"><b>${p.g}</b></span>`:''}   // letter only (the user's call); the style word stays in AIP for the profile card
+function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}" title="${p.st}"><b>${p.g}</b></span>`:''}   // letter only (the user's call); the style word shows on the profile card
 const AIL=[{lv:0,def:0,call:2,mis:.3},{lv:1,def:0,call:1},{lv:2,def:1,call:1}];
 // window.__aiSeat: test-only per-seat override (a level 0-2 or a profile object)
 function aiProf(s){const o=window.__aiSeat;if(o&&s!=null&&o[s]!=null)return typeof o[s]==='object'?o[s]:AIL[o[s]];return AIP[chr(s)]||AIL[1]}
@@ -1240,12 +1240,12 @@ function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col
    `<div class="pfbar"><span>胡牌率</span><i><u style="width:${Math.min(100,st[0]/35*100).toFixed(0)}%"></u></i><b>${st[0].toFixed(1)}%</b></div>`+
    `<div class="pfbar bad"><span>放槍率</span><i><u style="width:${Math.min(100,st[1]/35*100).toFixed(0)}%"></u></i><b>${st[1].toFixed(1)}%</b></div>`+
    `<small class="pfnote">模擬對局數據：對三位普通電腦各 1600 局</small>`+
-   `<div class="pfq">${q.map((t,i)=>`<button class="pfl" data-k="${['hu','zimo','pon'][i]||'hu'}">「${esc(t)}」<i>▶</i></button>`).join('')}</div></div>`+
+   `<div class="pfq">${q.map(t=>`<p class="pfl">「${esc(t)}」</p>`).join('')}</div></div>`+
    `<div class="pfdots">${(window.AVATARS||[]).map((_,i)=>`<i class="${i===c?'on':''}"></i>`).join('')}</div>`;
   el.classList.remove('in');void el.offsetWidth;el.classList.add('in')}
 function stepProf(d){const n=(window.AVATARS||[]).length||8;pfC=(pfC+d+n)%n;renderProf();try{voiceC(pfC,'hu',1.4)}catch(_){}}
 $('prof').addEventListener('click',e=>{const t=e.target;if(t.closest('[data-pfx]')||t.id==='prof'){$('prof').classList.add('hide');return}
-  const n=t.closest('[data-pfn]');if(n){stepProf(+n.dataset.pfn);return}const l=t.closest('.pfl');if(l){try{voiceC(pfC,l.dataset.k,1.5)}catch(_){}}});
+  const n=t.closest('[data-pfn]');if(n)stepProf(+n.dataset.pfn)});
 {let x0=null;$('prof').addEventListener('pointerdown',e=>{x0=e.clientX},{passive:true});$('prof').addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)stepProf(dx<0?1:-1)},{passive:true})}
 function kvCycle(){const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
   if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
@@ -1421,7 +1421,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1120';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1121';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
