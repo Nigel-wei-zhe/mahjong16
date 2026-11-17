@@ -583,6 +583,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .lsheet.rm-pks{width:520px}.rm-pk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .rm-pk>div{position:relative;height:104px;border-radius:8px;overflow:hidden;border:1px solid #d9a95777;background:radial-gradient(ellipse at 50% 30%,var(--c1),var(--c2) 75%);cursor:pointer}
 .rm-pk img{position:absolute;width:160%;left:-30%;top:-4%;pointer-events:none}
+.rm-cd img.rm-nw,.rm-pk img.rm-nw{width:100%;left:0}
 .rm-pk i{position:absolute;left:0;right:0;bottom:0;padding:12px 0 4px;text-align:center;font:700 12px var(--serif);font-style:normal;color:#fbecc8;background:linear-gradient(#0000,#0b0306ee 60%);pointer-events:none}
 .rm-pk .aig1{position:absolute!important;right:4px;top:4px}
 .rm-pk .rm-pi{position:absolute;left:4px;bottom:4px;z-index:2;width:22px;height:22px;padding:0;border-radius:50%;border:1px solid #e9c46aaa;background:#14070bd0;color:var(--gold);font:italic 900 12px/1 Georgia,serif;cursor:pointer}
@@ -1687,7 +1688,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1833';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1948';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1789,6 +1790,8 @@ function rerollChs(){if(!isHost||G.st!=='lobby')return;const o=(G.lchs||[]).join
 /* room page: four portrait cards (tap = profile, ⇄ = host swaps her, own nameplate = nickname); rules sit in a pill that opens a sheet */
 let lobS='';   // open sheet: '' | 'cfg' | 'p<seat>' (swap picker)
 function pickChr(i,c){if(!isHost||G.st!=='lobby')return;const L=(G.lchs||[]).slice();if(L.length!==4||L.includes(c))return;L[i]=c;G.lchs=L;G.v=(G.v|0)+1;dirty=true;lobS='';lobRedraw()}
+/* window art n is a wide canvas only when listed in nx; narrow (older) n shows at 100% */
+function nNarrow(a){return !!a.n&&!(a.nx||[]).includes('n')}
 function lobRedraw(){lobbyHTML='';renderLobby()}
 function renderLobby(){
   if(isHost&&!(G.lchs&&G.lchs.length===4)){G.lchs=G.chs&&G.chs.length===4?G.chs.slice():dealChs();G.v=(G.v|0)+1;dirty=true}
@@ -1800,7 +1803,7 @@ function renderLobby(){
     if(p)inf=`<div class="rm-lb"${me?' data-nm="1"':''}><span>${esc(me?(myName||'我'):peerName(p.id,i))}</span>${me?'<b title="改暱稱"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><rect x="9" y="1.5" width="6" height="3.5" rx="1.2"/><rect x="9" y="6.2" width="6" height="11"/><path d="M9 18.4h6L12 23.2z"/></g></svg></b>':''}</div><div class="rm-sub">${me?'你':'牌友'}${k!=null?'・扮'+BOTS[k]:''}</div>`;
     else if(R)inf=`<div class="rm-lb"><span>虛位以待</span></div><div class="rm-sub">${k!=null?`沒人來就 <em>${BOTS[k]}</em> ${g(k)}`:''}</div>`;
     else inf=`<div class="rm-lb"><span>${k!=null?BOTS[k]:'?'}</span></div><div class="rm-sub">${k!=null?g(k):''} 陪你打</div>`;
-    cards.push(`<div class="rm-cd${me?' rm-me':''}${!p&&R?' rm-emp':''}"${k!=null?` data-c="${k}" style="${col(k)}"`:''}><div class="rm-fr">${a.n||a.w?`<img alt="" src="${a.n||a.w}">`:''}<div class="rm-sh"></div></div>`+
+    cards.push(`<div class="rm-cd${me?' rm-me':''}${!p&&R?' rm-emp':''}"${k!=null?` data-c="${k}" style="${col(k)}"`:''}><div class="rm-fr">${a.n||a.w?`<img alt=""${nNarrow(a)?' class="rm-nw"':''} src="${a.n||a.w}">`:''}<div class="rm-sh"></div></div>`+
       `${R&&i===0&&p?'<div class="rm-hs">房主</div>':''}<div class="rm-wn">${WIND[i]}</div>${!p&&R?'<button class="rm-add" data-inv="1" aria-label="邀請">+</button>':''}`+
       `${isHost&&k!=null?`<button class="rm-sw" data-sw="${i}" aria-label="換人">⇄</button>`:''}<div class="rm-inf">${inf}</div></div>`)}
   const top=`<div class="rm-top"><button class="rm-back" id="leave" aria-label="返回">‹</button><div class="rm-ttl">${R?'好友包廂':'單機包廂'}</div>`+
@@ -1815,7 +1818,7 @@ function renderLobby(){
    <div class="opt"><span>出牌</span>${seg('s',[[15,'快手','15 秒'],[30,'標準','30 秒'],[60,'悠閒','60 秒']])}</div>
    <button class="lok" data-sx="1">確定</button></div></div>`;
   else if(lobS[0]==='p'){const i=+lobS.slice(1);sh=`<div class="lmask" data-sx="1"><div class="lsheet rm-pks"><h3>${WIND[i]}家換誰坐？<small>ⓘ 看介紹</small></h3><div class="rm-pk">${
-    BOTS.map((n,k)=>!A[k]?'':`<div class="${k===L[i]?'rm-cur':L.includes(k)?'rm-tk':''}"${k!==L[i]&&L.includes(k)?` data-at="在${WIND[L.indexOf(k)]}家"`:''} data-pk="${k}" style="${col(k)}"><img alt="" src="${A[k].n||A[k].w||''}"><i>${n}</i>${g(k)}<button class="rm-pi" data-pi="${k}" aria-label="看介紹">i</button></div>`).join('')}</div></div></div>`}
+    BOTS.map((n,k)=>!A[k]?'':`<div class="${k===L[i]?'rm-cur':L.includes(k)?'rm-tk':''}"${k!==L[i]&&L.includes(k)?` data-at="在${WIND[L.indexOf(k)]}家"`:''} data-pk="${k}" style="${col(k)}"><img alt=""${nNarrow(A[k])?' class="rm-nw"':''} src="${A[k].n||A[k].w||''}"><i>${n}</i>${g(k)}<button class="rm-pi" data-pi="${k}" aria-label="看介紹">i</button></div>`).join('')}</div></div></div>`}
   const h=top+`<div class="rm-cds">${cards.join('')}</div>`+bot+sh;
   if(h!==lobbyHTML){const m=document.querySelector('#lobbyCard .lmsg'),t=m&&m.textContent;lobbyHTML=h;$('lobbyCard').innerHTML=h;if(t)flashMsg(t,1)}}
 const QUIPS=[
