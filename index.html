@@ -437,6 +437,29 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .aig.gS b{animation:neonS 2.4s infinite}@keyframes neonS{0%,100%{opacity:1}46%{opacity:1}48%{opacity:.45}50%{opacity:1}52%{opacity:.6}54%{opacity:1}}
 .cast span{position:relative}.aig1{position:absolute;right:-3px;top:-4px;font-size:9px;padding:1px 3px 2px;border-width:1px;border-radius:4px;background:#0d0407cc}
 
+/* character profile */
+#prof{position:absolute;inset:0;z-index:88;background:#07020599;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}#prof.hide{display:none}
+#prof .pf{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse 55% 90% at 18% 60%,color-mix(in srgb,var(--c1) 50%,#0000),#0000 70%),linear-gradient(100deg,#1d0a12 0,#12060a 55%,#0c0e16 100%)}
+#prof .pfbg{position:absolute;left:0;top:0;bottom:0;width:44%;-webkit-clip-path:polygon(0 0,100% 0,80% 100%,0 100%);clip-path:polygon(0 0,100% 0,80% 100%,0 100%);background:repeating-conic-gradient(from 0deg at 45% 55%,#ffe9a622 0 8deg,#0000 8deg 18deg),radial-gradient(circle at 45% 55%,color-mix(in srgb,var(--c1) 75%,#fff) 0,color-mix(in srgb,var(--c1) 30%,#0000) 35%,#0000 70%)}
+#prof .pfart{position:absolute;left:21%;bottom:0;height:100%;max-width:46%;object-fit:contain;object-position:50% 100%;transform:translateX(-50%);filter:drop-shadow(0 0 2px #fffa) drop-shadow(0 0 18px color-mix(in srgb,var(--c1) 70%,#0000))}
+#prof .pf.in .pfart{animation:artUp .5s cubic-bezier(.15,.9,.25,1.05) both}#prof .pf.in .pfin{animation:fadeR .4s .12s both}
+#prof .pfin{position:absolute;left:44%;right:6%;top:9%;bottom:12%;display:flex;flex-direction:column;gap:9px;color:#f3e9d2}
+#prof .pfhd{display:flex;align-items:center;gap:6px}#prof .pfhd h2{margin:0;font:700 min(calc(11*var(--vmin)),46px)/1 var(--brush);letter-spacing:.12em;background:none;color:#ffd96e;-webkit-text-stroke:1.5px #3a1406;paint-order:stroke fill;text-shadow:0 -1px 0 #fff4c2,0 3px 0 #2a0d04,0 0 14px color-mix(in srgb,var(--c1) 70%,#ffb84d)}
+#prof .pfhd .aig b{font-size:18px;padding:3px 7px 4px}
+#prof .pfbio{margin:0;font:600 14px/1.6 var(--serif);color:#f6ead0}
+#prof .pfsty{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13px}#prof .pfsty span,#prof .pfbar span{flex:none;width:3.6em;color:#e9c46acc;font-weight:700;letter-spacing:2px}
+#prof .pfsty b{font:800 15px var(--serif);color:#ffe9a6}#prof .pfsty em{font-style:normal;color:#f3e9d2bb}
+#prof .pfbar{display:flex;align-items:center;gap:8px;font-size:12.5px}#prof .pfbar i{flex:1;height:8px;border-radius:4px;background:#ffffff14;overflow:hidden}#prof .pfbar u{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#e9c46a,#ffe9a6)}
+#prof .pfbar.bad u{background:linear-gradient(90deg,#c0241c,#ff8a80)}#prof .pfbar b{width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+#prof .pfnote{font-size:10.5px;color:#f3e9d266;margin-top:-4px}
+#prof .pfq{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+#prof .pfl{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;padding:7px 12px;border-radius:10px;border:1px solid #b8862b77;background:#0e0508cc;color:#f6ead0;font:600 13px/1.45 var(--serif);cursor:pointer}#prof .pfl i{font-style:normal;color:#e9c46a;font-size:11px}
+#prof .pfx{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;z-index:2}
+#prof .pfnav{position:absolute;top:50%;translate:0 -50%;width:34px;height:54px;border-radius:8px;border:1px solid #c9973f66;background:#0d0407aa;color:#f6dc8c;font:700 24px system-ui;cursor:pointer;z-index:2}#prof .pfnav.l{left:8px}#prof .pfnav.r{right:8px}
+#prof .pfdots{position:absolute;left:44%;right:6%;bottom:5%;display:flex;gap:6px;justify-content:center}#prof .pfdots i{width:6px;height:6px;border-radius:50%;background:#ffffff33}#prof .pfdots i.on{background:#ffd96e;box-shadow:0 0 6px #ffd96e}
+#kvdlg .kvi{position:absolute;right:18px;top:-13px;pointer-events:auto;padding:3px 12px;border-radius:12px;border:1px solid #e2b45a;background:#1a0a10;color:#f6dc8c;font:700 12px/1.3 var(--serif);letter-spacing:2px;cursor:pointer}#pause #kvdlg .kvi{display:none}
+.cast>span[data-c]{cursor:pointer}
+
 /* hand opening */
 #intro{position:absolute;inset:0;z-index:9;pointer-events:auto;transition:opacity .25s}#intro.out{opacity:0}
 #intro .iveil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#0006,#000a);animation:fadeIn .25s both}
@@ -685,6 +708,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
 
   <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
+  <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉">✕</button><button class="pfnav l" data-pfn="-1" aria-label="上一位">‹</button><button class="pfnav r" data-pfn="1" aria-label="下一位">›</button></div>
   <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉">✕</button>
     <section data-p="main"><h3>設定</h3>
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
@@ -1181,7 +1205,7 @@ function kvBuild(){
   const A=window.AVATARS||[],kv=$('kv'),o=[...A.keys()].filter(c=>A[c]&&(A[c].Wp||A[c].W)).sort(()=>Math.random()-.5);
   kv.innerHTML='<i class="kvl"></i>'+o.map(c=>`<div class="g c${c}" data-c="${c}"><img alt="" src="${A[c].Wp?A[c].Wp[Math.random()*A[c].Wp.length|0]:A[c].W}"><span class="nm8">${esc(BOTS[c])}</span></div>`).join('')+
     Array.from({length:16},(_,i)=>`<i class="pt${i%3?'':' bk'}" style="left:${(Math.random()*100).toFixed(0)}%;--d:${(7+Math.random()*7).toFixed(1)}s;--dl:-${(Math.random()*14).toFixed(1)}s;--x:${(Math.random()*80-40).toFixed(0)}px;--s:${(.6+Math.random()*.8).toFixed(2)}"></i>`).join('');
-  kv.onclick=e=>{const g=e.target.closest('.g');if(g){kvFront(g);setTimeout(()=>kvSay(g,true),700);try{sfx('pick')}catch(_){}}};
+  kv.onclick=e=>{const ib=e.target.closest('.kvi');if(ib){openProf(+ib.dataset.c);return}const g=e.target.closest('.g');if(g){kvFront(g);setTimeout(()=>kvSay(g,true),700);try{sfx('pick')}catch(_){}}};
   clearTimeout(kvT);kvT=setTimeout(kvCycle,2400)}
 function kvFront(g){const n=$('kv').querySelectorAll('.g').length,i=+g.dataset.i;kvTarget=-i*2*Math.PI/n}
 {let last=performance.now();const tick=now=>{requestAnimationFrame(tick);const dt=Math.min(50,now-last);last=now;const kv=$('kv');if(!kv||!kv.offsetParent)return;
@@ -1194,9 +1218,35 @@ function kvFront(g){const n=$('kv').querySelectorAll('.g').length,i=+g.dataset.i
 function kvSay(g,tap){const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c]||KVQ[0];let d=$('kvdlg');
   if(!d){d=document.createElement('div');d.id='kvdlg';kv.appendChild(d)}
   kv.querySelectorAll('.g').forEach(x=>x.classList.toggle('sel',x===g));kv.classList.add('focus');
-  const t=L[Math.random()*L.length|0];d.innerHTML=`<span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><b>${esc(BOTS[c])}</b><span class="tx"></span><i></i>`;d.classList.remove('done');d.classList.add('on');
+  const t=L[Math.random()*L.length|0];d.innerHTML=`<span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><b>${esc(BOTS[c])}</b><button class="kvi" data-c="${c}">角色介紹 ›</button><span class="tx"></span><i></i>`;d.classList.remove('done');d.classList.add('on');
   const sp=d.querySelector('.tx');let n=0;clearInterval(dlgT);dlgT=setInterval(()=>{n++;sp.textContent=t.slice(0,n);if(n>=t.length){clearInterval(dlgT);d.classList.add('done')}},55);
   kvSel=c;clearTimeout(kvT);kvT=setTimeout(kvCycle,tap?6500:5000)}
+/* character profile card: win art on a slanted panel, grade, a line about her, how she plays, numbers from test/aisim.py, a few of her lines (tap to hear her) */
+const BIO=['銀髮夜后，晚禮服配長手套。說話慢、出手狠，牌桌上最優雅的掠食者。','紅旗袍的大姊頭，豪爽愛起鬨。見碰就碰，輸了也要笑著乾杯。',
+ '黑貓系少女，貓耳、鈴鐺、黑絲。打牌全憑心情，撒嬌比算牌在行。','精明的 OL，細框眼鏡後面全是算計。寧可不胡，也不放槍。',
+ '值勤中的女警，雷厲風行。只想最快聽牌，誰擋路就把誰銬起來。','修行三百年的狐仙巫女，慵懶又神祕。愛門清、等自摸，像早就算好了天命。',
+ '甜美的女僕，嘴上說服侍主人，其實膽子小，一緊張就打錯牌。','夜店 DJ，節奏感滿點。不屑小胡，要做就做碰碰胡、混一色這種大的。'];
+const STYD={'均衡':'攻守平衡，看情勢決定要衝還是收。','愛碰':'能碰就碰，用速度壓人。','隨性':'全憑感覺，偶爾會亂打。','守備':'別家一露出聽牌跡象，就改打安全牌。',
+ '速攻':'只求最快聽牌，幾乎不防守。','門清':'不太吃碰，喜歡門清自摸。','保守':'很怕放槍，但牌效率不太好。','大牌':'偏好碰碰胡、混一色這類大牌。'};
+const AISTAT=[[26.0,12.8],[24.2,17.1],[9.0,22.3],[18.9,10.8],[29.6,16.6],[14.4,10.1],[7.1,11.8],[21.7,16.6]];   // win %, deal-in % vs three plain bots
+let pfC=0;
+function openProf(c){const A=window.AVATARS||[];if(!A[c])return;pfC=c;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){};setTimeout(()=>{try{voiceC(c,'hu',1.4)}catch(_){}},350)}
+function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col=CCOL[c]||CCOL[0],st=AISTAT[c]||[0,0],el=$('pfBody');
+  const q=[...(KVQ[c]||[]).slice(0,2),(QUIPS[c]&&QUIPS[c].zimo&&QUIPS[c].zimo[0])||''].filter(Boolean);
+  $('prof').style.setProperty('--c1',col[0]);$('prof').style.setProperty('--c2',col[1]);
+  el.innerHTML=`<div class="pfbg"></div><img class="pfart" alt="" src="${a.w||a.W||''}">`+
+   `<div class="pfin"><div class="pfhd"><h2>${esc(BOTS[c])}</h2>${aiTag(c)}</div><p class="pfbio">${esc(BIO[c]||'')}</p>`+
+   `<div class="pfsty"><span>牌風</span><b>${esc(P.st||'')}</b><em>${esc(STYD[P.st]||'')}</em></div>`+
+   `<div class="pfbar"><span>胡牌率</span><i><u style="width:${Math.min(100,st[0]/35*100).toFixed(0)}%"></u></i><b>${st[0].toFixed(1)}%</b></div>`+
+   `<div class="pfbar bad"><span>放槍率</span><i><u style="width:${Math.min(100,st[1]/35*100).toFixed(0)}%"></u></i><b>${st[1].toFixed(1)}%</b></div>`+
+   `<small class="pfnote">模擬對局數據：對三位普通電腦各 1600 局</small>`+
+   `<div class="pfq">${q.map((t,i)=>`<button class="pfl" data-k="${['hu','zimo','pon'][i]||'hu'}">「${esc(t)}」<i>▶</i></button>`).join('')}</div></div>`+
+   `<div class="pfdots">${(window.AVATARS||[]).map((_,i)=>`<i class="${i===c?'on':''}"></i>`).join('')}</div>`;
+  el.classList.remove('in');void el.offsetWidth;el.classList.add('in')}
+function stepProf(d){const n=(window.AVATARS||[]).length||8;pfC=(pfC+d+n)%n;renderProf();try{voiceC(pfC,'hu',1.4)}catch(_){}}
+$('prof').addEventListener('click',e=>{const t=e.target;if(t.closest('[data-pfx]')||t.id==='prof'){$('prof').classList.add('hide');return}
+  const n=t.closest('[data-pfn]');if(n){stepProf(+n.dataset.pfn);return}const l=t.closest('.pfl');if(l){try{voiceC(pfC,l.dataset.k,1.5)}catch(_){}}});
+{let x0=null;$('prof').addEventListener('pointerdown',e=>{x0=e.clientX},{passive:true});$('prof').addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)stepProf(dx<0?1:-1)},{passive:true})}
 function kvCycle(){const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
   if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
   const g=[...kv.querySelectorAll('.g')].sort((a,b)=>(+b.style.zIndex)-(+a.style.zIndex))[0];if(g)kvSay(g,false)}
@@ -1340,9 +1390,10 @@ function decodeVoice(vi,k,then){
   try{const b=atob(d.split(',')[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
     SND.ctx.decodeAudioData(u.buffer,buf=>{VB[vi][k]=buf;if(then)then(buf)},()=>{VB[vi][k]=null})}catch(e){VB[vi][k]=null}}
 function loadVoices(){if(!SND.ctx)return;for(let vi=0;vi<VB.length;vi++)for(const k of ['chi','pon','kan','hu','zimo'])decodeVoice(vi,k)}
-function voice(seat,k,gain){
-  if(!SND.on||seat<0||seat>3)return;const c=audio();if(!c||c.state!=='running')return;
-  const vi=chr(seat),buf=VB[vi][k];
+function voice(seat,k,gain){if(seat<0||seat>3)return;voiceC(chr(seat),k,gain)}
+function voiceC(vi,k,gain){
+  if(!SND.on||!VB[vi])return;const c=audio();if(!c||c.state!=='running')return;
+  const buf=VB[vi][k];
   if(buf&&buf!=='pending')playBuf(buf,gain||1.5);else if(!buf)decodeVoice(vi,k,b=>playBuf(b,gain||1.5))}
 document.addEventListener('pointerdown',()=>{if(SND.on&&audio())loadVoices()},{passive:true});
 function noise(t,dur,freq,q,gain,type){
@@ -1370,7 +1421,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1117';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1120';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1461,7 +1512,7 @@ function renderLobby(){
     rows.push(p?`<div class="pl${me?' me':''}"><span class="wd">${WIND[i]}</span>${f}<span class="nm">${esc(me?(myName||'我'):peerName(p.id,i))}</span><span class="tg">${me?'你':'牌友'}${i===0&&R?'・房主':''}${c!=null?'・扮'+BOTS[c]:''}</span></div>`
       :`<div class="pl emp"><span class="wd">${WIND[i]}</span>${f}<span class="nm">${c!=null?BOTS[c]+aiTag(c):'虛位以待'}</span><span class="tg">${R?'沒人來就她坐':'陪你打'}</span></div>`)}
   const settling=R&&performance.now()-joinedAt<1800,c=cfg(),n=R?Math.min(4,plist.length):1,A=window.AVATARS||[];
-  const cast=`<div class="cast">${BOTS.map((_,i)=>!A[i]?'':`<span title="${BOTS[i]}" class="${L.includes(i)?'in':'out'}">${face(i)}<i>${BOTS[i]}</i>${AIP[i]?`<b class="aig1 g${AIP[i].g}">${AIP[i].g}</b>`:''}</span>`).join('')}</div>`;
+  const cast=`<div class="cast">${BOTS.map((_,i)=>!A[i]?'':`<span title="${BOTS[i]}" data-c="${i}" class="${L.includes(i)?'in':'out'}">${face(i)}<i>${BOTS[i]}</i>${AIP[i]?`<b class="aig1 g${AIP[i].g}">${AIP[i].g}</b>`:''}</span>`).join('')}</div>`;
   const h=`<div class="lcol"><div class="lt">${R?'包廂 <b class="rc">'+esc(roomCode)+'</b><button class="inv" id="inv">邀請連結</button>':'單機包廂'}</div>${rows.join('')}
    <div class="lcast"><div class="lsub">今晚的牌搭子・亮著的 4 位入座${isHost?'<button class="rer" id="reroll">🎲 重骰</button>':''}</div>${cast}</div></div>
    <div class="lcol"><div class="lt">牌局設定${isHost?'':'<small>由房主決定</small>'}</div>
@@ -1701,7 +1752,7 @@ async function invite(){const u=inviteUrl();
   try{await navigator.clipboard.writeText(u);flashMsg('邀請連結已複製')}catch(e){prompt('複製邀請連結',u)}}
 function flashMsg(t){const m=document.querySelector('#lobbyCard .lmsg');if(m){m.textContent=t;lobbyHTML=''}}
 $('solo').onclick=()=>{saveName();inMenu=false;isHost=true;show('menu',false);G={st:'lobby',v:0,cfg:loadCfg(),co:Math.random()*3|0};dirty=true};
-$('lobbyCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+$('lobbyCard').addEventListener('click',e=>{const cs=e.target.closest('.cast>span[data-c]');if(cs){openProf(+cs.dataset.c);return}const b=e.target.closest('button');if(!b)return;
   if(b.id==='start'){if(isHost)newGame()}else if(b.id==='reroll'){rerollChs()}else if(b.id==='inv')invite();else if(b.id==='leave'){leaveRoom()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
 $('pzCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave')leaveRoom()});
