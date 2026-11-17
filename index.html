@@ -563,6 +563,8 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #rmodal .rrow{display:flex;gap:8px}#rmodal .rrow input{flex:1}#rmodal .rrow .big{width:96px;flex:none}
 #rmodal .rsep{display:flex;align-items:center;gap:8px;font-size:11px;color:#f3e9d266;letter-spacing:3px}#rmodal .rsep::before,#rmodal .rsep::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#0000,#c9973f88,#0000)}
 #rmodal #netmsg{text-align:center;font-size:12px;color:#ffc2d4;min-height:0;margin:0}
+#rmodal .rk{position:absolute;left:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f55;background:#0d0407;font-size:13px;cursor:pointer;padding:0;opacity:.55}#rmodal .rk.on{opacity:1;border-color:#c9973f}
+#rmodal #keyRow[hidden]{display:none}#rmodal #keyIn{font-size:12px;letter-spacing:1px;height:34px}
 #rmodal .rx{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;padding:0}
 #rmodal .cn{position:absolute;width:24px;height:24px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat}
 #rmodal .cn.a{left:3px;top:3px}#rmodal .cn.b{right:3px;top:3px;transform:scaleX(-1)}#rmodal .cn.c{left:3px;bottom:3px;transform:scaleY(-1)}#rmodal .cn.d{right:3px;bottom:3px;transform:scale(-1,-1)}
@@ -642,11 +644,12 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <button class="big alt" id="solo">練習</button>
     <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
-  <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><h3>包廂</h3>
+  <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><button class="rk" id="rmk" aria-label="連線密碼">🔑</button><h3>包廂</h3>
     <label>暱稱</label><input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off">
     <button class="big" id="create" disabled>建立包廂</button>
     <div class="rsep">或</div><label>包廂號</label>
     <div class="rrow"><input id="codeIn" maxlength="4" placeholder="輸入 4 碼" autocomplete="off"><button class="big alt" id="join" disabled>進入</button></div>
+    <div class="rrow" id="keyRow" hidden><input id="keyIn" maxlength="16" inputmode="numeric" placeholder="連線密碼（網路不通時才需要）" autocomplete="off"></div>
     <p id="netmsg">連線檢查中…</p></div></div>
 
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
@@ -658,7 +661,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="sbtn" data-go="tai">台數表<em>›</em></button>
       <button class="sbtn" data-go="rule">規則說明<em>›</em></button>
       <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
-      <p class="ver">版本 <span class="verv"></span></p></section>
+      <p class="ver" id="verLine">版本 <span class="verv"></span></p><p class="ver" id="netv" hidden></p></section>
     <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>台數表</h3></div>
       <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
     <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
@@ -921,11 +924,16 @@ const PEER_CFG={debug:0,config:{iceServers:[
   // {urls:'turn:turn.example.com:3478',username:'user',credential:'pass'},
 ]}};
 // TURN: short-lived credentials from our own function (the secret key never reaches the page); STUN only if it cannot be reached
-const TURN_URL='https://turn.nigel-lee.com/api/ice';let iceP=null;
+// the function wants the room password (X-Turn-Key): it comes in invite links as #k=…, or typed under 🔑; kept once it works
+const TURN_URL='https://turn.nigel-lee.com/api/ice',TKEY='mjTurnKey';let iceP=null,turnOk='',turnKey='',turnSt='',badKey='';
+try{turnOk=turnKey=localStorage.getItem(TKEY)||''}catch(e){}
+try{const m=location.hash.match(/[#&]k=([^&]+)/);if(m){turnKey=decodeURIComponent(m[1]);history.replaceState(null,'',location.href.replace(/#.*$/,''))}}catch(e){}   // keep it out of the address bar
+function setTurnKey(k){k=String(k||'').trim();if(k===turnKey)return;turnKey=k;iceP=null;turnSt=''}
 function getIce(){
-  if(iceP)return iceP;
-  iceP=Promise.race([fetch(TURN_URL,{cache:'no-store'}).then(r=>r.ok?r.json():null),new Promise(r=>setTimeout(()=>r(null),4000))])
-    .then(j=>{if(j&&Array.isArray(j.iceServers)&&j.iceServers.length){PEER_CFG.config.iceServers=PEER_CFG.config.iceServers.filter(x=>String(x.urls).startsWith('stun:')).concat(j.iceServers);
+  if(iceP)return iceP;const k=turnKey;if(k&&k===badKey)return Promise.resolve();   // a known-wrong password: do not burn the server's retry budget
+  iceP=Promise.race([fetch(TURN_URL,{cache:'no-store',headers:k?{'X-Turn-Key':k}:{}}).then(r=>{if(r.status===401)badKey=k;turnSt=r.status===401?'bad':r.status===429?'lock':r.ok?'ok':'err';return r.ok?r.json():null}),new Promise(r=>setTimeout(()=>r(null),4000))])
+    .then(j=>{if(j&&Array.isArray(j.iceServers)&&j.iceServers.length){if(k&&k!==turnOk){turnOk=k;try{localStorage.setItem(TKEY,k)}catch(e){}}
+      PEER_CFG.config.iceServers=PEER_CFG.config.iceServers.filter(x=>String(x.urls).startsWith('stun:')).concat(j.iceServers);
       setTimeout(()=>{iceP=null},Math.max(600,(j.ttl||7200)-600)*1000)}else iceP=null})   // refetch well before they expire
     .catch(()=>{iceP=null});
   return iceP||Promise.resolve()}
@@ -974,6 +982,15 @@ function peerNet(opt){
     room.setG=G=>{lastG=G;if(!hub)return;for(const [id,c] of conns)if(c.open)try{c.send({t:'G',G:viewFor(id)})}catch(e){}};
     room.peers=()=>[...table].map(([id,pr])=>({peer:id,isMe:id===cid,sameTab:id===cid,kind:'viewer',presence:!hub&&id===hubCid&&hostG?Object.assign({},pr,{G:hostG}):pr}));
     room.isHub=()=>hub;
+    // which path each link took (host / srflx = direct, relay = through TURN), for the hidden line in settings
+    room.netInfo=async()=>{const list=hub?[...conns].map(([id,c])=>[(table.get(id)||{}).nm||id,c]):hubConn?[['房主',hubConn]]:[];
+      return Promise.all(list.map(async([nm,c])=>{const pc=c.peerConnection;if(!pc)return{nm,t:'?'};
+        try{const st=await pc.getStats();let pair=null;
+          st.forEach(r=>{if(r.type==='transport'&&r.selectedCandidatePairId)pair=st.get(r.selectedCandidatePairId)});
+          if(!pair)st.forEach(r=>{if(r.type==='candidate-pair'&&(r.selected||r.nominated&&r.state==='succeeded'))pair=pair||r});
+          if(!pair)return{nm,t:'?'};const L=st.get(pair.localCandidateId)||{},Rm=st.get(pair.remoteCandidateId)||{};
+          const t=L.candidateType==='relay'||Rm.candidateType==='relay'?'relay':L.candidateType==='host'&&Rm.candidateType==='host'?'host':'srflx';
+          return{nm,t,rtt:pair.currentRoundTripTime,kb:Math.round(((pair.bytesSent||0)+(pair.bytesReceived||0))/1024)}}catch(e){return{nm,t:'?'}}}))};
     room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
     addEventListener('pagehide',()=>room.leave());
     return getIce().then(()=>new Promise((res,rej)=>{
@@ -1266,9 +1283,16 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.0917';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1000';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
+/* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
+const NETT={host:'區網直連',srflx:'打洞直連',relay:'TURN 轉送','?':'未知'};
+$('verLine').onclick=async()=>{const el=$('netv');if(!el.hidden){el.hidden=true;return}
+  el.hidden=false;if(!R||!R.netInfo){el.textContent='沒有連線（單機或 claude.ai 版）';return}
+  el.textContent='查詢中…';const L=await R.netInfo();
+  el.innerHTML=L.length?L.map(x=>`${esc(x.nm)}：${NETT[x.t]||x.t}${x.rtt!=null?'・'+Math.round(x.rtt*1000)+'ms':''}${x.kb!=null?'・'+x.kb+'KB':''}`).join('<br>')+(L.some(x=>x.t==='relay')?'<br>有經過 TURN':'<br>沒經過 TURN'):'目前沒有連線';
+  el.innerHTML+='<br>TURN 憑證：'+({ok:'已取得',bad:'密碼不對',lock:'密碼錯太多次',err:'伺服器錯誤'}[turnSt]||'沒有')};
 $('cfgBtn').onclick=()=>{setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
 $('setm').addEventListener('click',e=>{const t=e.target;if(t.id==='setm'||t.closest('[data-x]')){$('setm').classList.add('hide');return}const g=t.closest('[data-go]');if(g)setPage(g.dataset.go)});
 $('quitGo').onclick=()=>leaveRoom();
@@ -1558,12 +1582,16 @@ async function joinCode(code,jo,saved){
   if(saved)lobbyNs=peerNet({cid:saved.cid});
   try{enterRoom(code,await lobbyNs.join('mj-'+code.toLowerCase(),jo||{}),saved)}
   catch(e){if(jo&&jo.create&&e&&e.code==='房號已被使用')return joinCode(newCode(),jo);
-    $('netmsg').textContent='無法加入包廂（'+((e&&e.code)||'連線失敗')+'），可稍後再試，或先打單機。'}}
+    $('netmsg').textContent='無法加入包廂（'+((e&&e.code)||'連線失敗')+'）'+(turnSt==='bad'?'，連線密碼不對。':turnSt==='lock'?'，密碼錯太多次，10 分鐘後再試。':turnOk?'，可稍後再試，或先打單機。':'，有連線密碼的話填在 🔑 再試。');
+    if(!turnOk)showKey()}}
+function showKey(){$('keyRow').hidden=false;$('rmk').classList.add('on');$('keyIn').value=turnKey}
+$('rmk').onclick=()=>{if($('keyRow').hidden)showKey();else{$('keyRow').hidden=true;$('rmk').classList.remove('on')}};
+$('keyIn').oninput=()=>setTurnKey($('keyIn').value);
 $('create').onclick=()=>joinCode(newCode(),{create:true});
 $('join').onclick=()=>joinCode($('codeIn').value,{join:true});
 /* lost the host: a banner while we keep retrying */
 function netBanner(){const b=$('netBan'),on=!!(R&&R.status==='retry');if(b.classList.contains('hide')===on)b.classList.toggle('hide',!on)}
-function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode}
+function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode+(turnOk?'#k='+encodeURIComponent(turnOk):'')}   // the password rides after # (never sent to a server)
 async function invite(){const u=inviteUrl();
   try{if(navigator.share){await navigator.share({title:'今夜有局',text:'今夜有局，來同桌打十六張，房號 '+roomCode,url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(u);flashMsg('邀請連結已複製')}catch(e){prompt('複製邀請連結',u)}}
