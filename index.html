@@ -711,7 +711,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 'use strict';
 const $=id=>document.getElementById(id);
 const NUM='一二三四五六七八九',SUIT='萬筒條',HON='東南西北中發白',FLO='春夏秋冬梅蘭竹菊',WIND='東南西北';
-const CFG0={r:1,b:100,t:20,s:30},TMAP={100:20,300:50,500:100};
+const CFG0={r:1,b:100,t:20,s:30,ai:1},TMAP={100:20,300:50,500:100};
 function cfg(){return Object.assign({},CFG0,(typeof G!=='undefined'&&G&&G.cfg)||{})}
 let SPEED=1,AUTO=false;
 
@@ -904,25 +904,51 @@ function tileVal(c,k){
   if(k>=27)return c[k]>=3?9:c[k]===2?5:0;
   const n=k%9;let v=(c[k]-1)*3+(n>=2&&n<=6?1:0);
   if(n>0&&c[k-1])v+=2;if(n<8&&c[k+1])v+=2;if(n>1&&c[k-2])v+=1;if(n<7&&c[k+2])v+=1;return v}
-function botDiscard(c,need){
-  let bk=-1,bs=99,bv=99;
-  for(let k=0;k<34;k++){if(!c[k])continue;c[k]--;const s=shanten(c,need);c[k]++;const v=tileVal(c,k);
-    if(s<bs||(s===bs&&v<bv)){bs=s;bv=v;bk=k}}
-  return bk}
+/* computer strength (cfg().ai, one setting for the whole table): 0 easy, 1 normal, 2 hard.
+   bots only ever look at their own hand and what is on the table (rivers, exposed melds), never the wall or other hands */
+const aiLv=s=>{const o=window.__aiSeat;if(o&&s!=null&&o[s]!=null)return o[s];const v=cfg().ai;return v===0||v===2?v:1};   // __aiSeat: test-only per-seat override
+function seenCnt(s){const v=new Array(34).fill(0);for(const x of G.hands[s])v[kd(x)]++;
+  for(let i=0;i<4;i++){for(const x of G.disc[i])v[kd(x)]++;for(const m of G.melds[i]){if(m[0]==='a'&&i!==s)continue;if(m[0]==='c'){for(let j=1;j<4;j++)v[kd(m[j])]++}else v[kd(m[1])]+=m[0]==='p'?3:4}}
+  return v}
+// how many still-unseen tiles would move this hand closer to ready
+function ukeire(c,need,seen){const b=shanten(c,need);let n=0;for(let t=0;t<34;t++){const left=4-seen[t];if(left<=0)continue;c[t]++;if(shanten(c,need)<b)n+=left;c[t]--}return n}
+// who looks close to ready: 3+ exposed melds is loud, 2 melds with a long river or a very long river is a maybe
+function threats(s){const out=[];for(let o=0;o<4;o++){if(o===s)continue;const ex=G.melds[o].filter(m=>m[0]!=='a').length,n=G.disc[o].length;
+  const lv=ex>=3?2:ex>=2&&n>=6?1:0;if(lv)out.push({o,lv})}return out}
+// rough deal-in risk of tile k against seat o: her own discards are safe, seen-out honours nearly safe, suji and terminals safer than middle tiles
+function danger(k,o,seen){const r=G.disc[o];if(r.includes(ch(k)))return 0;
+  if(k>=27)return seen[k]>=3?.3:seen[k]===2?1.5:3.5;
+  const n=k%9;let d=n===0||n===8?3:n===1||n===7?4:5;if((n>=3&&r.includes(ch(k-3)))||(n<=5&&r.includes(ch(k+3))))d-=2;return Math.max(.5,d)}
+function botDiscard(c,need,s){
+  const L=s==null?1:aiLv(s),cand=[];
+  for(let k=0;k<34;k++){if(!c[k])continue;c[k]--;cand.push({k,sh:shanten(c,need),v:tileVal(c,k)});c[k]++}
+  const min=Math.min(...cand.map(x=>x.sh)),best=cand.filter(x=>x.sh===min).sort((a,b)=>a.v-b.v);
+  if(L===0){if(Math.random()<.3){const ok=cand.filter(x=>x.sh<=min+1);return ok[Math.random()*ok.length|0].k}return best[0].k}
+  if(L===1)return best[0].k;
+  // hard: efficiency by remaining tiles; when someone looks ready, fold from far away and push carefully when close
+  const seen=seenCnt(s),th=threats(s),dg=k=>th.reduce((a,t)=>a+danger(k,t.o,seen)*t.lv,0);
+  for(const x of cand)if(x.sh<=min){c[x.k]--;x.u=ukeire(c,need,seen);c[x.k]++}
+  const loud=th.reduce((a,t)=>a+t.lv,0)>=2;
+  if(loud&&min>=2)return cand.slice().sort((a,b)=>dg(a.k)-dg(b.k)||a.sh-b.sh||a.v-b.v)[0].k;
+  if(th.length)return best.slice().sort((a,b)=>dg(a.k)-dg(b.k)||b.u-a.u||a.v-b.v)[0].k;
+  return best.slice().sort((a,b)=>b.u-a.u||a.v-b.v)[0].k}
 function botTurn(s){
   const h=G.hands[s],c=cnt(h),need=5-G.melds[s].length;
   if(!G.nd){
     if(canWin(c,need)){act(s,{t:'hu'});return}
     for(let k=0;k<34;k++)if(c[k]===4){const base=shanten(c,need);c[k]=0;const s2=shanten(c,need-1);c[k]=4;if(s2<=base){act(s,{t:'ak',k});return}}
     for(const m of G.melds[s])if(m[0]==='p'&&c[kd(m[1])]){act(s,{t:'jk',k:kd(m[1])});return}}
-  act(s,{t:'d',k:botDiscard(c,need)})}
+  act(s,{t:'d',k:botDiscard(c,need,s)})}
 function botClaim(s,o){
   if(o.hu)return{t:'hu'};
-  const c=cnt(G.hands[s]),need=5-G.melds[s].length,k=G.last.k,base=shanten(c,need),sw=(s-G.dealer+4)%4;
+  const c=cnt(G.hands[s]),need=5-G.melds[s].length,k=G.last.k,base=shanten(c,need),sw=(s-G.dealer+4)%4,L=aiLv(s),open=G.melds[s].some(m=>m[0]!=='a');
+  // hard: no calls while folding; otherwise keeps the hand closed unless the call is valuable, the hand is already open, or it gets close to ready
+  if(L===2&&base>=2&&threats(s).reduce((a,t)=>a+t.lv,0)>=2)return null;
+  const keep=()=>true;
   if(o.kan){c[k]-=3;const s3=shanten(c,need-1);c[k]+=3;if(s3<=base)return{t:'kan'}}
-  if(o.pon){c[k]-=2;const s2=shanten(c,need-1);c[k]+=2;const val=k>=31||k===27+sw||k===27+G.wind;if(s2<base||(val&&s2<=base))return{t:'pon'}}
-  if(o.chi){let ba=-1,bs=base;for(const a of o.chi){for(let x=a;x<a+3;x++)if(x!==k)c[x]--;const s2=shanten(c,need-1);for(let x=a;x<a+3;x++)if(x!==k)c[x]++;if(s2<bs){bs=s2;ba=a}}
-    if(ba>=0)return{t:'chi',a:ba}}
+  if(o.pon){c[k]-=2;const s2=shanten(c,need-1);c[k]+=2;const val=k>=31||k===27+sw||k===27+G.wind;if((s2<base&&(val||keep(s2)))||(val&&s2<=base)||(L===0&&s2<=base))return{t:'pon'}}
+  if(o.chi){let ba=-1,bs=L===0?base+1:base;for(const a of o.chi){for(let x=a;x<a+3;x++)if(x!==k)c[x]--;const s2=shanten(c,need-1);for(let x=a;x<a+3;x++)if(x!==k)c[x]++;if(s2<bs){bs=s2;ba=a}}
+    if(ba>=0&&keep(bs))return{t:'chi',a:ba}}
   return null}
 function hostTick(){
   if(G.st!=='play'||G.pz)return;const now=Date.now();if(now<introUntil)return;
@@ -1327,7 +1353,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1034';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1059';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1407,7 +1433,7 @@ function renderActs(){
 let lobbyHTML='';
 function seg(key,opts){const c=cfg();return `<div class="seg">${opts.map(([v,l,sub])=>`<button data-cfg="${key}" data-v="${v}" class="${String(c[key])===String(v)?'on':''}" ${isHost?'':'disabled'}><b>${l}</b>${sub?`<small>${sub}</small>`:''}</button>`).join('')}</div>`}
 function setCfg(key,v){if(!isHost||G.st!=='lobby')return;const c=cfg();c[key]=+v;if(key==='b')c.t=TMAP[+v]||20;G.cfg=c;G.v=(G.v|0)+1;dirty=true;try{localStorage.setItem('mjCfg',JSON.stringify(c))}catch(e){}}
-function loadCfg(){try{const c=JSON.parse(localStorage.getItem('mjCfg')||'null');if(c&&TMAP[c.b]&&[1,4].includes(c.r)&&[15,30,60].includes(c.s))return{r:c.r,b:c.b,t:TMAP[c.b],s:c.s}}catch(e){}return Object.assign({},CFG0)}
+function loadCfg(){try{const c=JSON.parse(localStorage.getItem('mjCfg')||'null');if(c&&TMAP[c.b]&&[1,4].includes(c.r)&&[15,30,60].includes(c.s))return{r:c.r,b:c.b,t:TMAP[c.b],s:c.s,ai:[0,1,2].includes(c.ai)?c.ai:1}}catch(e){}return Object.assign({},CFG0)}
 function face(c,cls){return `<span class="fc c${c} ${cls||''}"></span>`}
 /* the four girls at the table are dealt in the lobby (host can reroll) and kept for the whole game */
 function rerollChs(){if(!isHost||G.st!=='lobby')return;const o=(G.lchs||[]).join();let c;do c=dealChs();while(c.join()===o&&BOTS.length>4);G.lchs=c;G.v=(G.v|0)+1;dirty=true}
@@ -1425,6 +1451,7 @@ function renderLobby(){
    <div class="opt"><span>局數</span>${seg('r',[[1,'一圈','4 局'],[4,'一將','16 局']])}</div>
    <div class="opt"><span>底／台</span>${seg('b',[[100,'小玩','100／20'],[300,'中注','300／50'],[500,'豪賭','500／100']])}</div>
    <div class="opt"><span>出牌</span>${seg('s',[[15,'快手','15 秒'],[30,'標準','30 秒'],[60,'悠閒','60 秒']])}</div>
+   <div class="opt"><span>電腦</span>${seg('ai',[[0,'簡單','會失誤'],[1,'普通','只求快'],[2,'困難','會防守']])}</div>
    <div class="lmsg">${settling?'連線中…':isHost?`每人帶 <b>$${(c.b*30).toLocaleString()}</b> 入座${n<4?`・${4-n} 個空位由她們補上`:R?'・人到齊了':''}${R?'<br>準備好就按「入座開局」':''}`:'人到齊後由房主按開局…'}</div>
    <div class="lbtn">${isHost&&!settling?'<button class="big" id="start">入座開局</button>':''}<button class="big alt" id="leave">返回</button></div></div>`;
   if(h!==lobbyHTML){lobbyHTML=h;$('lobbyCard').innerHTML=h}}
