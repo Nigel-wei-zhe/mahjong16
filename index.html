@@ -919,7 +919,7 @@ function tileVal(c,k){
 // grades come from test/aisim.py (one seat vs three plain greedy bots, 1600 hands, money per hand): S +17, A +10, B about 0, C -13, D -34 or worse
 const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'D',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'B',st:'守備',lv:2,def:2,call:1},
   {g:'S',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'D',st:'保守',lv:0,def:1,call:0,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
-function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}"><b>${p.g}</b><em>${p.st}</em></span>`:''}
+function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}" title="${p.st}"><b>${p.g}</b></span>`:''}   // letter only (the user's call); the style word stays in AIP for the profile card
 const AIL=[{lv:0,def:0,call:2,mis:.3},{lv:1,def:0,call:1},{lv:2,def:1,call:1}];
 // window.__aiSeat: test-only per-seat override (a level 0-2 or a profile object)
 function aiProf(s){const o=window.__aiSeat;if(o&&s!=null&&o[s]!=null)return typeof o[s]==='object'?o[s]:AIL[o[s]];return AIP[chr(s)]||AIL[1]}
@@ -1370,7 +1370,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1116';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1117';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
