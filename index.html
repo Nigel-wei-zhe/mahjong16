@@ -93,6 +93,10 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 #hand .t.sel{transform:translateY(calc(var(--tw)*-.3))}
 #hand .t.drawn{margin-left:calc(var(--tw)*.35)}
 #hand .t.in{animation:tin .22s ease-out}
+/* press a tile and slide it up to discard: it follows the finger; past the line it lights up and goes on release */
+#hand{touch-action:none}#hand .t.drag{transition:none;z-index:3;filter:drop-shadow(0 8px 8px #000a)}#hand .t.drag.go{outline:2px solid #ffd54a;filter:drop-shadow(0 0 10px #ffd54a) drop-shadow(0 8px 8px #000a)}
+/* the kind of tile I have picked up is tinted wherever it lies face up (my own melds here, rivers and the others' melds on the 3D table) */
+#myMelds .t.same{background-color:#a8dcff;outline:2px solid #58c8ff;outline-offset:-2px}
 @keyframes tin{from{transform:translateY(-45%);opacity:0}}
 #myMelds,#myFl{display:flex;align-items:flex-end;gap:6px;line-height:0;--tw:var(--mw)}
 #myFl{gap:1px;--tw:var(--sw)}#myMelds .meld{display:inline-flex}#myMelds .t,#myFl .t{margin:0 .5px calc(var(--tw)*.22)}
@@ -106,6 +110,7 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 .ab{border:0;border-radius:12px;padding:10px 18px;font-size:18px;font-weight:800;color:#fff;font-family:inherit;box-shadow:0 3px 0 #0006;display:inline-flex;align-items:center;gap:4px;line-height:1}
 .ab.hu{background:#c0241c}.ab.pon{background:#1b56a0}.ab.kan{background:#7a3fb0}.ab.chi{background:#19743f}.ab.pass{background:#555}
 .ab .t{margin-bottom:0;box-shadow:none}
+.ab.hu{padding-left:14px;padding-right:12px}.ab small{font-size:12.5px;font-weight:800;letter-spacing:0;margin-left:3px;padding:2px 5px;border-radius:6px;background:#0000004d;color:#ffe9a6;white-space:nowrap}
 #acts .from{display:inline-flex;align-items:center;gap:4px;background:#000c;border:1px solid #b8862b;border-radius:10px;padding:4px 8px;color:#f3e6c4;font-size:13px;line-height:1}#acts .from b{color:#ffd54a}#acts .from .t{margin:0;box-shadow:none}
 .toast{position:absolute;z-index:9;font-size:54px;font-weight:900;color:#ffd54a;text-shadow:0 3px 0 #7a1a0a,0 0 20px #000;pointer-events:none;animation:pop 1.2s ease-out forwards;transform:translate(-50%,-50%)}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
@@ -257,6 +262,13 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #cfgBtn,#auto{position:absolute;top:12px;z-index:7;height:36px;border:1px solid #c9973f;border-radius:11px;background:linear-gradient(#34151e,#14070b);color:var(--gold);font:800 15px/1 inherit;font-family:inherit;letter-spacing:1px;padding:0 14px;box-shadow:inset 0 1px 0 #fff3,0 3px 8px #000a}
 #cfgBtn{right:14px;width:42px;padding:0;display:flex;align-items:center;justify-content:center}#cfgBtn::after,#auto::after{content:"";position:absolute;inset:-6px -4px}#auto{right:64px}#auto.on{background:linear-gradient(#f3d27e,#b8862b);color:#2a1406}
 #cfgBtn:active,#auto:active{transform:translateY(1px)}
+/* quick chat (rooms only): a small button left of 託管, a panel of set phrases and emoji under it, bubbles beside the speaker's window */
+#chatBtn{position:absolute;top:12px;right:140px;z-index:7;width:40px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid #c9973f;border-radius:11px;background:linear-gradient(#34151e,#14070b);color:var(--gold);box-shadow:inset 0 1px 0 #fff3,0 3px 8px #000a;transition:opacity .2s}
+#chatBtn::after{content:"";position:absolute;inset:-6px -4px}#chatBtn.cd{opacity:.4}#chatBtn:active{transform:translateY(1px)}
+#chatP{position:absolute;top:54px;right:14px;z-index:9;width:min(336px,64%);padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:5px;border-radius:12px;background:linear-gradient(#2b1219f7,#14070bf7);border:1px solid #b8862b;box-shadow:0 10px 26px #000d,inset 0 1px 0 #fff2}
+#chatP button{border:1px solid #b8862b66;border-radius:8px;background:#0e050899;color:#f6ead0;font:600 12.5px/1.3 var(--serif);padding:7px 6px;text-align:center;font-family:inherit}
+#chatP button:active{background:#e9c46a33}#chatP .em{grid-column:1/-1;display:flex;gap:5px}#chatP .em button{flex:1;font-size:20px;line-height:1.1;padding:5px 0}
+.quip.chat{border-color:#e9a0b8;animation-duration:3.2s}.quip.chat.emo{font-size:30px;line-height:1.1;padding:5px 12px 7px}
 #autoBan{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--tw)*.5);z-index:8;background:#000c;border:1px solid var(--gold);color:var(--gold);border-radius:20px;padding:6px 18px;font-weight:800;letter-spacing:2px}
 /* tenpai hints */
 #hand .t.tp::after{content:"聽";position:absolute;right:-3px;top:-7px;width:calc(var(--tw)*.4);height:calc(var(--tw)*.4);border-radius:50%;background:linear-gradient(#f0524a,#a81810);color:#fff;font:800 calc(var(--tw)*.24)/calc(var(--tw)*.4) system-ui,sans-serif;text-align:center;box-shadow:0 1px 3px #000a;border:1px solid #fff8}
@@ -264,6 +276,8 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #tips:not(:empty){background:#000c;border:1px solid var(--gold2);border-radius:10px;padding:4px 10px}
 #acts:not(:empty)+#tips{bottom:calc(var(--bh) + var(--sw)*2.95 + 62px)}
 #tips .tl{font-size:12px;color:var(--gold);font-weight:700}#tips .tw{position:relative;display:inline-flex}#tips .t{margin:0;box-shadow:none}
+#tips .pwt{font-size:11px;font-weight:700;color:#ffb4a8;padding-left:7px;border-left:1px solid #b8862b88}#tips .pwt:first-child{padding-left:0;border-left:0}
+#tips:has(.tw+.pwt),#tips:has(.tl+.pwt){left:calc(50% + 30px)}   /* the longer bar slides right, off my own portrait */
 #tips .tw em{position:absolute;right:-5px;bottom:-4px;min-width:14px;height:14px;border-radius:7px;background:#19743f;color:#fff;font:800 10px/14px system-ui,sans-serif;font-style:normal;text-align:center;border:1px solid #fff8}
 
 /* quips */
@@ -506,6 +520,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #menu .card #create:disabled{background:#0000;color:#e6d3a066;border-color:#e6d3a033}
 
 #lobbyCard .lt .inv{margin-left:auto;padding:5px 10px;border-radius:6px;border:1px solid #e9c46a;background:#e9c46a22;color:var(--gold);font:700 12px/1 inherit;font-family:inherit;letter-spacing:1px}
+#note{position:absolute;left:44%;top:10px;transform:translateX(-50%);z-index:21;max-width:70%;background:#1c0a10f2;border:1px solid #e9c46a;color:#ffe9a6;border-radius:18px;padding:6px 16px;font-size:13px;font-weight:700;letter-spacing:1px;white-space:nowrap;box-shadow:0 4px 14px #000a;opacity:0;pointer-events:none;transition:opacity .3s}#note.on{opacity:1}
 #netBan{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:20;background:#2a0d0ee8;border:1px solid #ff8a80;color:#ffd6d0;border-radius:18px;padding:6px 16px;font-size:13px;font-weight:700;letter-spacing:1px;box-shadow:0 4px 14px #000a;animation:tglow 1.4s ease-in-out infinite}
 
 
@@ -618,6 +633,18 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #rmodal #pwGo{background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6}#rmodal #pwGo:disabled{opacity:.45}#rmodal #pwMsg{text-align:center;font-size:12px;color:#ffc2d4;min-height:16px;margin:0}
 #rmodal .rx{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;padding:0}
 #rmodal .cn{position:absolute;width:24px;height:24px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat}
+#rmodal #nameRnd{width:84px;font-size:13px;letter-spacing:2px;padding:0}
+/* upright input bar: sits outside #root (not rotated, not zoomed) so it faces the same way as the system keyboard when the page is turned 90deg */
+#kbar{position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999;display:flex;flex-direction:column;align-items:center;padding:14px 14px 0;padding-top:max(14px,env(safe-area-inset-top));background:#070205e0}
+#kbar.hide{display:none}
+#kbar .kb{position:relative;width:100%;max-width:360px;margin-top:5%;padding:20px 20px 18px;border-radius:8px;display:flex;flex-direction:column;gap:12px;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,#ff9fbf18,#0000 60%),linear-gradient(#26091b,#12040c 70%,#0b0207);
+  border:1px solid #6e4a1c;box-shadow:inset 0 0 0 3px #12040c,inset 0 0 0 4px #e3b55c,inset 0 0 0 6px #12040c,inset 0 0 0 7px #8a6224,inset 0 0 30px #000,0 14px 40px #000e}
+#kbar h3{margin:0;text-align:center;font:900 19px var(--serif);letter-spacing:6px;color:#f6dc8c;text-shadow:0 2px 0 #3a1a06,0 0 14px #ffb84d55}
+#kbar input{height:46px;margin:0;padding:0 12px;border-radius:23px;background:#0d0407;border:1px solid #c9973f88;color:#f6efd9;text-align:center;font-size:18px;letter-spacing:2px;width:100%;user-select:text;-webkit-user-select:text}
+#kbar input:focus{outline:none;border-color:#f6dc8c;box-shadow:0 0 0 2px #e9c46a44}
+#kbar .kr{display:flex;gap:10px}#kbar .kr .big{flex:1;width:auto;height:44px;margin:0;padding:0;border-radius:22px;font-size:16px}
+#kbar #kbOk{background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6}
 #rmodal .cn.a{left:3px;top:3px}#rmodal .cn.b{right:3px;top:3px;transform:scaleX(-1)}#rmodal .cn.c{left:3px;bottom:3px;transform:scaleY(-1)}#rmodal .cn.d{right:3px;bottom:3px;transform:scale(-1,-1)}
 
 #kv .kq{display:none!important}
@@ -679,6 +706,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 function bootDone(){var b=document.getElementById('boot');if(!b)return;b.classList.add('out');setTimeout(function(){b.remove()},600)}
 addEventListener('load',function(){setTimeout(bootDone,300)});   // fallback if the game script failed half way
 setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.getElementById('boot')&&!document.getElementById('boot').classList.contains('out'))m.textContent+='（網路較慢，請稍候）'},9000)</script>
+<div id="kbar" class="hide"><div class="kb"><h3 id="kbT"></h3><input id="kbIn" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done"><div class="kr"><button class="big alt" id="kbNo">取消</button><button class="big" id="kbOk">確認</button></div></div></div>
 <div id="root">
   <div id="table" class="hide">
     <div id="room"></div>
@@ -687,6 +715,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
     <div id="mine"><div id="hand"></div><div id="mr"><div id="myFl"></div><div id="myMelds"></div></div></div>
     <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button>
+    <button id="chatBtn" class="hide" aria-label="快捷語"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></svg></button><div id="chatP" class="hide"></div>
   </div>
 
   <div class="panel" id="menu"><div id="kv"></div><div id="mtop"><span class="dot"></span><span>線上</span><span class="sp"></span></div><div class="card">
@@ -696,7 +725,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
   <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><div id="rmMain"><h3>包廂</h3>
-    <label>暱稱</label><input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off">
+    <label>暱稱</label><div class="rrow"><input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off"><button class="big alt" id="nameRnd">換一個</button></div>
     <button class="big" id="create" disabled>建立包廂</button>
     <div class="rsep">或</div><label>包廂號</label>
     <div class="rrow"><input id="codeIn" maxlength="4" placeholder="輸入 4 碼" autocomplete="off"><button class="big alt" id="join" disabled>進入</button></div>
@@ -717,13 +746,15 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
       <p class="ver" id="verLine">版本 <span class="verv"></span></p><p class="ver" id="netv" hidden></p></section>
     <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>台數表</h3></div>
-      <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
+      <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>地胡</td><td>閒家第一次摸牌就自摸，之前沒人吃碰槓</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>人胡</td><td>閒家還沒摸過牌就胡別人打的牌，之前沒人吃碰槓</td><td>8</td></tr><tr><td>八仙過海</td><td>一人集滿八張花，當場胡，三家付</td><td>8</td></tr><tr><td>七搶一</td><td>七張花、第八張在別人手上，當場胡，由他付</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>搶槓</td><td>胡別人加槓的那張牌，加槓的人付</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
     <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
 <h4>吃、碰、槓</h4><p>上家打的牌可以吃（湊順子）；任何人打的牌都可以碰（湊刻子）或槓。同時有人要時，胡＞碰／槓＞吃。</p>
+<h4>搶槓與過水</h4><p>別人把摸到的牌加進已經碰出的刻子（加槓）時，剛好胡那張牌的人可以搶槓胡，由加槓的人付，多 1 台；暗槓不能搶。別人打的牌可以胡卻按了「過」（或時間到沒按），到自己下一次摸牌之前都不能再胡別人的牌，這叫過水；自摸不受影響。</p>
+<h4>花牌胡</h4><p>一個人集滿八張花是「八仙過海」，當場胡牌，算自摸、三家都付。一個人有七張花、第八張在另一人手上是「七搶一」，七張的人當場胡，由拿第八張的人付。兩種都算 8 台，不看手牌，也不另計花牌、花槓。</p>
 <h4>胡牌與付錢</h4><p>胡別人打的牌叫「放槍」，由放槍的人付；自己摸到叫「自摸」，三家都付。每家付「底＋台數×每台」，底和每台在開局前的牌局設定選。莊家胡、或莊家付錢時，另加莊家與連莊的台數。</p>
 <h4>莊家與局數</h4><p>莊家胡牌或流局就連莊，否則換下家當莊。一圈 4 局、一將 16 局。牌牆剩 16 張還沒人胡就流局。</p>
-<h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦代打。</p>
-<h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先讓她們代打。</p></div></section>
+<h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦代打。出牌可以點一下選牌、再點一下打出，或按住牌往上滑；選到的牌，桌上同樣的牌會標成藍色。</p>
+<h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先讓她們代打。房主把遊戲切到背景時，牌局會暫停等他回來；房主按「離開」則包廂解散，大家回到主選單。牌桌右上的對話鈕可以送快捷語和表情。</p></div></section>
     <section data-p="quit" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>離開遊戲</h3></div>
       <p class="qtxt" id="quitTxt"></p><div class="qrow"><button class="big alt" data-go="main">取消</button><button class="big" id="quitGo">離開</button></div></section>
   </div></div>
@@ -828,6 +859,7 @@ function startHand(){
   for(let i=w.length-1;i>0;i--){const j=Math.random()*(i+1)|0;const t=w[i];w[i]=w[j];w[j]=t}
   G.wall=w.map(ch).join('');G.hands=['','','',''];G.melds=[[],[],[],[]];G.fl=['','','',''];G.disc=['','','',''];
   G.last=null;G.res=null;G.kong=0;G.first=1;G.wt=0;G.wait=[];G.resp={};G.drawn=null;G.nd=0;
+  G.pw=[0,0,0,0];   // 過水: seats that let a winning tile go by; no winning on someone else's tile until their own next draw
   for(let s=0;s<4;s++){G.hands[s]=G.wall.slice(0,16);G.wall=G.wall.slice(16)}
   for(let i=0;i<4;i++){const s=(G.dealer+i)%4;
     for(;;){const h=[...G.hands[s]],f=h.filter(x=>kd(x)>=34);if(!f.length)break;
@@ -835,19 +867,31 @@ function startHand(){
       for(let j=0;j<f.length;j++){nh+=G.wall[G.wall.length-1];G.wall=G.wall.slice(0,-1);G.wt++}
       G.hands[s]=nh}
     G.hands[s]=sortS(G.hands[s])}
-  G.st='play';drawFor(G.dealer,false);bump();
-  const im=introMs();introUntil=Date.now()+im;if(im&&!isBot(G.dealer)&&G.tl){tAt+=im;G.tl+=Math.ceil(im/1000)}}
+  G.st='play';G.ph='deal';G.turn=G.dealer;delete G.fw;if(!flowerEnd())drawFor(G.dealer,false);bump();
+  const im=introMs();introUntil=Date.now()+im;if(im&&!isBot(G.dealer)&&G.tl){tAt+=im;G.tl+=Math.ceil(im/1000)}
+  if(G.ph==='fw')tAt=Date.now()+im+(im?700:0)}   // let every screen finish its opening (deal, flowers) before the flower hand is called
+/* flower hands end the hand on the spot: all eight flowers on one seat (八仙過海, counts as a self-draw, three pay),
+   or seven on one seat with the eighth on another (七搶一, whoever holds the eighth pays) */
+function flowerWin(){
+  for(let s=0;s<4;s++){const n=G.fl[s].length;if(n===8)return{w:s,f:-1,k:kd(G.fl[s][7])};
+    if(n===7)for(let t=0;t<4;t++)if(t!==s&&G.fl[t].length===1)return{w:s,f:t,k:kd(G.fl[t][0])}}
+  return null}
+// during the opening deal (G.ph 'deal') it only parks in phase 'fw'; hostTick calls it once the opening animation is over
+function flowerEnd(){const x=flowerWin();if(!x)return false;
+  if(G.ph==='deal'){G.fw=x;G.ph='fw';G.drawn=null}else endHand(x.w,x.f,x.k,1);return true}
 function drawFor(seat,tail){
   for(;;){
     if(G.wall.length<=16){endHand(-1);return false}
     let k;if(tail){k=kd(G.wall[G.wall.length-1]);G.wall=G.wall.slice(0,-1);G.wt++}else{k=kd(G.wall[0]);G.wall=G.wall.slice(1)}
-    if(k>=34){G.fl[seat]+=ch(k);tail=true;continue}
+    if(k>=34){G.fl[seat]+=ch(k);if(flowerEnd())return false;tail=true;continue}
     G.hands[seat]=sortS(G.hands[seat]+ch(k));G.drawn=k;break}
-  G.turn=seat;G.ph='discard';G.nd=0;return true}
+  G.turn=seat;G.ph='discard';G.nd=0;if(G.pw)G.pw[seat]=0;return true}
+function passWater(seat){if(!G.pw)G.pw=[0,0,0,0];G.pw[seat]=1}
 function options(seat){
   const L=G.last;if(!L||L.f===seat)return null;
   const c=cnt(G.hands[seat]),k=L.k,need=5-G.melds[seat].length,o={};let any=false;
-  c[k]++;if(canWin(c,need)){o.hu=1;any=true}c[k]--;
+  c[k]++;if(canWin(c,need)&&!(G.pw&&G.pw[seat])){o.hu=1;any=true}c[k]--;
+  if(L.q!=null)return any?o:null;   // 搶槓: a tile added to a pong can only be taken for a win
   if(c[k]>=2){o.pon=1;any=true}if(c[k]>=3)o.kan=1;
   if(seat===(L.f+1)%4&&k<27){const list=[];
     for(const a of [k-2,k-1,k]){if(a<0||(a/9|0)!==(k/9|0)||a%9>6)continue;let ok=true;for(let x=a;x<a+3;x++)if(x!==k&&!c[x])ok=false;if(ok)list.push(a)}
@@ -860,7 +904,9 @@ function openClaims(){
   G.ph='claim';bump()}
 function resolve(){
   const L=G.last,f=L.f,k=L.k,order=[1,2,3].map(i=>(f+i)%4);let pick=null;
+  for(const s of G.wait){const o=options(s);if(o&&o.hu)passWater(s)}   // ran out of time on a tile she could have won on: that is a pass too
   for(const s of order){const r=G.resp[s];if(r&&r.t==='hu'){pick=[s,r];break}}
+  if(L.q!=null){G.wait=[];G.resp={};if(pick){endHand(pick[0],f,k);return}G.last=null;if(drawFor(f,true)){G.kong=1;bump()}return}   // 搶槓 window: a win takes the tile (the kong maker pays), otherwise the kong draws its replacement
   if(!pick)for(const s of order){const r=G.resp[s];if(r&&(r.t==='pon'||r.t==='kan')){pick=[s,r];break}}
   if(!pick){const r=G.resp[order[0]];if(r&&r.t==='chi')pick=[order[0],r]}
   G.wait=[];G.resp={};
@@ -871,6 +917,13 @@ function resolve(){
   if(r.t==='pon'){G.hands[s]=rm(G.hands[s],k,2);G.melds[s].push('p'+ch(k));G.turn=s;G.ph='discard';G.nd=1;bump({s,t:'碰',f})}
   else if(r.t==='kan'){G.hands[s]=rm(G.hands[s],k,3);G.melds[s].push('k'+ch(k));if(drawFor(s,true)){G.kong=1;bump({s,t:'槓',f})}}
   else{const a=r.a;for(let x=a;x<a+3;x++)if(x!==k)G.hands[s]=rm(G.hands[s],x);G.melds[s].push('c'+ch(a)+ch(a+1)+ch(a+2)+ch(k));G.turn=s;G.ph='discard';G.nd=1;bump({s,t:'吃',f})}}
+/* 搶槓: before a tile added to an exposed pong (加槓) draws its replacement, the other three may win on it; a concealed kong cannot be robbed.
+   G.last.q is the meld index, which marks the claim window as win-only (see options / resolve) */
+function robOpen(seat,k,mi){
+  const L0=G.last;G.last={k,f:seat,q:mi};G.wait=[];G.resp={};
+  for(let i=1;i<4;i++){const s=(seat+i)%4,o=options(s);if(!o||!o.hu)continue;if(isBot(s))G.resp[s]={t:'hu'};else G.wait.push(s)}
+  if(!G.wait.length&&!Object.keys(G.resp).length){G.last=L0;return false}
+  G.ph='claim';bump({s:seat,t:'槓'});return true}
 function act(seat,a){
   if(!a||typeof a.t!=='string'||(G.pz&&a.t!=='next'))return;
   if(a.t==='next'){if(G.st==='over')newGame();else if(G.st==='play'&&G.ph==='end')nextHand();return}
@@ -880,25 +933,26 @@ function act(seat,a){
     if(a.t==='d'){const nh=rm(h,k);if(nh===null||k<0||k>33)return;G.hands[seat]=nh;G.disc[seat]+=ch(k);G.last={k,f:seat};G.drawn=null;G.first=0;openClaims()}
     else if(a.t==='hu'){if(G.nd||!canWin(c,need))return;endHand(seat,-1,G.drawn)}
     else if(a.t==='ak'){if(G.nd||k<0||k>33||c[k]!==4)return;G.hands[seat]=rm(h,k,4);G.melds[seat].push('a'+ch(k));G.first=0;if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
-    else if(a.t==='jk'){const i=G.melds[seat].indexOf('p'+ch(k));if(G.nd||i<0||!c[k])return;G.hands[seat]=rm(h,k);G.melds[seat][i]='k'+ch(k);if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
+    else if(a.t==='jk'){const i=G.melds[seat].indexOf('p'+ch(k));if(G.nd||i<0||!c[k])return;G.hands[seat]=rm(h,k);G.melds[seat][i]='k'+ch(k);if(robOpen(seat,k,i))return;if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
   }else if(G.ph==='claim'&&G.wait.includes(seat)){
     const o=options(seat);if(!o)return;
     if((a.t==='hu'&&o.hu)||(a.t==='pon'&&o.pon)||(a.t==='kan'&&o.kan)||(a.t==='chi'&&o.chi&&o.chi.includes(a.a)))G.resp[seat]={t:a.t,a:a.a};
     else if(a.t!=='pass')return;
+    if(o.hu&&a.t!=='hu')passWater(seat);
     G.wait=G.wait.filter(x=>x!==seat);if(!G.wait.length)resolve();else bump()}}
 function nextHand(){
   const r=G.res;
   if(r&&(r.w===G.dealer||r.w<0))G.lian++;
   else{G.lian=0;G.dealer=(G.dealer+1)%4;G.ju++;if(G.ju>=4){G.ju=0;G.wind++;if(G.wind>=cfg().r){G.st='over';G.ph='';bump();return}}}
   assignSeats();startHand()}
-function endHand(w,f,k){
+function endHand(w,f,k,fw){   // fw: a flower hand (八仙過海 / 七搶一), a flat 8 whatever the tiles are
   G.ph='end';G.wait=[];G.resp={};
   if(w<0){G.res={w:-1};bump({s:-1,t:'流局'});return}
-  const self=f<0,T=calcTai(w,k,self),dx=1+2*G.lian,d=[0,0,0,0];
+  const self=f<0,T=fw?{list:[[self?'八仙過海':'七搶一',8]],tot:8}:calcTai(w,k,self),dx=1+2*G.lian,d=[0,0,0,0];
   const payers=self?[0,1,2,3].filter(s=>s!==w):[f];
   for(const p of payers){const t=T.tot+((w===G.dealer||p===G.dealer)?dx:0),amt=cfg().b+cfg().t*t;d[p]-=amt;d[w]+=amt}
   for(let i=0;i<4;i++)G.score[i]+=d[i];
-  G.res={w,f,k,tai:T.list,tot:T.tot,dx,d,dl:G.dealer,ln:G.lian|0};
+  G.res={w,f,k,tai:T.list,tot:T.tot,dx,d,dl:G.dealer,ln:G.lian|0};if(fw)G.res.fw=1;
   if(G.stat){const S=G.stat;S[w][0]++;if(self)S[w][1]++;else S[f][2]++;S[w][3]=Math.max(S[w][3],T.tot)}
   bump({s:w,t:self?'自摸':'胡',f})}
 function calcTai(w,k,self){
@@ -912,8 +966,11 @@ function calcTai(w,k,self){
     const kInSeq=D.sets.some(s=>s[0]==='s'&&k>=s[1]&&k<=s[1]+2);
     let conc=ank;for(const s of D.sets)if(s[0]==='t'&&(self||s[1]!==k||kInSeq))conc++;
     if(G.first&&self&&w===G.dealer)L.push(['天胡',16]);
+    // 地胡 / 人胡: a non-dealer who has not discarded yet, nobody has called anything (any call leaves a meld); self-drawn on that first draw, or won off a discard before it
+    if(w!==G.dealer&&!G.disc[w]&&G.melds.every(m=>!m.length))L.push(self?['地胡',16]:['人胡',8]);
     if(!exposed&&self)L.push(['門清自摸',3]);else{if(self)L.push(['自摸',1]);if(!exposed)L.push(['門清',1])}
     if(!self&&exposed===5)L.push(['全求人',2]);
+    if(!self&&G.last&&G.last.q!=null)L.push(['搶槓',1]);
     if(self&&G.kong)L.push(['槓上開花',1]);
     if(self&&G.wall.length<=16)L.push(['海底撈月',1]);
     if(waits===1)L.push(['獨聽',1]);
@@ -941,8 +998,8 @@ function tileVal(c,k){
    call: 0 keeps the hand closed, 1 normal, 2 calls whenever it does not hurt; big: aims for all-pungs / one suit; mis: chance of a random discard.
    bots only ever look at their own hand and the table (rivers, exposed melds), never the wall or other hands */
 // grades come from test/aisim.py (one seat vs three plain greedy bots, 1600 hands, money per hand): S +17, A +10, B about 0, C -13, D -34 or worse
-const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'D',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'B',st:'守備',lv:2,def:2,call:1},
-  {g:'S',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'D',st:'保守',lv:0,def:1,call:0,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
+const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'D',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'A',st:'守備',lv:2,def:2,call:1},
+  {g:'S',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'B',st:'保守',lv:0,def:1,call:1,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
 function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}" title="${p.st}"><b>${p.g}</b></span>`:''}   // letter only (the user's call); the style word shows on the profile card
 const AIL=[{lv:0,def:0,call:2,mis:.3},{lv:1,def:0,call:1},{lv:2,def:1,call:1}];
 // window.__aiSeat: test-only per-seat override (a level 0-2 or a profile object)
@@ -954,7 +1011,7 @@ function seenCnt(s){const v=new Array(34).fill(0);for(const x of G.hands[s])v[kd
 function ukeire(c,need,seen){const b=shanten(c,need);let n=0;for(let t=0;t<34;t++){const left=4-seen[t];if(left<=0)continue;c[t]++;if(shanten(c,need)<b)n+=left;c[t]--}return n}
 // who looks close to ready: 3+ exposed melds is loud, 2 melds with a long river or a very long river is a maybe
 function threats(s){const out=[];for(let o=0;o<4;o++){if(o===s)continue;const ex=G.melds[o].filter(m=>m[0]!=='a').length,n=G.disc[o].length;
-  const lv=ex>=3?2:ex>=2&&n>=6?1:0;if(lv)out.push({o,lv})}return out}
+  const lv=ex>=4?2:ex>=3?1:0;if(lv)out.push({o,lv})}return out}
 // rough deal-in risk of tile k against seat o: her own discards are safe, seen-out honours nearly safe, suji and terminals safer than middle tiles
 function danger(k,o,seen){const r=G.disc[o];if(r.includes(ch(k)))return 0;
   if(k>=27)return seen[k]>=3?.3:seen[k]===2?1.5:3.5;
@@ -963,7 +1020,7 @@ function botDiscard(c,need,s){
   const P=s==null?AIL[1]:aiProf(s),cand=[];
   for(let k=0;k<34;k++){if(!c[k])continue;c[k]--;cand.push({k,sh:shanten(c,need),v:tileVal(c,k)});c[k]++}
   const min=Math.min(...cand.map(x=>x.sh));
-  if(P.mis&&Math.random()<P.mis){const ok=cand.filter(x=>x.sh<=min+1);return ok[Math.random()*ok.length|0].k}
+  if(P.mis&&min>=2&&Math.random()<P.mis){const ok=cand.filter(x=>x.sh<=min+1);return ok[Math.random()*ok.length|0].k}
   // big hands: keep pairs and the main suit (plus honours), throw the minor suits first
   let bigK=()=>0;if(P.big){const su=[0,0,0];for(let k=0;k<27;k++)su[k/9|0]+=c[k];const dom=su.indexOf(Math.max(...su));bigK=k=>(c[k]>=2?3:0)+(k>=27||(k/9|0)===dom?2:0)}
   const best=cand.filter(x=>x.sh===min);
@@ -971,7 +1028,7 @@ function botDiscard(c,need,s){
   if(P.lv>=2)for(const x of best){c[x.k]--;x.u=ukeire(c,need,seen);c[x.k]++}
   const eff=(a,b)=>bigK(a.k)-bigK(b.k)||(P.lv>=2?b.u-a.u:0)||a.v-b.v;
   if(P.def){const th=threats(s),dg=k=>th.reduce((a,t)=>a+danger(k,t.o,seen)*t.lv,0),loud=th.reduce((a,t)=>a+t.lv,0)>=2;
-    if((P.def>=2&&((th.length&&min>=2)||(loud&&min>=1)))||(loud&&min>=2))return cand.slice().sort((a,b)=>dg(a.k)-dg(b.k)||a.sh-b.sh||a.v-b.v)[0].k;
+    if((P.def>=2&&((loud&&min>=1)||(th.length&&min>=3)))||(loud&&min>=2))return cand.slice().sort((a,b)=>dg(a.k)-dg(b.k)||a.sh-b.sh||a.v-b.v)[0].k;
     if(th.length)return best.slice().sort((a,b)=>dg(a.k)-dg(b.k)||eff(a,b))[0].k}
   return best.slice().sort(eff)[0].k}
 function botTurn(s){
@@ -984,7 +1041,7 @@ function botTurn(s){
 function botClaim(s,o){
   if(o.hu)return{t:'hu'};
   const c=cnt(G.hands[s]),need=5-G.melds[s].length,k=G.last.k,base=shanten(c,need),sw=(s-G.dealer+4)%4,P=aiProf(s);
-  if(P.def){const th=threats(s),loud=th.reduce((a,t)=>a+t.lv,0)>=2;if((loud&&base>=2)||(P.def>=2&&((th.length&&base>=2)||(loud&&base>=1))))return null}   // folding: no calls
+  if(P.def){const th=threats(s),loud=th.reduce((a,t)=>a+t.lv,0)>=2;if((loud&&base>=2)||(P.def>=2&&((th.length&&base>=3)||(loud&&base>=1))))return null}   // folding: no calls
   if(o.kan){c[k]-=3;const s3=shanten(c,need-1);c[k]+=3;if(s3<=base&&P.call)return{t:'kan'}}
   if(o.pon){c[k]-=2;const s2=shanten(c,need-1);c[k]+=2;const val=k>=31||k===27+sw||k===27+G.wind;
     if(P.call===0?(s2===0&&s2<base)||(val&&s2<base):P.call===2||P.big?s2<=base:s2<base||(val&&s2<=base))return{t:'pon'}}
@@ -999,6 +1056,7 @@ function hostTick(){
   else if(G.ph==='claim'){
     for(const s of [...G.wait])if(isBot(s)){const o=options(s),r=o&&botClaim(s,o);act(s,r||{t:'pass'});if(G.ph!=='claim')return}
     if(now>=tAt)resolve()}
+  else if(G.ph==='fw'){if(now>=tAt){const x=G.fw;endHand(x.w,x.f,x.k,1)}}   // a flower hand from the opening deal: the opening has played, now it counts
   else if(G.ph==='end'){if(AUTO&&now>=tAt)nextHand()}}
 
 
@@ -1030,6 +1088,7 @@ function redact(G,seat){
   if(typeof g.wall==='string')g.wall=HID.repeat(g.wall.length);
   for(let s=0;s<4;s++){if(s===seat||(end&&G.res&&G.res.w===s))continue;
     g.hands[s]=HID.repeat(g.hands[s].length);g.melds[s]=g.melds[s].map(m=>m[0]==='a'?'a'+HID:m)}
+  if(g.pw)g.pw=g.pw.map((x,s)=>s===seat?x:0);   // who is under 過水 would tell the others who is ready
   if(g.turn!==seat)g.drawn=null;return g}
 function peerNet(opt){
   opt=opt||{};let cid=opt.cid||'';try{cid=cid||sessionStorage.getItem('mjCid')||''}catch(e){}
@@ -1051,13 +1110,16 @@ function peerNet(opt){
     function asClient(res,rej){hub=false;room.stage='signal';
       const pp=new Peer(PEER_CFG);peer=pp;keep(pp);
       pp.on('open',()=>{room.stage='ice';const c=pp.connect(HUB,{reliable:true});hubConn=c;
-        c.on('open',()=>{retry=0;room.status='ok';try{c.send({t:'p',cid,pres:me})}catch(e){}res&&res();res=null});
+        c.on('open',()=>{retry=0;room.goneAt=0;room.status='ok';try{c.send({t:'p',cid,pres:me})}catch(e){}res&&res();res=null});
         c._seen=Date.now();
         const hb=setInterval(()=>{if(dead||hubConn!==c){clearInterval(hb);return}
           if(Date.now()-c._seen>12000){clearInterval(hb);try{c.close()}catch(e){}lost();return}try{c.send({t:'hb'})}catch(e){}},4000);
-        c.on('data',m=>{if(!m)return;c._seen=Date.now();if(m.t==='hb')return;if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
+        c.on('data',m=>{if(!m)return;c._seen=Date.now();if(m.t==='hb')return;
+          if(m.t==='bye'){dead=true;room.status='closed';try{pp.destroy()}catch(e){}return}   // the host closed the room on purpose: no reconnecting
+          if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
         c.on('close',lost);c.on('error',lost)});
-      pp.on('error',e=>{if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
+      pp.on('error',e=>{if(e.type==='peer-unavailable'&&!res&&!room.goneAt)room.goneAt=Date.now();   // while retrying: the host's id is not there (it left or is still refreshing)
+        if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
     function lost(){   // the host went away: keep trying the same room (the host may be refreshing)
       if(dead||hub||room.status==='retry')return;room.status='retry';hubConn=null;
       const go=()=>{if(dead)return;try{peer&&peer.destroy()}catch(_){}room.status='retry';
@@ -1077,6 +1139,7 @@ function peerNet(opt){
           if(!pair)return{nm,t:'?'};const L=st.get(pair.localCandidateId)||{},Rm=st.get(pair.remoteCandidateId)||{};
           const t=L.candidateType==='relay'||Rm.candidateType==='relay'?'relay':L.candidateType==='host'&&Rm.candidateType==='host'?'host':'srflx';
           return{nm,t,rtt:pair.currentRoundTripTime,kb:Math.round(((pair.bytesSent||0)+(pair.bytesReceived||0))/1024)}}catch(e){return{nm,t:'?'}}}))};
+    room.close=()=>{if(hub)for(const [id,c] of conns)if(c.open)try{c.send({t:'bye'})}catch(e){}};   // host only: tell every client the room is over
     room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
     addEventListener('pagehide',()=>room.leave());
     return getIce().then(()=>new Promise((res,rej)=>{
@@ -1123,7 +1186,7 @@ function readActions(){
     if(seen[p.id]===undefined){seen[p.id]=a.n;continue}
     if(a.n!==seen[p.id]){seen[p.id]=a.n;if(a.v===G.v)act(G.seats?G.seats.indexOf(p.id):-1,a)}}}
 function doAct(a){
-  if(pending)return;
+  if(pending)return;MYT.act=true;
   if(isHost)act(mySeat(),a);
   else if(R){pending=true;an++;R.presence({a:Object.assign({n:an,v:G.v},a)}).catch(()=>{});renderActs();setTimeout(()=>{if(pending){pending=false;renderActs()}},2500)}}
 /* anyone seated who drops out pauses the hand (G.pz) until they are back; the host can let the girls play for them (G.sub), and they take the seat back on return */
@@ -1138,18 +1201,37 @@ function pauseCheck(){
   else{delete G.pz;introUntil=0;bump()}}   // everyone is back: the turn restarts with a full clock
 let pzOn=false,pzAt=0,pzHTML='';
 function renderPause(){
-  const gone=!isHost&&R.status==='retry'&&G.st==='play',pz=G.st==='play'&&G.pz,on=!inMenu&&!!(gone||pz);
+  const gone=!isHost&&R.status==='retry'&&G.st==='play',pz=G.st==='play'&&G.pz,away=G.st==='play'&&hostAway(),on=!inMenu&&!!(gone||pz||away||closedWhy);
   if(on!==pzOn){pzOn=on;pzAt=performance.now();pzHTML='';show('pause',on);kvWait=on;
     const kv=$('kv'),dst=on?$('pause'):$('menu');if(kv.parentNode!==dst){dst.insertBefore(kv,dst.firstChild);kvBuild()}}
   if(!on)return;const el=(performance.now()-pzAt)/1000|0,mm=(el/60|0)+':'+String(el%60).padStart(2,'0');
-  const h=`<div class="logo"><small>牌局暫停</small>${gone?'重新連線中':'等牌友回來'}</div>
-    <p>${gone?'和房主的連線中斷了，正在自動重新連線…':`<b class="pzn">${pz.n.map(esc).join('、')}</b> 斷線了，正在等${pz.n.length>1?'他們':'對方'}重新連線。`}</p>
+  const h=closedWhy?closedHTML():`<div class="logo"><small>牌局暫停</small>${away?'房主暫時離開':gone?'重新連線中':'等牌友回來'}</div>
+    <p>${away?'房主把遊戲切到背景了，牌局先停在這裡等他回來。':gone?'和房主的連線中斷了，正在自動重新連線…':`<b class="pzn">${pz.n.map(esc).join('、')}</b> 斷線了，正在等${pz.n.length>1?'他們':'對方'}重新連線。`}</p>
     <p class="pzt">已等 <b>${mm}</b></p>
-    <p class="pzh">${gone?'連上就會回到牌桌，不用重開。':'回來就接著打，牌局不會重開。'}<br>等待時，點點她們吧。</p>
+    <p class="pzh">${away?'房主一回來就接著打，這一手的時間會重新算。':gone?'連上就會回到牌桌，不用重開。':'回來就接著打，牌局不會重開。'}<br>等待時，點點她們吧。</p>
     ${isHost&&pz&&el>=20?'<button class="big" id="pzSub">先讓她們代打</button><p class="pzh">對方回來後可以接手原本的位子。</p>':''}
     ${el>=60?'<button class="big alt" id="pzLeave">離開包廂</button>':''}`;
   if(h!==pzHTML){pzHTML=h;$('pzCard').innerHTML=h}}
-function leaveRoom(){try{const h=savedHost();if(h&&h.code===roomCode)localStorage.removeItem(HOSTKEY);history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}
+function leaveRoom(){
+  const go=()=>{try{const h=savedHost();if(h&&h.code===roomCode)localStorage.removeItem(HOSTKEY);history.replaceState(null,'',location.pathname)}catch(e){}location.reload()};
+  // the host leaving on purpose closes the room for everyone: a presence flag (both kinds of room) plus a direct message to every PeerJS client, then a moment for them to go out
+  if(R&&isHost&&!closedWhy){if(leaveRoom.busy)return;leaveRoom.busy=1;setTimeout(go,1500);
+    try{if(R.close)R.close();Promise.resolve(R.presence({bye:1})).catch(()=>{}).then(()=>setTimeout(go,400))}catch(e){go()}return}
+  go()}
+/* guest side: the room is over. the host left on purpose (its presence says bye / the PeerJS hub said so), or it never came back:
+   a PeerJS host has about 45 s to take its id back after a refresh, so once that id has been missing for a minute the guests stop waiting.
+   (in a claude.ai room a host that vanishes without saying bye is simply replaced by the next player, as before) */
+let closedWhy='',closedAt=0;
+function closeCheck(){
+  if(closedWhy||!R||inMenu)return;const h=plist[0];let why='';
+  if(R.status==='closed'||(h&&h.id!==myPeer&&h.pr.bye))why='bye';
+  else if(R.status==='retry'&&R.goneAt&&Date.now()-R.goneAt>60000)why='gone';
+  if(!why)return;closedWhy=why;closedAt=performance.now();
+  try{if(R.leave)R.leave()}catch(e){}try{history.replaceState(null,'',location.pathname)}catch(e){}}
+function goHome(){if(goHome.done)return;goHome.done=1;try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}
+function closedHTML(){const left=Math.max(0,6-((performance.now()-closedAt)/1000|0));if(!left)setTimeout(goHome,0);
+  return `<div class="logo"><small>牌局結束</small>包廂已解散</div><p>${closedWhy==='bye'?'房主已解散包廂。':'房主一直沒有回來，包廂已解散。'}</p>
+    <p class="pzh">${left} 秒後回到主選單。</p><button class="big" id="pzHome">回主選單</button>`}
 let lastPl='';
 function tick(){
   if(inMenu)return;
@@ -1168,13 +1250,72 @@ function tick(){
   if(isHost)hostTick();
   if(dirty){dirty=false;if(R&&isHost){sentG=true;if(R.setG)R.setG(G);else R.presence({G}).catch(()=>{});backupHost()}render()}
   updateTimer()}
-setInterval(tick,150);
+/* keep the screen awake while at a table (the lobby counts): asked for once we leave the menu, let go when the page is hidden or we are back in the menu,
+   asked for again on return (the browser drops it by itself when the page is hidden). browsers without the API, or that refuse, are skipped silently */
+let wakeL=null,wakeBusy=false,wakeAt=0;
+function wakeSync(){
+  if(wakeBusy||!navigator.wakeLock)return;const want=!inMenu&&!document.hidden;
+  if(want&&!wakeL&&Date.now()>=wakeAt){wakeBusy=true;wakeAt=Date.now()+10000;   // a refusal (battery saver, no permission) is retried every 10 s at most
+    try{navigator.wakeLock.request('screen').then(l=>{wakeL=l;l.addEventListener('release',()=>{if(wakeL===l){wakeL=null;wakeAt=0}})},()=>{}).then(()=>{wakeBusy=false;wakeSync()})}catch(e){wakeBusy=false}}
+  else if(!want&&wakeL){const l=wakeL;wakeL=null;wakeAt=0;try{l.release().catch(()=>{})}catch(e){}}}
+document.addEventListener('visibilitychange',wakeSync);
+/* ---------- the page in the background ----------
+   every clock here is absolute (tAt / introUntil against Date.now()), and a hidden page's timers are throttled or, on phones, frozen outright. so:
+   - solo: the table simply stops while hidden; every beat that finds the page hidden (or finds it was frozen) pushes the clocks forward by the time that passed
+   - host of a room: a worker keeps the beat going in a hidden desktop tab (worker timers are not throttled), and the host's presence says "hidden" plus a heartbeat;
+     guests who see "hidden" and no heartbeat for 4 s show the pause overlay (hostAway). a host that comes back from a freeze restarts the turn with a full clock
+   - anyone coming back: one catch-up pass with every effect, sound and voice muted (mute()), leftovers of old effects removed, the audio context resumed
+   - effects are also skipped when more than one event went by between two renders (a reconnect): only the latest state is drawn */
+let beatAt=Date.now(),beatP=performance.now(),hbAt=0,fxOff=0,backAt=-1e9,awayMsg='',hzKey='',hzAt=0;
+const mute=()=>document.hidden||performance.now()<fxOff;
+function beat(){
+  const now=Date.now(),gap=now-beatAt,pn=performance.now(),pgap=pn-beatP;beatAt=now;beatP=pn;wakeSync();if(inMenu)return;
+  if(!R){if(document.hidden||gap>1500){tAt+=gap;if(introUntil)introUntil+=gap;phaseStart+=pgap;return}}   // the countdown on screen runs on performance.now(), which may or may not tick while frozen: each clock is moved by its own gap
+  else if(isHost){
+    if(gap>4000&&G.st==='play'&&G.ph!=='end'){readPeers();readActions();introUntil=0;bump()}   // I was frozen: nobody could play meanwhile
+    if(document.hidden&&now-hbAt>1500){hbAt=now;R.presence({hb:now%1e7}).catch(()=>{})}}
+  tick();readChat();closeCheck()}
+let bgW=null;try{bgW=new Worker(URL.createObjectURL(new Blob(['let t=0;onmessage=e=>{clearInterval(t);if(e.data)t=setInterval(()=>postMessage(0),200)}'],{type:'text/javascript'})));bgW.onmessage=()=>{if(document.hidden)beat()}}catch(e){bgW=null}
+// guest side: the host's page is hidden and its heartbeat has stopped
+function hostAway(){
+  if(!R||isHost)return false;const h=plist[0];if(!h||h.id===myPeer||!h.pr.hid){hzKey='';return false}
+  const k=h.pr.hid+':'+h.pr.hb;if(k!==hzKey){hzKey=k;hzAt=performance.now()}
+  return performance.now()-hzAt>4000}
+function clearFx(){
+  for(const e of root.querySelectorAll('.cband,.hufx,.quip,.toast,.duedge,.duhit,.duseal,.dufly,.stamp,.cut'))e.remove();
+  for(const e of root.querySelectorAll('.sw'))e.classList.remove('struck','dimmed','cuthide','pop');resHold=0;
+  const i=$('intro');if(i&&performance.now()>=INTRO.end)i.remove()}
+// a short notice at the top of the table
+function note(t,ms){let d=$('note');if(!d){d=document.createElement('div');d.id='note';root.appendChild(d)}
+  d.textContent=t;d.classList.remove('on');void d.offsetWidth;d.classList.add('on');clearTimeout(note.t);note.t=setTimeout(()=>d.classList.remove('on'),ms||4200)}
+/* was I timed out? a decision of mine (my discard, or my chance to claim) went away without me pressing anything: say so, at once or when I am back on the page */
+const MYT={k:'',act:false};
+function turnWatch(){
+  const me=mySeat(),play=G.st==='play'&&me>=0&&G.ph!=='end';let k='';
+  if(play&&G.ph==='discard'&&G.turn===me)k='d'+G.wall.length+':'+G.wt+':'+G.melds[me].length;
+  else if(play&&G.ph==='claim'&&G.last&&G.wait.includes(me))k='c'+G.last.f+':'+G.last.k+':'+G.disc[G.last.f].length+':'+G.wall.length;
+  if(k===MYT.k)return;
+  if(MYT.k&&!MYT.act&&!myAuto&&!AUTO){const t='，已自動'+(MYT.k[0]==='d'?'出牌':'放過那張牌');
+    if(document.hidden)awayMsg='你剛才逾時'+t;else note((performance.now()-backAt<2500?'你剛才逾時':'時間到')+t)}
+  MYT.k=k;MYT.act=false}
+document.addEventListener('visibilitychange',()=>{
+  const hid=document.hidden;
+  if(bgW)try{bgW.postMessage(hid&&R&&isHost?1:0)}catch(e){}
+  if(R&&isHost&&!inMenu)try{hbAt=Date.now();R.presence(hid?{hid:Date.now()%1e7+1}:{hid:null,hb:null}).catch(()=>{})}catch(e){}   // tell the room the host went to the background / is back
+  if(hid)return;
+  try{if(SND.ctx&&SND.ctx.state!=='running')SND.ctx.resume().catch(()=>{})}catch(e){}
+  fxOff=performance.now()+700;backAt=hzAt=performance.now();clearFx();
+  if(!inMenu){beat();try{render()}catch(e){}}
+  if(awayMsg){note(awayMsg);awayMsg=''}});
+setInterval(beat,150);
 
 /* ---------- render ---------- */
 let rot=false,RW=1,RH=1;window.UIZ=1;const root=$('root');
 var SIDEK=1.4,TWB=36;
 function resize(){
   // big screens (PC, tablets) get the phone-landscape layout scaled up as a whole, so text, names and quips grow with it; phones stay at 1
+  // the upright input bar is up (or its keyboard is still sliding away): a shorter window is the keyboard, not a turned phone, so keep the layout as it is
+  const K=window.KBL;if(K){if(innerWidth===K.w&&(K.open||innerHeight<K.h))return;window.KBL=null;if(K.open)kbHide()}
   const w=innerWidth,h=innerHeight;rot=w<h;const pw=rot?h:w,ph=rot?w:h,z=Math.max(1,Math.min(pw/844,ph/430,2.6));UIZ=z;RW=pw/z;RH=ph/z;
   root.style.zoom=z>1?z:'';root.style.width=RW+'px';root.style.height=RH+'px';root.style.transform=rot?`translateX(${w/z}px) rotate(90deg)`:'none';
   const bh=8,tw=Math.max(22,Math.min(62,(RW*.84)/17.8,RH/5.6)),sw=tw*.6;TWB=tw;
@@ -1228,7 +1369,7 @@ const BIO=['銀髮夜后，晚禮服配長手套。說話慢、出手狠，牌�
  '甜美的女僕，嘴上說服侍主人，其實膽子小，一緊張就打錯牌。','夜店 DJ，節奏感滿點。不屑小胡，要做就做碰碰胡、混一色這種大的。'];
 const STYD={'均衡':'攻守平衡，看情勢決定要衝還是收。','愛碰':'能碰就碰，用速度壓人。','隨性':'全憑感覺，偶爾會亂打。','守備':'別家一露出聽牌跡象，就改打安全牌。',
  '速攻':'只求最快聽牌，幾乎不防守。','門清':'不太吃碰，喜歡門清自摸。','保守':'很怕放槍，但牌效率不太好。','大牌':'偏好碰碰胡、混一色這類大牌。'};
-const AISTAT=[[26.0,12.8],[24.2,17.1],[9.0,22.3],[18.9,10.8],[29.6,16.6],[14.4,10.1],[7.1,11.8],[21.7,16.6]];   // win %, deal-in % vs three plain bots
+const AISTAT=[[28.6,14.9],[21.8,18.8],[17.4,18.6],[27.4,15.2],[31.4,17.5],[18.6,14.7],[21.0,14.9],[22.0,17.7]];   // win %, deal-in % vs three plain bots
 let pfC=0;
 function openProf(c){const A=window.AVATARS||[];if(!A[c])return;pfC=c;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){};setTimeout(()=>{try{voiceC(c,'hu',1.4)}catch(_){}},350)}
 function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col=CCOL[c]||CCOL[0],st=AISTAT[c]||[0,0],el=$('pfBody');
@@ -1264,9 +1405,38 @@ const BOTS=['瑟琳','蕾歐','薇拉','蜜雅','凜','白音','艾莉絲','露�
 function dealChs(){const n=Math.min(BOTS.length,(window.AVATARS||[]).length||4),p=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=Math.random()*(i+1)|0;[p[i],p[j]]=[p[j],p[i]]}return p.slice(0,4)}   // four of the cast at the table
 function chr(seat){return G&&G.chs?G.chs[seat]|0:seat&3}
 let myName='';try{myName=localStorage.getItem('mjName')||''}catch(e){}
-if(!myName){const A=['夜歸人','風流客','雀神','手氣王','小賭怡情','今晚不睡','包廂常客','聽牌高手','夜貓','紅中哥','清一色','好運來'];myName=A[Math.random()*A.length|0]+(Math.random()*90+10|0)}
+function rndName(){const A=['夜歸人','風流客','雀神','手氣王','小賭怡情','今晚不睡','包廂常客','聽牌高手','夜貓','紅中哥','清一色','好運來'];return A[Math.random()*A.length|0]+(Math.random()*90+10|0)}
+if(!myName)myName=rndName();
 $('nameIn').value=myName;
 function saveName(){myName=$('nameIn').value.trim().slice(0,8);try{localStorage.setItem('mjName',myName)}catch(e){}}
+$('nameRnd').onclick=()=>{let n;do n=rndName();while(n===$('nameIn').value);$('nameIn').value=n;saveName()};
+/* upright input bar (#kbar, outside #root): when the page is turned 90deg the system keyboard stays upright, so typing happens in an upright copy of the field.
+   it must take focus inside the tap itself (iOS only raises the keyboard then); 確認 / Enter writes the value back and replays the field's own events */
+const KBT={nameIn:'暱稱',codeIn:'包廂號',pwIn:'連線密碼'};let kbSrc=null,kbTm=0;
+function kbFix(s,v,done){if(s.id==='codeIn')v=v.toUpperCase().replace(/[^A-Z0-9]/g,'');else if(done&&s.type!=='password')v=v.trim();return v.slice(0,s.maxLength>0?s.maxLength:99)}
+function kbOpen(s){if(!rot||kbSrc)return;kbSrc=s;const i=$('kbIn');
+  i.type=s.type;i.placeholder=s.placeholder;i.value=s.value;$('kbT').textContent=KBT[s.id]||'';
+  const im=s.getAttribute('inputmode');if(im)i.setAttribute('inputmode',im);else i.removeAttribute('inputmode');
+  if(s.id==='codeIn'){i.removeAttribute('maxlength');i.setAttribute('autocapitalize','characters')}else{i.maxLength=s.maxLength;i.setAttribute('autocapitalize','off')}   // the code field is cleaned as you type instead (a pasted "ab-12" still gives 4 characters)
+  clearTimeout(kbTm);window.KBL={w:innerWidth,h:innerHeight,open:true};$('kbar').classList.remove('hide');
+  try{s.blur();i.focus();i.setSelectionRange(i.value.length,i.value.length)}catch(e){}}
+function kbHide(){kbSrc=null;$('kbar').classList.add('hide');try{$('kbIn').blur()}catch(e){}}
+function kbDone(ok){const s=kbSrc,K=window.KBL;if(!s)return;const v=kbFix(s,$('kbIn').value,true);kbHide();
+  // the layout stays frozen until the window is back to its full height (keyboard gone), 1.5s at most
+  if(K){K.open=false;kbTm=setTimeout(()=>{if(window.KBL===K){window.KBL=null;dispatchEvent(new Event('resize'))}},1500)}
+  try{scrollTo(0,0)}catch(e){}dispatchEvent(new Event('resize'));
+  if(!ok)return;
+  if(v!==s.value){s.value=v;s.dispatchEvent(new Event('input',{bubbles:true}));s.dispatchEvent(new Event('change',{bubbles:true}))}
+  if(s.id==='nameIn')saveName();
+  if(s.id==='codeIn'&&v.length===4){$('join').click();return}   // a full room code goes straight in (no second tap on the sideways page)
+  s.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'}))}   // the field's own Enter behaviour (password: same as its 確認)
+for(const id in KBT){const s=$(id);
+  s.addEventListener('touchend',e=>{if(rot){if(e.cancelable)e.preventDefault();kbOpen(s)}});
+  s.addEventListener('mousedown',e=>{if(rot){e.preventDefault();kbOpen(s)}});
+  s.addEventListener('focus',()=>kbOpen(s))}
+$('kbIn').addEventListener('input',e=>{const s=kbSrc;if(!s||e.isComposing)return;const i=$('kbIn'),v=kbFix(s,i.value,false);if(v!==i.value)i.value=v});
+$('kbIn').addEventListener('keydown',e=>{if(e.isComposing||e.keyCode===229)return;if(e.key==='Enter'){e.preventDefault();kbDone(true)}else if(e.key==='Escape')kbDone(false)});
+$('kbOk').onclick=()=>kbDone(true);$('kbNo').onclick=()=>kbDone(false);
 function peerName(id,i){const p=plist.find(x=>x.id===id),n=p&&typeof p.pr.nm==='string'?p.pr.nm.trim().slice(0,8):'';return n||'玩家'+(i+1)}
 function nameOf(seat){
   const p=G.seats[seat];
@@ -1323,7 +1493,7 @@ function introState(){
   return{n,fl,t}}
 function seatXY(pos){return pos===0?[RW*.45,RH-TWB*.9]:pos===1?[RW*.84,RH*.42]:pos===2?[RW*.5,RH*.1]:[RW*.16,RH*.42]}
 function startIntro(){
-  const ms=introMs();if(!ms)return;
+  const ms=introMs();if(!ms||mute())return;
   const P=introPre(),fh=firstHand();INTRO={t0:performance.now(),end:performance.now()+ms,p:P};
   const old=$('intro');if(old)old.remove();
   const me=Math.max(0,mySeat()),d=document.createElement('div');d.id='intro';
@@ -1362,13 +1532,15 @@ function startIntro(){
       w.innerHTML=`<span class="ifn">${esc(nameOf(s))}</span>`+fs.map(k=>tile(k)).join('');d.appendChild(w);try{voice(s,'flower',1.3)}catch(e){}});
     at(t0+660,tick)}
   at0(ms-260,()=>d.classList.add('out'));at0(ms,()=>{d.remove();tick()})}
+// 七搶一: the seat whose flower was the eighth (it is marked on the table like a struck discard), -1 otherwise
+function fwPay(){const r=G.res;return G.ph==='end'&&r&&r.fw&&r.f>=0?r.f:-1}
 /* hand the 3D module a plain snapshot of the table, seats relative to me (0 me, 1 right, 2 top, 3 left) */
 function draw3D(me,live,lastKey){
   if(!window.T3||!T3.draw)return;
   const IN=introState(),seats=[0,1,2,3].map(pos=>{const s=(me+pos)%4;return{disc:[...G.disc[s]].map(kd),hand:IN?Math.min(G.hands[s].length,IN.n[s]):G.hands[s].length,fl:IN&&!IN.fl[s]?[]:[...G.fl[s]].map(kd),
     melds:G.melds[s].map(m=>{if(m[0]==='c')return chiTiles(m);const k=kd(m[1]);return m[0]==='p'?[k,k,k]:m[0]==='a'?[-1,-1,-1,-1]:[k,k,k,k]})}});
-  const lt=G.last&&live?{pos:(G.last.f-me+4)%4,i:G.disc[G.last.f].length-1}:null;
-  T3.draw({seats,last:lt,lastKey,spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
+  const lp=G.last&&lastKey?(G.last.f-me+4)%4:0,lt=fwPay()>=0?{pos:(G.res.f-me+4)%4,fl:1}:G.last&&lastKey?(G.last.q!=null?{pos:lp,m:G.last.q}:{pos:lp,i:G.disc[G.last.f].length-1}):null;
+  T3.draw({seats,last:lt,lastKey,hi:hiK(),spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
     winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),
     dealer:(G.dealer-me+4)%4,turn:live?((G.ph==='claim'&&G.last?G.last.f:G.turn)-me+4)%4:-1})}
 /* my row: shrink the tiles when hand + flowers + melds would not fit across the screen */
@@ -1384,7 +1556,7 @@ function audio(){
   if(SND.ctx.state==='suspended'){try{SND.ctx.resume().catch(()=>{})}catch(e){}}
   return SND.ctx}
 const VB=BOTS.map(()=>({}));
-function playBuf(buf,gain){try{const c=SND.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=gain;src.buffer=buf;src.connect(g);g.connect(c.destination);src.start()}catch(e){}}
+function playBuf(buf,gain){if(mute())return;try{const c=SND.ctx,src=c.createBufferSource(),g=c.createGain();g.gain.value=gain;src.buffer=buf;src.connect(g);g.connect(c.destination);src.start()}catch(e){}}
 function decodeVoice(vi,k,then){
   const d=window.VOICES&&window.VOICES[vi]&&window.VOICES[vi][k];if(!d||VB[vi][k])return;VB[vi][k]='pending';
   try{const b=atob(d.split(',')[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
@@ -1407,7 +1579,7 @@ function tone(t,freq,dur,gain,type,slide){
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(gain,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
   o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+.03)}
 function sfx(name){
-  if(!SND.on)return;const c=audio();if(!c||c.state!=='running')return;const t=c.currentTime+.01;
+  if(!SND.on||mute())return;const c=audio();if(!c||c.state!=='running')return;const t=c.currentTime+.01;
   try{switch(name){
     case 'clack':noise(t,.05,2600,1.2,.6);noise(t+.012,.04,1400,1,.4);tone(t,190,.07,.4,'sine',90);break;
     case 'pick':noise(t,.02,4500,2,.12);break;
@@ -1421,7 +1593,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1121';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1422';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1446,17 +1618,19 @@ function renderTable(){
   // windows light up for the seat to act; while others may claim, the one who just discarded stays lit
   WINK.forEach((k,pos)=>{const s=(me+pos)%4,lit=live&&(G.ph==='claim'&&G.last?G.last.f===s:G.turn===s);
     placeWin(k,s,lit,live,'')});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
-  const lastKey=G.last&&live?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k:'',isNew=!!lastKey&&lastKey!==shownLast;
-  if(isNew){sfx('clack');voice(G.last.f,'t'+G.last.k,1.3)}shownLast=lastKey;
+  // the struck tile stays marked through a hand won on it, so the win effect lands on it; G.last.q: a tile added to a pong that may be robbed (搶槓)
+  const mark=G.last&&(live||(G.ph==='end'&&G.res&&G.res.f>=0&&!G.res.fw)),lastKey=fwPay()>=0?'fw:'+G.res.f:mark?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k+(G.last.q!=null?'q':''):'',isNew=!!lastKey&&lastKey!==shownLast;
+  if(isNew&&fwPay()<0){sfx('clack');if(G.last.q==null){const f=G.last.f,xk='x'+G.last.k,V=window.VOICES&&f>=0&&f<4&&window.VOICES[chr(f)];voice(f,V&&V[xk]&&Math.random()<.5?xk:'t'+G.last.k,1.3)}}shownLast=lastKey;
   {const hk=G.dealer+':'+G.ju+':'+G.lian+':'+(G.score||[]).join(',');if(hk!==flHand){flHand=hk;WPOSE=WPOSE.map(()=>Math.random()*3|0);flSeen=G.fl.map(x=>x.length);if(G.st==='play'&&G.ph!=='end'&&G.first&&G.disc.every(d=>!d))startIntro();if(G.st==='play'&&G.ph!=='end'){if(lastResD){const me=mySeat();lastResD.forEach((v,i)=>{if(v<0&&i!==me&&isBot(i))setMood(i,'L',9000)});lastResD=null}if(G.lian>0)quip(G.dealer,'lian',900)}}else G.fl.forEach((x,i)=>{if(x.length>flSeen[i]){flSeen[i]=x.length;voice(i,'flower',1.3)}})}
   draw3D(me,live,lastKey);
   $('auto').className=myAuto?'on':'';$('auto').textContent=myAuto?'託管中・取消':'託管';show('autoBan',false);
-  $('ginfo').innerHTML=roomCode?`房號 ${esc(roomCode)}`:'';
+  $('ginfo').innerHTML=roomCode?`房號 ${esc(roomCode)}`:'';chatPlace(ms);
   $('mine').className=live&&G.turn===ms?'turn':'';
   if(ms<0){$('myMelds').innerHTML=G.melds[me].map(m=>meldHTML(m,'',false)).join('');$('myFl').innerHTML=[...G.fl[me]].map(x=>tile(kd(x))).join('');$('hand').innerHTML='';$('acts').innerHTML='';fitMine();return}
   const IN=introState();
   $('myFl').innerHTML=IN&&!IN.fl[ms]?'':[...G.fl[ms]].map(x=>tile(kd(x))).join('');
   $('myMelds').innerHTML=G.melds[ms].map(m=>meldHTML(m,'',true)).join('');
+  if(lastKey&&fwPay()<0&&G.last.q!=null&&G.last.f===ms){const e=$('myMelds').children[G.last.q];if(e&&e.lastChild)e.lastChild.classList.add('last')}
   let h=[...G.hands[ms]].map(kd),drawn=null;const drawKey=G.turn+':'+G.wall.length+':'+G.wt;
   if(live&&G.turn===ms&&G.ph==='discard'&&!G.nd&&G.drawn!=null){const i=h.lastIndexOf(G.drawn);if(i>=0){h.splice(i,1);drawn=G.drawn}}
   if(IN){h=h.slice(0,IN.n[ms]);if(IN.n[ms]<17)drawn=null}
@@ -1464,7 +1638,8 @@ function renderTable(){
   $('hand').innerHTML=h.map((k,i)=>tile(k,(i===sel?'sel':'')+tpc(k),`data-i="${i}" data-k="${k}"`)).join('')+(drawn!=null?tile(drawn,'drawn'+(sel===99?' sel':'')+(drawKey!==shownDraw?' in':'')+tpc(drawn),`data-i="99" data-k="${drawn}"`):'');
   fitMine();
   {let sk=-1;if(sel>=0){const e=[...$('hand').children].find(c=>+c.dataset.i===sel);if(e)sk=+e.dataset.k}showTips(sk)}
-  shownDraw=drawKey;
+  shownDraw=drawKey;markSame();
+  if(DRAG.on){if(G.v!==DRAG.v)DRAG.on=false;else if(DRAG.mv)dragPaint()}   // the hand was rebuilt under a finger that is still dragging
   renderActs()}
 /* tenpai hints: which discards leave me waiting, on what, and how many of those are still unseen */
 let HINT={key:'',tp:{},now:null};
@@ -1478,10 +1653,13 @@ function hints(me){
   else if(n%3===1){const w=waitsOf(c,need);if(w.length)HINT.now=w}}
 function showTips(selK){
   const me=mySeat(),el=$('tips');if(me<0||G.st!=='play'||G.ph==='end'){el.innerHTML='';return}
-  const w=selK>=0&&HINT.tp[selK]?HINT.tp[selK]:(selK<0?HINT.now:null);
-  if(!w){el.innerHTML=Object.keys(HINT.tp).length&&selK<0?'<span class="tl">打出有「聽」記號的牌就聽牌</span>':'';return}
+  const w=selK>=0&&HINT.tp[selK]?HINT.tp[selK]:(selK<0?HINT.now:null),pw=G.pw&&G.pw[me]?'<span class="pwt">過水中・摸牌後才能胡</span>':'';
+  if(!w){el.innerHTML=(Object.keys(HINT.tp).length&&selK<0?'<span class="tl">打出有「聽」記號的牌就聽牌</span>':'')+pw;return}
   const tot=w.reduce((a,k)=>a+unseen(me,k),0);
-  el.innerHTML=`<span class="tl">${selK>=0?'打這張聽':'聽'}</span>`+w.map(k=>`<span class="tw">${tile(k)}<em>${unseen(me,k)}</em></span>`).join('')+`<span class="tl">共 ${tot} 張</span>`}
+  el.innerHTML=`<span class="tl">${selK>=0?'打這張聽':'聽'}</span>`+w.map(k=>`<span class="tw">${tile(k)}<em>${unseen(me,k)}</em></span>`).join('')+`<span class="tl">共 ${tot} 張</span>`+pw}
+// what winning right now is worth: the number the result screen shows big (the hand's tai, plus the dealer / streak tai when every payment carries them)
+function winTai(w,k,f){const self=f<0,T=calcTai(w,k,self);return T.tot+(w===G.dealer||(!self&&f===G.dealer)?1+2*(G.lian|0):0)}
+const taiTag=n=>`<small>${n} 台</small>`;
 function btn(label,cls,a){return `<button class="ab ${cls}" data-a='${JSON.stringify(a)}'>${label}</button>`}
 function renderActs(){
   const me=mySeat();let h='';
@@ -1489,14 +1667,14 @@ function renderActs(){
     if(G.ph==='discard'&&G.turn===me){
       const c=cnt(G.hands[me]),need=5-G.melds[me].length;
       if(!G.nd){
-        if(canWin(c,need))h+=btn('自摸','hu',{t:'hu'});
+        if(canWin(c,need))h+=btn('自摸'+taiTag(winTai(me,G.drawn!=null?G.drawn:kd(G.hands[me].slice(-1)),-1)),'hu',{t:'hu'});
         for(let k=0;k<34;k++)if(c[k]===4)h+=btn('暗槓 '+tname(k),'kan',{t:'ak',k});
         for(const m of G.melds[me])if(m[0]==='p'&&c[kd(m[1])])h+=btn('加槓 '+tname(kd(m[1])),'kan',{t:'jk',k:kd(m[1])})}
     }else if(G.ph==='claim'&&G.wait.includes(me)){
       const o=options(me);
-      if(o){if(o.hu)h+=btn('胡','hu',{t:'hu'});if(o.kan)h+=btn('槓','kan',{t:'kan'});if(o.pon)h+=btn('碰','pon',{t:'pon'});
+      if(o){if(o.hu)h+=btn('胡'+taiTag(winTai(me,G.last.k,G.last.f)),'hu',{t:'hu'});if(o.kan)h+=btn('槓','kan',{t:'kan'});if(o.pon)h+=btn('碰','pon',{t:'pon'});
         if(o.chi)for(const a of o.chi)h+=btn('吃'+[a,a+1,a+2].map(x=>tile(x,'xs')).join(''),'chi',{t:'chi',a});
-        h+=btn('過','pass',{t:'pass'});if(G.last)h=`<span class="from"><b>${esc(nameOf(G.last.f))}</b> 打出${tile(G.last.k,'xs')}</span>`+h}}}
+        h+=btn('過','pass',{t:'pass'});if(G.last)h=`<span class="from"><b>${esc(nameOf(G.last.f))}</b> ${G.last.q!=null?'加槓':'打出'}${tile(G.last.k,'xs')}</span>`+h}}}
   $('acts').innerHTML=h}
 let lobbyHTML='';
 function seg(key,opts){const c=cfg();return `<div class="seg">${opts.map(([v,l,sub])=>`<button data-cfg="${key}" data-v="${v}" class="${String(c[key])===String(v)?'on':''}" ${isHost?'':'disabled'}><b>${l}</b>${sub?`<small>${sub}</small>`:''}</button>`).join('')}</div>`}
@@ -1537,7 +1715,7 @@ function setMood(seat,e,ms){MOOD[seat]={e,until:Date.now()+ms};requestAnimationF
 function moodOf(seat){const m=MOOD[seat];return m&&Date.now()<m.until?m.e:''}
 /* a character only talks to you about something between the two of you, at most twice a hand */
 function quip(seat,kind,delay){
-  const me=mySeat();if(me<0||seat<0||seat===me||!isBot(seat))return;
+  const me=mySeat();if(mute()||me<0||seat<0||seat===me||!isBot(seat))return;
   const hk=G.wind+':'+G.ju+':'+G.lian;if(hk!==quipHand){quipHand=hk;quipN={}}
   if((quipN[seat]|0)>=2)return;quipN[seat]=(quipN[seat]|0)+1;
   const L=QUIPS[chr(seat)][kind],line=L[Math.random()*L.length|0],pos=(seat-me+4)%4;
@@ -1546,6 +1724,33 @@ function quip(seat,kind,delay){
 /* speech bubbles sit beside the speaker's window: right of the left one, left of the right and top ones */
 function anchorQuip(d,pos){const w=window.T3&&T3.lay&&T3.lay[WINK[pos]];if(!w)return;
   if(pos===3){d.style.left=(w.x+w.w+10)+'px';d.style.top=(w.y+w.h*.12)+'px'}else{d.style.left='auto';d.style.right=(RW-w.x+10)+'px';d.style.top=(pos===2?Math.max(4,w.y):w.y+w.h*.5)+'px'}}
+/* quick chat between the people in a room: a line is only an index into CHAT (nothing typed travels), sent as presence {c:{n,i}};
+   everyone shows it as a bubble beside the speaker's window. one line per player every 2 s, enforced by the sender and again by each receiver */
+const CHAT=['快一點嘛，花都謝了～','這張也敢打？佩服佩服','手下留情啊！','今晚手氣真旺，擋不住','再讓我摸一張就好……','謝謝招待，下次還找你','別急，好牌值得等','打完這圈，宵夜算我的','😏','😘','😭','😡','👍','🙏'],CHATN=8;
+const chatSeen={};let chatN=0,chatAt=-1e9;
+function chatPlace(ms){const b=$('chatBtn'),on=!!R&&ms>=0;b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
+  b.style.right=(64+$('auto').offsetWidth+8)+'px';b.classList.toggle('cd',performance.now()-chatAt<2000)}
+function chatBubble(seat,i){
+  if(mute()||seat<0||G.st!=='play'||!(i>=0&&i<CHAT.length))return;
+  const me=Math.max(0,mySeat()),pos=(seat-me+4)%4,d=document.createElement('div');d.className='quip chat p'+pos+(i>=CHATN?' emo':'');
+  d.innerHTML=i>=CHATN?CHAT[i]:`<b>${esc(nameOf(seat))}</b>${esc(CHAT[i])}`;
+  for(const o of $('table').querySelectorAll('.quip.chat.p'+pos))o.remove();
+  if(pos)anchorQuip(d,pos);else{const w=window.T3&&T3.lay&&T3.lay.B;d.style.left=(w?w.x+w.w+22:RW*.32)+'px';d.style.top=(w?w.y-4:RH*.5)+'px'}   // mine: right of my window, above the countdown badge
+  $('table').appendChild(d);setTimeout(()=>d.remove(),3300);sfx('pick')}
+function sendChat(i){
+  const now=performance.now();$('chatP').classList.add('hide');if(!R||mySeat()<0||now-chatAt<2000)return;chatAt=now;chatN++;
+  R.presence({c:{n:chatN,i}}).catch(()=>{});chatBubble(mySeat(),i);
+  const b=$('chatBtn');b.classList.add('cd');setTimeout(()=>b.classList.remove('cd'),2000)}
+function readChat(){
+  if(!R)return;const now=performance.now();
+  for(const p of plist){const c=p.pr.c,n=c&&typeof c.n==='number'?c.n:0;let s=chatSeen[p.id];
+    if(!s){chatSeen[p.id]={n,t:-1e9};continue}   // whatever was said before I came in is not replayed
+    if(n===s.n)continue;s.n=n;if(p.id===myPeer||!c||now-s.t<1900)continue;s.t=now;
+    chatBubble(G.seats?G.seats.indexOf(p.id):-1,c.i|0)}}
+$('chatBtn').onclick=()=>{const p=$('chatP');if(!p.firstChild)p.innerHTML=CHAT.slice(0,CHATN).map((t,i)=>`<button data-i="${i}">${esc(t)}</button>`).join('')+'<div class="em">'+CHAT.slice(CHATN).map((t,i)=>`<button data-i="${CHATN+i}">${t}</button>`).join('')+'</div>';
+  if(performance.now()-chatAt>=2000)p.classList.toggle('hide');try{sfx('pick')}catch(_){}};
+$('chatP').onclick=e=>{const b=e.target.closest('button');if(b)sendChat(+b.dataset.i)};
+$('table').addEventListener('pointerdown',e=>{if(!e.target.closest('#chatP,#chatBtn'))$('chatP').classList.add('hide')});
 /* the countdown is a round badge on the right edge of my own window */
 function placeTimer(el,seat){const ms=Math.max(0,mySeat()),pos=seat>=0?(seat-ms+4)%4:0,k=WINK[pos],w=window.T3&&T3.lay&&T3.lay[k];
   if(!w){el.style.left='6px';el.style.top=(RH-TWB*1.6-40)+'px';return}
@@ -1596,10 +1801,10 @@ function renderResult(){
     const ttl=`<div class="ttl"><span>合計</span><b><em data-cnt="${big}">${big}</em> 台</b>${tier?`<i class="tier">${tier}</i>`:''}${dlPays?`<small>莊家付 ${r.tot+ex} 台</small>`:''}</div>`;
     const bigNote=tier?`<i class="tier">${tier}</i>`:'';
     h=`<div class="rh"><div class="rt"><span class="rk">${self?'自摸':'胡牌'}</span><div class="rwc"><span class="rw">${seatLabel(r.w)}</span></div></div><div class="rtot"><b data-cnt="${big}">${big}</b>台${bigNote}</div></div>`+
-      `<div class="rhand sm">${G.melds[r.w].map(m=>meldHTML(m,'',true)).join('')}<span style="width:6px"></span>${hand.map(k=>tile(k)).join('')}<span style="width:8px"></span>${tile(r.k,'last')}`+
-      (G.fl[r.w]?`<span style="width:8px"></span>${[...G.fl[r.w]].map(x=>tile(kd(x),'dim')).join('')}`:'')+`</div>`+
+      `<div class="rhand sm">${G.melds[r.w].map(m=>meldHTML(m,'',true)).join('')}<span style="width:6px"></span>${hand.map(k=>tile(k)).join('')}<span style="width:8px"></span>${r.fw&&self?'':tile(r.k,'last')}`+
+      (G.fl[r.w]?`<span style="width:8px"></span>${[...G.fl[r.w]].map(x=>tile(kd(x),r.fw?'':'dim')).join('')}`:'')+`</div>`+
       `<div class="tl">${(r.tai.length?r.tai:[['無台',0]]).map(t=>`<div><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')}${dlRow}</div>`+
-      `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}${r.d[s]?'':' p0'}"><div class="pn">${s===r.w?`<span class="wd">${WIND[(s-dl+4)%4]}</span><span class="ptag w">胡</span>`:seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div>${!self&&s===r.f?'<div class="pt"><span class="ptag f">放槍</span></div>':''}${self&&r.d[s]<0?`<div class="pt">${r.tot+((r.w===dl||s===dl)?ex:0)} 台</div>`:''}</div>`).join('')}</div>`+
+      `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}${r.d[s]?'':' p0'}"><div class="pn">${s===r.w?`<span class="wd">${WIND[(s-dl+4)%4]}</span><span class="ptag w">胡</span>`:seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div>${!self&&s===r.f?`<div class="pt"><span class="ptag f">${r.fw?'被搶花':'放槍'}</span></div>`:''}${self&&r.d[s]<0?`<div class="pt">${r.tot+((r.w===dl||s===dl)?ex:0)} 台</div>`:''}</div>`).join('')}</div>`+
       `<div class="rfoot"><span></span><button class="big" data-next="1">下一局</button></div>`}
   const me=mySeat(),lo=r.w>=0?loserOf(r):-1,qw=r.w>=0&&r.w!==me?(r.f===me?resQuip(r.w,'beatme'):r.f<0?resQuip(r.w,'zimo'):''):'',ql=r.w===me?resQuip(lo,'dealin'):'';
   // win: the side panels only carry the backdrop; both figures float above the whole screen (huArt) so they show whole and may overlap the middle
@@ -1619,6 +1824,7 @@ function resIntro(el){
     const f=now=>{if(!x.isConnected)return;const k=el.classList.contains('skip')?1:Math.max(0,Math.min(1,(now-t0-dl)/du)),e=1-Math.pow(1-k,3),n=Math.round(v*e);
       x.textContent=sg?(n>0?'+':'')+n:n;if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
 function toast(seat,text){
+  if(mute())return;
   const ms=mySeat(),me=ms<0?0:ms,pos=seat<0?-1:(seat-me+4)%4,d=document.createElement('div');d.className='toast';d.textContent=text;
   const xy=pos===0?[.5,.64]:pos===1?[.85,.45]:pos===2?[.5,.18]:pos===3?[.15,.45]:[.5,.5];
   if(pos>0){const av=$('sw'+WINK[pos]);av.classList.remove('pop');void av.offsetWidth;av.classList.add('pop')}
@@ -1633,6 +1839,7 @@ function warmArt(){
 function whenArt(srcs,ms,fn){let done=false;const go=()=>{if(!done){done=true;fn()}};
   Promise.all(srcs.filter(Boolean).map(s=>ARTC[s]||(warmArt(),ARTC[s])||Promise.resolve())).then(go);setTimeout(go,ms)}
 function cutIn(seat,text){
+  if(mute())return;
   const ms=mySeat(),me=ms<0?0:ms,pos=(seat-me+4)%4,big=CUT[text]===2,c=chr(seat),a=window.AVATARS&&window.AVATARS[c];
   const col=pos===0?['#c9973f','#3a2408']:CCOL[c];
   const sw=pos>0?$('sw'+WINK[pos]):null;if(sw){sw.classList.remove('pop');void sw.offsetWidth;sw.classList.add('pop')}
@@ -1653,27 +1860,31 @@ function actFx(seat,pos,text,asrc,col,sw){
 /* win and deal-in as one beat: the tile is struck in the loser's river (her window greys out, red 放槍 seal),
    it flies to the winner, then the win banner opens with the loser shown small and cold on the other side.
    self-draw: only the winner, the other three dim. your own stake tints the screen edge (gold you won / dark red you paid) */
+// 搶槓 on my own pong, or 七搶一 taking my flower: my melds and flowers are HTML, so the struck tile's place comes from the DOM (the others' are on the 3D table, see T3.ptLast)
+function robPt(lpos){const L=G.last,fw=fwPay()>=0;if(lpos!==0||!(fw||(L&&L.q!=null)))return null;
+  const e=fw?null:$('myMelds').children[L.q],t=fw?$('myFl').lastElementChild:e&&e.lastChild;if(!t)return null;let x=t.offsetWidth/2,y=t.offsetHeight/2;
+  for(let n=t;n&&n!==root;n=n.offsetParent){x+=n.offsetLeft;y+=n.offsetTop}return{x,y}}
 function winFx(seat,pos,text,a,col){
   const zimo=text==='自摸',lo=!zimo&&G.res&&G.res.f>=0?G.res.f:-1,ms=Math.max(0,mySeat()),me=mySeat();
   const edge=me<0?'':seat===me?'gold':(lo===me||(zimo&&G.res&&G.res.d&&G.res.d[me]<0))?'red':'';
   if(edge){const e=document.createElement('i');e.className='duedge '+edge;root.appendChild(e);setTimeout(()=>e.remove(),2700)}
   if(lo<0){winCore(seat,pos,text,a,col,null);return}
-  const lpos=(lo-ms+4)%4,lsw=lpos>0?$('sw'+WINK[lpos]):$('swB'),tg=(window.T3&&T3.ptLast&&T3.ptLast())||{x:RW/2,y:RH/2};
+  const lpos=(lo-ms+4)%4,lsw=lpos>0?$('sw'+WINK[lpos]):$('swB'),tg=robPt(lpos)||(window.T3&&T3.ptLast&&T3.ptLast())||{x:RW/2,y:RH/2};
   if(lsw){lsw.classList.remove('struck');void lsw.offsetWidth;lsw.classList.add('struck');setTimeout(()=>lsw.classList.remove('struck'),2600)}
   const hit=document.createElement('div');hit.className='duhit';hit.style.left=tg.x+'px';hit.style.top=tg.y+'px';hit.innerHTML='<i class="ring"></i><i class="crack"></i>';root.appendChild(hit);setTimeout(()=>hit.remove(),900);
   if(lsw){const r=lsw.getBoundingClientRect?{x:lsw.offsetLeft+lsw.offsetWidth/2,y:lsw.offsetTop+lsw.offsetHeight}:null;
-    if(r){const sl=document.createElement('div');sl.className='duseal';sl.textContent='放槍';sl.style.left=r.x+'px';sl.style.top=Math.min(RH-40,r.y+4)+'px';root.appendChild(sl);setTimeout(()=>sl.remove(),760)}}
+    if(r){const sl=document.createElement('div');sl.className='duseal';sl.textContent=fwPay()>=0?'被搶花':'放槍';sl.style.left=r.x+'px';sl.style.top=Math.min(RH-40,r.y+4)+'px';root.appendChild(sl);setTimeout(()=>sl.remove(),760)}}
   // the winning tile flies from the river to the winner
   const wsw=pos>0?$('sw'+WINK[pos]):$('swB'),k=G.res&&G.res.k!=null?G.res.k:(G.last?G.last.k:-1);
   if(k>=0&&wsw){const f=document.createElement('div');f.className='t dufly k'+k;f.style.left=tg.x+'px';f.style.top=tg.y+'px';
     f.style.setProperty('--tx',(wsw.offsetLeft+wsw.offsetWidth/2-tg.x)+'px');f.style.setProperty('--ty',(wsw.offsetTop+wsw.offsetHeight*.5-tg.y)+'px');root.appendChild(f);setTimeout(()=>f.remove(),800)}
   try{sfx('pon')}catch(_){}
   const la=window.AVATARS&&window.AVATARS[chr(lo)];
-  setTimeout(()=>winCore(seat,pos,text,a,col,{seat:lo,art:la&&(la.X||la.n||la.t)||''}),620)}
+  setTimeout(()=>winCore(seat,pos,text,a,col,{seat:lo,art:la&&(la.X||la.n||la.t)||'',pt:robPt(lpos)}),620)}
 function winCore(seat,pos,text,a,col,loser){
   const d=document.createElement('div'),R=pos===1,zimo=text==='自摸';d.className='hufx'+(R?' r':'');d.style.setProperty('--c1',col[0]);d.style.setProperty('--c2',col[1]);
   if(zimo){const ms=Math.max(0,mySeat());for(let s=0;s<4;s++)if(s!==seat){const w=(s-ms+4)%4,el=w>0?$('sw'+WINK[w]):$('swB');if(el){el.classList.add('dimmed');setTimeout(()=>el.classList.remove('dimmed'),2200)}}}
-  let tg=(!zimo&&window.T3&&T3.ptLast&&T3.ptLast())||(window.T3&&T3.ptSeat?T3.ptSeat(pos,0,pos===0?8.6:7.6):{x:RW/2,y:RH/2});
+  let tg=(loser&&loser.pt)||(!zimo&&window.T3&&T3.ptLast&&T3.ptLast())||(window.T3&&T3.ptSeat?T3.ptSeat(pos,0,pos===0?8.6:7.6):{x:RW/2,y:RH/2});
   // a jagged bolt from above the screen to the target, with two short branches
   const pts=[];let x=tg.x+(Math.random()*2-1)*RW*.12,y=-20;const n=9;
   for(let i=0;i<=n;i++){const t=i/n;pts.push([x+(tg.x-x)*t+(i&&i<n?(Math.random()*2-1)*28:0),y+(tg.y-y)*t])}
@@ -1684,16 +1895,18 @@ function winCore(seat,pos,text,a,col,loser){
   d.innerHTML=`<i class="dim"></i><i class="zoom"></i><svg class="bolt" viewBox="0 0 ${RW} ${RH}"><path class="g" d="${P(pts)}"/><path class="w" d="${P(pts)}"/>${br.map(b=>`<path class="br" d="${b}"/>`).join('')}</svg>`+
     `<i class="hit" style="left:${tg.x}px;top:${tg.y}px"></i><i class="flash"></i><div class="band"></div>${art?`<img alt="" src="${art}">`:''}`+
     `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`+
-    (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>放槍</em></span></div>`:'');
+    (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>${fwPay()>=0?'被搶花':'放槍'}</em></span></div>`:'');
   root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9)},170);setTimeout(()=>d.remove(),2000);setTimeout(()=>{if(resHold){resHold=0;render()}},1750)}
 function render(){
   if(G.v!==lastV){lastV=G.v;pending=false;sel=-1;phaseStart=performance.now()}
+  if(G.ev&&lastEv>=0&&G.ev.n>lastEv+1)fxOff=Math.max(fxOff,performance.now()+80);   // events were missed (reconnect, frozen page): draw the latest state, replay nothing
+  turnWatch();
   const st=G.st;
   show('lobby',st==='lobby');if(st==='lobby')renderLobby();else lobbyHTML='';
   show('table',st==='play'||st==='over');
   if(st==='play')renderTable();
   // a win: hold the result screen back until the deal-in / win effect has played (winCore lets go early when it ends)
-  if(G.ev&&G.ev.n!==lastEv&&lastEv>=0&&(G.ev.t==='胡'||G.ev.t==='自摸')){resHold=performance.now()+(G.ev.t==='胡'?3500:2900);setTimeout(render,(G.ev.t==='胡'?3500:2900)+30)}
+  if(G.ev&&G.ev.n!==lastEv&&lastEv>=0&&!mute()&&(G.ev.t==='胡'||G.ev.t==='自摸')){resHold=performance.now()+(G.ev.t==='胡'?3500:2900);setTimeout(render,(G.ev.t==='胡'?3500:2900)+30)}
   renderResult();
   if(G.ev&&G.ev.n!==lastEv){if(lastEv>=0&&G.ev.t){const t=G.ev.t,me=mySeat();if(CUT[t]&&G.ev.s>=0)cutIn(G.ev.s,t);else toast(G.ev.s,t);evQuip(G.ev);
     {const vk={'碰':'pon','吃':'chi','槓':'kan','胡':'hu','自摸':'zimo'}[t];if(vk&&G.ev.s>=0)voice(G.ev.s,vk,1.6)}
@@ -1708,11 +1921,35 @@ function updateTimer(){
     el.textContent=left;el.classList.toggle('mine',mine);placeTimer(el,mine?mySeat():G.ph==='discard'?G.turn:(G.wait[0]??-1));if(mine&&left<=5&&left>0&&left!==lastTick){lastTick=left;sfx('tick')}}else el.textContent=''}
 
 /* ---------- input ---------- */
+/* the picked-up tile's kind (-1 none): every face-up copy on the table is tinted while it is selected */
+let selK=-1;const hiK=()=>sel>=0?selK:-1;
+function markSame(){const k=hiK();for(const e of $('myMelds').querySelectorAll('.t'))e.classList.toggle('same',k>=0&&e.classList.contains('k'+k));if(window.T3&&T3.hi)T3.hi(k)}
+function pickTile(i,k){sel=i;selK=k;[...$('hand').children].forEach(c=>c.classList.toggle('sel',+c.dataset.i===i));markSame();showTips(i<0?-1:k)}
 $('hand').addEventListener('click',e=>{
-  const t=e.target.closest('.t');if(!t)return;const ms=mySeat();
+  const t=e.target.closest('.t');if(!t||performance.now()-DRAG.sup<400)return;const ms=mySeat();
   if(G.st!=='play'||G.ph!=='discard'||G.turn!==ms||pending)return;
   const i=+t.dataset.i,k=+t.dataset.k;
-  if(sel===i){sel=-1;doAct({t:'d',k})}else{sel=i;sfx('pick');[...$('hand').children].forEach(c=>c.classList.toggle('sel',+c.dataset.i===i));showTips(k)}});
+  if(sel===i){pickTile(-1,-1);doAct({t:'d',k})}else{sfx('pick');pickTile(i,k)}});
+$('table').addEventListener('click',e=>{if(sel>=0&&!e.target.closest('#hand,#acts,button'))pickTile(-1,-1)});   // a tap on the table puts the tile back
+/* slide up to discard: the tile follows the finger (only upward), past dragLim() it is thrown on release, let go lower and it drops back unselected.
+   movement is read in the root's own frame: on a portrait phone the root is turned 90 degrees (table-up is screen-right), on big screens it is zoomed */
+const DRAG={on:false,id:0,i:-1,k:-1,x:0,y:0,dy:0,mv:false,v:0,sup:0},dragLim=()=>Math.max(34,TWB*1.05);
+function dragEl(){return [...$('hand').children].find(c=>+c.dataset.i===DRAG.i&&+c.dataset.k===DRAG.k)}
+function dragPaint(){const t=dragEl();if(!t)return;t.classList.add('drag');t.classList.toggle('go',-DRAG.dy>=dragLim());t.style.transform=`translateY(${Math.min(0,DRAG.dy)}px)`}
+function dragStop(e,cancel){
+  if(!DRAG.on||e.pointerId!==DRAG.id)return;DRAG.on=false;if(!DRAG.mv)return;   // never moved: an ordinary tap, the click handler deals with it
+  DRAG.sup=performance.now();const t=dragEl();if(t){t.classList.remove('drag','go');t.style.transform=''}
+  const go=!cancel&&-DRAG.dy>=dragLim()&&G.v===DRAG.v&&G.st==='play'&&G.ph==='discard'&&G.turn===mySeat()&&!pending;
+  pickTile(-1,-1);if(go)doAct({t:'d',k:DRAG.k})}
+$('hand').addEventListener('pointerdown',e=>{
+  const t=e.target.closest('.t');if(!t||DRAG.on||e.button>0)return;
+  if(G.st!=='play'||G.ph!=='discard'||G.turn!==mySeat()||pending)return;
+  Object.assign(DRAG,{on:true,id:e.pointerId,i:+t.dataset.i,k:+t.dataset.k,x:e.clientX,y:e.clientY,dy:0,mv:false,v:G.v})});
+addEventListener('pointermove',e=>{
+  if(!DRAG.on||e.pointerId!==DRAG.id)return;const dx=(e.clientX-DRAG.x)/UIZ,dy=(e.clientY-DRAG.y)/UIZ;
+  DRAG.dy=rot?-dx:dy;if(!DRAG.mv){if(Math.hypot(dx,dy)<7)return;DRAG.mv=true;if(sel!==DRAG.i){sfx('pick');pickTile(DRAG.i,DRAG.k)}}
+  dragPaint()});
+addEventListener('pointerup',e=>dragStop(e,false));addEventListener('pointercancel',e=>dragStop(e,true));
 $('acts').addEventListener('click',e=>{const b=e.target.closest('.ab');if(!b)return;try{doAct(JSON.parse(b.dataset.a))}catch(err){}});
 $('resCard').addEventListener('click',e=>{if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
 let myJ=0;
@@ -1733,7 +1970,7 @@ async function joinCode(code,jo,saved){
 let pwNext=null;
 function askPw(why,next){if(!PEER){next();return}
   pwNext=next;$('pwFor').textContent=why;$('pwMsg').textContent='';$('pwIn').value='';$('pwGo').disabled=false;
-  $('rmMain').hidden=true;$('rmPw').hidden=false;$('rmodal').classList.remove('hide');setTimeout(()=>{try{$('pwIn').focus()}catch(e){}},60)}
+  $('rmMain').hidden=true;$('rmPw').hidden=false;$('rmodal').classList.remove('hide');if(rot)kbOpen($('pwIn'));else setTimeout(()=>{try{$('pwIn').focus()}catch(e){}},60)}   // turned page: open the upright bar inside the tap, so the phone keyboard comes up at once
 function pwClose(){$('rmPw').hidden=true;$('rmMain').hidden=false;pwNext=null}
 $('pwBack').onclick=pwClose;
 $('pwIn').onkeydown=e=>{if(e.key==='Enter')$('pwGo').click()};
@@ -1755,7 +1992,7 @@ $('solo').onclick=()=>{saveName();inMenu=false;isHost=true;show('menu',false);G=
 $('lobbyCard').addEventListener('click',e=>{const cs=e.target.closest('.cast>span[data-c]');if(cs){openProf(+cs.dataset.c);return}const b=e.target.closest('button');if(!b)return;
   if(b.id==='start'){if(isHost)newGame()}else if(b.id==='reroll'){rerollChs()}else if(b.id==='inv')invite();else if(b.id==='leave'){leaveRoom()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v)});
 $('pzCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave')leaveRoom()});
+  if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave')leaveRoom();else if(b.id==='pzHome')goHome()});
 $('auto').onclick=$('autoBan').onclick=()=>{myAuto=!myAuto;if(R)R.presence({au:myAuto?1:0}).catch(()=>{});dirty=true;render()};
 window.onT3=()=>{resize();if(!inMenu&&G.st==='play')try{render()}catch(e){}};
 setTimeout(()=>{if(!window.T3)$('glmsg').classList.remove('hide')},12000);   // three.js never loaded
@@ -1880,6 +2117,7 @@ async function init(){
     .replace('#include <uv_vertex>','#include <uv_vertex>\n\tvMapUv=vMapUv*vec2(.125,1./6.)+aCell;')};
   const iIv=new THREE.InstancedMesh(gIvory,mIvory,MAX),iBl=new THREE.InstancedMesh(gBlue,mBlue,MAX),iFc=new THREE.InstancedMesh(gFace,mFace,MAX);
   const IVORY=new THREE.Color(0xf6f3ea),IVHI=new THREE.Color(0xffe39a),WHITE=new THREE.Color(0xffffff),FCHI=new THREE.Color(0xfff0c4);
+  const IVSAME=new THREE.Color(0x6cc2ff),FCSAME=new THREE.Color(0x9ad6ff);let hiK3=-1;   // the kind of tile picked up in my hand: its face-up copies are tinted blue
   for(const m of [iIv,iBl,iFc]){m.frustumCulled=false;m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);m.count=0;scene.add(m)}
   iIv.castShadow=iBl.castShadow=true;iIv.receiveShadow=iBl.receiveShadow=true;
   iIv.setColorAt(0,IVORY);iFc.setColorAt(0,WHITE);
@@ -1907,31 +2145,31 @@ async function init(){
     if(mode===2){_M.multiply(_T.makeTranslation(0,TH/2*sc,0));_M.multiply(RX)}
     _M.multiply(_T.makeScale(sc,sc,sc));
     const r={M:_M.clone(),up:mode===1,iv:nIv++,bl:nBl++,fc:mode===1&&k>=0?nFc++:-1};
-    iIv.setColorAt(r.iv,IVORY);if(r.fc>=0){iFc.setColorAt(r.fc,WHITE);aCell.setXY(r.fc,(k%8)/8,1-((k/8|0)+1)/6)}
+    const same=r.fc>=0&&k===hiK3;iIv.setColorAt(r.iv,same?IVSAME:IVORY);if(r.fc>=0){iFc.setColorAt(r.fc,same?FCSAME:WHITE);aCell.setXY(r.fc,(k%8)/8,1-((k/8|0)+1)/6)}
     placeParts(r,r.M);return r}
 
   const DS=1.12,DP=1.02*DS,DR=1.4*DS,MS=1.1,MP=1.12,MG=.35;
   const RANGE=[null,[-9.1,11.15],[-9.1,11.15],[-9.1,11.15]];   // usable stretch of each opponent's edge, in its own x
   // an opponent's edge: concealed tiles standing from the owner's left, melds then flowers face up from the right; shrinks to fit
-  function strip(pos,s){
+  function strip(pos,s,hm){
     const [A,B]=RANGE[pos],nh=s.hand,gs=s.melds,fl=s.fl;
     let L=nh+(nh&&(gs.length||fl.length)?.5:0);gs.forEach((g,i)=>L+=g.length*MP+(i?MG:0));if(fl.length)L+=(gs.length?MG:0)+fl.length*MP;
     const sc=Math.min(1,(B-A)/Math.max(1,L)),z=11.38-TH*MS*sc/2;
     for(let j=0;j<nh;j++)tileAt(pos,A+(j+.5)*sc,10.75,-1,2,sc);
-    let x=B-MS*sc/2;
-    gs.forEach(g=>{for(let j=g.length-1;j>=0;j--){tileAt(pos,x,z,g[j],g[j]<0?0:1,MS*sc);x-=MP*sc}x-=MG*sc});
+    let x=B-MS*sc/2,hr=null;   // hr: the marked tile of meld hm (搶槓)
+    gs.forEach((g,gi)=>{for(let j=g.length-1;j>=0;j--){const r=tileAt(pos,x,z,g[j],g[j]<0?0:1,MS*sc);if(gi===hm&&j===g.length-1)hr=r;x-=MP*sc}x-=MG*sc});
     if(!gs.length)x+=MG*sc;
-    for(const k of fl){tileAt(pos,x,z,k,1,MS*sc);x-=MP*sc}}
+    for(const k of fl){const r=tileAt(pos,x,z,k,1,MS*sc);if(hm===-2&&!hr)hr=r;x-=MP*sc}return hr}
 
   let cur=null,lastSig='',animKey='',anim=null,raf=0,calls=0;
   function draw(v){
-    const sig=JSON.stringify(v);if(sig===lastSig)return;lastSig=sig;cur=v;
+    const sig=JSON.stringify(v);if(sig===lastSig)return;lastSig=sig;cur=v;hiK3=v.hi==null?-1:v.hi;
     nIv=nBl=nFc=0;let lastRec=null;
     v.seats.forEach((s,pos)=>{
       // river: rows of 6 shifted toward the owner's left (pinwheel); a long river widens its rows instead of growing toward the edge
       const n=s.disc.length,rows=pos===0?3:4,per=Math.max(6,Math.ceil(n/rows)),x0=-2.5*DP-.35-(per-6)*DP;
       s.disc.forEach((k,j)=>{const r=tileAt(pos,x0+(j%per)*DP,3.75+Math.floor(j/per)*DR,k,1,DS);if(v.last&&v.last.pos===pos&&v.last.i===j)lastRec=r});
-      if(pos)strip(pos,s)});
+      if(pos){const r=strip(pos,s,v.last&&v.last.pos===pos?(v.last.fl?-2:v.last.m!=null?v.last.m:-1):-1);if(r)lastRec=r}});
     if(lastRec){
       iIv.setColorAt(lastRec.iv,IVHI);if(lastRec.fc>=0)iFc.setColorAt(lastRec.fc,FCHI);
       glow.position.setFromMatrixPosition(lastRec.M);glow.position.y=.03;glow.rotation.y=SEATROT[v.last.pos];glow.visible=true;
@@ -1992,7 +2230,8 @@ async function init(){
 
   const ptSeat=(pos,x,z)=>{_v.set(x,0,z).applyAxisAngle(_Y,SEATROT[pos]).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
   const ptLast=()=>{if(!glow.visible)return null;_v.copy(glow.position).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
-  const api={draw,resize,lay,calls:()=>calls,renderer,scene,camera,shake,ptSeat,ptLast};
+  const hi=k=>{if(cur&&(cur.hi==null?-1:cur.hi)!==k){lastSig='';draw(Object.assign({},cur,{hi:k}))}};
+  const api={draw,resize,lay,hi,calls:()=>calls,renderer,scene,camera,shake,ptSeat,ptLast};
   window.T3=api;if(window.onT3)window.onT3()}
 if(!renderer)glFail();else init().catch(e=>{console.warn('3D table',e);glFail()});
 </script>
