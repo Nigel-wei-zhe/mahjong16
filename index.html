@@ -275,6 +275,18 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #tips{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--bh) + var(--sw)*2.95 + 10px);z-index:6;display:flex;align-items:center;gap:6px;white-space:nowrap;pointer-events:none;--tw:calc(var(--sw)*.8)}
 #tips:not(:empty){background:#000c;border:1px solid var(--gold2);border-radius:10px;padding:4px 10px}
 #acts:not(:empty)+#tips{bottom:calc(var(--bh) + var(--sw)*2.95 + 62px)}
+/* 局末亮牌: countdown bar above my hand, seat tags on the portrait windows, the no-WebGL list, and the way back from the result card */
+#rvbar{position:absolute;left:6px;top:25px;z-index:7;display:flex;align-items:center;gap:6px;white-space:nowrap;background:#12060af0;border:1px solid #b8862b;border-radius:17px;padding:2px 2px 2px 9px;color:#f3e6c4;font-size:12px;line-height:1.4;font-weight:700;letter-spacing:1px;box-shadow:0 4px 12px #000a}
+#rvbar b{color:#ffd54a;font-variant-numeric:tabular-nums;display:inline-block;min-width:1.3em;text-align:center;font-size:14px}
+#rvbar button{height:28px;padding:0 10px;border-radius:14px;border:1px solid #ffe9a6;background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;font:800 13px/1 inherit;font-family:inherit;letter-spacing:0;position:relative}#rvbar button::after{content:"";position:absolute;inset:-8px -6px}
+.sw .rvt{position:absolute;right:-7px;top:-9px;z-index:3;min-width:22px;padding:2px 6px;border-radius:11px;font:900 12.5px/1.35 system-ui,sans-serif;text-align:center;white-space:nowrap;border:1.5px solid #fff3c0;color:#3a1c04;background:linear-gradient(#ffe9a6,#d39a2c);box-shadow:0 0 0 1px #1c0810,0 0 10px #ffc95acc,0 2px 6px #000b}
+.sw .rvt.ls{color:#fff;border-color:#ffb0a6;background:linear-gradient(#e2584a,#8a1c14);box-shadow:0 0 0 1px #1c0810,0 2px 6px #000b}
+.sw .rvt.tg{color:#06222e;border-color:#c8f3ff;background:linear-gradient(#9fe8ff,#3aa6cf);box-shadow:0 0 0 1px #1c0810,0 0 8px #6cd6ffaa,0 2px 6px #000b}
+#mine.won #hand{filter:drop-shadow(0 0 8px #ffd54a)}#mine.won #hand .t.drawn{outline:2px solid #ffd54a}
+#rvlist{position:absolute;left:50%;top:64px;transform:translateX(-50%);z-index:6;max-width:96%;background:#12060ae6;border:1px solid #b8862b;border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;gap:3px;--tw:calc(var(--sw)*.8);pointer-events:none}
+#rvlist>div{display:flex;align-items:center;gap:6px;line-height:0;white-space:nowrap}#rvlist>div.wn{filter:drop-shadow(0 0 5px #ffd54a)}#rvlist span.nm{flex:none;width:86px;overflow:hidden;font-size:11.5px;line-height:1.3;color:#f3e6c4;text-align:left}#rvlist span.nm em{font-style:normal;font-weight:900;color:#ffd54a;margin-left:4px}#rvlist .t{margin:0 .5px}#rvlist .meld{display:inline-flex;margin-right:3px}#rvlist .gp{display:inline-block;width:6px}
+.lookb{border:1px solid #e6d3a077;background:#0000;color:#e6d3a0;border-radius:16px;height:30px;padding:0 14px;font:700 13px/1 inherit;font-family:inherit;letter-spacing:1px;position:relative}.lookb::after{content:"";position:absolute;inset:-7px -6px}.lookb:active{background:#e6d3a022}
+.rb.dr{position:relative}.rb.dr .lookb{position:absolute;left:12px;top:10px}
 #tips .tl{font-size:12px;color:var(--gold);font-weight:700}#tips .tw{position:relative;display:inline-flex}#tips .t{margin:0;box-shadow:none}
 #tips .pwt{font-size:11px;font-weight:700;color:#ffb4a8;padding-left:7px;border-left:1px solid #b8862b88}#tips .pwt:first-child{padding-left:0;border-left:0}
 #tips:has(.tw+.pwt),#tips:has(.tl+.pwt){left:calc(50% + 30px)}   /* the longer bar slides right, off my own portrait */
@@ -713,6 +725,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <canvas id="gl"></canvas><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="inkf" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="34"/></filter></svg><div id="glmsg" class="hide">這台裝置無法使用 WebGL，<br>3D 牌桌顯示不出來。<br>請換瀏覽器或開啟硬體加速。</div>
     <div class="sw l" id="swL"></div><div class="sw t" id="swT"></div><div class="sw r" id="swR"></div><div class="sw b" id="swB"></div>
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
+    <div id="rvbar" class="hide"></div><div id="rvlist" class="hide"></div>
     <div id="mine"><div id="hand"></div><div id="mr"><div id="myFl"></div><div id="myMelds"></div></div></div>
     <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button>
     <button id="chatBtn" class="hide" aria-label="快捷語"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></svg></button><div id="chatP" class="hide"></div>
@@ -946,7 +959,7 @@ function nextHand(){
   else{G.lian=0;G.dealer=(G.dealer+1)%4;G.ju++;if(G.ju>=4){G.ju=0;G.wind++;if(G.wind>=cfg().r){G.st='over';G.ph='';bump();return}}}
   assignSeats();startHand()}
 function endHand(w,f,k,fw){   // fw: a flower hand (八仙過海 / 七搶一), a flat 8 whatever the tiles are
-  G.ph='end';G.wait=[];G.resp={};
+  G.ph='end';G.wait=[];G.resp={};nextAt=SPEED>50||AUTO?0:Date.now()+(w<0?0:f<0?2900:3500)+RVMS;
   if(w<0){G.res={w:-1};bump({s:-1,t:'流局'});return}
   const self=f<0,T=fw?{list:[[self?'八仙過海':'七搶一',8]],tot:8}:calcTai(w,k,self),dx=1+2*G.lian,d=[0,0,0,0];
   const payers=self?[0,1,2,3].filter(s=>s!==w):[f];
@@ -1086,7 +1099,7 @@ const HID='~';   // a hidden tile
 function redact(G,seat){
   if(!G||!G.hands)return G;const g=JSON.parse(JSON.stringify(G)),end=G.ph==='end';
   if(typeof g.wall==='string')g.wall=HID.repeat(g.wall.length);
-  for(let s=0;s<4;s++){if(s===seat||(end&&G.res&&G.res.w===s))continue;
+  for(let s=0;s<4;s++){if(s===seat||end)continue;   // the hand is over: all four hands (and concealed kongs) are shown; the wall stays hidden
     g.hands[s]=HID.repeat(g.hands[s].length);g.melds[s]=g.melds[s].map(m=>m[0]==='a'?'a'+HID:m)}
   if(g.pw)g.pw=g.pw.map((x,s)=>s===seat?x:0);   // who is under 過水 would tell the others who is ready
   if(g.turn!==seat)g.drawn=null;return g}
@@ -1184,7 +1197,7 @@ function readActions(){
   for(const p of plist){if(p.id===myPeer)continue;const a=p.pr.a;
     if(!a||typeof a.n!=='number'){if(seen[p.id]===undefined)seen[p.id]=0;continue}
     if(seen[p.id]===undefined){seen[p.id]=a.n;continue}
-    if(a.n!==seen[p.id]){seen[p.id]=a.n;if(a.v===G.v)act(G.seats?G.seats.indexOf(p.id):-1,a)}}}
+    if(a.n!==seen[p.id]){seen[p.id]=a.n;if(a.v===G.v&&!(a.t==='next'&&G.st==='play'&&Date.now()<nextAt))act(G.seats?G.seats.indexOf(p.id):-1,a)}}}
 function doAct(a){
   if(pending)return;MYT.act=true;
   if(isHost)act(mySeat(),a);
@@ -1539,6 +1552,7 @@ function draw3D(me,live,lastKey){
   if(!window.T3||!T3.draw)return;
   const IN=introState(),seats=[0,1,2,3].map(pos=>{const s=(me+pos)%4;return{disc:[...G.disc[s]].map(kd),hand:IN?Math.min(G.hands[s].length,IN.n[s]):G.hands[s].length,fl:IN&&!IN.fl[s]?[]:[...G.fl[s]].map(kd),
     melds:G.melds[s].map(m=>{if(m[0]==='c')return chiTiles(m);const k=kd(m[1]);return m[0]==='p'?[k,k,k]:m[0]==='a'?[-1,-1,-1,-1]:[k,k,k,k]})}});
+  {const RS=rvSeats(me);if(RS)seats.forEach((o,pos)=>Object.assign(o,RS[pos]))}   // 局末亮牌: the other three hands lie face up
   const lp=G.last&&lastKey?(G.last.f-me+4)%4:0,lt=fwPay()>=0?{pos:(G.res.f-me+4)%4,fl:1}:G.last&&lastKey?(G.last.q!=null?{pos:lp,m:G.last.q}:{pos:lp,i:G.disc[G.last.f].length-1}):null;
   T3.draw({seats,last:lt,lastKey,hi:hiK(),spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
     winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),
@@ -1593,7 +1607,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1422';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1617';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1633,6 +1647,7 @@ function renderTable(){
   if(lastKey&&fwPay()<0&&G.last.q!=null&&G.last.f===ms){const e=$('myMelds').children[G.last.q];if(e&&e.lastChild)e.lastChild.classList.add('last')}
   let h=[...G.hands[ms]].map(kd),drawn=null;const drawKey=G.turn+':'+G.wall.length+':'+G.wt;
   if(live&&G.turn===ms&&G.ph==='discard'&&!G.nd&&G.drawn!=null){const i=h.lastIndexOf(G.drawn);if(i>=0){h.splice(i,1);drawn=G.drawn}}
+  if(rvShown()&&G.res.w===ms&&!G.res.fw){drawn=G.res.k;if(G.res.f<0){const i=h.lastIndexOf(drawn);if(i>=0)h.splice(i,1)}}   // 局末亮牌: my winning tile stands apart
   if(IN){h=h.slice(0,IN.n[ms]);if(IN.n[ms]<17)drawn=null}
   hints(ms);const tpc=k=>HINT.tp[k]?' tp':'';
   $('hand').innerHTML=h.map((k,i)=>tile(k,(i===sel?'sel':'')+tpc(k),`data-i="${i}" data-k="${k}"`)).join('')+(drawn!=null?tile(drawn,'drawn'+(sel===99?' sel':'')+(drawKey!==shownDraw?' in':'')+tpc(drawn),`data-i="99" data-k="${drawn}"`):'');
@@ -1782,6 +1797,7 @@ function renderResult(){
     show('result',true);return}
   if(G.st!=='play'||G.ph!=='end'||!G.res){show('result',false);return}
   if(G.res.w>=0&&performance.now()<resHold){show('result',false);return}
+  if(rvKey()===RV.k&&(!RV.seen||RV.look)){show('result',false);return}   // 局末亮牌: the table first (or again)
   const r=G.res;let h;if(r.d)lastResD=r.d;
   if(r.w<0){const A=window.AVATARS||[];
     h=`<div class="dhd"><h1 class="bt">流局</h1><p>牌牆摸完，沒有人胡牌・<b>${esc(nameOf(G.dealer))}</b> 連莊${G.lian?`（已連 ${G.lian}）`:''}</p></div><div class="dgrid">`+[0,1,2,3].map(s=>{const a=A[chr(s)]||{},src=a.n||a.tL||a.t||'';
@@ -1897,6 +1913,56 @@ function winCore(seat,pos,text,a,col,loser){
     `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`+
     (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>${fwPay()>=0?'被搶花':'放槍'}</em></span></div>`:'');
   root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9)},170);setTimeout(()=>d.remove(),2000);setTimeout(()=>{if(resHold){resHold=0;render()}},1750)}
+/* ---------- 局末亮牌: when a hand ends (win, flower win, draw) the four hands lie open on the table for RVMS before the result card comes up ----------
+   all of it is local to this device: RV.k names the ended hand, RV.at / RV.end the countdown (it starts once the win effect lets go: resHold),
+   RV.seen: the result card may show (time up, 看結算, or no reveal at all: SPEED>50 / AUTO, a page in the background or just back, a page that loaded into a hand already over),
+   RV.look: back at the table from the result card (看牌桌), no new countdown. nothing here moves the game: the next hand still starts when someone presses 下一局.
+   RV.lock: with two or more people at the table that button stays shut until everybody's reveal can have ended (the host enforces the same in readActions with nextAt) */
+const RVMS=10000,RV={k:'',at:0,end:0,seen:1,look:0,lock:0,ting:null};let nextAt=0;
+const rvKey=()=>G.st==='play'&&G.ph==='end'&&G.res?(G.ev?G.ev.n:0)+':'+G.wind+':'+G.ju+':'+G.lian:'';
+const rvShown=()=>{const k=rvKey();return !!k&&k===RV.k&&!!(RV.at||RV.seen)};   // the hands lie face up (they stay so under the result card)
+const rvMany=()=>!!R&&!!G.seats&&G.seats.filter(p=>p&&(p===myPeer||present().has(p))).length>1;
+function rvSync(){   // true when what the table shows has changed
+  const k=rvKey(),now=performance.now(),was=rvShown();
+  if(k!==RV.k){const hold=!k||G.res.w<0?0:G.res.f<0?2900:3500;
+    Object.assign(RV,{k,at:0,end:0,look:0,ting:null,seen:!k||SPEED>50||AUTO||mute()||lastEv<0?1:0});RV.lock=k&&!RV.seen&&rvMany()?now+hold+RVMS+400:0}
+  if(k&&!RV.seen){
+    if(mute())RV.seen=1;
+    else{if(!RV.at&&(G.res.w<0||now>=resHold)){RV.at=now;RV.end=now+RVMS;try{sfx('clack')}catch(e){}setTimeout(()=>{try{render()}catch(e){}},RVMS+40)}
+      if(RV.at&&now>=RV.end)RV.seen=1}}
+  return rvShown()!==was}
+/* what draw3D adds to the three other seats: the hand as tile codes (hand:0 = nothing standing), the winning tile apart, concealed kongs open */
+function rvSeats(me){
+  if(!rvShown())return null;const r=G.res,an=matchMedia('(prefers-reduced-motion: reduce)').matches?0:1,mine=mySeat()>=0;
+  return [0,1,2,3].map(pos=>{const s=(me+pos)%4,h=G.hands[s];if((!pos&&mine)||!h||h.includes(HID))return {};
+    const a=[...h].map(kd).sort((x,y)=>x-y);let wk=-1;
+    if(r.w===s&&!r.fw){wk=r.k;if(r.f<0){const i=a.lastIndexOf(wk);if(i>=0)a.splice(i,1)}}
+    return {hand:0,show:a,wk,gold:r.w===s?1:0,rvk:RV.k,rva:an,melds:G.melds[s].map(m=>{if(m[0]==='c')return chiTiles(m);const k=m[1]===HID?-1:kd(m[1]);return m[0]==='p'?[k,k,k]:[k,k,k,k]})}})}
+function rvTagOf(s){const r=G.res;
+  if(r.w>=0)return s===r.w?(r.f<0?'自摸':'胡'):s===r.f?(r.fw?'被搶花':'放槍'):'';
+  if(!RV.ting)RV.ting=[0,1,2,3].map(q=>{const h=G.hands[q]||'';return !h.includes(HID)&&h.length%3===1&&waitsOf(cnt(h),5-G.melds[q].length).length>0});
+  return RV.ting[s]?'聽':''}
+function rvPaint(){
+  const shown=rvShown(),on=shown&&(!RV.seen||RV.look),ms=mySeat(),me=ms<0?0:ms,r=G.res;
+  WINK.forEach((k,pos)=>{const d=$('sw'+k),t=shown?rvTagOf((me+pos)%4):'';let b=d.querySelector('.rvt');
+    if(!t){if(b)b.remove();return}
+    if(!b){b=document.createElement('b');d.appendChild(b)}
+    b.className='rvt'+(t==='聽'?' tg':t==='胡'||t==='自摸'?'':' ls');if(b.textContent!==t)b.textContent=t});
+  $('mine').classList.toggle('won',shown&&ms>=0&&r.w===ms);
+  show('rvbar',on);
+  if(on){const bar=$('rvbar'),left=Math.max(0,Math.ceil((RV.end-performance.now())/1000)),h=(RV.seen?'<span>牌桌</span>':`<span>亮牌<b>${left}</b></span>`)+'<button>看結算 ›</button>';if(bar._h!==h){bar._h=h;bar.innerHTML=h}}
+  // without WebGL nothing draws the other hands: a plain list of the four seats instead
+  const ls=on&&!(window.T3&&T3.draw);show('rvlist',ls);$('glmsg').style.visibility=ls?'hidden':'';
+  if(ls){const h=[0,1,2,3].map(pos=>{const s=(me+pos)%4,t=rvTagOf(s),hs=G.hands[s]||'',a=hs.includes(HID)?[]:[...hs].map(kd).sort((x,y)=>x-y);let wk=-1;
+      if(r.w===s&&!r.fw){wk=r.k;if(r.f<0){const i=a.lastIndexOf(wk);if(i>=0)a.splice(i,1)}}
+      return `<div${r.w===s?' class="wn"':''}><span class="nm">${esc(nameOf(s))}${t?`<em>${t}</em>`:''}</span>${G.melds[s].map(m=>meldHTML(m,'',true)).join('')}${a.map(k=>tile(k)).join('')}${wk>=0?'<i class="gp"></i>'+tile(wk,'last'):''}${G.fl[s]?'<i class="gp"></i>'+[...G.fl[s]].map(x=>tile(kd(x),'dim')).join(''):''}</div>`}).join('');
+    const el=$('rvlist');if(el._h!==h){el._h=h;el.innerHTML=h}}
+  // on the result card: the way back to the table, and 下一局 held shut while others may still be looking
+  if(rvKey()&&!$('result').classList.contains('hide')){const el=$('resCard'),f=el.querySelector('.rfoot span')||el.querySelector('.rb.dr');
+    if(f&&!el.querySelector('[data-look]'))f.insertAdjacentHTML('beforeend','<button class="lookb" data-look="1">‹ 看牌桌</button>');
+    const nb=el.querySelector('[data-next]'),lk=Math.ceil((RV.lock-performance.now())/1000),t=lk>0?`下一局（${lk}）`:'下一局';
+    if(nb){nb.disabled=lk>0;if(nb.textContent!==t)nb.textContent=t}}}
+setInterval(()=>{if(!RV.k||inMenu)return;try{if(!RV.seen&&RV.at&&performance.now()>=RV.end)render();else rvPaint()}catch(e){}},250);
 function render(){
   if(G.v!==lastV){lastV=G.v;pending=false;sel=-1;phaseStart=performance.now()}
   if(G.ev&&lastEv>=0&&G.ev.n>lastEv+1)fxOff=Math.max(fxOff,performance.now()+80);   // events were missed (reconnect, frozen page): draw the latest state, replay nothing
@@ -1907,7 +1973,9 @@ function render(){
   if(st==='play')renderTable();
   // a win: hold the result screen back until the deal-in / win effect has played (winCore lets go early when it ends)
   if(G.ev&&G.ev.n!==lastEv&&lastEv>=0&&!mute()&&(G.ev.t==='胡'||G.ev.t==='自摸')){resHold=performance.now()+(G.ev.t==='胡'?3500:2900);setTimeout(render,(G.ev.t==='胡'?3500:2900)+30)}
+  if(rvSync()&&st==='play')renderTable();
   renderResult();
+  rvPaint();
   if(G.ev&&G.ev.n!==lastEv){if(lastEv>=0&&G.ev.t){const t=G.ev.t,me=mySeat();if(CUT[t]&&G.ev.s>=0)cutIn(G.ev.s,t);else toast(G.ev.s,t);evQuip(G.ev);
     {const vk={'碰':'pon','吃':'chi','槓':'kan','胡':'hu','自摸':'zimo'}[t];if(vk&&G.ev.s>=0)voice(G.ev.s,vk,1.6)}
     if(t==='碰')sfx('pon');else if(t==='吃')sfx('chi');else if(t==='槓')sfx('kan');else if(t==='流局')sfx('drawgame');
@@ -1952,6 +2020,8 @@ addEventListener('pointermove',e=>{
 addEventListener('pointerup',e=>dragStop(e,false));addEventListener('pointercancel',e=>dragStop(e,true));
 $('acts').addEventListener('click',e=>{const b=e.target.closest('.ab');if(!b)return;try{doAct(JSON.parse(b.dataset.a))}catch(err){}});
 $('resCard').addEventListener('click',e=>{if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
+$('resCard').addEventListener('click',e=>{if(e.target.closest('[data-look]')){e.stopPropagation();RV.look=1;render()}else if(e.target.closest('[data-next]')&&rvKey()&&performance.now()<RV.lock)e.stopPropagation()},true);
+$('rvbar').addEventListener('click',e=>{if(!e.target.closest('button'))return;const back=RV.look;RV.seen=1;RV.look=0;if(back)$('resCard').classList.add('skip');try{sfx('pick')}catch(_){}render()});
 let myJ=0;
 function enterRoom(code,room,saved){
   R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
@@ -2139,9 +2209,9 @@ async function init(){
     if(r.up){put(iBl,r.bl,M,BACK/2);put(iIv,r.iv,M,BACK+(TT-BACK)/2-.03);if(r.fc>=0)put(iFc,r.fc,M,TT+.002)}
     else{put(iIv,r.iv,M,(TT-BACK)/2+.03);put(iBl,r.bl,M,TT-BACK/2)}}
   // mode: 1 face up, 0 face down, 2 standing; x,z in the seat's frame
-  function tileAt(pos,x,z,k,mode,sc){
+  function tileAt(pos,x,z,k,mode,sc,ry){
     if(nIv>=MAX)return null;
-    _M.makeRotationY(SEATROT[pos]);_M.multiply(_T.makeTranslation(x,0,z));
+    _M.makeRotationY(SEATROT[pos]);_M.multiply(_T.makeTranslation(x,0,z));if(ry)_M.multiply(_T.makeRotationY(ry));
     if(mode===2){_M.multiply(_T.makeTranslation(0,TH/2*sc,0));_M.multiply(RX)}
     _M.multiply(_T.makeScale(sc,sc,sc));
     const r={M:_M.clone(),up:mode===1,iv:nIv++,bl:nBl++,fc:mode===1&&k>=0?nFc++:-1};
@@ -2150,12 +2220,32 @@ async function init(){
 
   const DS=1.12,DP=1.02*DS,DR=1.4*DS,MS=1.1,MP=1.12,MG=.35;
   const RANGE=[null,[-9.1,11.15],[-9.1,11.15],[-9.1,11.15]];   // usable stretch of each opponent's edge, in its own x
+  /* 局末亮牌: an opponent's hand lies face up where it stood, every tile turned upright for me (the side seats read top to bottom), in one row or two,
+     whichever shows the tiles larger between that seat's river and the table edge; the winning tile sits apart at the end, tinted gold; a gold halo under the winner's hand */
+  const hc=document.createElement('canvas');hc.width=256;hc.height=128;{const g=hc.getContext('2d');g.filter='blur(12px)';g.fillStyle='#ffcf5a';g.beginPath();g.roundRect(20,20,216,88,20);g.fill()}
+  const htex=new THREE.CanvasTexture(hc);htex.colorSpace=THREE.SRGBColorSpace;
+  const halo=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:htex,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false}));
+  halo.visible=false;halo.renderOrder=1;scene.add(halo);
+  let revRecs=[],revKey='',rev=null;
+  function revFit(pos,s,span,Lm){
+    const n=s.show.length+(s.wk>=0?1:0),side=pos!==2,e=(side?TH:TW)*1.03,d=(side?TW:TH)*1.04,gap=s.wk>=0?.45*e:0;
+    const nd=s.disc.length,per=Math.max(6,Math.ceil(nd/4)),zmin=3.75+(Math.max(1,Math.ceil(nd/per))-1)*DR+TH*DS/2+.25;   // the near edge of that seat's river
+    let F=null;for(let rows=1;rows<=2;rows++){const pr=Math.ceil(n/rows),len=pr*e+gap,hs=Math.min(1.25,(11.38-zmin)/(rows*d),Math.max(.8,(span-Lm)/len));if(!F||hs>F.hs*1.05||(hs>F.hs*.95&&len<F.len))F={rows,pr,len,hs,e,d,gap}}
+    return F}
+  function revPut(pos,s,F,A){
+    const h=F.hs,all=s.wk>=0?s.show.concat(s.wk):s.show,zo=11.38-F.d*h/2;
+    all.forEach((k,j)=>{const win=s.wk>=0&&j===all.length-1,c=Math.floor(j/F.pr),p=(j%F.pr+.5)*F.e+(win?F.gap:0),col=pos===1?F.rows-1-c:c;
+      const r=tileAt(pos,pos===3?A+p*h:A+(F.len-p)*h,zo-col*F.d*h,k,1,h,-SEATROT[pos]);if(!r)return;
+      if(win){iIv.setColorAt(r.iv,IVHI);iFc.setColorAt(r.fc,FCHI)}revRecs.push(r)});
+    if(s.gold){_v.set(A+F.len*h/2,.025,11.38-F.rows*F.d*h/2).applyAxisAngle(_Y,SEATROT[pos]);halo.position.copy(_v);halo.rotation.y=SEATROT[pos];halo.scale.set((F.len*h+1.3)/.84,1,(F.rows*F.d*h+1.3)/.69);halo.visible=true}}
   // an opponent's edge: concealed tiles standing from the owner's left, melds then flowers face up from the right; shrinks to fit
   function strip(pos,s,hm){
     const [A,B]=RANGE[pos],nh=s.hand,gs=s.melds,fl=s.fl;
     let L=nh+(nh&&(gs.length||fl.length)?.5:0);gs.forEach((g,i)=>L+=g.length*MP+(i?MG:0));if(fl.length)L+=(gs.length?MG:0)+fl.length*MP;
-    const sc=Math.min(1,(B-A)/Math.max(1,L)),z=11.38-TH*MS*sc/2;
+    const F=s.show?revFit(pos,s,B-A,L+(L?.5:0)):null;   // 局末亮牌: the open hand takes its own scale, the melds and flowers get what is left of the edge
+    const sc=Math.min(1,(F?B-A-F.len*F.hs-(L?.5:0):B-A)/Math.max(1,L)),z=11.38-TH*MS*sc/2;
     for(let j=0;j<nh;j++)tileAt(pos,A+(j+.5)*sc,10.75,-1,2,sc);
+    if(F)revPut(pos,s,F,A);
     let x=B-MS*sc/2,hr=null;   // hr: the marked tile of meld hm (搶槓)
     gs.forEach((g,gi)=>{for(let j=g.length-1;j>=0;j--){const r=tileAt(pos,x,z,g[j],g[j]<0?0:1,MS*sc);if(gi===hm&&j===g.length-1)hr=r;x-=MP*sc}x-=MG*sc});
     if(!gs.length)x+=MG*sc;
@@ -2164,7 +2254,7 @@ async function init(){
   let cur=null,lastSig='',animKey='',anim=null,raf=0,calls=0;
   function draw(v){
     const sig=JSON.stringify(v);if(sig===lastSig)return;lastSig=sig;cur=v;hiK3=v.hi==null?-1:v.hi;
-    nIv=nBl=nFc=0;let lastRec=null;
+    nIv=nBl=nFc=0;let lastRec=null;revRecs=[];halo.visible=false;
     v.seats.forEach((s,pos)=>{
       // river: rows of 6 shifted toward the owner's left (pinwheel); a long river widens its rows instead of growing toward the edge
       const n=s.disc.length,rows=pos===0?3:4,per=Math.max(6,Math.ceil(n/rows)),x0=-2.5*DP-.35-(per-6)*DP;
@@ -2175,6 +2265,7 @@ async function init(){
       glow.position.setFromMatrixPosition(lastRec.M);glow.position.y=.03;glow.rotation.y=SEATROT[v.last.pos];glow.visible=true;
       if(v.lastKey!==animKey){animKey=v.lastKey;anim={rec:lastRec,t0:performance.now()}}else if(anim)anim.rec=lastRec}
     else{glow.visible=false;anim=null}
+    {const rk=(v.seats.find(s=>s.rvk)||{}).rvk||'';if(rk!==revKey){revKey=rk;rev=rk&&v.seats.some(s=>s.rva)?{t0:performance.now()}:null}if(rev)rev.recs=revRecs;else halo.material.opacity=.55}   // 局末亮牌: the hands turn over once per ended hand
     iIv.count=nIv;iBl.count=nBl;iFc.count=nFc;
     for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;
     iIv.instanceColor.needsUpdate=iFc.instanceColor.needsUpdate=true;aCell.needsUpdate=true;
@@ -2191,6 +2282,11 @@ async function init(){
       _A.makeTranslation(0,(1-e)*1.6,0).multiply(anim.rec.M);placeParts(anim.rec,_A);
       for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;glow.material.opacity=e;
       if(t>=1)anim=null;else req()}
+    if(rev){ // 局末亮牌: face down to face up in about a third of a second
+      const t=Math.min(1,(performance.now()-rev.t0)/360),e=1-Math.pow(1-t,3);
+      for(const r of rev.recs){_A.copy(r.M).multiply(_T.makeTranslation(0,TT/2,0)).multiply(_T.makeRotationZ((1-e)*Math.PI)).multiply(_T.makeTranslation(0,-TT/2,0)).premultiply(_T.makeTranslation(0,Math.sin(t*Math.PI)*.6,0));placeParts(r,_A)}
+      for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;halo.material.opacity=.55*e;
+      if(t>=1)rev=null;else req()}
     renderer.render(scene,camera);calls=renderer.info.render.calls}
 
   /* ---------- framing: Mahjong Soul style high camera, everything kept between the screen top and my hand row ---------- */
