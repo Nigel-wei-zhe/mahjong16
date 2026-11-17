@@ -563,8 +563,10 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #rmodal .rrow{display:flex;gap:8px}#rmodal .rrow input{flex:1}#rmodal .rrow .big{width:96px;flex:none}
 #rmodal .rsep{display:flex;align-items:center;gap:8px;font-size:11px;color:#f3e9d266;letter-spacing:3px}#rmodal .rsep::before,#rmodal .rsep::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#0000,#c9973f88,#0000)}
 #rmodal #netmsg{text-align:center;font-size:12px;color:#ffc2d4;min-height:0;margin:0}
-#rmodal .rk{position:absolute;left:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f55;background:#0d0407;font-size:13px;cursor:pointer;padding:0;opacity:.55}#rmodal .rk.on{opacity:1;border-color:#c9973f}
-#rmodal #keyRow[hidden]{display:none}#rmodal #keyIn{font-size:12px;letter-spacing:1px;height:34px}
+#rmodal input:focus{outline:none;border-color:#f6dc8c;box-shadow:0 0 0 2px #e9c46a44}
+#rmMain,#rmPw{display:flex;flex-direction:column;gap:9px}#rmMain[hidden],#rmPw[hidden]{display:none}
+#rmPw .pwfor{margin:0 0 2px;text-align:center;font-size:13px;color:#f3e9d2cc;line-height:1.5}#rmPw .rrow .big{flex:1;width:auto}
+#rmodal #pwGo{background:linear-gradient(#f6dc8c,#c9922f);color:#2a1406;border-color:#ffe9a6}#rmodal #pwGo:disabled{opacity:.45}#rmodal #pwMsg{text-align:center;font-size:12px;color:#ffc2d4;min-height:16px;margin:0}
 #rmodal .rx{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;padding:0}
 #rmodal .cn{position:absolute;width:24px;height:24px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff2c0%22/%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23e2b45a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238a5a18%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23g%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M3%2030%20V9%20Q3%203%209%203%20H30%22/%3E%3Cpath%20d%3D%22M8%2034%20V13%20Q8%208%2013%208%20H34%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M14%208%20q4%20-6%2010%20-2%20q-5%201%20-6%205%22/%3E%3Cpath%20d%3D%22M8%2014%20q-6%204%20-2%2010%20q1%20-5%205%20-6%22/%3E%3C/g%3E%3Cpath%20d%3D%22M3%203%20l4%200%20l-4%204z%20M9%209%20l3%200%20l0%203z%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%222.2%22%20fill%3D%22url%28%23g%29%22/%3E%3C/svg%3E") center/contain no-repeat}
 #rmodal .cn.a{left:3px;top:3px}#rmodal .cn.b{right:3px;top:3px;transform:scaleX(-1)}#rmodal .cn.c{left:3px;bottom:3px;transform:scaleY(-1)}#rmodal .cn.d{right:3px;bottom:3px;transform:scale(-1,-1)}
@@ -644,13 +646,15 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <button class="big alt" id="solo">練習</button>
     <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
-  <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><button class="rk" id="rmk" aria-label="連線密碼">🔑</button><h3>包廂</h3>
+  <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><div id="rmMain"><h3>包廂</h3>
     <label>暱稱</label><input id="nameIn" maxlength="8" placeholder="你的暱稱" autocomplete="off">
     <button class="big" id="create" disabled>建立包廂</button>
     <div class="rsep">或</div><label>包廂號</label>
     <div class="rrow"><input id="codeIn" maxlength="4" placeholder="輸入 4 碼" autocomplete="off"><button class="big alt" id="join" disabled>進入</button></div>
-    <div class="rrow" id="keyRow" hidden><input id="keyIn" maxlength="16" inputmode="numeric" placeholder="連線密碼（網路不通時才需要）" autocomplete="off"></div>
-    <p id="netmsg">連線檢查中…</p></div></div>
+    <p id="netmsg">連線檢查中…</p></div>
+    <div id="rmPw" hidden><h3>連線密碼</h3><p class="pwfor" id="pwFor"></p>
+      <input id="pwIn" type="password" inputmode="numeric" maxlength="16" placeholder="向管理員索取" autocomplete="off">
+      <div class="rrow"><button class="big alt" id="pwBack">返回</button><button class="big" id="pwGo">確認</button></div><p id="pwMsg"></p></div></div></div>
 
   <div class="panel hide" id="lobby"><div class="card wide" id="lobbyCard"></div></div>
 
@@ -924,16 +928,13 @@ const PEER_CFG={debug:0,config:{iceServers:[
   // {urls:'turn:turn.example.com:3478',username:'user',credential:'pass'},
 ]}};
 // TURN: short-lived credentials from our own function (the secret key never reaches the page); STUN only if it cannot be reached
-// the function wants the room password (X-Turn-Key): it comes in invite links as #k=…, or typed under 🔑; kept once it works
-const TURN_URL='https://turn.nigel-lee.com/api/ice',TKEY='mjTurnKey';let iceP=null,turnOk='',turnKey='',turnSt='',badKey='';
-try{turnOk=turnKey=localStorage.getItem(TKEY)||''}catch(e){}
-try{const m=location.hash.match(/[#&]k=([^&]+)/);if(m){turnKey=decodeURIComponent(m[1]);history.replaceState(null,'',location.href.replace(/#.*$/,''))}}catch(e){}   // keep it out of the address bar
+// the function wants the connection password (X-Turn-Key), which the admin tells people; asked before every create / join, kept only in memory
+const TURN_URL='https://turn.nigel-lee.com/api/ice';let iceP=null,turnKey='',turnSt='',badKey='',PEER=false;
 function setTurnKey(k){k=String(k||'').trim();if(k===turnKey)return;turnKey=k;iceP=null;turnSt=''}
 function getIce(){
   if(iceP)return iceP;const k=turnKey;if(k&&k===badKey)return Promise.resolve();   // a known-wrong password: do not burn the server's retry budget
   iceP=Promise.race([fetch(TURN_URL,{cache:'no-store',headers:k?{'X-Turn-Key':k}:{}}).then(r=>{if(r.status===401)badKey=k;turnSt=r.status===401?'bad':r.status===429?'lock':r.ok?'ok':'err';return r.ok?r.json():null}),new Promise(r=>setTimeout(()=>r(null),4000))])
-    .then(j=>{if(j&&Array.isArray(j.iceServers)&&j.iceServers.length){if(k&&k!==turnOk){turnOk=k;try{localStorage.setItem(TKEY,k)}catch(e){}}
-      PEER_CFG.config.iceServers=PEER_CFG.config.iceServers.filter(x=>String(x.urls).startsWith('stun:')).concat(j.iceServers);
+    .then(j=>{if(j&&Array.isArray(j.iceServers)&&j.iceServers.length){PEER_CFG.config.iceServers=PEER_CFG.config.iceServers.filter(x=>String(x.urls).startsWith('stun:')).concat(j.iceServers);
       setTimeout(()=>{iceP=null},Math.max(600,(j.ttl||7200)-600)*1000)}else iceP=null})   // refetch well before they expire
     .catch(()=>{iceP=null});
   return iceP||Promise.resolve()}
@@ -1009,7 +1010,7 @@ function peerNet(opt){
 (async()=>{
   for(let i=0;i<30&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,100));
   try{if(window.claude&&window.claude.use)lobbyNs=await window.claude.use('room')}catch(e){}
-  if(!lobbyNs&&!window.claude&&window.Peer)lobbyNs=peerNet();   // outside claude.ai (GitHub Pages): WebRTC through PeerJS
+  if(!lobbyNs&&!window.claude&&window.Peer){lobbyNs=peerNet();PEER=true}   // outside claude.ai (GitHub Pages): WebRTC through PeerJS
   if(lobbyNs){$('create').disabled=false;$('join').disabled=false;$('netmsg').textContent='';autoRoom()}
   else{$('netmsg').textContent='這裡無法連線，可以先練習。';$('solo').classList.add('prime')}
 })();
@@ -1018,8 +1019,9 @@ const HOSTKEY='mjHost';
 function savedHost(){try{const h=JSON.parse(localStorage.getItem(HOSTKEY)||'null');return h&&Date.now()-h.t<6*3600e3?h:null}catch(e){return null}}
 function urlRoom(){try{return (new URLSearchParams(location.search).get('room')||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}catch(e){return ''}}
 function autoRoom(){const code=urlRoom();if(code.length<4)return;const h=savedHost();
-  if(h&&h.code===code&&lobbyNs.join.length>1){$('netmsg').textContent='正在回到你的包廂…';joinCode(code,{resume:true},h)}
-  else{if(!myName)$('nameIn').value=myName='牌友';joinCode(code,{join:true,wait:false})}}
+  $('codeIn').value=code;
+  if(h&&h.code===code&&lobbyNs.join.length>1)askPw('回到你的包廂 '+code+'，請輸入連線密碼。',()=>{$('netmsg').textContent='正在回到你的包廂…';joinCode(code,{resume:true},h)});
+  else{if(!myName)$('nameIn').value=myName='牌友';askPw('加入包廂 '+code+'，請輸入連線密碼。',()=>joinCode(code,{join:true,wait:false}))}}
 let hostSaveT=0;
 function backupHost(){   // the whole game, so a refresh can pick it up again
   if(!R||!isHost||!R.cid)return;if(Date.now()-hostSaveT<500){clearTimeout(backupHost.t);backupHost.t=setTimeout(backupHost,520);return}hostSaveT=Date.now();
@@ -1137,7 +1139,7 @@ function kvCycle(){const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvC
   if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
   const g=[...kv.querySelectorAll('.g')].sort((a,b)=>(+b.style.zIndex)-(+a.style.zIndex))[0];if(g)kvSay(g,false)}
 // 包廂 modal and a nickname that is never empty
-$('roomBtn').onclick=()=>$('rmodal').classList.remove('hide');$('rmx').onclick=()=>$('rmodal').classList.add('hide');$('rmodal').onclick=e=>{if(e.target.id==='rmodal')$('rmodal').classList.add('hide')};
+$('roomBtn').onclick=()=>{pwClose();$('rmodal').classList.remove('hide')};$('rmx').onclick=()=>$('rmodal').classList.add('hide');$('rmodal').onclick=e=>{if(e.target.id==='rmodal')$('rmodal').classList.add('hide')};
 setTimeout(warmArt,1200);   // decode the effect art while the player is still in the menu
 addEventListener('resize',()=>{resize();if(!inMenu)try{render()}catch(e){}});resize();root.classList.add('art');
 {const st=document.createElement('style');st.textContent=(window.AVATARS||[]).map((a,i)=>a&&(a.a||a.t)?`.fc.c${i}{background-image:url(${a.a||a.t})}`:'').join('');document.head.appendChild(st);
@@ -1283,7 +1285,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1000';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1009';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1582,16 +1584,25 @@ async function joinCode(code,jo,saved){
   if(saved)lobbyNs=peerNet({cid:saved.cid});
   try{enterRoom(code,await lobbyNs.join('mj-'+code.toLowerCase(),jo||{}),saved)}
   catch(e){if(jo&&jo.create&&e&&e.code==='房號已被使用')return joinCode(newCode(),jo);
-    $('netmsg').textContent='無法加入包廂（'+((e&&e.code)||'連線失敗')+'）'+(turnSt==='bad'?'，連線密碼不對。':turnSt==='lock'?'，密碼錯太多次，10 分鐘後再試。':turnOk?'，可稍後再試，或先打單機。':'，有連線密碼的話填在 🔑 再試。');
-    if(!turnOk)showKey()}}
-function showKey(){$('keyRow').hidden=false;$('rmk').classList.add('on');$('keyIn').value=turnKey}
-$('rmk').onclick=()=>{if($('keyRow').hidden)showKey();else{$('keyRow').hidden=true;$('rmk').classList.remove('on')}};
-$('keyIn').oninput=()=>setTurnKey($('keyIn').value);
-$('create').onclick=()=>joinCode(newCode(),{create:true});
-$('join').onclick=()=>joinCode($('codeIn').value,{join:true});
+    $('netmsg').textContent='無法加入包廂（'+((e&&e.code)||'連線失敗')+'），可稍後再試，或先打單機。'}}
+/* connection password: asked before creating / joining (PeerJS only); the TURN request goes out on 確認, a failure says to ask the admin */
+let pwNext=null;
+function askPw(why,next){if(!PEER){next();return}
+  pwNext=next;$('pwFor').textContent=why;$('pwMsg').textContent='';$('pwIn').value='';$('pwGo').disabled=false;
+  $('rmMain').hidden=true;$('rmPw').hidden=false;$('rmodal').classList.remove('hide');setTimeout(()=>{try{$('pwIn').focus()}catch(e){}},60)}
+function pwClose(){$('rmPw').hidden=true;$('rmMain').hidden=false;pwNext=null}
+$('pwBack').onclick=pwClose;
+$('pwIn').onkeydown=e=>{if(e.key==='Enter')$('pwGo').click()};
+$('pwGo').onclick=async()=>{const k=$('pwIn').value.trim();if(!k){$('pwMsg').textContent='請輸入連線密碼。';return}
+  $('pwGo').disabled=true;$('pwMsg').textContent='確認中…';setTurnKey(k);badKey='';iceP=null;turnSt='';await getIce();$('pwGo').disabled=false;
+  if(turnSt!=='ok'){$('pwMsg').textContent=turnSt==='bad'?'密碼不對，請聯絡管理員。':turnSt==='lock'?'錯太多次了，請 10 分鐘後再試，或聯絡管理員。':'取不到連線憑證，請聯絡管理員。';return}
+  const f=pwNext;pwClose();f&&f()};
+$('create').onclick=()=>askPw('建立包廂前，請輸入連線密碼。',()=>joinCode(newCode(),{create:true}));
+$('join').onclick=()=>{const c=$('codeIn').value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(c.length<4){$('netmsg').textContent='請輸入 4 碼包廂號。';return}
+  askPw('進入包廂 '+c+'，請輸入連線密碼。',()=>joinCode(c,{join:true}))};
 /* lost the host: a banner while we keep retrying */
 function netBanner(){const b=$('netBan'),on=!!(R&&R.status==='retry');if(b.classList.contains('hide')===on)b.classList.toggle('hide',!on)}
-function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode+(turnOk?'#k='+encodeURIComponent(turnOk):'')}   // the password rides after # (never sent to a server)
+function inviteUrl(){return location.origin+location.pathname+'?room='+roomCode}
 async function invite(){const u=inviteUrl();
   try{if(navigator.share){await navigator.share({title:'今夜有局',text:'今夜有局，來同桌打十六張，房號 '+roomCode,url:u});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(u);flashMsg('邀請連結已複製')}catch(e){prompt('複製邀請連結',u)}}
