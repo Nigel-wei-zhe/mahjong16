@@ -811,7 +811,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
     <button class="big" id="roomBtn">包廂</button>
     <button class="big alt" id="solo">練習</button>
-    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<span class="verline">・版本 <span class="verv"></span></span></p>
+    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<br>語音：つくよみちゃん（CV.夢前黎）・JVNV（CC BY-SA）<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
   <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><div id="rmMain"><h3>包廂</h3>
     <button class="big" id="create" disabled>建立包廂</button>
@@ -1688,7 +1688,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1948';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1118.0001';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1715,7 +1715,7 @@ function renderTable(){
     placeWin(k,s,lit,live,'')});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
   // the struck tile stays marked through a hand won on it, so the win effect lands on it; G.last.q: a tile added to a pong that may be robbed (搶槓)
   const mark=G.last&&(live||(G.ph==='end'&&G.res&&G.res.f>=0&&!G.res.fw)),lastKey=fwPay()>=0?'fw:'+G.res.f:mark?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k+(G.last.q!=null?'q':''):'',isNew=!!lastKey&&lastKey!==shownLast;
-  if(isNew&&fwPay()<0){if(!(window.T3&&T3.draw)||G.last.q!=null)sfx('clack');if(G.last.q==null){const f=G.last.f,xk='x'+G.last.k,V=window.VOICES&&f>=0&&f<4&&window.VOICES[chr(f)];voice(f,V&&V[xk]&&Math.random()<.5?xk:'t'+G.last.k,1.3)}}shownLast=lastKey;
+  if(isNew&&fwPay()<0){if(!(window.T3&&T3.draw)||G.last.q!=null)sfx('clack');if(G.last.q==null){const f=G.last.f;voice(f,'t'+G.last.k,1.3);punBubble(f,G.last.k)}}shownLast=lastKey;
   {const hk=G.dealer+':'+G.ju+':'+G.lian+':'+(G.score||[]).join(',');if(hk!==flHand){flHand=hk;WPOSE=WPOSE.map(()=>Math.random()*3|0);flSeen=G.fl.map(x=>x.length);if(G.st==='play'&&G.ph!=='end'&&G.first&&G.disc.every(d=>!d))startIntro();if(G.st==='play'&&G.ph!=='end'){if(lastResD){const me=mySeat();lastResD.forEach((v,i)=>{if(v<0&&i!==me&&isBot(i))setMood(i,'L',9000)});lastResD=null}if(G.lian>0)quip(G.dealer,'lian',900)}}else G.fl.forEach((x,i)=>{if(x.length>flSeen[i]){flSeen[i]=x.length;voice(i,'flower',1.3)}})}
   draw3D(me,live,lastKey);
   $('auto').className=myAuto?'on':'';$('auto').textContent=myAuto?'託管中・取消':'託管';show('autoBan',false);
@@ -1830,6 +1830,14 @@ const QUIPS=[
  {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與本宮有緣。", "施主有心了，這張本宮收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給本宮，不丟臉喔。", "區區凡人，也敢與本宮爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，本宮自摸呢～"],lian:["上一世輸給你，這一世本宮連本帶利討回來。", "手氣正旺，陪本宮修煉到天亮～"]},
  {take:["主人好眼光，這張請收下。", "主人連女僕的牌都要搶，好貪心呢～"],took:["謝謝主人的賞賜～", "主人好大方，這張我收走囉～"],dealin:["主人真是壞心眼呢。", "啊，服務出包了……請主人手下留情～"],beatme:["貴是貴了點，但主人輸得不燒心～", "從今天起，換主人乖乖聽我的話囉～"],zimo:["服務完畢，請笑納。", "不勞主人動手，我自己摸最香～"],lian:["莊家的位子，我先幫您暖著。", "主人今晚，別想早睡囉～"]},
  {take:["哇，你也聽到這個拍子？", "搶得走我的牌，搶不走我的節奏！"],took:["謝啦，這拍我接了！", "這拍送得剛好，我收下啦！"],dealin:["這一世我重生了，絕不再打錯這一拍！", "拍子掉了！這拍當作送你的福利啦！"],beatme:["胡啦！全場為我歡呼！", "聽好了，今晚你的心跳歸我控場！"],zimo:["自摸！音量開到最大！", "重低音下去，這把我自己嗨！"],lian:["安可！再來一局！", "DJ不下台，派對還沒結束呢！"]}];
+/* tile puns: text only (the long voiced takes were dropped); half the time a discard has one, a bubble beside whoever threw it */
+const TPUN=[{"9": "一筒，請你吃塊大餅。", "16": "八筒，頂級的烏魚子。", "31": "紅中，像櫻桃一樣甜。", "32": "發財，祝我們大家發財。", "33": "白板，親愛的自己刻吧。"}, {"5": "六萬，流氓出來開路！", "11": "三筒，看到紅綠燈停下！", "18": "一條，小鳥飛出去囉！", "19": "二條，吃姊的雙節棍！", "28": "南風，有什麼困難儘管說！"}, {"0": "一萬，好吃的魚丸喵～", "13": "五筒，分你一片披薩喵～", "16": "八筒，香噴噴的烏魚子喵～", "18": "一條，小鳥別跑本喵抓！", "25": "八條，想吃麥當勞薯條喵～"}, {"9": "一筒，部門訂的大餅到了。", "28": "南風，專案困難我處理。", "30": "北風，台北出差報公帳。", "32": "發財，祝各位股東發財。", "33": "白板，自己刻章簽核。"}, {"5": "六萬，流氓通通抓起來！", "9": "一筒，請你吃牢飯大餅！", "11": "三筒，紅綠燈別闖紅燈！", "19": "二條，雙節棍列管違禁品！", "30": "北風，台北分局支援！"}, {"9": "一筒，賞你一塊大餅～", "27": "東風，借本宮吹一陣～", "31": "紅中，紅通通的櫻桃呢～", "32": "發財，本宮賜你大家發財～", "33": "白板，白嫩的豆腐供品～"}, {"0": "一萬，熱騰騰的魚丸湯～", "9": "一筒，請主人吃塊大餅～", "13": "五筒，剛烤好的披薩喔～", "31": "紅中，甜點是櫻桃喔～", "33": "白板，手工嫩豆腐請慢用～"}, {"11": "三筒，紅綠燈霓虹燈閃起來！", "13": "五筒，宵夜場吃披薩囉！", "19": "二條，雙節棍甩起來！", "25": "八條，派對點份麥當勞！", "30": "北風，台北不夜城嗨起來！"}];
+function punBubble(seat,k){
+  if(mute()||seat<0||seat>3||G.st!=='play'||seat===mySeat()||!isBot(seat))return;const t=TPUN[chr(seat)]&&TPUN[chr(seat)][k];if(!t||Math.random()>=.5)return;
+  const me=Math.max(0,mySeat()),pos=(seat-me+4)%4,d=document.createElement('div');d.className='quip pun p'+pos;
+  d.innerHTML=`<b>${esc(nameOf(seat))}</b>${esc(t)}`;if($('table').querySelector('.quip.p'+pos+':not(.pun)'))return;for(const o of $('table').querySelectorAll('.quip.pun.p'+pos))o.remove();
+  if(pos)anchorQuip(d,pos);else{const w=window.T3&&T3.lay&&T3.lay.B;d.style.left=(w?w.x+w.w+22:RW*.32)+'px';d.style.top=(w?w.y-4:RH*.5)+'px'}
+  $('table').appendChild(d);setTimeout(()=>d.remove(),2600)}
 let quipN={},quipHand='',MOOD={},lastResD=null;
 /* short-lived table expression: S = smiling at you, L = lost a hand, smile gone */
 function setMood(seat,e,ms){MOOD[seat]={e,until:Date.now()+ms};requestAnimationFrame(render);setTimeout(()=>requestAnimationFrame(render),ms+50)}
