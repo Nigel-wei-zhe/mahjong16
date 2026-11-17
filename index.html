@@ -424,7 +424,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .res.hu .rp.win{flex-basis:30%;margin-right:-6%}.res.hu .rp.lose{flex-basis:17%}
 .res.hu .rpa{position:absolute;bottom:0;z-index:1;pointer-events:none;object-fit:contain;object-position:50% 100%}
 .res.hu .rpa.win{left:15%;height:97%;max-width:36%;transform:translateX(-50%);filter:drop-shadow(0 0 2px #fffa) drop-shadow(0 0 18px color-mix(in srgb,var(--c1) 70%,#0000));animation:artUp .6s .1s cubic-bezier(.15,.9,.25,1.05) both}
-.res.hu .rpa.lose{right:0;height:80%;max-width:30%;object-position:100% 100%;filter:drop-shadow(0 4px 10px #000c) saturate(.8) brightness(.9);animation:rpInR .5s .25s cubic-bezier(.15,.9,.25,1) both}
+.res.hu .rpa.lose{right:0;height:74%;max-width:25%;object-position:100% 100%;filter:drop-shadow(0 4px 10px #000c) saturate(.8) brightness(.9);animation:rpInR .5s .25s cubic-bezier(.15,.9,.25,1) both}
 .res.hu .rb{z-index:2}
 .res.hu .rpq{position:absolute;z-index:3;quotes:none;background:#0e0508e0;border:1px solid #b8862b88;border-radius:10px;padding:5px 9px;color:#f6ead0;font:600 12px/1.45 var(--serif,serif);text-align:center;box-shadow:0 3px 10px #0009;animation:fadeIn .4s 1.6s both}
 .res.hu .rpq.win{left:2%;width:24%;bottom:3%}.res.hu .rpq.lose{right:1.5%;width:15%;top:6%}
@@ -446,6 +446,15 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #intro .ifl{position:absolute;display:flex;gap:3px;align-items:flex-end;line-height:0;--tw:calc(var(--sw)*1.6);transform:translate(-50%,-50%);padding:8px 10px 6px;border-radius:10px;background:#14060bdd;border:1px solid var(--gold);box-shadow:0 0 18px #ffd54a88;animation:flIn .9s cubic-bezier(.3,.8,.3,1) both}
 #intro .ifl .ifn{position:absolute;left:50%;top:-9px;transform:translateX(-50%);font:700 11px/1.4 system-ui,sans-serif;color:#2a1406;background:var(--gold);padding:0 6px;border-radius:6px;white-space:nowrap}
 #intro .ifl .t{margin:0}
+#intro .iseat{position:absolute;--tw:calc(var(--sw)*1.7);transform:translate(-50%,-50%);transition:transform .55s cubic-bezier(.3,.6,.3,1),opacity .55s;line-height:0}
+#intro .iseat .t{margin:0}#intro .iseat .isb{display:block;width:calc(var(--tw)*1);height:calc(var(--tw)*1.36);border-radius:5px;background:linear-gradient(160deg,#5cc0ee,#2a86b8 60%,#1d6690);box-shadow:inset 0 0 0 1px #ffffff40,0 3px 0 #efe6cf,0 4px 0 #c9b98f,0 6px 8px #0008;animation:fadeIn .3s both}
+#intro .iseat.flip{animation:isFlip .32s ease-out both}@keyframes isFlip{0%{transform:translate(-50%,-50%) scaleX(0)}100%{transform:translate(-50%,-50%) scaleX(1)}}
+#intro .iseat .isn{position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);font:700 11px/1.4 system-ui,sans-serif;color:#2a1406;background:var(--gold);padding:0 6px;border-radius:6px;white-space:nowrap}
+#intro .iseat.go{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.8);opacity:0;transition-delay:0s,.35s}
+#intro .idice{position:absolute;display:flex;gap:calc(var(--tw)*.3);transform:translate(-50%,-50%);transition:opacity .15s}#intro .idice.out{opacity:0}
+#intro .dz{width:calc(var(--tw)*1.25);height:calc(var(--tw)*1.25);box-sizing:border-box;padding:9%;border-radius:20%;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);background:linear-gradient(145deg,#fffdf6,#e6dcc4);box-shadow:inset 0 -3px 0 #c9bb98,inset 0 1px 0 #fff,0 7px 12px #000a;animation:dzRoll .85s var(--dl) cubic-bezier(.22,.85,.32,1.1) both}
+#intro .dz i{border-radius:50%;margin:9%}#intro .dz i.on{background:radial-gradient(circle at 40% 35%,#555,#111)}#intro .dz.red i.on{background:radial-gradient(circle at 40% 35%,#ff6a5a,#a8120c)}
+@keyframes dzRoll{0%{transform:translate(var(--sx),var(--sy)) rotate(-620deg) scale(.55);opacity:0;filter:blur(2px)}12%{opacity:1}55%{transform:translate(calc(var(--sx)*-.12),-10px) rotate(25deg) scale(1.08);filter:blur(.6px)}78%{transform:translate(0,2px) rotate(-6deg) scale(.98);filter:none}100%{transform:none}}
 @keyframes flIn{0%{transform:translate(-50%,-50%) scale(.3) rotateY(90deg);opacity:0}22%{transform:translate(-50%,-50%) scale(1.08) rotateY(0);opacity:1}62%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.55);opacity:0}}
 
 /* lobby v2: two-line option buttons, seat rows, tonight's cast */
@@ -1114,13 +1123,13 @@ const KVQ=[["今晚，留下來陪我打一圈？", "牌桌上我從不手軟，
  ["你今晚的行程，我已經排好了。", "天涼了，讓其他三家破產吧……我是說開始吧。", "準時入座，麻將桌前無父子，公事公辦。"],
  ["坐下，不准逃。這是命令。", "今晚，我值你的班。", "在我面前誰犯規都上銬，包括你。"],
  ["本宮等你，已經等了三百年呢。", "坐近些，讓我看清你的牌……和心思。", "渡劫歸來，今夜本宮定要讓你傾家蕩產～"],
- ["主人，您的位子已經暖好了。", "今晚由我服侍您……打牌，才怪。", "表面是您的女僕，其實今晚我要做牌桌的主人～"],
+ ["主人，您的位子已經暖好了。", "今晚由我服侍您……打牌，才怪。", "這一世我重生了，不再只當女僕——今晚我做莊～"],
  ["今晚的歌單，第一首就是你。", "音樂一下，今晚你就是我的。", "今晚全場的消費由本DJ買單……只要你贏得了我！"]];
 const KVW=[["人還沒回來？讓淑女等，真不懂禮貌。", "等人的時候，看著我就好。", "親愛的，趁沒人打擾，陪我喝杯紅酒？"],
  ["也太慢了吧！回來先罰一杯！", "斷線？這傢伙回來先罰三杯！", "喂，趁現在跟姊說實話，你有沒有偷偷暗戀我？"],
  ["喵～趁空檔摸摸我嘛～", "等得人家好寂寞，快抱抱我安慰一下喵～", "那個人是不是迷路了呀？怎麼還不回來喵～"],
  ["暫停中。等待時間我會記在帳上。", "遲到這麼久，是在哈囉？績效直接扣到底。", "趁這空檔，簽了這份陪我一輩子的合約如何？"],
- ["擅離牌桌，記一支警告。", "棄保潛逃？等我把他抓回來。", "看著我的眼睛！老實交代，心裡有沒有我？"],
+ ["前世你逃了，這一世我親手把你銬回來。", "棄保潛逃？等我把他抓回來。", "看著我的眼睛！老實交代，心裡有沒有我？"],
  ["不急，本宮最擅長的就是等待。", "凡間的網路真是脆弱，不如陪本宮賞月？", "趁這空檔，讓我替你算算今晚的桃花劫？"],
  ["主人，要不要先來杯紅茶？", "等人好無聊，我先幫主人捏捏肩吧～", "那位客人還沒回來呢，主人看我就好～"],
  ["斷線？那我先放首歌墊檔！", "這網速真的可撥，來，耳機分你一半！", "人跑哪去了？不管他，我們先來合拍一首！"]];
@@ -1201,11 +1210,18 @@ function idleMove(){
 setTimeout(idleMove,3000);
 
 /* ---------- hand opening: shuffle in the middle, deal 4 x 4 to each seat (the hands grow as tiles land), then flowers flip up and fly to their owners ---------- */
-const IT={sh:1300,rd:300,st:75,dl:2550,fl:2650,fs:300};let INTRO={t0:0,end:0};
+const IT={sh:1300,rd:300,st:75,dl:2550,fl:2650,fs:300};let INTRO={t0:0,end:0,p:0};
 const introFast=()=>SPEED>50||AUTO||matchMedia('(prefers-reduced-motion:reduce)').matches;
-function introMs(){if(introFast())return 0;const nf=G.fl.filter(x=>x.length).length;return nf?IT.fl+nf*IT.fs+900:IT.dl+250}
+// before the shuffle: the seat draw (first hand of a game only: four face-down winds flip and go to their seats), then the dealer's dice
+const IPRE={seat:1900,dice:1500};
+const firstHand=()=>G.wind===0&&G.ju===0&&!G.lian&&(!G.stat||G.stat.every(r=>!r[0]));
+const introPre=()=>(firstHand()?IPRE.seat:0)+IPRE.dice;
+// the same three dice on every screen: derived from public state, not Math.random
+function diceOf(){let h=(G.wind*31+G.ju*17+(G.lian|0)*7+G.dealer*5+(G.score||[]).reduce((a,b)=>a+b,0))>>>0;for(const f of G.fl)h=(h*33+f.length*7+3)>>>0;
+  return [0,1,2].map(i=>{h=(h*1103515245+12345)>>>0;return 1+((h>>>16)%6)})}
+function introMs(){if(introFast())return 0;const nf=G.fl.filter(x=>x.length).length;return introPre()+(nf?IT.fl+nf*IT.fs+900:IT.dl+250)}
 function introState(){
-  const t=performance.now()-INTRO.t0;if(performance.now()>=INTRO.end||!G.hands)return null;
+  const t=performance.now()-INTRO.t0-INTRO.p;if(performance.now()>=INTRO.end||!G.hands)return null;
   const n=[0,0,0,0],fl=[0,0,0,0];let fi=0;
   for(let i=0;i<4;i++){const s=(G.dealer+i)%4;for(let r=0;r<4;r++)if(t>=IT.sh+r*IT.rd+i*IT.st)n[s]+=4;if(s===G.dealer&&t>=IT.dl)n[s]=17;}
   for(let i=0;i<4;i++){const s=(G.dealer+i)%4;if(G.fl[s].length){fl[s]=t>=IT.fl+fi*IT.fs+650;fi++}else fl[s]=1}
@@ -1213,15 +1229,29 @@ function introState(){
 function seatXY(pos){return pos===0?[RW*.45,RH-TWB*.9]:pos===1?[RW*.84,RH*.42]:pos===2?[RW*.5,RH*.1]:[RW*.16,RH*.42]}
 function startIntro(){
   const ms=introMs();if(!ms)return;
-  INTRO={t0:performance.now(),end:performance.now()+ms};
+  const P=introPre(),fh=firstHand();INTRO={t0:performance.now(),end:performance.now()+ms,p:P};
   const old=$('intro');if(old)old.remove();
   const me=Math.max(0,mySeat()),d=document.createElement('div');d.id='intro';
   const cx=RW/2,cy=RH*.44;
   let sh='';for(let i=0;i<36;i++)sh+=`<i class="ib" style="--a:${(i*10+Math.random()*8).toFixed(0)}deg;--r:${(30+Math.random()*Math.min(RW,RH)*.26).toFixed(0)}px;--rot:${(Math.random()*180).toFixed(0)}deg;--dl:${(Math.random()*.15).toFixed(2)}s"></i>`;
-  d.innerHTML=`<i class="iveil"></i><div class="ish" style="left:${cx}px;top:${cy}px">${sh}</div><b class="ilb" style="left:${cx}px;top:${cy+Math.min(RW,RH)*.2}px">洗牌</b>`;
-  $('table').appendChild(d);try{sfx('pick')}catch(e){}
+  d.innerHTML=`<i class="iveil"></i><b class="ilb" style="left:${cx}px;top:${cy+Math.min(RW,RH)*.2}px">${fh?'抓位':'擲骰'}</b>`;
+  $('table').appendChild(d);
   const lb=d.querySelector('.ilb'),setLb=t=>{lb.textContent=t;lb.classList.remove('pop');void lb.offsetWidth;lb.classList.add('pop')};
-  const at=(t,f)=>setTimeout(()=>{if(d.isConnected)f()},t),tick=()=>requestAnimationFrame(()=>{try{render()}catch(e){}});
+  const at0=(t,f)=>setTimeout(()=>{if(d.isConnected)f()},t),at=(t,f)=>at0(P+t,f),tick=()=>requestAnimationFrame(()=>{try{render()}catch(e){}});
+  // seat draw: four backs in a row, they flip to 東南西北 (by seat, dealer is 東) and fly to their owners with the name
+  const D0=fh?IPRE.seat:0;
+  if(fh){const gap=TWB*1.35,row=[0,1,2,3].sort(()=>Math.random()-.5);
+    row.forEach((s,i)=>{const w=document.createElement('div');w.className='iseat';w.style.left=(cx+(i-1.5)*gap)+'px';w.style.top=cy+'px';w.innerHTML='<i class="isb"></i>';d.appendChild(w);
+      at0(450+i*120,()=>{w.innerHTML=tile(27+(s-G.dealer+4)%4)+`<span class="isn">${esc(nameOf(s))}</span>`;w.classList.add('flip');try{sfx('clack')}catch(e){}});
+      at0(1250,()=>{const [x,y]=seatXY((s-me+4)%4);w.style.setProperty('--x',(x-(cx+(i-1.5)*gap))+'px');w.style.setProperty('--y',(y-cy)+'px');w.classList.add('go')})});
+    at0(D0-120,()=>d.querySelectorAll('.iseat').forEach(x=>x.remove()))}
+  // dice: the dealer throws three, they tumble in and settle, the total shows for a moment
+  at0(D0,()=>{if(fh)setLb('擲骰');const v=diceOf(),PIP={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+    const dc=document.createElement('div');dc.className='idice';dc.style.left=cx+'px';dc.style.top=cy+'px';
+    dc.innerHTML=v.map((n,i)=>`<div class="dz${n===1||n===4?' red':''}" style="--sx:${(Math.random()*160-80).toFixed(0)}px;--sy:${(-90-Math.random()*60).toFixed(0)}px;--dl:${(i*.07).toFixed(2)}s">`+Array.from({length:9},(_,j)=>`<i${PIP[n].includes(j)?' class="on"':''}></i>`).join('')+'</div>').join('');
+    d.appendChild(dc);try{sfx('clack')}catch(e){}
+    at0(850,()=>setLb(v[0]+v[1]+v[2]+' 點'));at0(P-D0-260,()=>dc.classList.add('out'));at0(P-D0,()=>dc.remove())});   // relative: this runs inside the D0 callback
+  at(-40,()=>{const sh0=document.createElement('div');sh0.className='ish';sh0.style.left=cx+'px';sh0.style.top=cy+'px';sh0.innerHTML=sh;d.insertBefore(sh0,lb);setLb('洗牌');try{sfx('pick')}catch(e){}});
   at(IT.sh-120,()=>{d.querySelector('.ish').classList.add('done');setLb('發牌')});
   // deal: each event sends a packet of four tile backs from the middle to that seat
   for(let r=0;r<4;r++)for(let i=0;i<4;i++){const s=(G.dealer+i)%4,pos=(s-me+4)%4;
@@ -1236,7 +1266,7 @@ function startIntro(){
     at(t0,()=>{const [x,y]=seatXY(pos),w=document.createElement('div');w.className='ifl';w.style.left=cx+'px';w.style.top=(cy-10)+'px';w.style.setProperty('--x',(x-cx)+'px');w.style.setProperty('--y',(y-cy+10)+'px');
       w.innerHTML=`<span class="ifn">${esc(nameOf(s))}</span>`+fs.map(k=>tile(k)).join('');d.appendChild(w);try{voice(s,'flower',1.3)}catch(e){}});
     at(t0+660,tick)}
-  at(ms-260,()=>d.classList.add('out'));at(ms,()=>{d.remove();tick()})}
+  at0(ms-260,()=>d.classList.add('out'));at0(ms,()=>{d.remove();tick()})}
 /* hand the 3D module a plain snapshot of the table, seats relative to me (0 me, 1 right, 2 top, 3 left) */
 function draw3D(me,live,lastKey){
   if(!window.T3||!T3.draw)return;
@@ -1295,7 +1325,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1021';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1025';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1397,14 +1427,14 @@ function renderLobby(){
    <div class="lbtn">${isHost&&!settling?'<button class="big" id="start">入座開局</button>':''}<button class="big alt" id="leave">返回</button></div></div>`;
   if(h!==lobbyHTML){lobbyHTML=h;$('lobbyCard').innerHTML=h}}
 const QUIPS=[
- {take:["這張牌，你配嗎？算我賞你的。", "原來，你一直等著我這張。"],took:["親愛的，這張我就笑納了。", "這麼體貼，我會記住的。"],dealin:["哎呀，被你看穿了，親愛的真壞。", "讓你一次……下次可沒這麼好說話。"],beatme:["親愛的，我要你輸得心服口服。", "別皺眉，親愛的，下一局我讓你。"],zimo:["不好意思，我自己摸才優雅。", "運氣好到擋不住，真是抱歉呢。"],lian:["莊家的位子，我坐得很舒服。", "再來一局吧，今晚誰都不准走。"]},
- {take:["敢搶姊的牌？你很有種嘛！", "好啊，敢搶就要敢接招！"],took:["規矩姊先立好，這張歸我！", "這張送得好，姊記你一功！"],dealin:["我就爛！這把算姊請你的啦！", "哼，算你厲害，下一把討回來！"],beatme:["跪下叫姊！今晚宵夜你買單！", "怎樣，服不服？"],zimo:["這把姊自己摸，誰敢不服！", "看好了，這就是實力！"],lian:["莊家是我的，誰都別想搶！", "全場聽令，陪姊打到天亮！"]},
- {take:["喵嗚！搶小貓的牌，真的會謝～", "欸～那張我捨不得的耶。"],took:["嘿嘿，謝謝你餵我～", "這是你寵我的證據，收下囉喵～"],dealin:["嗚，芭比Q了，被你抓到尾巴了喵！", "好啦好啦，這次算你贏。"],beatme:["抓到你了～", "男人，你成功引起本喵的注意了～"],zimo:["自己摸到的魚最甜了喵～", "欸嘿，我很厲害對吧？"],lian:["再一局嘛，好不好～", "贏了還要繼續，你陪本喵吃宵夜～"]},
+ {take:["這張牌，你配嗎？算我賞你的。", "原來，你一直等著我這張。"],took:["親愛的，這張我就笑納了。", "這張收得不燒心，親愛的。"],dealin:["哎呀，被你看穿了，親愛的真壞。", "讓你一次……下次可沒這麼好說話。"],beatme:["親愛的，我要你輸得心服口服。", "上一世你讓我等了一整晚，這一世輪到你輸。"],zimo:["不好意思，我自己摸才優雅。", "運氣好到擋不住，真是抱歉呢。"],lian:["莊家的位子，我坐得很舒服。", "再來一局吧，今晚誰都不准走。"]},
+ {take:["敢搶姊的牌？你很有種嘛！", "好啊，敢搶就要敢接招！"],took:["規矩姊先立好，這張歸我！", "這張送得好，姊記你一功！"],dealin:["我就爛！這把算姊請你的啦！", "哼，算你厲害，下一把討回來！"],beatme:["跪下叫姊！今晚宵夜你買單！", "宵夜你請，姊吃了不燒心！"],zimo:["這把姊自己摸，誰敢不服！", "重生回到這一局，這次姊不會再輸！"],lian:["莊家是我的，誰都別想搶！", "全場聽令，陪姊打到天亮！"]},
+ {take:["喵嗚！搶小貓的牌，真的會謝～", "欸～那張我捨不得的耶。"],took:["嘿嘿，謝謝你餵我～", "這是你寵我的證據，收下囉喵～"],dealin:["嗚，芭比Q了，被你抓到尾巴了喵！", "好啦好啦，這次算你贏。"],beatme:["抓到你了～", "男人，你成功引起本喵的注意了～"],zimo:["自己摸到的魚最甜了喵～", "自己摸的魚，吃了不燒心喵～"],lian:["再一局嘛，好不好～", "贏了還要繼續，你陪本喵吃宵夜～"]},
  {take:["……計算之外。你記住了。", "好的呢，攔截我的專案是吧？"],took:["效率很好，謝謝配合。", "這張，納入我的季度報表。"],dealin:["這筆先記著。下一局，我會算回來。", "寧可少賺點，規矩不能壞。"],beatme:["結帳時間到了。", "三分鐘內，我要你賠光所有籌碼。"],zimo:["完美收支。", "不靠別人，這就是職場女強人。"],lian:["延長加班，你奉陪嗎？", "專案還沒結案，誰都不准下班。"]},
  {take:["想搶我的牌？膽子不小。", "敢劫警車？這張牌你也配？"],took:["這張，依法沒收。", "別發呆，牌交出來配合調查！"],dealin:["……這次算你逮到我。", "防線被突破了……算你狠！"],beatme:["你被逮捕了，罪名是輸給我。", "放棄抵抗，罰你今晚歸我管轄！"],zimo:["證據確鑿，自摸。", "親手破案，不假他人之手！"],lian:["先把規矩立住，路才能越走越寬。", "莊家我守著，今晚誰都別想保釋！"]},
- {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與本宮有緣。", "施主有心了，這張本宮收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給本宮，不丟臉喔。", "區區凡人，也敢與本宮爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，本宮自摸呢～"],lian:["再陪本宮一局吧。", "手氣正旺，陪本宮修煉到天亮～"]},
+ {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與本宮有緣。", "施主有心了，這張本宮收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給本宮，不丟臉喔。", "區區凡人，也敢與本宮爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，本宮自摸呢～"],lian:["上一世輸給你，這一世本宮連本帶利討回來。", "手氣正旺，陪本宮修煉到天亮～"]},
  {take:["主人好眼光，這張請收下。", "主人連女僕的牌都要搶，好貪心呢～"],took:["謝謝主人的賞賜～", "主人好大方，這張我收走囉～"],dealin:["主人真是壞心眼呢。", "啊，服務出包了……請主人手下留情～"],beatme:["貴是貴了點，但主人輸得不燒心～", "從今天起，換主人乖乖聽我的話囉～"],zimo:["服務完畢，請笑納。", "不勞主人動手，我自己摸最香～"],lian:["莊家的位子，我先幫您暖著。", "主人今晚，別想早睡囉～"]},
- {take:["哇，你也聽到這個拍子？", "搶我C位？這張牌你接得住嗎！"],took:["謝啦，這拍我接了！", "這拍送得剛好，我收下啦！"],dealin:["欸——這段我打錯拍了啦！", "拍子掉了！這拍當作送你的福利啦！"],beatme:["胡啦！全場為我歡呼！", "聽好了，今晚你的心跳歸我控場！"],zimo:["自摸！音量開到最大！", "重低音下去，這把我自己嗨！"],lian:["安可！再來一局！", "DJ不下台，派對還沒結束呢！"]}];
+ {take:["哇，你也聽到這個拍子？", "搶得走我的牌，搶不走我的節奏！"],took:["謝啦，這拍我接了！", "這拍送得剛好，我收下啦！"],dealin:["這一世我重生了，絕不再打錯這一拍！", "拍子掉了！這拍當作送你的福利啦！"],beatme:["胡啦！全場為我歡呼！", "聽好了，今晚你的心跳歸我控場！"],zimo:["自摸！音量開到最大！", "重低音下去，這把我自己嗨！"],lian:["安可！再來一局！", "DJ不下台，派對還沒結束呢！"]}];
 let quipN={},quipHand='',MOOD={},lastResD=null;
 /* short-lived table expression: S = smiling at you, L = lost a hand, smile gone */
 function setMood(seat,e,ms){MOOD[seat]={e,until:Date.now()+ms};requestAnimationFrame(render);setTimeout(()=>requestAnimationFrame(render),ms+50)}
