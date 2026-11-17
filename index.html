@@ -92,12 +92,15 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 #hand .t{cursor:pointer;transition:transform .08s;box-shadow:inset 0 0 0 1px #00000012,0 calc(var(--tw)*.09) 0 #2f95c8,0 calc(var(--tw)*.15) calc(var(--tw)*.12) #0007}
 #hand .t.sel{transform:translateY(calc(var(--tw)*-.3))}
 #hand .t.drawn{margin-left:calc(var(--tw)*.35)}
-#hand .t.in{animation:tin .22s ease-out}
+
 /* press a tile and slide it up to discard: it follows the finger; past the line it lights up and goes on release */
 #hand{touch-action:none}#hand .t.drag{transition:none;z-index:3;filter:drop-shadow(0 8px 8px #000a)}#hand .t.drag.go{outline:2px solid #ffd54a;filter:drop-shadow(0 0 10px #ffd54a) drop-shadow(0 8px 8px #000a)}
 /* the kind of tile I have picked up is tinted wherever it lies face up (my own melds here, rivers and the others' melds on the 3D table) */
 #myMelds .t.same{background-color:#a8dcff;outline:2px solid #58c8ff;outline-offset:-2px}
-@keyframes tin{from{transform:translateY(-45%);opacity:0}}
+@keyframes tin{0%{transform:translate(55%,-70%) rotate(8deg);opacity:0}60%{transform:translate(-4%,4%) rotate(-1deg);opacity:1}100%{transform:none}}
+#hand .t.in{animation:tin .3s cubic-bezier(.2,.8,.3,1.1)}#hand .t.slide{transition:translate .22s cubic-bezier(.25,.8,.3,1),transform .08s}
+#myMelds .meld.mnew{animation:mnew .34s cubic-bezier(.2,.8,.3,1.05)}@keyframes mnew{from{transform:translate(-90%,-40%) scale(1.15);opacity:0}}
+#glv{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 72% 78% at 50% 52%,#0000 58%,#05020a66 88%,#05020aaa 100%)}
 #myMelds,#myFl{display:flex;align-items:flex-end;gap:6px;line-height:0;--tw:var(--mw)}
 #myFl{gap:1px;--tw:var(--sw)}#myMelds .meld{display:inline-flex}#myMelds .t,#myFl .t{margin:0 .5px calc(var(--tw)*.22)}
 #myMelds .t,#myFl .t{box-shadow:0 calc(var(--tw)*.1) 0 #2f95c8,0 calc(var(--tw)*.16) calc(var(--tw)*.12) #0007}
@@ -722,7 +725,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <div id="root">
   <div id="table" class="hide">
     <div id="room"></div>
-    <canvas id="gl"></canvas><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="inkf" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="34"/></filter></svg><div id="glmsg" class="hide">這台裝置無法使用 WebGL，<br>3D 牌桌顯示不出來。<br>請換瀏覽器或開啟硬體加速。</div>
+    <canvas id="gl"></canvas><div id="glv"></div><svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="inkf" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="34"/></filter></svg><div id="glmsg" class="hide">這台裝置無法使用 WebGL，<br>3D 牌桌顯示不出來。<br>請換瀏覽器或開啟硬體加速。</div>
     <div class="sw l" id="swL"></div><div class="sw t" id="swT"></div><div class="sw r" id="swR"></div><div class="sw b" id="swB"></div>
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
     <div id="rvbar" class="hide"></div><div id="rvlist" class="hide"></div>
@@ -1554,7 +1557,7 @@ function draw3D(me,live,lastKey){
     melds:G.melds[s].map(m=>{if(m[0]==='c')return chiTiles(m);const k=kd(m[1]);return m[0]==='p'?[k,k,k]:m[0]==='a'?[-1,-1,-1,-1]:[k,k,k,k]})}});
   {const RS=rvSeats(me);if(RS)seats.forEach((o,pos)=>Object.assign(o,RS[pos]))}   // 局末亮牌: the other three hands lie face up
   const lp=G.last&&lastKey?(G.last.f-me+4)%4:0,lt=fwPay()>=0?{pos:(G.res.f-me+4)%4,fl:1}:G.last&&lastKey?(G.last.q!=null?{pos:lp,m:G.last.q}:{pos:lp,i:G.disc[G.last.f].length-1}):null;
-  T3.draw({seats,last:lt,lastKey,hi:hiK(),spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
+  T3.draw({seats,last:lt,lastKey,hi:hiK(),fast:introFast(),intro:!!IN,spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
     winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),
     dealer:(G.dealer-me+4)%4,turn:live?((G.ph==='claim'&&G.last?G.last.f:G.turn)-me+4)%4:-1})}
 /* my row: shrink the tiles when hand + flowers + melds would not fit across the screen */
@@ -1607,7 +1610,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1117.1617';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1117.1650';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -1634,7 +1637,7 @@ function renderTable(){
     placeWin(k,s,lit,live,'')});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
   // the struck tile stays marked through a hand won on it, so the win effect lands on it; G.last.q: a tile added to a pong that may be robbed (搶槓)
   const mark=G.last&&(live||(G.ph==='end'&&G.res&&G.res.f>=0&&!G.res.fw)),lastKey=fwPay()>=0?'fw:'+G.res.f:mark?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k+(G.last.q!=null?'q':''):'',isNew=!!lastKey&&lastKey!==shownLast;
-  if(isNew&&fwPay()<0){sfx('clack');if(G.last.q==null){const f=G.last.f,xk='x'+G.last.k,V=window.VOICES&&f>=0&&f<4&&window.VOICES[chr(f)];voice(f,V&&V[xk]&&Math.random()<.5?xk:'t'+G.last.k,1.3)}}shownLast=lastKey;
+  if(isNew&&fwPay()<0){if(!(window.T3&&T3.draw)||G.last.q!=null)sfx('clack');if(G.last.q==null){const f=G.last.f,xk='x'+G.last.k,V=window.VOICES&&f>=0&&f<4&&window.VOICES[chr(f)];voice(f,V&&V[xk]&&Math.random()<.5?xk:'t'+G.last.k,1.3)}}shownLast=lastKey;
   {const hk=G.dealer+':'+G.ju+':'+G.lian+':'+(G.score||[]).join(',');if(hk!==flHand){flHand=hk;WPOSE=WPOSE.map(()=>Math.random()*3|0);flSeen=G.fl.map(x=>x.length);if(G.st==='play'&&G.ph!=='end'&&G.first&&G.disc.every(d=>!d))startIntro();if(G.st==='play'&&G.ph!=='end'){if(lastResD){const me=mySeat();lastResD.forEach((v,i)=>{if(v<0&&i!==me&&isBot(i))setMood(i,'L',9000)});lastResD=null}if(G.lian>0)quip(G.dealer,'lian',900)}}else G.fl.forEach((x,i)=>{if(x.length>flSeen[i]){flSeen[i]=x.length;voice(i,'flower',1.3)}})}
   draw3D(me,live,lastKey);
   $('auto').className=myAuto?'on':'';$('auto').textContent=myAuto?'託管中・取消':'託管';show('autoBan',false);
@@ -1643,19 +1646,28 @@ function renderTable(){
   if(ms<0){$('myMelds').innerHTML=G.melds[me].map(m=>meldHTML(m,'',false)).join('');$('myFl').innerHTML=[...G.fl[me]].map(x=>tile(kd(x))).join('');$('hand').innerHTML='';$('acts').innerHTML='';fitMine();return}
   const IN=introState();
   $('myFl').innerHTML=IN&&!IN.fl[ms]?'':[...G.fl[ms]].map(x=>tile(kd(x))).join('');
-  $('myMelds').innerHTML=G.melds[ms].map(m=>meldHTML(m,'',true)).join('');
+  {const mk=G.melds[ms].length,ok=myMk===mk-1&&!introFast();$('myMelds').innerHTML=G.melds[ms].map(m=>meldHTML(m,'',true)).join('');if(ok){const e=$('myMelds').lastElementChild;if(e)e.classList.add('mnew')}myMk=mk}
   if(lastKey&&fwPay()<0&&G.last.q!=null&&G.last.f===ms){const e=$('myMelds').children[G.last.q];if(e&&e.lastChild)e.lastChild.classList.add('last')}
   let h=[...G.hands[ms]].map(kd),drawn=null;const drawKey=G.turn+':'+G.wall.length+':'+G.wt;
   if(live&&G.turn===ms&&G.ph==='discard'&&!G.nd&&G.drawn!=null){const i=h.lastIndexOf(G.drawn);if(i>=0){h.splice(i,1);drawn=G.drawn}}
   if(rvShown()&&G.res.w===ms&&!G.res.fw){drawn=G.res.k;if(G.res.f<0){const i=h.lastIndexOf(drawn);if(i>=0)h.splice(i,1)}}   // 局末亮牌: my winning tile stands apart
   if(IN){h=h.slice(0,IN.n[ms]);if(IN.n[ms]<17)drawn=null}
   hints(ms);const tpc=k=>HINT.tp[k]?' tp':'';
+  const flip=handPos();
   $('hand').innerHTML=h.map((k,i)=>tile(k,(i===sel?'sel':'')+tpc(k),`data-i="${i}" data-k="${k}"`)).join('')+(drawn!=null?tile(drawn,'drawn'+(sel===99?' sel':'')+(drawKey!==shownDraw?' in':'')+tpc(drawn),`data-i="99" data-k="${drawn}"`):'');
-  fitMine();
+  fitMine();handFlip(flip);
   {let sk=-1;if(sel>=0){const e=[...$('hand').children].find(c=>+c.dataset.i===sel);if(e)sk=+e.dataset.k}showTips(sk)}
   shownDraw=drawKey;markSame();
   if(DRAG.on){if(G.v!==DRAG.v)DRAG.on=false;else if(DRAG.mv)dragPaint()}   // the hand was rebuilt under a finger that is still dragging
   renderActs()}
+/* my hand slides instead of jumping: positions by tile kind and copy number before the rebuild, then each tile eases from its old place */
+let myMk=-1;
+function handPos(){if(introFast()||DRAG.on)return null;const o={},c={};for(const e of $('hand').children){const k=e.dataset.k,n=c[k]=(c[k]||0)+1;o[k+'#'+n]=e.offsetLeft}return o}
+function handFlip(o){if(!o)return;const c={},mv=[];
+  for(const e of $('hand').children){const k=e.dataset.k,n=c[k]=(c[k]||0)+1,x=o[k+'#'+n];if(x==null||e.classList.contains('in'))continue;const dx=x-e.offsetLeft;if(Math.abs(dx)>1)mv.push([e,dx])}
+  if(!mv.length)return;for(const [e,dx] of mv){e.style.transition='none';e.style.translate=dx+'px 0'}
+  $('hand').offsetWidth;for(const [e] of mv){e.style.transition='';e.classList.add('slide');e.style.translate=''}
+  setTimeout(()=>{for(const [e] of mv)e.classList.remove('slide')},260)}
 /* tenpai hints: which discards leave me waiting, on what, and how many of those are still unseen */
 let HINT={key:'',tp:{},now:null};
 function unseen(me,k){let n=4;for(const x of G.hands[me])if(kd(x)===k)n--;for(let s=0;s<4;s++){for(const x of G.disc[s])if(kd(x)===k)n--;
@@ -1912,7 +1924,7 @@ function winCore(seat,pos,text,a,col,loser){
     `<i class="hit" style="left:${tg.x}px;top:${tg.y}px"></i><i class="flash"></i><div class="band"></div>${art?`<img alt="" src="${art}">`:''}`+
     `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`+
     (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>${fwPay()>=0?'被搶花':'放槍'}</em></span></div>`:'');
-  root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9)},170);setTimeout(()=>d.remove(),2000);setTimeout(()=>{if(resHold){resHold=0;render()}},1750)}
+  root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9);if(window.T3&&T3.focus)T3.focus(pos,1800)},170);setTimeout(()=>d.remove(),2000);setTimeout(()=>{if(resHold){resHold=0;render()}},1750)}
 /* ---------- 局末亮牌: when a hand ends (win, flower win, draw) the four hands lie open on the table for RVMS before the result card comes up ----------
    all of it is local to this device: RV.k names the ended hand, RV.at / RV.end the countdown (it starts once the win effect lets go: resHold),
    RV.seen: the result card may show (time up, 看結算, or no reveal at all: SPEED>50 / AUTO, a page in the background or just back, a page that loaded into a hand already over),
@@ -1992,12 +2004,14 @@ function updateTimer(){
 /* the picked-up tile's kind (-1 none): every face-up copy on the table is tinted while it is selected */
 let selK=-1;const hiK=()=>sel>=0?selK:-1;
 function markSame(){const k=hiK();for(const e of $('myMelds').querySelectorAll('.t'))e.classList.toggle('same',k>=0&&e.classList.contains('k'+k));if(window.T3&&T3.hi)T3.hi(k)}
+function rootXY(el){let x=0,y=0;while(el&&el.id!=='root'){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent}return{x,y}}
+function throwPt(t){if(!window.T3||!T3.throwPt)return;const p=rootXY(t),tb=rootXY($('table'));T3.throwPt(p.x-tb.x+t.offsetWidth/2,p.y-tb.y+(DRAG.dy<0?DRAG.dy:0))}   // the 3D table throws my discard from here
 function pickTile(i,k){sel=i;selK=k;[...$('hand').children].forEach(c=>c.classList.toggle('sel',+c.dataset.i===i));markSame();showTips(i<0?-1:k)}
 $('hand').addEventListener('click',e=>{
   const t=e.target.closest('.t');if(!t||performance.now()-DRAG.sup<400)return;const ms=mySeat();
   if(G.st!=='play'||G.ph!=='discard'||G.turn!==ms||pending)return;
   const i=+t.dataset.i,k=+t.dataset.k;
-  if(sel===i){pickTile(-1,-1);doAct({t:'d',k})}else{sfx('pick');pickTile(i,k)}});
+  if(sel===i){throwPt(t);pickTile(-1,-1);doAct({t:'d',k})}else{sfx('pick');pickTile(i,k)}});
 $('table').addEventListener('click',e=>{if(sel>=0&&!e.target.closest('#hand,#acts,button'))pickTile(-1,-1)});   // a tap on the table puts the tile back
 /* slide up to discard: the tile follows the finger (only upward), past dragLim() it is thrown on release, let go lower and it drops back unselected.
    movement is read in the root's own frame: on a portrait phone the root is turned 90 degrees (table-up is screen-right), on big screens it is zoomed */
@@ -2008,7 +2022,7 @@ function dragStop(e,cancel){
   if(!DRAG.on||e.pointerId!==DRAG.id)return;DRAG.on=false;if(!DRAG.mv)return;   // never moved: an ordinary tap, the click handler deals with it
   DRAG.sup=performance.now();const t=dragEl();if(t){t.classList.remove('drag','go');t.style.transform=''}
   const go=!cancel&&-DRAG.dy>=dragLim()&&G.v===DRAG.v&&G.st==='play'&&G.ph==='discard'&&G.turn===mySeat()&&!pending;
-  pickTile(-1,-1);if(go)doAct({t:'d',k:DRAG.k})}
+  if(go&&t)throwPt(t);pickTile(-1,-1);if(go)doAct({t:'d',k:DRAG.k})}
 $('hand').addEventListener('pointerdown',e=>{
   const t=e.target.closest('.t');if(!t||DRAG.on||e.button>0)return;
   if(G.st!=='play'||G.ph!=='discard'||G.turn!==mySeat()||pending)return;
@@ -2092,17 +2106,27 @@ async function init(){
   const FELT=23,RIM=2.2,TW=1,TH=1.333,TT=.78,BACK=.36;
 
   // table: felt 23 tile-widths square inside a wooden frame
-  const wood=new THREE.MeshStandardMaterial({color:0x8a5328,roughness:.55,metalness:.05});
+  let lipM=null;const wood=new THREE.MeshStandardMaterial({color:0x8a5328,roughness:.55,metalness:.05});
   const rim=new THREE.Mesh(new RoundedBoxGeometry(FELT+RIM*2,1.6,FELT+RIM*2,3,.6),wood);rim.position.y=-.8;rim.receiveShadow=true;scene.add(rim);
   { // felt with a soft centre spotlight baked into its texture
     const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');
     const gr=g.createRadialGradient(256,270,40,256,256,380);gr.addColorStop(0,'#3a78ad');gr.addColorStop(.6,'#24547f');gr.addColorStop(1,'#163a5c');
     g.fillStyle=gr;g.fillRect(0,0,512,512);
     for(let i=0;i<9000;i++){g.fillStyle=`rgba(255,255,255,${Math.random()*.035})`;g.fillRect(Math.random()*512,Math.random()*512,1,1)}
+    {const v=g.createRadialGradient(256,262,150,256,256,372);v.addColorStop(0,'#0000');v.addColorStop(1,'#000a');g.fillStyle=v;g.fillRect(0,0,512,512)}   // corners fall into shadow
     const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;
-    const felt=new THREE.Mesh(new THREE.PlaneGeometry(FELT,FELT),new THREE.MeshStandardMaterial({map:tex,roughness:.95}));
+    // felt fibres: a height field of short random strokes turned into a tiling normal map
+    const N=256,hc2=document.createElement('canvas');hc2.width=hc2.height=N;const h2=hc2.getContext('2d');h2.fillStyle='#808080';h2.fillRect(0,0,N,N);
+    for(let i=0;i<5200;i++){const x=Math.random()*N,y=Math.random()*N,a=Math.random()*Math.PI,l=2+Math.random()*5,b=Math.random()<.5?255:0;
+      h2.strokeStyle=`rgba(${b},${b},${b},${.08+Math.random()*.14})`;h2.lineWidth=.6+Math.random()*.8;
+      for(const [ox,oy] of [[0,0],[-N,0],[N,0],[0,-N],[0,N]]){h2.beginPath();h2.moveTo(x+ox,y+oy);h2.lineTo(x+ox+Math.cos(a)*l,y+oy+Math.sin(a)*l);h2.stroke()}}
+    const hd=h2.getImageData(0,0,N,N).data,nd=h2.createImageData(N,N),H=(x,y)=>hd[(((y+N)%N)*N+((x+N)%N))*4]/255;
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){const dx=(H(x+1,y)-H(x-1,y))*2.2,dy=(H(x,y+1)-H(x,y-1))*2.2,l=Math.hypot(dx,dy,1),o=(y*N+x)*4;
+      nd.data[o]=(-dx/l*.5+.5)*255;nd.data[o+1]=(dy/l*.5+.5)*255;nd.data[o+2]=(1/l*.5+.5)*255;nd.data[o+3]=255}
+    h2.putImageData(nd,0,0);const ntex=new THREE.CanvasTexture(hc2);ntex.wrapS=ntex.wrapT=THREE.RepeatWrapping;ntex.repeat.set(7,7);ntex.anisotropy=8;
+    const felt=new THREE.Mesh(new THREE.PlaneGeometry(FELT,FELT),new THREE.MeshPhysicalMaterial({map:tex,roughness:.93,normalMap:ntex,normalScale:new THREE.Vector2(.55,.55),sheen:.35,sheenRoughness:.5,sheenColor:new THREE.Color(0x4f86c8),}));
     felt.rotation.x=-Math.PI/2;felt.position.y=.01;felt.receiveShadow=true;scene.add(felt);
-    const lip=new THREE.Mesh(new THREE.BoxGeometry(FELT+.5,.25,FELT+.5),new THREE.MeshStandardMaterial({color:0xc9973f,roughness:.4,metalness:.6}));lip.position.y=-.2;scene.add(lip)}
+    lipM=new THREE.MeshStandardMaterial({color:0xc9973f,roughness:.4,metalness:.6});const lip=new THREE.Mesh(new THREE.BoxGeometry(FELT+.5,.25,FELT+.5),lipM);lip.position.y=-.2;scene.add(lip)}
 
   // centre compass: round, tiles left, the four winds and scores facing their seats; redrawn when any of it changes
   const cc=document.createElement('canvas');cc.width=cc.height=1024;const cg=cc.getContext('2d');
@@ -2167,8 +2191,15 @@ async function init(){
     g.fillStyle='#7fe3ff';g.font=`800 56px ${SANS}`;g.shadowColor='#3fc8ff';g.shadowBlur=14;g.fillText(String(v.left),266,326);g.shadowBlur=0;
     ctex.needsUpdate=true}
 
-  scene.add(new THREE.HemisphereLight(0xfff2dc,0x40202a,1.1));
-  const sun=new THREE.DirectionalLight(0xfff0d8,2.2);sun.position.set(-8,30,14);sun.castShadow=true;
+  let ENV=null;scene.add(new THREE.HemisphereLight(0xfff2dc,0x40202a,.75));
+  { // reflections: a dark private room, a warm lamp panel overhead and two dim side panels, prefiltered once
+    const pm=new THREE.PMREMGenerator(renderer),es=new THREE.Scene();
+    es.add(new THREE.Mesh(new THREE.BoxGeometry(80,40,80),new THREE.MeshBasicMaterial({color:0x1a0f12,side:THREE.BackSide})));
+    const pan=(c,k,w,h,x,y,z,rx,ry)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(c).multiplyScalar(k),side:THREE.DoubleSide}));m.position.set(x,y,z);m.rotation.set(rx,ry||0,0);es.add(m)};
+    pan(0xffd9a8,6,14,14,0,19,2,Math.PI/2);pan(0xff8fb0,1.2,30,8,-38,8,0,0,Math.PI/2);pan(0x8fb8ff,1,30,8,38,8,0,0,-Math.PI/2);pan(0xffe2c0,1.5,40,6,0,10,-38,0);
+    ENV=pm.fromScene(es,.04).texture;pm.dispose();if(lipM){lipM.envMap=ENV;lipM.envMapIntensity=.8;lipM.needsUpdate=true}}
+  const lamp=new THREE.SpotLight(0xffc58a,30,70,.5,.8,1);lamp.position.set(0,30,3);lamp.target.position.set(0,0,1.5);scene.add(lamp,lamp.target);   // the warm lamp over the table
+  const sun=new THREE.DirectionalLight(0xfff0d8,1.7);sun.position.set(-8,30,14);sun.castShadow=true;
   sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-14,right:14,top:14,bottom:-14,near:5,far:70});sun.shadow.radius=3;sun.shadow.bias=-.0006;scene.add(sun);
   const fill=new THREE.PointLight(0xffc98a,40,40,1.6);fill.position.set(0,9,4);scene.add(fill);
 
@@ -2181,8 +2212,9 @@ async function init(){
   const MAX=200;
   const gIvory=new RoundedBoxGeometry(TW,TT-BACK+.06,TH,2,.1),gBlue=new RoundedBoxGeometry(TW,BACK,TH,2,.1),gFace=new THREE.PlaneGeometry(TW*.9,TH*.9).rotateX(-Math.PI/2);
   const aCell=new THREE.InstancedBufferAttribute(new Float32Array(MAX*2),2);aCell.setUsage(THREE.DynamicDrawUsage);gFace.setAttribute('aCell',aCell);
-  const mIvory=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.32}),mBlue=new THREE.MeshStandardMaterial({color:0x2f8fd0,roughness:.35});
-  const mFace=new THREE.MeshStandardMaterial({map:atlas,transparent:true,depthWrite:false,roughness:.32,polygonOffset:true,polygonOffsetFactor:-2});
+  const GL={clearcoat:.8,clearcoatRoughness:.16,envMap:ENV,envMapIntensity:.45};   // polished tiles: a hard clear layer that catches the lamp
+  const mIvory=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.38,...GL}),mBlue=new THREE.MeshPhysicalMaterial({color:0x2f8fd0,roughness:.36,...GL});
+  const mFace=new THREE.MeshPhysicalMaterial({map:atlas,transparent:true,depthWrite:false,roughness:.38,...GL,polygonOffset:true,polygonOffsetFactor:-2});
   mFace.onBeforeCompile=sh=>{sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute vec2 aCell;')
     .replace('#include <uv_vertex>','#include <uv_vertex>\n\tvMapUv=vMapUv*vec2(.125,1./6.)+aCell;')};
   const iIv=new THREE.InstancedMesh(gIvory,mIvory,MAX),iBl=new THREE.InstancedMesh(gBlue,mBlue,MAX),iFc=new THREE.InstancedMesh(gFace,mFace,MAX);
@@ -2244,51 +2276,115 @@ async function init(){
     let L=nh+(nh&&(gs.length||fl.length)?.5:0);gs.forEach((g,i)=>L+=g.length*MP+(i?MG:0));if(fl.length)L+=(gs.length?MG:0)+fl.length*MP;
     const F=s.show?revFit(pos,s,B-A,L+(L?.5:0)):null;   // 局末亮牌: the open hand takes its own scale, the melds and flowers get what is left of the edge
     const sc=Math.min(1,(F?B-A-F.len*F.hs-(L?.5:0):B-A)/Math.max(1,L)),z=11.38-TH*MS*sc/2;
-    for(let j=0;j<nh;j++)tileAt(pos,A+(j+.5)*sc,10.75,-1,2,sc);
+    SR[pos]={hand:[],melds:[],hx:A+nh*sc/2};
+    for(let j=0;j<nh;j++){const r=tileAt(pos,A+(j+.5)*sc,10.75,-1,2,sc);if(r)SR[pos].hand.push(r)}
     if(F)revPut(pos,s,F,A);
     let x=B-MS*sc/2,hr=null;   // hr: the marked tile of meld hm (搶槓)
-    gs.forEach((g,gi)=>{for(let j=g.length-1;j>=0;j--){const r=tileAt(pos,x,z,g[j],g[j]<0?0:1,MS*sc);if(gi===hm&&j===g.length-1)hr=r;x-=MP*sc}x-=MG*sc});
+    gs.forEach((g,gi)=>{SR[pos].melds[gi]=[];for(let j=g.length-1;j>=0;j--){const r=tileAt(pos,x,z,g[j],g[j]<0?0:1,MS*sc);if(r)SR[pos].melds[gi].push(r);if(gi===hm&&j===g.length-1)hr=r;x-=MP*sc}x-=MG*sc});
     if(!gs.length)x+=MG*sc;
     for(const k of fl){const r=tileAt(pos,x,z,k,1,MS*sc);if(hm===-2&&!hr)hr=r;x-=MP*sc}return hr}
 
-  let cur=null,lastSig='',animKey='',anim=null,raf=0,calls=0;
+  let cur=null,lastSig='',animKey='',anim=null,raf=0,calls=0,SR=[],PREV=null,TWS=[],LR=null,from0=null;
+  /* tweens: short moves layered over the table as drawn; each picks its tiles again after every redraw (the instances are rebuilt) */
+  const _R=new THREE.Matrix4(),_S=new THREE.Vector3(),_E=new THREE.Vector3(),RM=matchMedia('(prefers-reduced-motion: reduce)');
+  const seatPt=(pos,x,y,z)=>new THREE.Vector3(x,y,z).applyAxisAngle(_Y,SEATROT[pos]);
+  const easeOut=t=>1-Math.pow(1-t,3),back=t=>{const c=1.5;t-=1;return 1+(c+1)*t*t*t+c*t*t};
+  function tween(o){o.t0=performance.now();o.recs=o.pick();TWS.push(o);return o}
+  /* a discard is thrown from the hand: an arc with a spin, landing flat with a small bounce; the clack sounds as it lands */
+  function throwFrom(pos){
+    if(pos===0){ // mine: from the tile I just let go of (screen point handed over by the page), else from below my side of the table
+      if(from0&&performance.now()-from0.t<1500){_v.set(from0.x/W*2-1,1-from0.y/H*2,.5).unproject(camera).sub(camera.position).normalize();
+        const k=(1.4-camera.position.y)/_v.y;if(k>0)return camera.position.clone().addScaledVector(_v,k)}
+      return seatPt(0,0,1.4,12.4)}
+    return seatPt(pos,SR[pos]?SR[pos].hx:0,1.3,10.3)}
+  function throwM(r,t,o){
+    const ft=Math.min(1,t/.72),e=1-Math.pow(1-ft,2);_E.setFromMatrixPosition(r.M);
+    let x=o.S.x+(_E.x-o.S.x)*e,z=o.S.z+(_E.z-o.S.z)*e,y=o.S.y+(_E.y-o.S.y)*e+Math.sin(ft*Math.PI)*.9;
+    if(t>.72){const b=(t-.72)/.28;y=_E.y+Math.sin(b*Math.PI)*.14*(1-b)}
+    _R.copy(r.M).setPosition(0,0,0);
+    return _A.makeTranslation(x,y,z).multiply(_T.makeRotationY(o.spin*(1-e))).multiply(_T.makeRotationX(-Math.sin(ft*Math.PI)*.45)).multiply(_R)}
+  function applyTweens(now){
+    let any=false;
+    for(let i=TWS.length-1;i>=0;i--){const o=TWS[i],t=(now-o.t0)/o.dur;
+      o.recs.forEach((r,j)=>{if(!r)return;const tj=Math.max(0,Math.min(1,t-(o.lag||0)*j));placeParts(r,tj>=1?r.M:o.f(r,tj,o,j))});
+      if(o.land&&!o.landed&&t>=.72){o.landed=1;o.land()}
+      if(t-(o.lag||0)*Math.max(0,o.recs.length-1)>=1){if(o.land&&!o.landed)o.land();TWS.splice(i,1)}else any=true}
+    if(TWS.length||any)for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;
+    return any}
+  const clack=()=>{try{window.sfx&&window.sfx('clack')}catch(e){}};
   function draw(v){
     const sig=JSON.stringify(v);if(sig===lastSig)return;lastSig=sig;cur=v;hiK3=v.hi==null?-1:v.hi;
-    nIv=nBl=nFc=0;let lastRec=null;revRecs=[];halo.visible=false;
+    nIv=nBl=nFc=0;let lastRec=null;revRecs=[];halo.visible=false;SR=[];
     v.seats.forEach((s,pos)=>{
       // river: rows of 6 shifted toward the owner's left (pinwheel); a long river widens its rows instead of growing toward the edge
       const n=s.disc.length,rows=pos===0?3:4,per=Math.max(6,Math.ceil(n/rows)),x0=-2.5*DP-.35-(per-6)*DP;
       s.disc.forEach((k,j)=>{const r=tileAt(pos,x0+(j%per)*DP,3.75+Math.floor(j/per)*DR,k,1,DS);if(v.last&&v.last.pos===pos&&v.last.i===j)lastRec=r});
       if(pos){const r=strip(pos,s,v.last&&v.last.pos===pos?(v.last.fl?-2:v.last.m!=null?v.last.m:-1):-1);if(r)lastRec=r}});
+    LR=lastRec;
+    // what changed since the last snapshot: an opponent drew (one more standing tile) or called (one more meld)
+    const P0=PREV,sumD=a=>a.reduce((n,x)=>n+x.d,0);PREV=v.seats.map(s=>({h:s.hand,m:s.melds.length,d:s.disc.length}));
+    const calm=!P0||v.fast||v.intro||RM.matches||sumD(PREV)<sumD(P0);
+    if(calm)TWS=TWS.filter(o=>o.k==='thr');
+    else for(let pos=1;pos<4;pos++){const s=v.seats[pos],p=P0[pos],q=PREV[pos];if(s.show)continue;
+      if(q.m===p.m+1){const S=seatPt(pos,SR[pos].hx,1.1,10.4),gi=q.m-1;   // the called tiles fly from her hand to her meld row
+        tween({k:'m'+pos,dur:320,lag:.14,pick:()=>(SR[pos]&&SR[pos].melds[gi]||[]).slice().reverse(),S,
+          f:(r,t,o)=>{const e=easeOut(t);_E.setFromMatrixPosition(r.M);_R.copy(r.M).setPosition(0,0,0);
+            return _A.makeTranslation(o.S.x+(_E.x-o.S.x)*e,o.S.y+(_E.y-o.S.y)*e+Math.sin(t*Math.PI)*.7,o.S.z+(_E.z-o.S.z)*e).multiply(_R)}})}
+      else if(q.h===p.h+1&&q.m===p.m){const off=seatPt(pos,.6,1.1,-1.5);   // a drawn tile slides in from the wall side and settles
+        tween({k:'d'+pos,dur:260,pick:()=>(SR[pos]&&SR[pos].hand.slice(-1))||[],f:(r,t)=>{const e=1-back(t);return _A.makeTranslation(off.x*e,Math.max(0,off.y*e),off.z*e).multiply(r.M)}})}}
+    for(const o of TWS)o.recs=o.pick();
     if(lastRec){
       iIv.setColorAt(lastRec.iv,IVHI);if(lastRec.fc>=0)iFc.setColorAt(lastRec.fc,FCHI);
       glow.position.setFromMatrixPosition(lastRec.M);glow.position.y=.03;glow.rotation.y=SEATROT[v.last.pos];glow.visible=true;
-      if(v.lastKey!==animKey){animKey=v.lastKey;anim={rec:lastRec,t0:performance.now()}}else if(anim)anim.rec=lastRec}
+      if(v.lastKey!==animKey){animKey=v.lastKey;
+        if(v.last.i!=null){TWS=TWS.filter(o=>o.k!=='thr');
+          if(v.fast||RM.matches){clack();anim=null;glow.material.opacity=1}
+          else{glow.material.opacity=0;anim=null;tween({k:'thr',dur:430,pick:()=>LR?[LR]:[],S:throwFrom(v.last.pos),spin:(Math.random()<.5?-1:1)*(1.6+Math.random()*1.4),f:throwM,land:()=>{clack();glow.material.opacity=1}})}}
+        else anim={rec:lastRec,t0:performance.now()}}
+      else if(anim)anim.rec=lastRec}
     else{glow.visible=false;anim=null}
     {const rk=(v.seats.find(s=>s.rvk)||{}).rvk||'';if(rk!==revKey){revKey=rk;rev=rk&&v.seats.some(s=>s.rva)?{t0:performance.now()}:null}if(rev)rev.recs=revRecs;else halo.material.opacity=.55}   // 局末亮牌: the hands turn over once per ended hand
     iIv.count=nIv;iBl.count=nBl;iFc.count=nFc;
+    applyTweens(performance.now());
     for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;
     iIv.instanceColor.needsUpdate=iFc.instanceColor.needsUpdate=true;aCell.needsUpdate=true;
     drawCompass(v);req()}
   function req(){if(!raf)raf=requestAnimationFrame(frame)}
-  let shk=null;const camBase=new THREE.Vector3();
-  function shake(ms,amp){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(!shk)camBase.copy(camera.position);shk={t0:performance.now(),ms,amp};req()}
+  /* camera: base pose from fit(); on top of it a slow breathing drift while a hand is on, a small push in on my turn, a push toward a winner, and shakes */
+  const camP0=new THREE.Vector3(),camT0=new THREE.Vector3(),camT=new THREE.Vector3();
+  let shk=null,push=0,foc=null,lastR=0,lastF=0;
+  function shake(ms,amp){if(RM.matches)return;shk={t0:performance.now(),ms,amp};req()}
+  function focus(pos,ms){if(RM.matches||(cur&&cur.fast))return;foc={pos,t0:performance.now(),ms:ms||1900};req()}
+  function camera0(now){
+    const dt=Math.min(.1,(now-(lastF||now))/1000);lastF=now;
+    const live=cur&&cur.turn>=0&&!RM.matches&&!cur.fast,want=live&&cur.turn===0?1:0;push+=(want-push)*Math.min(1,dt*3);
+    let w=0,fp=null;if(foc){const t=now-foc.t0;w=t<350?easeOut(t/350):t<foc.ms?1:t<foc.ms+700?1-easeOut((t-foc.ms)/700):0;if(t>=foc.ms+700)foc=null;else fp=seatPt(foc.pos,0,0,foc.pos?8.4:7.4)}
+    camT.copy(camT0);if(fp)camT.lerp(fp,.3*w);
+    const dol=1-.035*push-.1*w,br=live?1:0;
+    camera.position.copy(camP0).sub(camT0).multiplyScalar(dol).add(camT);
+    if(br){camera.position.x+=Math.sin(now/3300)*.16;camera.position.y+=Math.sin(now/4700+1)*.1;camera.position.z+=Math.sin(now/5900+2)*.08}
+    if(shk){const t=(now-shk.t0)/shk.ms;if(t>=1)shk=null;else{const a=shk.amp*(1-t)*(1-t);camera.position.x+=(Math.random()*2-1)*a;camera.position.y+=(Math.random()*2-1)*a*.6;camera.position.z+=(Math.random()*2-1)*a}}
+    camera.lookAt(camT);camera.updateMatrixWorld();
+    return !!(shk||foc||Math.abs(want-push)>.002)||br}
   function frame(){
-    raf=0;
-    if(shk){const t=(performance.now()-shk.t0)/shk.ms;
-      if(t>=1){camera.position.copy(camBase);shk=null}else{const a=shk.amp*(1-t)*(1-t);camera.position.set(camBase.x+(Math.random()*2-1)*a,camBase.y+(Math.random()*2-1)*a*.6,camBase.z+(Math.random()*2-1)*a);req()}}
-    if(anim){ // the new discard drops onto the felt
-      const t=Math.min(1,(performance.now()-anim.t0)/250),e=1-Math.pow(1-t,3);
+    raf=0;const now=performance.now();let busy=false;
+    const camBusy=camera0(now);
+    busy=applyTweens(now)||busy;
+    if(anim){ // a marked meld tile or flower drops into place
+      const t=Math.min(1,(now-anim.t0)/250),e=1-Math.pow(1-t,3);
       _A.makeTranslation(0,(1-e)*1.6,0).multiply(anim.rec.M);placeParts(anim.rec,_A);
       for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;glow.material.opacity=e;
-      if(t>=1)anim=null;else req()}
+      if(t>=1)anim=null;else busy=true}
     if(rev){ // 局末亮牌: face down to face up in about a third of a second
-      const t=Math.min(1,(performance.now()-rev.t0)/360),e=1-Math.pow(1-t,3);
+      const t=Math.min(1,(now-rev.t0)/360),e=1-Math.pow(1-t,3);
       for(const r of rev.recs){_A.copy(r.M).multiply(_T.makeTranslation(0,TT/2,0)).multiply(_T.makeRotationZ((1-e)*Math.PI)).multiply(_T.makeTranslation(0,-TT/2,0)).premultiply(_T.makeTranslation(0,Math.sin(t*Math.PI)*.6,0));placeParts(r,_A)}
       for(const m of [iIv,iBl,iFc])m.instanceMatrix.needsUpdate=true;halo.material.opacity=.55*e;
-      if(t>=1)rev=null;else req()}
-    renderer.render(scene,camera);calls=renderer.info.render.calls}
-
+      if(t>=1)rev=null;else busy=true}
+    // idle breathing alone draws at about 30 fps; anything moving draws every frame
+    const idleOnly=!busy&&camBusy&&!shk&&!foc;
+    if(!idleOnly||now-lastR>=32||needR){renderer.render(scene,camera);calls=renderer.info.render.calls;lastR=now;needR=false}
+    if(busy||camBusy)req()}
+  let needR=true;
   /* ---------- framing: Mahjong Soul style high camera, everything kept between the screen top and my hand row ---------- */
   let W=1,H=1,HT=1;const lay={};
   const P=(x,y,z)=>{_v.set(x,y,z).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
@@ -2301,7 +2397,7 @@ async function init(){
       const rx=P(10.75,0,0).x,yT=Math.min(P(0,TH,-10.75).y,P(0,.9,-11.4).y),yB=P(0,0,3.75+2*DR+TH*DS/2).y,yC=P(0,0,0).y;
       d*=Math.pow(Math.max((rx-W/2)/(W*.335),(yB-yT)/(bot-top)),.8);
       tgt.z+=Math.min(yT-top,Math.max(yB-bot,yC-H*.45))/H*5}
-    camera.updateMatrixWorld();
+    camera.updateMatrixWorld();camP0.copy(camera.position);camT0.copy(tgt);
     // windows live in the strips outside the side hands, the top player's at the top right, mine above my hand at the left
     const sw=Math.round(H*.18),sh=sw*1.3;byId('root').style.setProperty('--cw',sw+'px');
     const hl=P(-11.6,0,-3),hr=P(11.6,0,-3);
@@ -2322,12 +2418,13 @@ async function init(){
 
   function resize(w,h,ht){
     W=w;H=h;HT=ht;renderer.setPixelRatio(Math.min((devicePixelRatio||1)*(window.UIZ||1),3));renderer.setSize(W,H,false);fit();
-    if(cur){lastSig='';draw(cur)}else req()}
+    needR=true;if(cur){lastSig='';draw(cur)}else req()}
 
   const ptSeat=(pos,x,z)=>{_v.set(x,0,z).applyAxisAngle(_Y,SEATROT[pos]).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
   const ptLast=()=>{if(!glow.visible)return null;_v.copy(glow.position).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
   const hi=k=>{if(cur&&(cur.hi==null?-1:cur.hi)!==k){lastSig='';draw(Object.assign({},cur,{hi:k}))}};
-  const api={draw,resize,lay,hi,calls:()=>calls,renderer,scene,camera,shake,ptSeat,ptLast};
+  const throwPt=(x,y)=>{from0={x,y,t:performance.now()}};
+  const api={draw,resize,lay,hi,calls:()=>calls,renderer,scene,camera,shake,focus,throwPt,ptSeat,ptLast};
   window.T3=api;if(window.onT3)window.onT3()}
 if(!renderer)glFail();else init().catch(e=>{console.warn('3D table',e);glFail()});
 </script>
