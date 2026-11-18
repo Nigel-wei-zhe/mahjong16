@@ -1487,6 +1487,35 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <script src="tiles.js"></script>
 <script>bootStep('她們正在梳妝打扮…（立繪約 3.5 MB）',35)</script>
 <script src="avatars.js"></script>
+<script>
+/* room-light pass (2026-11-18): every portrait gets the private-room light at load time, the files stay untouched.
+   pink neon rim on the upper-left edge, a faint warm key from above, cool violet falloff toward the bottom. ?lit=0 turns it off for comparison. */
+(function(){
+  if(/[?&]lit=0/.test(location.search)||!window.AVATARS)return;
+  const KEYS=['n','n2','n3','c','p','w','W','X','Wp'],q=[];
+  KEYS.forEach(k=>window.AVATARS.forEach(a=>{if(a&&typeof a==='object'&&typeof a[k]==='string'&&a[k].startsWith('data:'))q.push([a,k])}));   // key-major: table windows first
+  const cv=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c};
+  function lit(im,full){
+    const w=im.naturalWidth,h=im.naturalHeight,m=cv(w,h),x=m.getContext('2d');x.drawImage(im,0,0);
+    const layer=(paint,op,alpha)=>{const c=cv(w,h),y=c.getContext('2d');paint(y);y.globalCompositeOperation='destination-in';y.drawImage(im,0,0);
+      x.save();x.globalCompositeOperation=op;x.globalAlpha=alpha;x.drawImage(c,0,0);x.restore()};
+    const s0=full?.38:.45;   // full-body shots start the falloff higher (legs)
+    layer(y=>{const g=y.createLinearGradient(0,0,0,h);g.addColorStop(0,'#fff');g.addColorStop(s0,'#fff');g.addColorStop(1,'rgb(212,200,232)');y.fillStyle=g;y.fillRect(0,0,w,h)},'multiply',1);
+    layer(y=>{const g=y.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,205,140,.10)');g.addColorStop(.42,'rgba(255,205,140,0)');y.fillStyle=g;y.fillRect(0,0,w,h)},'screen',1);
+    // rim: silhouette minus itself shifted down-right = a thin band on the upper-left edge, softened by stacking a few offsets
+    const d=Math.max(2,w*.018),r=cv(w,h),z=r.getContext('2d');z.fillStyle='#ff6ad0';z.fillRect(0,0,w,h);z.globalCompositeOperation='destination-in';z.drawImage(im,0,0);
+    z.globalCompositeOperation='destination-out';z.drawImage(im,d,d*.45);
+    x.save();x.globalCompositeOperation='source-atop';
+    [[0,0,.36],[-1,0,.18],[1,1,.14]].forEach(([ox,oy,a])=>{x.globalAlpha=a;x.drawImage(r,ox,oy)});x.restore();
+    return new Promise(res=>m.toBlob(b=>res(b?URL.createObjectURL(b):null),'image/webp',.92))}
+  let busy=false;
+  window.__litN=q.length;function next(){window.__litLeft=q.length;if(!q.length){window.__litDone=true;return}
+    const [a,k]=q.shift(),src=a[k],im=new Image();
+    im.onload=()=>lit(im,k==='W'||k==='X'||k==='Wp').then(u=>{if(u&&a[k]===src)a[k]=u;setTimeout(next,0)},()=>setTimeout(next,0));
+    im.onerror=()=>setTimeout(next,0);im.src=src}
+  next();
+})();
+</script>
 <script>bootStep('載入語音…',82)</script>
 <script src="voices.js"></script>
 <script>bootStep('入座中…',95)</script>
@@ -2317,7 +2346,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1118.1115';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1118.1612';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
