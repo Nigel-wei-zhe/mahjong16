@@ -1309,14 +1309,14 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-st{position:absolute;left:50%;bottom:0;width:755px;height:395px;transform-origin:50% 100%;transform:translateX(-50%) scale(var(--sk,1));overflow:hidden;background:#05060c;font-family:"Noto Sans TC",sans-serif;color:#f3e9d2;user-select:none}
 #st-bg{position:absolute;left:-17.5px;top:0;width:790px;height:395px;background:url(img/plate.webp) 0 0/100% 100% no-repeat}
 /* Serin layer (box 875,129–1127,766 in 1568x784 → ×395/784, −17.5) */
-#st-serin{position:absolute;left:423.4px;top:65px;width:127px;height:321px;z-index:10;pointer-events:none}
+#st-serin{position:absolute;left:183.5px;top:70.5px;width:112.9px;height:302.8px;z-index:10;pointer-events:none}
 #st-serin img,#st-serin video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 #st-serin.vid img.p{opacity:0}
 /* idle video canvas: 530x707 at (736,94) in 1568 space */
 #st-sv{position:absolute;left:353.3px;top:47.4px;width:267px;height:356.2px;z-index:10;pointer-events:none;opacity:0;transition:opacity .5s}#st-sv.on{opacity:1}
-#st-refl{position:absolute;left:423.4px;top:383px;width:127px;height:321px;z-index:9;pointer-events:none;transform:scaleY(-.55);transform-origin:50% 0;opacity:.28;filter:blur(1.5px) saturate(1.3);-webkit-mask:linear-gradient(#000,#0000 22%);mask:linear-gradient(#000,#0000 22%)}
+#st-refl{position:absolute;left:183.5px;top:370.3px;width:112.9px;height:302.8px;z-index:9;pointer-events:none;transform:scaleY(-.55);transform-origin:50% 0;opacity:.28;filter:blur(1.5px) saturate(1.3);-webkit-mask:linear-gradient(#000,#0000 22%);mask:linear-gradient(#000,#0000 22%)}
 #st-refl img{width:100%;height:100%;object-fit:contain}
-#st-cshadow{position:absolute;left:458px;top:374px;width:70px;height:12px;z-index:9;border-radius:50%;background:radial-gradient(#000a,#0000 70%);pointer-events:none}
+#st-cshadow{position:absolute;left:227.5px;top:362.3px;width:70px;height:12px;z-index:9;border-radius:50%;background:radial-gradient(#000a,#0000 70%);pointer-events:none}
 #st-grade{position:absolute;inset:0;pointer-events:none;z-index:40;background:radial-gradient(ellipse 85% 80% at 55% 45%,#0000 55%,#02030ab0 100%)}
 #st-grain{position:absolute;inset:0;z-index:41;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 /* sign content mapped into the painted frame */
@@ -1339,17 +1339,15 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .st-lb .refl{position:absolute;top:100%;left:50%;width:150%;height:40px;transform:translateX(-50%);background:radial-gradient(ellipse 40% 60% at 50% 0,var(--g2),#0000 70%);filter:blur(4px);pointer-events:none}
 .st-lb .foot{box-shadow:0 3px 6px #000c}
 .st-lb::after{content:"";position:absolute;left:50%;top:calc(100% - 3px);width:56px;height:10px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(#000b,#0000 70%);z-index:-1}
-#roomBtn{left:30px;--ry:30deg;--c:#ff8ad8;--g:#ff2fae;--g2:#ff2fae55;--fs:22px}#roomBtn .box{width:54px;height:118px}
-#solo{left:118px;bottom:44px;--sc:.86;--ry:24deg;--c:#7fe9ff;--g:#14c8ff;--g2:#14c8ff44;--fs:16px}#solo .box{width:40px;height:88px}
 .st-lb.flash .box{animation:flash .5s steps(2) 2}@keyframes flash{50%{filter:brightness(.4)}}
-#st-hit{position:absolute;left:440px;top:40px;width:120px;height:350px;z-index:15;cursor:pointer}
-#st-say{position:absolute;left:556px;top:70px;z-index:30;max-width:190px;padding:9px 13px 10px;border-radius:10px;background:linear-gradient(#120a1aee,#08050ef2);border:1px solid #ff8ad8;box-shadow:0 0 8px #ff2fae88,inset 0 0 10px #ff2fae22,0 8px 18px #000c;font:600 12.5px/1.6 "Noto Serif TC",serif;letter-spacing:.04em;color:#f6efff;opacity:0;translate:0 6px;transition:opacity .4s,translate .4s}
+#st-hit{position:absolute;left:189.5px;top:70.5px;width:100.9px;height:302.8px;z-index:15;cursor:pointer}
+#st-say{position:absolute;left:300.4px;top:74.5px;z-index:30;max-width:178px;padding:7px 11px 8px;border-radius:10px;background:linear-gradient(#120a1aee,#08050ef2);border:1px solid #ff8ad8;box-shadow:0 0 8px #ff2fae88,inset 0 0 10px #ff2fae22,0 8px 18px #000c;font:600 11.5px/1.55 "Noto Serif TC",serif;letter-spacing:.03em;color:#f6efff;opacity:0;translate:0 6px;transition:opacity .4s,translate .4s}
 #st-say.on{opacity:1;translate:0 0}
 #st-say b{display:inline-block;margin-bottom:3px;font:900 11px/1 'Zen Maru Gothic';letter-spacing:.25em;color:#ff9ae0;text-shadow:0 0 6px #ff2fae}
 #st-say::after{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;background:#0c0714;border-left:1px solid #ff8ad8;border-bottom:1px solid #ff8ad8;transform:rotate(45deg)}
-#st-prof{position:absolute;right:46px;top:10px;z-index:42;padding:5px 10px;border-radius:14px;border:1px solid #7fe9ff;color:#d8f7ff;font:700 10px/1 'Zen Maru Gothic';letter-spacing:.2em;background:#0b0710cc;box-shadow:0 0 8px #14c8ff66}
+
 #st-ver{position:absolute;right:8px;bottom:5px;z-index:42;font:500 8px/1 "Noto Sans TC";letter-spacing:.06em;color:#ffffff59}
-#st-infoB{position:absolute;right:10px;top:10px;z-index:42;width:26px;height:26px;padding:0;border-radius:50%;border:1px solid #ff8ad8;background:#0b0710cc;color:#ffd6f1;font:900 13px/1 'Zen Maru Gothic';box-shadow:0 0 8px #ff2fae66;cursor:pointer}
+
 #st-info{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:#03020acc;backdrop-filter:blur(3px)}
 #st-info.on{display:flex}
 #st-info .st-pn{position:relative;width:400px;max-height:330px;overflow:auto;padding:16px 20px 14px;border-radius:12px;background:linear-gradient(#140b1df2,#08050ef7);border:1px solid #ff8ad8;box-shadow:0 0 0 3px #0b0710,0 0 0 4px #ff2fae44,0 0 22px #ff2fae55,0 14px 30px #000;font:500 11px/1.65 "Noto Sans TC";color:#e9e2f2}
@@ -1363,6 +1361,30 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-bg{-webkit-mask:linear-gradient(#0000,#000 9%);mask:linear-gradient(#0000,#000 9%)}
 #menu>#kv,#menu>.card{display:none!important}
 #menu #mtop{z-index:43;pointer-events:none}
+
+
+#st-prof{left:auto;right:66px;bottom:46px;--sc:.78;--ry:-24deg;--c:#7fe9ff;--g:#14c8ff;--g2:#14c8ff44;--fs:13px}#st-prof .box{width:38px;height:96px}
+#st-infoB{left:auto;right:14px;bottom:12px;--sc:.86;--ry:-30deg;--c:#c9a8ff;--g:#9a5cff;--g2:#9a5cff44;--fs:15px}#st-infoB .box{width:40px;height:78px}
+#st-ver{right:18px!important;bottom:6px!important;z-index:44}
+
+/* road markings: 包廂 / 練習 are painted into img/plate.webp; these are the hotspots + press glow */
+.st-rd{position:absolute;z-index:6;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:#0000}
+.st-rd img{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none;mix-blend-mode:screen}
+.st-rd.flash img{animation:rdFlash .7s ease-out}@keyframes rdFlash{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+@media (hover:hover){.st-rd:hover img{opacity:.45}}
+#roomBtn{left:312.0px;top:298.8px;width:330.5px;height:96.2px}
+#solo{left:448.5px;top:271.6px;width:147.6px;height:41.8px}
+
+/* affordance: road markings get a headlight sweep, the standing signs flicker now and then */
+.st-rd img.sw{opacity:1;
+  -webkit-mask:linear-gradient(170deg,#0000 0%,#0000 40%,#000 47%,#000 53%,#0000 60%,#0000 100%) 0 0/100% 320% no-repeat;
+          mask:linear-gradient(170deg,#0000 0%,#0000 40%,#000 47%,#000 53%,#0000 60%,#0000 100%) 0 0/100% 320% no-repeat;
+  animation:rdSweep 8s cubic-bezier(.35,.1,.45,.95) infinite}
+#solo img.sw{animation-delay:1s}
+@keyframes rdSweep{0%{-webkit-mask-position:0 100%;mask-position:0 100%}40%{-webkit-mask-position:0 0%;mask-position:0 0%}100%{-webkit-mask-position:0 0%;mask-position:0 0%}}
+.st-lb.flick .box{animation:lbFlick .55s steps(1,end)}
+@keyframes lbFlick{0%{filter:brightness(1)}15%{filter:brightness(.25)}30%{filter:brightness(1.25)}45%{filter:brightness(.4)}60%,100%{filter:brightness(1)}}
+@media (prefers-reduced-motion:reduce){.st-rd img.sw{display:none}.st-lb.flick .box{animation:none}}
 
 </style>
 </head>
@@ -1395,18 +1417,16 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <feMerge><feMergeNode in="c3"/><feMergeNode in="c2"/><feMergeNode in="c1"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
     <text class="t off" x="100" y="62">今夜有局</text><text class="t on" x="100" y="62">今夜有局</text>
   </svg><canvas id="st-led"></canvas></div>
-  <div id="st-cshadow"></div>
+  <button class="st-rd" id="roomBtn" aria-label="包廂"><img src="img/road_room.webp" alt=""></button><button class="st-rd" id="solo" aria-label="練習"><img src="img/road_solo.webp" alt=""></button><div id="st-cshadow"></div>
   <div id="st-refl"><img src="img/serin.webp" alt=""></div>
   <div id="st-serin"><img class="p" src="img/serin.webp" alt="瑟琳"></div>
   <div id="st-hit"></div>
-  <button class="st-lb" id="roomBtn"><div class="box"><span>包廂</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button>
-  <button class="st-lb" id="solo"><div class="box"><span>練習</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button>
+  
+  <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button>
   <div id="st-say"><b>瑟琳</b><br>今晚，留下來陪我打一圈？</div>
   <div id="st-grade"></div><div id="st-grain"></div>
   
-</div>  <div id="st-prof">角色介紹 ›</div>
-  <button id="st-infoB" aria-label="資訊">i</button>
-  <div id="st-ver">v<span class="verv">dev</span></div>
+</div>  <div id="st-ver">v<span class="verv">dev</span></div>
 <div id="st-info"><div class="st-pn">
     <button class="st-x" aria-label="關閉">×</button>
     <h2>資訊</h2>
@@ -2297,7 +2317,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1118.0949';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1118.1115';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
@@ -3165,7 +3185,7 @@ document.getElementById('st-hit').onclick=()=>{const n=performance.now();pokes=n
 const info=document.getElementById('st-info');document.getElementById('st-infoB').onclick=()=>info.classList.add('on');
 info.onclick=e=>{if(e.target===info||e.target.classList.contains('st-x'))info.classList.remove('on')};
 addEventListener('keydown',e=>{if(e.key==='Escape')info.classList.remove('on')});
-document.querySelectorAll('.st-lb').forEach(b=>b.addEventListener('pointerdown',()=>{b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}));   // the game binds #roomBtn / #solo itself
+document.querySelectorAll('.st-lb,.st-rd').forEach(b=>b.addEventListener('pointerdown',()=>{b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}));   // the game binds #roomBtn / #solo itself
 document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
 /* LED ticker inside the sign */
 (function(){
@@ -3181,6 +3201,14 @@ function stFit(){const m=document.getElementById('st-wrap');if(m&&typeof RW!=='u
 addEventListener('resize',()=>setTimeout(stFit,0));setTimeout(stFit,0);setTimeout(stFit,600);
 
 })();
+</script>
+<script>
+/* lobby affordance: headlight sweep over the road markings, random flicker on the standing signs */
+(()=>{document.querySelectorAll('.st-rd').forEach(b=>{const im=b.querySelector('img');if(!im||b.querySelector('.sw'))return;const s=im.cloneNode();s.className='sw';s.alt='';b.appendChild(s)});
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const signs=[...document.querySelectorAll('.st-lb')];let last=-1;
+  (function next(){setTimeout(()=>{if(typeof inMenu==='undefined'||inMenu){let i=Math.random()*signs.length|0;if(i===last)i=(i+1)%signs.length;last=i;const b=signs[i];b.classList.remove('flick');void b.offsetWidth;b.classList.add('flick')}next()},2600+Math.random()*3800)})();})();
+
 </script>
 </body>
 </html>
