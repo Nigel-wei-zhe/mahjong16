@@ -790,6 +790,11 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .fhd{flex:none;width:56px;text-align:right;font:900 17px/1 var(--serif);font-variant-numeric:tabular-nums;color:#f3e9d266}.fhd.pos{color:#7CFC8A}.fhd.neg{color:#ff8a80}
 </style>
 <style id="neon">
+#setm .sbtn[hidden]{display:none!important}
+#netv .nrow{display:flex;align-items:baseline;gap:10px;margin:0 0 6px!important}#netv .nrow b{flex:1;color:#ece6f4;font-weight:700}
+#netv .nt{color:var(--cyt)}#netv .nt.on{color:#ff8ad8;text-shadow:0 0 6px #ff2fae}#netv i{font:400 12px var(--led);color:#ffc35a;font-style:normal}
+#netv .nsum{font:900 15px var(--ng)!important;color:var(--cyt)!important;text-shadow:0 0 6px #14c8ff88;margin:8px 0 10px!important}#netv .nsum.on{color:#ff8ad8!important;text-shadow:0 0 8px #ff2fae}
+#netRe{margin-top:10px}
 /* 2026-11-18 neon art direction (see CLAUDE.md 霓虹規範); prototypes in test/neon/ */
 /* --- neon --- */
 /* ===== neon kit override (prototype) ===== */
@@ -1463,8 +1468,11 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
       <button class="sbtn" data-go="tai">台數表<em>›</em></button>
       <button class="sbtn" data-go="rule">規則說明<em>›</em></button>
+      <button class="sbtn" id="netGo" data-go="net" hidden>連線狀態<em>›</em></button>
       <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
-      <p class="ver" id="verLine">版本 <span class="verv"></span></p><p class="ver" id="netv" hidden></p></section>
+      <p class="ver" id="verLine">版本 <span class="verv"></span></p></section>
+    <section data-p="net" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>連線狀態</h3></div>
+      <div class="scroll"><div id="netv"></div></div><button class="sbtn" id="netRe">重新查詢<em>↻</em></button></section>
     <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>台數表</h3></div>
       <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>地胡</td><td>閒家第一次摸牌就自摸，之前沒人吃碰槓</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>人胡</td><td>閒家還沒摸過牌就胡別人打的牌，之前沒人吃碰槓</td><td>8</td></tr><tr><td>八仙過海</td><td>一人集滿八張花，當場胡，三家付</td><td>8</td></tr><tr><td>七搶一</td><td>七張花、第八張在別人手上，當場胡，由他付</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>搶槓</td><td>胡別人加槓的那張牌，加槓的人付</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
     <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
@@ -2346,17 +2354,18 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1118.1612';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.0934';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
+  if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
 const NETT={host:'區網直連',srflx:'打洞直連',relay:'TURN 轉送','?':'未知'};
-$('verLine').onclick=async()=>{const el=$('netv');if(!el.hidden){el.hidden=true;return}
-  el.hidden=false;if(!R||!R.netInfo){el.textContent='沒有連線（單機或 claude.ai 版）';return}
-  el.textContent='查詢中…';const L=await R.netInfo();
-  el.innerHTML=L.length?L.map(x=>`${esc(x.nm)}：${NETT[x.t]||x.t}${x.rtt!=null?'・'+Math.round(x.rtt*1000)+'ms':''}${x.kb!=null?'・'+x.kb+'KB':''}`).join('<br>')+(L.some(x=>x.t==='relay')?'<br>有經過 TURN':'<br>沒經過 TURN'):'目前沒有連線';
-  el.innerHTML+='<br>TURN 憑證：'+({ok:'已取得',bad:'密碼不對',lock:'密碼錯太多次',err:'伺服器錯誤'}[turnSt]||'沒有')};
-$('cfgBtn').onclick=()=>{setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
+async function netShow(){const el=$('netv');if(!R||!R.netInfo){el.innerHTML='<p>沒有連線（單機或 claude.ai 版）</p>';return}
+  el.innerHTML='<p>查詢中…</p>';const L=await R.netInfo(),relay=L.some(x=>x.t==='relay');
+  el.innerHTML=(L.length?`<p class="nsum${relay?' on':''}">${relay?'有經過 TURN 轉送':'沒經過 TURN'}</p>`+L.map(x=>`<p class="nrow"><b>${esc(x.nm)}</b><span class="nt${x.t==='relay'?' on':''}">${NETT[x.t]||x.t}</span><i>${x.rtt!=null?Math.round(x.rtt*1000)+'ms':''}${x.kb!=null?' · '+x.kb+'KB':''}</i></p>`).join(''):'<p>目前沒有連線</p>')
+    +`<p class="nrow"><b>TURN 憑證</b><span class="nt">${({ok:'已取得',bad:'密碼不對',lock:'密碼錯太多次',err:'伺服器錯誤'}[turnSt]||'沒有')}</span></p>`}
+$('netRe').onclick=()=>netShow();
+$('cfgBtn').onclick=()=>{$('netGo').hidden=!(R&&R.netInfo);setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
 $('setm').addEventListener('click',e=>{const t=e.target;if(t.id==='setm'||t.closest('[data-x]')){$('setm').classList.add('hide');return}const g=t.closest('[data-go]');if(g)setPage(g.dataset.go)});
 $('quitGo').onclick=()=>leaveRoom();
 $('snd').onclick=()=>{SND.on=!SND.on;try{localStorage.setItem('mjSnd',SND.on?'1':'0')}catch(e){}sndBtn();if(SND.on){audio();sfx('pick')}};sndBtn();
