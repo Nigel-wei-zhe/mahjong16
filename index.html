@@ -1392,9 +1392,12 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-sign text{fill:none;stroke-linejoin:round;stroke-linecap:round;text-anchor:middle}
 #st-sign .t{font:900 50px 'Zen Maru Gothic',sans-serif;letter-spacing:2px}
 #st-sign .off{stroke:#f6e2ee;stroke-width:1.3;opacity:.22}
-#st-sign .on{stroke:#fff6fc;stroke-width:1.5;filter:url(#st-ngP);opacity:0;animation:nOn 1.8s steps(1,end) .5s forwards,nHum 6s ease-in-out 3s infinite}
+#st-sign .on{stroke:#fff6fc;stroke-width:1.5;filter:url(#st-ngP);opacity:0;animation:nOn 1.8s steps(1,end) .5s forwards}
+/* after the switch-on the tubes sit still; the hum is a one-shot blip that JS triggers every ~6 s (an infinite opacity loop on a filtered SVG repainted every frame) */
+#st-sign.lit .on{opacity:1;animation:none}#st-sign.lit.hum .on{animation:nHum .14s ease-in-out}
+@media (prefers-reduced-motion:reduce){#st-sign .on{opacity:1;animation:none}}
 @keyframes nOn{0%{opacity:0}8%{opacity:1}12%{opacity:0}20%{opacity:1}24%{opacity:.15}30%{opacity:1}55%{opacity:.6}58%{opacity:1}100%{opacity:1}}
-@keyframes nHum{0%,100%{opacity:1}47%{opacity:1}48%{opacity:.5}49%{opacity:1}}
+@keyframes nHum{0%,100%{opacity:1}50%{opacity:.5}}
 #st-sign canvas{position:absolute;left:14px;right:14px;bottom:9px;width:172px;height:17px;border-radius:2px;box-shadow:0 0 0 1px #2a1c10}
 /* light boxes */
 .st-lb{position:absolute;bottom:16px;transform-origin:50% 100%;transform:perspective(420px) rotateY(var(--ry,26deg)) scale(var(--sc,1));z-index:20;display:flex;flex-direction:column;align-items:center;cursor:pointer;border:0;background:none;padding:0;-webkit-tap-highlight-color:#0000}
@@ -1477,10 +1480,12 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 /* affordance: road markings get a headlight sweep, the standing signs flicker now and then */
 .st-rd img.sw{opacity:1;
   -webkit-mask:linear-gradient(170deg,#0000 0%,#0000 40%,#000 47%,#000 53%,#0000 60%,#0000 100%) 0 0/100% 320% no-repeat;
-          mask:linear-gradient(170deg,#0000 0%,#0000 40%,#000 47%,#000 53%,#0000 60%,#0000 100%) 0 0/100% 320% no-repeat;
-  animation:rdSweep 8s cubic-bezier(.35,.1,.45,.95) infinite}
-#solo img.sw{animation-delay:1s}
-@keyframes rdSweep{0%{-webkit-mask-position:0 100%;mask-position:0 100%}40%{-webkit-mask-position:0 0%;mask-position:0 0%}100%{-webkit-mask-position:0 0%;mask-position:0 0%}}
+          mask:linear-gradient(170deg,#0000 0%,#0000 40%,#000 47%,#000 53%,#0000 60%,#0000 100%) 0 0/100% 320% no-repeat}
+/* the sweep runs only while it is visible (3.2 s); JS adds .go every 8 s. mask-position is not composited, so an infinite loop repainted both road images every frame */
+.st-rd.go img.sw{animation:rdSweep 3.2s cubic-bezier(.35,.1,.45,.95)}
+@keyframes rdSweep{0%{-webkit-mask-position:0 100%;mask-position:0 100%}100%{-webkit-mask-position:0 0%;mask-position:0 0%}}
+/* nobody touched the lobby for 60 s: freeze every ambient animation (stIdle) */
+#st-wrap.st-idle *,#st-wrap.st-idle *::before,#st-wrap.st-idle *::after{animation-play-state:paused!important}
 .st-lb.flick .box{animation:lbFlick .55s steps(1,end)}
 @keyframes lbFlick{0%{filter:brightness(1)}15%{filter:brightness(.25)}30%{filter:brightness(1.25)}45%{filter:brightness(.4)}60%,100%{filter:brightness(1)}}
 @media (prefers-reduced-motion:reduce){.st-rd img.sw{display:none}.st-lb.flick .box{animation:none}}
@@ -2507,7 +2512,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1335';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1352';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3471,8 +3476,8 @@ let pool=[],pokes=0,lastPoke=0;
 function nextLine(){if(!pool.length)pool=[...LINES.any].sort(()=>Math.random()-.5);return pool.pop()}
 function say(t){sayEl.classList.remove('on');setTimeout(()=>{sayEl.innerHTML='<b>瑟琳</b><br>'+t;sayEl.classList.add('on')},300)}
 const hk=hourKey();setTimeout(()=>say(hk?LINES[hk][Math.random()*2|0]:nextLine()),2200);
-let idleT=setInterval(()=>{if(window.inMenu!==false&&typeof inMenu!=='undefined'&&inMenu)say(nextLine())},14000);
-document.getElementById('st-hit').onclick=()=>{const n=performance.now();pokes=n-lastPoke<2500?pokes+1:0;lastPoke=n;say(pokes>=2?LINES.poke[Math.min(pokes-2,2)]:nextLine());clearInterval(idleT);idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu)say(nextLine())},14000)};
+let idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdle)say(nextLine())},14000);
+document.getElementById('st-hit').onclick=()=>{const n=performance.now();pokes=n-lastPoke<2500?pokes+1:0;lastPoke=n;say(pokes>=2?LINES.poke[Math.min(pokes-2,2)]:nextLine());clearInterval(idleT);idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdle)say(nextLine())},14000)};
 /* idle video (serin_idle.webm/.mp4) not produced yet: add back from proto/street/slice.html when it exists */
 const info=document.getElementById('st-info');document.getElementById('st-infoB').onclick=()=>info.classList.add('on');
 info.onclick=e=>{if(e.target===info||e.target.classList.contains('st-x'))info.classList.remove('on')};
@@ -3493,7 +3498,7 @@ document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
   // a frame only copies the visible slice, and only when the text has moved one column (20/s)
   let S=null,last=-1;const strip=()=>{const n=loop+C;S=document.createElement('canvas');S.width=Math.ceil((4+n*P)*dpr);S.height=H*dpr;const y=S.getContext('2d');y.setTransform(dpr,0,0,dpr,0,0);
     for(let r=0;r<R;r++)for(let c=0;c<n;c++){const on=g.a[r*g.w+c];y.fillStyle=on?'#ffc35a':'#2a1608';y.shadowColor=on?'#ff8a00':'transparent';y.shadowBlur=on?2:0;y.beginPath();y.arc(2+c*P+P/2,2+r*P,on?.55:.35,0,6.283);y.fill()}};
-  const t0=performance.now();(function f(now){requestAnimationFrame(f);if(typeof inMenu!=='undefined'&&!inMenu){last=-1;return}if(!g){if(last!==-2){last=-2;x.setTransform(1,0,0,1,0,0);x.fillStyle='#0a0406';x.fillRect(0,0,cv.width,cv.height)}return}
+  const t0=performance.now();(function f(now){requestAnimationFrame(f);if(typeof inMenu!=='undefined'&&!inMenu||window.stIdle){last=-1;return}if(!g){if(last!==-2){last=-2;x.setTransform(1,0,0,1,0,0);x.fillStyle='#0a0406';x.fillRect(0,0,cv.width,cv.height)}return}
     if(!S)strip();const off=Math.floor((now-t0)/1000*20)%loop;if(off===last)return;last=off;
     x.setTransform(1,0,0,1,0,0);x.imageSmoothingEnabled=false;x.fillStyle='#0a0406';x.fillRect(0,0,cv.width,cv.height);x.drawImage(S,Math.round(off*P*dpr),0,cv.width,cv.height,0,0,cv.width,cv.height)})(t0);
 })();
@@ -3507,9 +3512,22 @@ addEventListener('resize',()=>setTimeout(stFit,0));setTimeout(stFit,0);setTimeou
 <script>
 /* lobby affordance: headlight sweep over the road markings, random flicker on the standing signs */
 (()=>{document.querySelectorAll('.st-rd').forEach(b=>{const im=b.querySelector('img');if(!im||b.querySelector('.sw'))return;const s=im.cloneNode();s.className='sw';s.alt='';b.appendChild(s)});
+  /* idle: 60 s without input freezes the lobby's ambient motion; any input wakes it */
+  const wrap=document.getElementById('st-wrap');let act=performance.now();window.stIdle=false;
+  const wake=()=>{act=performance.now();if(window.stIdle){window.stIdle=false;wrap.classList.remove('st-idle')}};
+  for(const e of ['pointerdown','pointermove','keydown','wheel','touchstart'])addEventListener(e,wake,{passive:true,capture:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake()});
+  setInterval(()=>{if(!window.stIdle&&performance.now()-act>60000){window.stIdle=true;wrap.classList.add('st-idle')}},5000);
+  const live=()=>(typeof inMenu==='undefined'||inMenu)&&!window.stIdle&&!document.hidden;
+  const sign=document.getElementById('st-sign');
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  setTimeout(()=>sign.classList.add('lit'),2400);
+  setInterval(()=>{if(!live()||!sign.classList.contains('lit'))return;sign.classList.remove('hum');void sign.offsetWidth;sign.classList.add('hum')},6000);
+  const go=b=>{if(!b||!live())return;b.classList.remove('go');void b.offsetWidth;b.classList.add('go')};
+  document.querySelectorAll('.st-rd img.sw').forEach(s=>s.addEventListener('animationend',()=>s.parentNode.classList.remove('go')));
+  setInterval(()=>{go(document.getElementById('roomBtn'));setTimeout(()=>go(document.getElementById('solo')),1000)},8000);
   const signs=[...document.querySelectorAll('.st-lb')];let last=-1;
-  (function next(){setTimeout(()=>{if(typeof inMenu==='undefined'||inMenu){let i=Math.random()*signs.length|0;if(i===last)i=(i+1)%signs.length;last=i;const b=signs[i];b.classList.remove('flick');void b.offsetWidth;b.classList.add('flick')}next()},2600+Math.random()*3800)})();})();
+  (function next(){setTimeout(()=>{if(live()){let i=Math.random()*signs.length|0;if(i===last)i=(i+1)%signs.length;last=i;const b=signs[i];b.classList.remove('flick');void b.offsetWidth;b.classList.add('flick')}next()},2600+Math.random()*3800)})();})();
 
 </script>
 </body>
