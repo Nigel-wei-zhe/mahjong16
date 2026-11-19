@@ -790,6 +790,27 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .fhd{flex:none;width:56px;text-align:right;font:900 17px/1 var(--serif);font-variant-numeric:tabular-nums;color:#f3e9d266}.fhd.pos{color:#7CFC8A}.fhd.neg{color:#ff8a80}
 </style>
 <style id="neon">
+/* side margins for landscape phones (iPhone corners / native bars): settings and chat share one inset column */
+#table{--edge:max(26px,env(safe-area-inset-right))}
+#cfgBtn{right:var(--edge)!important}#auto{right:calc(var(--edge) + 50px)!important}
+#chatBtn{top:auto!important;right:var(--edge)!important;width:42px!important;bottom:calc(var(--bh) + var(--tw)*1.333 + 14px)}
+#chatP{top:auto!important;right:var(--edge)!important;bottom:calc(var(--bh) + var(--tw)*1.333 + 58px)}
+#chatBtn{border:0!important;background:linear-gradient(#1a1222,#0b0710)!important;box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710,0 4px 10px #000b!important;color:var(--cyc)!important}
+#chatBtn::before{content:"";position:absolute;inset:4px;border-radius:8px;border:1.4px solid var(--cyt);box-shadow:0 0 6px var(--cy),inset 0 0 6px var(--cy);pointer-events:none}#chatBtn svg{filter:drop-shadow(0 0 3px var(--cy))}
+/* 託管 tag above a player's name plate */
+.sw .aut{display:none;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:2;padding:2px 8px;border-radius:5px;background:#0b0710e6;box-shadow:inset 0 0 0 1px var(--cyt),0 0 6px #14c8ff88;color:var(--cyc);font:900 10px/1.2 var(--ng);letter-spacing:.15em;text-shadow:0 0 5px var(--cy);white-space:nowrap}
+.sw.au .aut{display:block}
+#chatP{background:#0b0710f2!important;border:0!important;box-shadow:inset 0 0 0 1px #7fe9ff66,0 0 14px #14c8ff33,0 10px 26px #000c!important}
+#chatP button{background:#120a1a!important;border:1px solid #ffffff1a!important;color:#ece6f4!important;font-family:'Noto Sans TC',sans-serif!important}#chatP button:active{background:#14c8ff33!important}
+.sw .lb .sig{pointer-events:auto;position:relative;display:inline-flex;align-items:flex-end;gap:1.5px;height:10px;margin-left:5px;cursor:pointer}
+.sw.r .lb .sig{order:-1;margin:0 5px 0 0}   /* right seat: bars on the inner side, away from the screen edge */
+.sw .lb .sig::after{content:"";position:absolute;inset:-10px -8px}   /* bigger finger target than the bars */
+.sw .lb .sig i{width:2.5px;border-radius:1px;background:#ffffff26}.sw .lb .sig i:nth-child(1){height:4px}.sw .lb .sig i:nth-child(2){height:7px}.sw .lb .sig i:nth-child(3){height:10px}
+.sw .lb .sig.l3 i{background:var(--cyt);box-shadow:0 0 3px var(--cy)}
+.sw .lb .sig.l2 i:nth-child(-n+2){background:var(--amb);box-shadow:0 0 3px #ff8a00}
+.sw .lb .sig.l1 i:nth-child(1),.sw .lb .sig.l0 i:nth-child(1){background:#ff4d5e;box-shadow:0 0 3px #ff4d5e}
+.sw .sgt{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;white-space:nowrap;padding:3px 9px;border-radius:6px;background:#0b0710ee;box-shadow:inset 0 0 0 1px #7fe9ff55,0 2px 8px #000b;color:#ece6f4;font:600 11px/1.3 'Noto Sans TC',sans-serif;opacity:0;transition:opacity .2s;pointer-events:none}
+.sw .sgt.on{opacity:1}
 #setm .sbtn[hidden]{display:none!important}
 #netv .nrow{display:flex;align-items:baseline;gap:10px;margin:0 0 6px!important}#netv .nrow b{flex:1;color:#ece6f4;font-weight:700}
 #netv .nt{color:var(--cyt)}#netv .nt.on{color:#ff8ad8;text-shadow:0 0 6px #ff2fae}#netv i{font:400 12px var(--led);color:#ffc35a;font-style:normal}
@@ -1407,7 +1428,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="sw l" id="swL"></div><div class="sw t" id="swT"></div><div class="sw r" id="swR"></div><div class="sw b" id="swB"></div>
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
     <div id="mine"><div id="hand"></div><div id="mr"><div id="myFl"></div><div id="myMelds"></div></div></div>
-    <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg></button>
+    <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M18.59 9.96 L21.02 10.17 L21.02 13.83 L18.59 14.04 L18.10 15.22 L19.67 17.08 L17.08 19.67 L15.22 18.10 L14.04 18.59 L13.83 21.02 L10.17 21.02 L9.96 18.59 L8.78 18.10 L6.92 19.67 L4.33 17.08 L5.90 15.22 L5.41 14.04 L2.98 13.83 L2.98 10.17 L5.41 9.96 L5.90 8.78 L4.33 6.92 L6.92 4.33 L8.78 5.90 L9.96 5.41 L10.17 2.98 L13.83 2.98 L14.04 5.41 L15.22 5.90 L17.08 4.33 L19.67 6.92 L18.10 8.78Z"/><circle cx="12" cy="12" r="3"/></svg></button>
     <button id="chatBtn" class="hide" aria-label="快捷語"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></svg></button><div id="chatP" class="hide"></div>
   </div>
 
@@ -1481,8 +1502,8 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <h4>花牌胡</h4><p>一個人集滿八張花是「八仙過海」，當場胡牌，算自摸、三家都付。一個人有七張花、第八張在另一人手上是「七搶一」，七張的人當場胡，由拿第八張的人付。兩種都算 8 台，不看手牌，也不另計花牌、花槓。</p>
 <h4>胡牌與付錢</h4><p>胡別人打的牌叫「放槍」，由放槍的人付；自己摸到叫「自摸」，三家都付。每家付「底＋台數×每台」，底和每台在開局前的牌局設定選。莊家胡、或莊家付錢時，另加莊家與連莊的台數。</p>
 <h4>莊家與局數</h4><p>莊家胡牌或流局就連莊，否則換下家當莊。一圈 4 局、一將 16 局。牌牆剩 16 張還沒人胡就流局。</p>
-<h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦代打。出牌可以點一下選牌、再點一下打出，或按住牌往上滑；選到的牌，桌上同樣的牌會標成藍色。</p>
-<h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先讓她們代打。房主把遊戲切到背景時，牌局會暫停等他回來；房主按「離開」則包廂解散，大家回到主選單。牌桌右上的對話鈕可以送快捷語和表情。</p></div></section>
+<h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦幫你打。出牌可以點一下選牌、再點一下打出，或按住牌往上滑；選到的牌，桌上同樣的牌會標成藍色。</p>
+<h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先把他改成託管。房主把遊戲切到背景時，牌局會暫停等他回來；房主按「離開」則包廂解散，大家回到主選單。牌桌右上的對話鈕可以送快捷語和表情。</p></div></section>
     <section data-p="quit" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>離開遊戲</h3></div>
       <p class="qtxt" id="quitTxt"></p><div class="qrow"><button class="big alt" data-go="main">取消</button><button class="big" id="quitGo">離開</button></div></section>
   </div></div>
@@ -1591,7 +1612,7 @@ function shanten(c,need){
 
 /* ---------- game state (host-authoritative, mirrored to everyone) ---------- */
 let G={st:'lobby',v:0};
-let R=null,lobbyNs=null,roomCode='',myPeer=null,plist=[],isHost=false,wasHost=false,sentG=false,srcHost=null,joinedAt=0;
+let sigJ='',R=null,lobbyNs=null,roomCode='',myPeer=null,plist=[],isHost=false,wasHost=false,sentG=false,srcHost=null,joinedAt=0;
 let introUntil=0,inMenu=true,dirty=false,tAt=0,seen={},an=0,pending=false,sel=-1,lastV=-1,lastEv=-1,phaseStart=0;
 const present=()=>new Set(plist.map(p=>p.id));
 const meId=()=>R?myPeer:'me';
@@ -1888,14 +1909,18 @@ function peerNet(opt){
     room.peers=()=>[...table].map(([id,pr])=>({peer:id,isMe:id===cid,sameTab:id===cid,kind:'viewer',presence:!hub&&id===hubCid&&hostG?Object.assign({},pr,{G:hostG}):pr}));
     room.isHub=()=>hub;
     // which path each link took (host / srflx = direct, relay = through TURN), for the hidden line in settings
-    room.netInfo=async()=>{const list=hub?[...conns].map(([id,c])=>[(table.get(id)||{}).nm||id,c]):hubConn?[['房主',hubConn]]:[];
-      return Promise.all(list.map(async([nm,c])=>{const pc=c.peerConnection;if(!pc)return{nm,t:'?'};
+    room.netInfo=async()=>linkInfo(hub?[...conns].map(([id,c])=>[(table.get(id)||{}).nm||id,c]):hubConn?[['房主',hubConn]]:[]);
+    const linkInfo=list=>Promise.all(list.map(async([nm,c])=>{const pc=c.peerConnection;if(!pc)return{nm,t:'?'};
         try{const st=await pc.getStats();let pair=null;
           st.forEach(r=>{if(r.type==='transport'&&r.selectedCandidatePairId)pair=st.get(r.selectedCandidatePairId)});
           if(!pair)st.forEach(r=>{if(r.type==='candidate-pair'&&(r.selected||r.nominated&&r.state==='succeeded'))pair=pair||r});
           if(!pair)return{nm,t:'?'};const L=st.get(pair.localCandidateId)||{},Rm=st.get(pair.remoteCandidateId)||{};
           const t=L.candidateType==='relay'||Rm.candidateType==='relay'?'relay':L.candidateType==='host'&&Rm.candidateType==='host'?'host':'srflx';
-          return{nm,t,rtt:pair.currentRoundTripTime,kb:Math.round(((pair.bytesSent||0)+(pair.bytesReceived||0))/1024)}}catch(e){return{nm,t:'?'}}}))};
+          return{nm,t,rtt:pair.currentRoundTripTime,kb:Math.round(((pair.bytesSent||0)+(pair.bytesReceived||0))/1024)}}catch(e){return{nm,t:'?'}}}));
+    // signal bars: the host measures every guest's round trip and shares it in its presence, only when it changes
+    setInterval(async()=>{if(dead||!hub)return;const q={};
+      await Promise.all([...conns].map(async([id,c])=>{const [x]=await linkInfo([['',c]]);q[id]=[x.rtt!=null?Math.round(x.rtt*100)*10:-1,x.t==='relay'?1:0]}));
+      const js=JSON.stringify(q);if(js!==room._q){room._q=js;me.q=q;table.set(cid,me);bcast()}},3000);
     room.close=()=>{if(hub)for(const [id,c] of conns)if(c.open)try{c.send({t:'bye'})}catch(e){}};   // host only: tell every client the room is over
     room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
     addEventListener('pagehide',()=>room.leave());
@@ -1936,6 +1961,7 @@ function readPeers(){
   const mine=ps.find(p=>p.isMe&&p.sameTab);myPeer=mine?mine.peer:null;
   plist=ps.filter(p=>p.kind==='viewer'&&p.presence&&typeof p.presence.j==='number').map(p=>({id:p.peer,j:p.presence.j,pr:p.presence}))
     .sort((a,b)=>a.j-b.j||(a.id<b.id?-1:1));
+  const qj=(plist[0]&&plist[0].pr.q?JSON.stringify(plist[0].pr.q):'')+plist.map(p=>p.pr.au?1:0).join('');if(qj!==sigJ){sigJ=qj;dirty=true}
   isHost=!!myPeer&&plist.length>0&&plist[0].id===myPeer}
 function readActions(){
   for(const p of plist){if(p.id===myPeer)continue;const a=p.pr.a;
@@ -1966,7 +1992,7 @@ function renderPause(){
     <p>${away?'房主把遊戲切到背景了，牌局先停在這裡等他回來。':gone?'和房主的連線中斷了，正在自動重新連線…':`<b class="pzn">${pz.n.map(esc).join('、')}</b> 斷線了，正在等${pz.n.length>1?'他們':'對方'}重新連線。`}</p>
     <p class="pzt">已等 <b>${mm}</b></p>
     <p class="pzh">${away?'房主一回來就接著打，這一手的時間會重新算。':gone?'連上就會回到牌桌，不用重開。':'回來就接著打，牌局不會重開。'}<br>等待時，點點她們吧。</p>
-    ${isHost&&pz&&el>=20?'<button class="big" id="pzSub">先讓她們代打</button><p class="pzh">對方回來後可以接手原本的位子。</p>':''}
+    ${isHost&&pz&&el>=20?'<button class="big" id="pzSub">先改成託管</button><p class="pzh">對方回來後可以接手原本的位子。</p>':''}
     ${el>=60?'<button class="big alt" id="pzLeave">離開包廂</button>':''}`;
   if(h!==pzHTML){pzHTML=h;$('pzCard').innerHTML=h}}
 function leaveRoom(){
@@ -2203,7 +2229,7 @@ function nameOf(seat){
   const p=G.seats[seat];
   if(seat===mySeat())return myName||'我';
   if(!p)return BOTS[chr(seat)];
-  if(R&&!present().has(p))return BOTS[chr(seat)]+'（代打）';
+  if(R&&!present().has(p))return (G.nm&&G.nm[seat])||peerName(p,seat);   // dropped out: keeps the name, the 託管 tag shows above it
   return peerName(p,seat)}
 function seatLabel(seat){
   return `<span class="wd">${WIND[(seat-G.dealer+4)%4]}</span>${seat===G.dealer?`<span class="badge">莊${G.lian?'連'+G.lian:''}</span>`:''}<span class="nm">${esc(nameOf(seat))}</span>`}
@@ -2215,13 +2241,25 @@ function meldHTML(m,cls,mine){
   return `<span class="meld">${ks.map((k,i)=>m[0]==='a'?(mine&&(i===1||i===2)?tile(k,cls):tile(-1,cls)):tile(k,cls)).join('')}</span>`}
 /* the four portrait windows (k = B me, R, T, L): the character's table art cropped to the chest, mood variant when there is one */
 const WINK=['B','R','T','L'];let WPOSE=[0,0,0,0];   // which window pose each seat shows (n, n2, n3)
+/* signal bars (PeerJS only): every seat's link to the host, measured by the host; tap for the numbers */
+function sigOf(s){const id=G.seats&&G.seats[s],h=plist[0];if(!PEER||!R||!id||!h||!h.pr.q)return null;
+  if(id===h.id)return{l:3,tx:'房主'};if(!present().has(id))return{l:0,tx:'斷線'};
+  const v=h.pr.q[id];if(!v)return{l:0,tx:'測量中'};const ms=v[0];
+  return{l:ms<0?0:ms<100?3:ms<250?2:1,tx:(ms<0?'測量中':ms+'ms')+(v[1]?'・TURN 轉送':'')}}
+function sigHTML(s){const g=sigOf(s);return g?`<span class="sig l${g.l}" data-s="${s}" title="${g.tx}"><i></i><i></i><i></i></span>`:''}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.sig');if(!b)return;e.stopPropagation();
+  const d=b.closest('.sw'),g=sigOf(+b.dataset.s);if(!d||!g)return;let t=d.querySelector('.sgt');if(!t){t=document.createElement('div');t.className='sgt';d.appendChild(t)}
+  t.textContent=g.tx;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600)},true);
 function placeWin(k,s,lit,live,extra){
   const d=$('sw'+k),c=chr(s),a=window.AVATARS&&window.AVATARS[c],bk=a&&a.n?'n':'t',mo=moodOf(s),ps=a?['n','n2','n3'].filter(x=>a[x]):[],pk=ps.length?ps[WPOSE[s]%ps.length]:bk,vk=mo&&a&&a[bk+mo]?bk+mo:pk;
-  if(!d.firstChild)d.innerHTML='<div class="fr"></div><div class="wn"><img alt=""></div><div class="lb"></div>';
+  if(!d.firstChild)d.innerHTML='<div class="fr"></div><div class="wn"><img alt=""></div><div class="lb"></div><div class="aut">託管</div>';
   const img=d.querySelector('img');if(a&&img.dataset.k!==c+vk){const was=img.dataset.k;img.dataset.k=c+vk;img.src=a[vk]||a[bk];
     if(was&&was[0]===c){d.classList.remove('mood');void d.offsetWidth;d.classList.add('mood')}}
-  const nm=`${s===G.dealer?`<span class="badge">莊${G.lian?'・連'+G.lian:''}</span>`:''}<span class="nm">${esc(nameOf(s))}</span>${extra||''}`,el=d.lastChild;if(el.innerHTML!==nm)el.innerHTML=nm;
-  d.classList.toggle('nw',bk==='n');d.classList.toggle('nx',!!(a&&a.nx&&a.nx.includes(vk)));d.classList.toggle('on',lit);d.classList.toggle('off',live&&!lit)}
+  const nm=`${s===G.dealer?`<span class="badge">莊${G.lian?'・連'+G.lian:''}</span>`:''}<span class="nm">${esc(nameOf(s))}</span>${extra||''}`,el=d.querySelector('.lb');if(el.innerHTML!==nm)el.innerHTML=nm;
+  d.classList.toggle('nw',bk==='n');d.classList.toggle('nx',!!(a&&a.nx&&a.nx.includes(vk)));d.classList.toggle('on',lit);d.classList.toggle('off',live&&!lit);d.classList.toggle('au',autoTag(s))}
+// a real player who let the computer play for them (託管 on); a player who dropped out is played by the computer too, so they get the same tag
+function autoTag(s){if(AUTO||!G.seats||G.st!=='play')return false;const p=G.seats[s];if(!R)return s===mySeat()&&myAuto;if(!p)return false;
+  if(p===myPeer)return myAuto;if(!present().has(p))return true;const q=plist.find(x=>x.id===p);return !!(q&&q.pr.au)}
 /* idle moves: every few seconds one window (rarely mine) plays a random small motion, never the same one twice in a row */
 const IA_MS=[0,2600,2400,1100,2800,2400,2400];let iaLast=0;
 function idleMove(){
@@ -2354,10 +2392,10 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.0934';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1007';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
-  if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子由她們代打。'):'這一場的進度不會保存，確定回到主選單？'}
+  if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
 /* hidden: tap the version line to see how this device reached the others (and whether TURN relays it) */
 const NETT={host:'區網直連',srflx:'打洞直連',relay:'TURN 轉送','?':'未知'};
 async function netShow(){const el=$('netv');if(!R||!R.netInfo){el.innerHTML='<p>沒有連線（單機或 claude.ai 版）</p>';return}
@@ -2379,7 +2417,7 @@ function renderTable(){
   if(G.res&&G.res.d&&ms>=0)lastDelta=G.res.d[ms];
   // windows light up for the seat to act; while others may claim, the one who just discarded stays lit
   WINK.forEach((k,pos)=>{const s=(me+pos)%4,lit=live&&(G.ph==='claim'&&G.last?G.last.f===s:G.turn===s);
-    placeWin(k,s,lit,live,'')});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
+    placeWin(k,s,lit,live,sigHTML(s))});   // last hand's win/loss no longer trails my name: the result screen and the compass show money
   // the struck tile stays marked through a hand won on it, so the win effect lands on it; G.last.q: a tile added to a pong that may be robbed (搶槓)
   const mark=G.last&&(live||(G.ph==='end'&&G.res&&G.res.f>=0&&!G.res.fw)),lastKey=fwPay()>=0?'fw:'+G.res.f:mark?G.last.f+':'+G.disc[G.last.f].length+':'+G.last.k+(G.last.q!=null?'q':''):'',isNew=!!lastKey&&lastKey!==shownLast;
   if(isNew&&fwPay()<0){if(!(window.T3&&T3.draw)||G.last.q!=null)sfx('clack');if(G.last.q==null){const f=G.last.f;voice(f,'t'+G.last.k,1.3);punBubble(f,G.last.k)}}shownLast=lastKey;
@@ -2525,7 +2563,7 @@ function anchorQuip(d,pos){const w=window.T3&&T3.lay&&T3.lay[WINK[pos]];if(!w)re
 const CHAT=['快一點嘛，花都謝了～','這張也敢打？佩服佩服','手下留情啊！','今晚手氣真旺，擋不住','再讓我摸一張就好……','謝謝招待，下次還找你','別急，好牌值得等','打完這圈，宵夜算我的','😏','😘','😭','😡','👍','🙏'],CHATN=8;
 const chatSeen={};let chatN=0,chatAt=-1e9;
 function chatPlace(ms){const b=$('chatBtn'),on=!!R&&ms>=0;b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
-  b.style.right=(64+$('auto').offsetWidth+8)+'px';b.classList.toggle('cd',performance.now()-chatAt<2000)}
+  b.classList.toggle('cd',performance.now()-chatAt<2000)}
 function chatBubble(seat,i){
   if(mute()||seat<0||G.st!=='play'||!(i>=0&&i<CHAT.length))return;
   const me=Math.max(0,mySeat()),pos=(seat-me+4)%4,d=document.createElement('div');d.className='quip chat p'+pos+(i>=CHATN?' emo':'');
