@@ -1528,11 +1528,13 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .st-lb::after{content:"";position:absolute;left:50%;top:calc(100% - 3px);width:56px;height:10px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(#000b,#0000 70%);z-index:-1}
 .st-lb.flash .box{animation:flash .5s steps(2) 2}@keyframes flash{50%{filter:brightness(.4)}}
 #st-hit{position:absolute;left:189.5px;top:70.5px;width:100.9px;height:302.8px;z-index:15;cursor:pointer}
-#st-say{position:absolute;left:300.4px;top:74.5px;z-index:30;max-width:178px;padding:7px 11px 8px;border-radius:10px;background:linear-gradient(#120a1aee,#08050ef2);border:1px solid #ff8ad8;box-shadow:0 0 8px #ff2fae88,inset 0 0 10px #ff2fae22,0 8px 18px #000c;font:600 11.5px/1.55 "Noto Serif TC",serif;letter-spacing:.03em;color:#f6efff;opacity:0;translate:0 6px;transition:opacity .4s,translate .4s}
+#st-say{position:absolute;left:300.4px;top:74.5px;z-index:30;max-width:236px;padding:20px 34px 24px 24px;margin:-8px 0 0 -8px;border:0;border-radius:0;box-shadow:none;background:radial-gradient(closest-side,#07050cea 55%,#07050c00);font:500 13px/1.8 "Noto Serif TC",serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px #000,0 0 10px #000;text-wrap:balance;opacity:0;translate:0 6px;transition:opacity .4s,translate .4s}
 #st-say.on{opacity:1;translate:0 0}
-#st-say b{display:inline-block;margin-bottom:3px;font:900 11px/1 'Zen Maru Gothic';letter-spacing:.25em;color:#ff9ae0;text-shadow:0 0 6px #ff2fae}
-#st-say::after{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;background:#0c0714;border-left:1px solid #ff8ad8;border-bottom:1px solid #ff8ad8;transform:rotate(45deg)}
-
+#st-say b,#st-hsay b{display:flex;align-items:center;gap:9px;margin:0 0 5px;font:900 10.5px/1 var(--ng);letter-spacing:.35em;color:#fff6fc;text-shadow:0 0 3px #fff,0 0 8px #ff2fae,0 0 16px #ff2fae}
+#st-say b::after,#st-hsay b::after{content:"";width:34px;height:1.5px;border-radius:2px;background:#fff6fc;box-shadow:0 0 4px #ff8ad8,0 0 9px #ff2fae}
+#st-say .ph,#st-hsay .ph{display:inline-block}
+#st-say .c,#st-hsay .c{opacity:0;animation:stCh .32s ease-out var(--d) forwards}@keyframes stCh{from{opacity:0;filter:blur(2px)}to{opacity:1;filter:none}}
+@media (prefers-reduced-motion:reduce){#st-say .c,#st-hsay .c{opacity:1;animation:none}}
 #st-ver{position:absolute;right:8px;bottom:5px;z-index:42;font:500 8px/1 "Noto Sans TC";letter-spacing:.06em;color:#ffffff59}
 
 :is(#st-info,#st-bankm){position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:#03020acc;backdrop-filter:blur(3px)}
@@ -1611,10 +1613,8 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-ist{position:absolute;left:50%;bottom:0;width:755px;height:395px;transform-origin:50% 100%;transform:translateX(-50%) scale(var(--ik,1))}
 #st-hs{position:absolute;left:30px;bottom:0;width:170px;height:338px;pointer-events:none}
 #st-hs img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 0 10px #ff2fae55)}
-#st-hsay{position:absolute;left:176px;top:70px;z-index:4;max-width:170px;padding:7px 11px 8px;border-radius:10px;background:linear-gradient(#120a1aee,#08050ef2);border:1px solid #ff8ad8;box-shadow:0 0 8px #ff2fae88;font:600 11.5px/1.55 "Noto Serif TC",serif;color:#f6efff;opacity:0;translate:0 6px;transition:opacity .35s .5s,translate .35s .5s}
+#st-hsay{position:absolute;left:176px;top:70px;z-index:4;max-width:236px;padding:20px 34px 24px 24px;margin:-8px 0 0 -8px;border:0;border-radius:0;box-shadow:none;background:radial-gradient(closest-side,#07050cea 55%,#07050c00);font:500 13px/1.8 "Noto Serif TC",serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px #000,0 0 10px #000;text-wrap:balance;opacity:0;translate:0 6px;transition:opacity .35s .5s,translate .35s .5s}
 #st-in.on #st-hsay{opacity:1;translate:0 0}
-#st-hsay b{display:inline-block;margin-bottom:3px;font:900 11px/1 var(--ng);letter-spacing:.25em;color:#ff9ae0;text-shadow:0 0 6px #ff2fae}
-#st-hsay::after{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;background:#0c0714;border-left:1px solid #ff8ad8;border-bottom:1px solid #ff8ad8;transform:rotate(45deg)}
 #st-inBack{position:absolute;left:var(--edge);top:14px;z-index:6;width:32px;height:32px;border-radius:50%;border:1px solid #ffffff44;background:#0b0710aa;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
 #st-inBack:active{background:#ffffff14}
 #st-ist h2{position:absolute;left:0;right:0;top:20px;margin:0;text-align:center;font:900 19px/1 var(--ng);letter-spacing:.35em;text-indent:.35em;color:#fff6fc;text-shadow:0 0 3px #fff,0 0 10px #ff2fae,0 0 22px #ff2fae}
@@ -1714,7 +1714,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div id="st-hit"></div>
   
   <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb" id="st-bank" aria-label="錢莊"><div class="box"><span>錢莊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button id="st-bal" aria-label="餘額">餘額<b>$10,000</b></button>
-  <div id="st-say"><b>瑟琳</b><br>今晚，留下來陪我打一圈？</div>
+  <div id="st-say"><b>瑟琳</b>今晚，留下來陪我打一圈？</div>
   <div id="st-grade"></div><div id="st-grain"></div>
   
 </div>  <div id="st-ver">v<span class="verv">dev</span></div>
@@ -1740,7 +1740,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <p>本作為免費網頁遊戲。遊戲中的金錢是虛擬點數，不能儲值或兌換，不涉及真實金錢輸贏。角色、店家與故事均為虛構，角色皆為成年人。</p>
     <p class="st-cp">© 2026 Nigel Lee. All rights reserved.<br>上列素材依各自授權條款使用。</p>
   </div></div></div><div id="st-glow"></div><div id="st-in"><div class="bg"></div><div class="vg"></div>
-  <div id="st-ist"><div id="st-hs"><img alt="瑟琳"></div><div id="st-hsay"><b>瑟琳</b><br><span id="st-hline">想玩哪一桌？</span></div>
+  <div id="st-ist"><div id="st-hs"><img alt="瑟琳"></div><div id="st-hsay"><b>瑟琳</b><span id="st-hline">想玩哪一桌？</span></div>
     <h2>今夜有局<small id="st-isub">選一張桌</small></h2>
     <div class="st-pane" id="st-games"><button class="st-gm lit" id="st-gMj"><span class="st-gi">麻</span><span class="st-gn">麻將</span><span class="st-gs">台灣十六張</span></button><button class="st-gm soon" id="st-gBig" aria-disabled="true"><span class="st-gt">即將開幕</span><span class="st-gi">♠</span><span class="st-gn">大老二</span><span class="st-gs">四人比大小</span></button></div>
     <div class="st-pane later" id="st-mode"><div class="st-mg">牌桌<b>麻將</b></div>
@@ -2745,7 +2745,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.2114';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.2149';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2936,7 +2936,8 @@ const CHAT=['好了沒','餵我～','欸，你牌是不是拿反了','我聽牌�
 const chatSeen={};let chatN=0,chatAt=-1e9;
 let chatHK='';
 function chatPlace(ms){const b=$('chatBtn'),on=!!R&&ms>=0,hk=G.st==='play'&&G.ph!=='end'?'p'+(G.gid||'')+G.ju+'_'+G.lian:'';
-  if(hk!==chatHK){chatHK=hk;if(!hk){$('chatP').classList.add('hide');if(gfSeat>=0)gfClose()}}   // the hand ended (or the game): quick-chat and gift menus close$('table').classList.toggle('gfon',gfOn());if(!gfOn()&&gfSeat>=0)gfClose();b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
+  if(hk!==chatHK){chatHK=hk;if(!hk){$('chatP').classList.add('hide');if(gfSeat>=0)gfClose()}}   // the hand ended (or the game): quick-chat and gift menus close
+  $('table').classList.toggle('gfon',gfOn());if(!gfOn()&&gfSeat>=0)gfClose();b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
   b.classList.toggle('cd',performance.now()-chatAt<2000)}
 function chatBubble(seat,i){
   if(mute()||seat<0||G.st!=='play'||!(i>=0&&i<CHAT.length))return;
@@ -3824,10 +3825,12 @@ const LINES={
   any:['今晚，留下來陪我打一圈？','牌桌上我從不手軟，但對你……我會溫柔一點。','別只看招牌，看我也可以。','聽說你最近手氣不錯？讓我驗證一下。','進來吧，外面在下雨。','你剛才，是回頭看我嗎？'],
   poke:['嗯？急什麼，牌又不會跑。','再戳，我就要收你台數了。','好啦好啦，進去再說。']};
 const sayEl=document.getElementById('st-say');
+/* line text: break only between phrases (after ，。？！、……), each character fades in once */
+window.stLine=(t,d0=0)=>{let n=0;return t.split(/(?<=[，。？！、]|……)/).map(p=>'<span class="ph">'+[...p].map(c=>'<span class="c" style="--d:'+(d0+45*n++)+'ms">'+c+'</span>').join('')+'</span>').join('')};
 function hourKey(){const h=new Date().getHours();return h>=18&&h<23?'eve':(h>=23||h<3)?'late':h<6?'dawn':null}
 let pool=[],pokes=0,lastPoke=0;
 function nextLine(){if(!pool.length)pool=[...LINES.any].sort(()=>Math.random()-.5);return pool.pop()}
-function say(t){sayEl.classList.remove('on');setTimeout(()=>{sayEl.innerHTML='<b>瑟琳</b><br>'+t;sayEl.classList.add('on')},300)}
+function say(t){sayEl.classList.remove('on');setTimeout(()=>{sayEl.innerHTML='<b>瑟琳</b>'+stLine(t);sayEl.classList.add('on')},300)}
 const hk=hourKey();setTimeout(()=>say(hk?LINES[hk][Math.random()*2|0]:nextLine()),2200);
 let idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdle&&!window.stIn)say(nextLine())},14000);
 document.getElementById('st-hit').onclick=()=>{const n=performance.now();pokes=n-lastPoke<2500?pokes+1:0;lastPoke=n;say(pokes>=2?LINES.poke[Math.min(pokes-2,2)]:nextLine());clearInterval(idleT);idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdle&&!window.stIn)say(nextLine())},14000)};
@@ -3862,9 +3865,10 @@ document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
 /* 入店: push toward the shop door (stage point 206,236), then the shop interior. ST_GAMES>1 shows the game shelf first; with one game it opens on 包廂／練習 */
 const ST_GAMES=1,$i=id=>document.getElementById(id),wrapE=$i('st-wrap'),inE=$i('st-in'),glow=$i('st-glow'),enterB=$i('st-enter');
 const RM=matchMedia('(prefers-reduced-motion: reduce)');let stBusy=false;
+const hline=t=>{$i('st-hline').innerHTML=stLine(t,inE.classList.contains('on')?0:600)};
 function inPane(p){const g=$i('st-games'),m=$i('st-mode');
-  if(p==='games'){g.className='st-pane';m.className='st-pane later';$i('st-isub').textContent='選一張桌';$i('st-hline').textContent='想玩哪一桌？'}
-  else{g.className='st-pane hide';m.className='st-pane';$i('st-isub').textContent=ST_GAMES>1?'選一種玩法':'台灣十六張';$i('st-hline').textContent='包廂熱鬧，練習清靜……你挑。'}
+  if(p==='games'){g.className='st-pane';m.className='st-pane later';$i('st-isub').textContent='選一張桌';hline('想玩哪一桌？')}
+  else{g.className='st-pane hide';m.className='st-pane';$i('st-isub').textContent=ST_GAMES>1?'選一種玩法':'台灣十六張';hline('包廂熱鬧，練習清靜……你挑。')}
   m.querySelector('.st-mg').style.display=ST_GAMES>1?'':'none'}
 function openIn(){const A=window.AVATARS&&window.AVATARS[0],im=$i('st-hs').firstChild;
   im.src=A&&A.Wp?A.Wp[Math.random()*A.Wp.length|0]:'img/serin.webp';
@@ -3881,7 +3885,7 @@ function leaveIn(){inE.classList.add('out');
     wrapE.classList.add('st-back');wrapE.classList.remove('st-go');glow.className=RM.matches?'':'off';say('這麼快就要走？')},330)}
 $i('st-inBack').onclick=()=>{if(ST_GAMES>1&&!$i('st-mode').classList.contains('later'))inPane('games');else leaveIn()};
 $i('st-gMj').onclick=()=>inPane('mode');
-$i('st-gBig').onclick=()=>{$i('st-hline').textContent='大老二還在裝潢，過陣子再來。'};
+$i('st-gBig').onclick=()=>{hline('大老二還在裝潢，過陣子再來。')};
 /* the 755x395 street stage covers the menu at any size (RW/RH = logical size before UIZ zoom); the shop interior fits whole (contain) */
 function stFit(){const m=document.getElementById('st-wrap');if(m&&typeof RW!=='undefined'){m.style.setProperty('--sk',RW/755);m.style.setProperty('--gap',Math.max(0,Math.ceil(RH-395*RW/755))+'px');$i('st-ist').style.setProperty('--ik',Math.min(RW/755,RH/395))}/* fit the width, street anchored to the bottom: wide screens lose sky, squarer ones get extra sky */}
 addEventListener('resize',()=>setTimeout(stFit,0));setTimeout(stFit,0);setTimeout(stFit,600);
