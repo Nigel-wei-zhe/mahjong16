@@ -90,6 +90,8 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 #hand{display:flex;align-items:flex-end;line-height:0;pointer-events:auto}
 #hand .t{cursor:pointer;transition:transform .08s;box-shadow:inset 0 0 0 1px #00000012,0 calc(var(--tw)*.09) 0 #2f95c8,0 calc(var(--tw)*.15) calc(var(--tw)*.12) #0007}
 #hand .t.sel{transform:translateY(calc(var(--tw)*-.3))}
+#hand .t.ban{filter:brightness(.45) saturate(.4)}
+#tips .bnt.flash{animation:bnF .5s 2}@keyframes bnF{50%{color:#fff;text-shadow:0 0 6px #ff4d5e}}
 #hand .t.drawn{margin-left:calc(var(--tw)*.35)}
 
 /* press a tile and slide it up to discard: it follows the finger; past the line it lights up and goes on release */
@@ -1808,7 +1810,7 @@ function startHand(){
   for(let i=w.length-1;i>0;i--){const j=Math.random()*(i+1)|0;const t=w[i];w[i]=w[j];w[j]=t}
   G.wall=w.map(ch).join('');G.hands=['','','',''];G.melds=[[],[],[],[]];G.fl=['','','',''];G.disc=['','','',''];
   G.last=null;G.res=null;G.kong=0;G.first=1;G.wt=0;G.wait=[];G.resp={};G.drawn=null;G.nd=0;
-  G.pw=[0,0,0,0];   // 過水: seats that let a winning tile go by; no winning on someone else's tile until their own next draw
+  G.pw=[0,0,0,0];G.nb=null;   // 過水: seats that let a winning tile go by; no winning at all (not even 自摸) until their own next discard
   for(let s=0;s<4;s++){G.hands[s]=G.wall.slice(0,16);G.wall=G.wall.slice(16)}
   for(let i=0;i<4;i++){const s=(G.dealer+i)%4;
     for(;;){const h=[...G.hands[s]],f=h.filter(x=>kd(x)>=34);if(!f.length)break;
@@ -1834,13 +1836,21 @@ function drawFor(seat,tail){
     let k;if(tail){k=kd(G.wall[G.wall.length-1]);G.wall=G.wall.slice(0,-1);G.wt++}else{k=kd(G.wall[0]);G.wall=G.wall.slice(1)}
     if(k>=34){G.fl[seat]+=ch(k);if(flowerEnd())return false;tail=true;continue}
     G.hands[seat]=sortS(G.hands[seat]+ch(k));G.drawn=k;break}
-  G.turn=seat;G.ph='discard';G.nd=0;if(G.pw)G.pw[seat]=0;return true}
+  G.turn=seat;G.ph='discard';G.nd=0;return true}
 function passWater(seat){if(!G.pw)G.pw=[0,0,0,0];G.pw[seat]=1}
+const pwOn=seat=>!!(G.pw&&G.pw[seat]);
+/* 海底前不吃碰: once the table shows 8 tiles left (wall minus the 16 kept back), no chow / pong / exposed kong; a concealed kong and wins still go */
+const LATE=8,late=()=>G.wall.length-16<=LATE;
+/* 吃碰後禁打: right after a chow the claimed tile and the far end are barred (claim 3 with 4-5: no 3, no 6), after a pong the claimed tile.
+   G.nb holds the barred kinds until she discards; if her whole hand is barred she may throw anything */
+function chiBan(a,k){const b=[k],n=a%9;if(k===a&&n<=5)b.push(a+3);if(k===a+2&&n>=1)b.push(a-1);return b}
+function banOf(seat){if(G.ph!=='discard'||G.turn!==seat||!G.nb||!G.nb.length)return [];const h=G.hands[seat];
+  return [...h].some(x=>!G.nb.includes(kd(x)))?G.nb:[]}
 function options(seat){
   const L=G.last;if(!L||L.f===seat)return null;
   const c=cnt(G.hands[seat]),k=L.k,need=5-G.melds[seat].length,o={};let any=false;
   c[k]++;if(canWin(c,need)&&!(G.pw&&G.pw[seat])){o.hu=1;any=true}c[k]--;
-  if(L.q!=null)return any?o:null;   // 搶槓: a tile added to a pong can only be taken for a win
+  if(L.q!=null||late())return any?o:null;   // 搶槓: a tile added to a pong can only be taken for a win; 海底前: wins only
   if(c[k]>=2){o.pon=1;any=true}if(c[k]>=3)o.kan=1;
   if(seat===(L.f+1)%4&&k<27){const list=[];
     for(const a of [k-2,k-1,k]){if(a<0||(a/9|0)!==(k/9|0)||a%9>6)continue;let ok=true;for(let x=a;x<a+3;x++)if(x!==k&&!c[x])ok=false;if(ok)list.push(a)}
@@ -1863,9 +1873,9 @@ function resolve(){
   const s=pick[0],r=pick[1];
   if(r.t==='hu'){endHand(s,f,k);return}
   G.disc[f]=G.disc[f].slice(0,-1);G.last=null;G.drawn=null;G.first=0;
-  if(r.t==='pon'){G.hands[s]=rm(G.hands[s],k,2);G.melds[s].push('p'+ch(k));G.turn=s;G.ph='discard';G.nd=1;bump({s,t:'碰',f})}
+  if(r.t==='pon'){G.hands[s]=rm(G.hands[s],k,2);G.melds[s].push('p'+ch(k));G.turn=s;G.ph='discard';G.nd=1;G.nb=[k];bump({s,t:'碰',f})}
   else if(r.t==='kan'){G.hands[s]=rm(G.hands[s],k,3);G.melds[s].push('k'+ch(k));if(drawFor(s,true)){G.kong=1;bump({s,t:'槓',f})}}
-  else{const a=r.a;for(let x=a;x<a+3;x++)if(x!==k)G.hands[s]=rm(G.hands[s],x);G.melds[s].push('c'+ch(a)+ch(a+1)+ch(a+2)+ch(k));G.turn=s;G.ph='discard';G.nd=1;bump({s,t:'吃',f})}}
+  else{const a=r.a;for(let x=a;x<a+3;x++)if(x!==k)G.hands[s]=rm(G.hands[s],x);G.melds[s].push('c'+ch(a)+ch(a+1)+ch(a+2)+ch(k));G.turn=s;G.ph='discard';G.nd=1;G.nb=chiBan(a,k);bump({s,t:'吃',f})}}
 /* 搶槓: before a tile added to an exposed pong (加槓) draws its replacement, the other three may win on it; a concealed kong cannot be robbed.
    G.last.q is the meld index, which marks the claim window as win-only (see options / resolve) */
 function robOpen(seat,k,mi){
@@ -1883,10 +1893,10 @@ function act(seat,a){
   if(G.st!=='play'||seat<0)return;
   if(G.ph==='discard'&&seat===G.turn){
     const h=G.hands[seat],c=cnt(h),need=5-G.melds[seat].length,k=a.k|0;
-    if(a.t==='d'){const nh=rm(h,k);if(nh===null||k<0||k>33)return;G.hands[seat]=nh;G.disc[seat]+=ch(k);G.last={k,f:seat};G.drawn=null;G.first=0;openClaims()}
-    else if(a.t==='hu'){if(G.nd||!canWin(c,need))return;endHand(seat,-1,G.drawn)}
+    if(a.t==='d'){const nh=rm(h,k);if(nh===null||k<0||k>33||banOf(seat).includes(k))return;G.hands[seat]=nh;G.nb=null;if(G.pw)G.pw[seat]=0;G.disc[seat]+=ch(k);G.last={k,f:seat};G.drawn=null;G.first=0;openClaims()}
+    else if(a.t==='hu'){if(G.nd||pwOn(seat)||!canWin(c,need))return;endHand(seat,-1,G.drawn)}
     else if(a.t==='ak'){if(G.nd||k<0||k>33||c[k]!==4)return;G.hands[seat]=rm(h,k,4);G.melds[seat].push('a'+ch(k));G.first=0;if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
-    else if(a.t==='jk'){const i=G.melds[seat].indexOf('p'+ch(k));if(G.nd||i<0||!c[k])return;G.hands[seat]=rm(h,k);G.melds[seat][i]='k'+ch(k);if(robOpen(seat,k,i))return;if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
+    else if(a.t==='jk'){const i=G.melds[seat].indexOf('p'+ch(k));if(G.nd||late()||i<0||!c[k])return;G.hands[seat]=rm(h,k);G.melds[seat][i]='k'+ch(k);if(robOpen(seat,k,i))return;if(drawFor(seat,true)){G.kong=1;bump({s:seat,t:'槓'})}}
   }else if(G.ph==='claim'&&G.wait.includes(seat)){
     const o=options(seat);if(!o)return;
     if((a.t==='hu'&&o.hu)||(a.t==='pon'&&o.pon)||(a.t==='kan'&&o.kan)||(a.t==='chi'&&o.chi&&o.chi.includes(a.a)))G.resp[seat]={t:a.t,a:a.a};
@@ -1981,7 +1991,8 @@ function danger(k,o,seen){const r=G.disc[o];if(r.includes(ch(k)))return 0;
   const n=k%9;let d=n===0||n===8?3:n===1||n===7?4:5;if((n>=3&&r.includes(ch(k-3)))||(n<=5&&r.includes(ch(k+3))))d-=2;return Math.max(.5,d)}
 function botDiscard(c,need,s){
   const P=s==null?AIL[1]:aiProf(s),cand=[];
-  for(let k=0;k<34;k++){if(!c[k])continue;c[k]--;cand.push({k,sh:shanten(c,need),v:tileVal(c,k)});c[k]++}
+  const ban=s==null?[]:banOf(s);
+  for(let k=0;k<34;k++){if(!c[k]||ban.includes(k))continue;c[k]--;cand.push({k,sh:shanten(c,need),v:tileVal(c,k)});c[k]++}
   const min=Math.min(...cand.map(x=>x.sh));
   if(P.mis&&min>=2&&Math.random()<P.mis){const ok=cand.filter(x=>x.sh<=min+1);return ok[Math.random()*ok.length|0].k}
   // big hands: keep pairs and the main suit (plus honours), throw the minor suits first
@@ -1997,9 +2008,9 @@ function botDiscard(c,need,s){
 function botTurn(s){
   const h=G.hands[s],c=cnt(h),need=5-G.melds[s].length;
   if(!G.nd){
-    if(canWin(c,need)){act(s,{t:'hu'});return}
+    if(canWin(c,need)&&!pwOn(s)){act(s,{t:'hu'});return}
     for(let k=0;k<34;k++)if(c[k]===4){const base=shanten(c,need);c[k]=0;const s2=shanten(c,need-1);c[k]=4;if(s2<=base){act(s,{t:'ak',k});return}}
-    for(const m of G.melds[s])if(m[0]==='p'&&c[kd(m[1])]){act(s,{t:'jk',k:kd(m[1])});return}}
+    if(!late())for(const m of G.melds[s])if(m[0]==='p'&&c[kd(m[1])]){act(s,{t:'jk',k:kd(m[1])});return}}
   act(s,{t:'d',k:botDiscard(c,need,s)})}
 function botClaim(s,o){
   if(o.hu)return{t:'hu'};
@@ -2016,7 +2027,7 @@ function hostTick(){
   if(G.st!=='play'||G.pz)return;const now=Date.now();if(now<introUntil)return;
   if(G.ph==='discard'){const s=G.turn;if(isBot(s)&&tAt-now>1000*SPEED)tAt=now+700*SPEED;if(now<tAt)return;
     if(isBot(s))botTurn(s);
-    else{const h=G.hands[s];act(s,{t:'d',k:G.drawn!=null&&h.includes(ch(G.drawn))?G.drawn:kd(h[h.length-1])})}}
+    else{const h=G.hands[s],ban=banOf(s);let k=G.drawn!=null&&h.includes(ch(G.drawn))?G.drawn:-1;if(k<0)for(let i=h.length-1;i>=0;i--)if(!ban.includes(kd(h[i]))){k=kd(h[i]);break}act(s,{t:'d',k})}}
   else if(G.ph==='claim'){
     for(const s of [...G.wait])if(isBot(s)){const o=options(s),r=o&&botClaim(s,o);act(s,r||{t:'pass'});if(G.ph!=='claim')return}
     if(now>=tAt)resolve()}
@@ -2649,7 +2660,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1716';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1758';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2697,8 +2708,8 @@ function renderTable(){
   if(live&&G.turn===ms&&G.ph==='discard'&&!G.nd&&G.drawn!=null){const i=h.lastIndexOf(G.drawn);if(i>=0){h.splice(i,1);drawn=G.drawn}}
   if(IN){h=h.slice(0,IN.n[ms]);if(IN.n[ms]<17)drawn=null}
   hints(ms);const tpc=k=>HINT.tp[k]?' tp':'';
-  const flip=handPos();
-  $('hand').innerHTML=h.map((k,i)=>tile(k,(i===sel?'sel':'')+tpc(k),`data-i="${i}" data-k="${k}"`)).join('')+(drawn!=null?tile(drawn,'drawn'+(sel===99?' sel':'')+(drawKey!==shownDraw?' in':'')+tpc(drawn),`data-i="99" data-k="${drawn}"`):'');
+  const flip=handPos(),ban=live?banOf(ms):[],bc=k=>ban.includes(k)?' ban':'';
+  $('hand').innerHTML=h.map((k,i)=>tile(k,(i===sel?'sel':'')+tpc(k)+bc(k),`data-i="${i}" data-k="${k}"`)).join('')+(drawn!=null?tile(drawn,'drawn'+(sel===99?' sel':'')+(drawKey!==shownDraw?' in':'')+tpc(drawn),`data-i="99" data-k="${drawn}"`):'');
   fitMine();handFlip(flip);
   {let sk=-1;if(sel>=0){const e=[...$('hand').children].find(c=>+c.dataset.i===sel);if(e)sk=+e.dataset.k}showTips(sk)}
   shownDraw=drawKey;markSame();
@@ -2722,9 +2733,10 @@ function hints(me){
   if(G.st!=='play'||G.ph==='end')return;const c=cnt(G.hands[me]),need=5-G.melds[me].length,n=G.hands[me].length;
   if(n%3===2){for(let k=0;k<34;k++)if(c[k]){c[k]--;const w=waitsOf(c,need);c[k]++;if(w.length)HINT.tp[k]=w}}
   else if(n%3===1){const w=waitsOf(c,need);if(w.length)HINT.now=w}}
+function banTip(){const e=document.querySelector('#tips .bnt');if(!e)return;e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash')}
 function showTips(selK){
   const me=mySeat(),el=$('tips');if(me<0||G.st!=='play'||G.ph==='end'){el.innerHTML='';return}
-  const w=selK>=0&&HINT.tp[selK]?HINT.tp[selK]:(selK<0?HINT.now:null),pw=G.pw&&G.pw[me]?'<span class="pwt">過水中・摸牌後才能胡</span>':'';
+  const w=selK>=0&&HINT.tp[selK]?HINT.tp[selK]:(selK<0?HINT.now:null),pw=(G.pw&&G.pw[me]?'<span class="pwt">過水中・打牌後才能胡</span>':'')+(banOf(me).length?'<span class="pwt bnt">剛吃碰・變暗的牌這手不能打</span>':'');
   if(!w){el.innerHTML=(Object.keys(HINT.tp).length&&selK<0?'<span class="tl">打出有「聽」記號的牌就聽牌</span>':'')+pw;return}
   const tot=w.reduce((a,k)=>a+unseen(me,k),0);
   el.innerHTML=`<span class="tl">${selK>=0?'打這張聽':'聽'}</span>`+w.map(k=>`<span class="tw">${tile(k)}<em>${unseen(me,k)}</em></span>`).join('')+`<span class="tl">共 ${tot} 張</span>`+pw}
@@ -2738,9 +2750,9 @@ function renderActs(){
     if(G.ph==='discard'&&G.turn===me){
       const c=cnt(G.hands[me]),need=5-G.melds[me].length;
       if(!G.nd){
-        if(canWin(c,need))h+=btn('自摸'+taiTag(winTai(me,G.drawn!=null?G.drawn:kd(G.hands[me].slice(-1)),-1)),'hu',{t:'hu'});
+        if(canWin(c,need)&&!pwOn(me))h+=btn('自摸'+taiTag(winTai(me,G.drawn!=null?G.drawn:kd(G.hands[me].slice(-1)),-1)),'hu',{t:'hu'});
         for(let k=0;k<34;k++)if(c[k]===4)h+=btn('暗槓 '+tname(k),'kan',{t:'ak',k});
-        for(const m of G.melds[me])if(m[0]==='p'&&c[kd(m[1])])h+=btn('加槓 '+tname(kd(m[1])),'kan',{t:'jk',k:kd(m[1])})}
+        if(!late())for(const m of G.melds[me])if(m[0]==='p'&&c[kd(m[1])])h+=btn('加槓 '+tname(kd(m[1])),'kan',{t:'jk',k:kd(m[1])})}
     }else if(G.ph==='claim'&&G.wait.includes(me)){
       const o=options(me);
       if(o){if(o.hu)h+=btn('胡'+taiTag(winTai(me,G.last.k,G.last.f)),'hu',{t:'hu'});if(o.kan)h+=btn('槓','kan',{t:'kan'});if(o.pon)h+=btn('碰','pon',{t:'pon'});
@@ -3261,7 +3273,7 @@ function pickTile(i,k){sel=i;selK=k;[...$('hand').children].forEach(c=>c.classLi
 $('hand').addEventListener('click',e=>{
   const t=e.target.closest('.t');if(!t||performance.now()-DRAG.sup<400)return;const ms=mySeat();
   if(G.st!=='play'||G.ph!=='discard'||G.turn!==ms||pending)return;
-  const i=+t.dataset.i,k=+t.dataset.k;
+  const i=+t.dataset.i,k=+t.dataset.k;if(banOf(ms).includes(k)){banTip();return}
   if(sel===i){throwPt(t);pickTile(-1,-1);doAct({t:'d',k})}else{sfx('pick');pickTile(i,k)}});
 $('table').addEventListener('click',e=>{if(sel>=0&&!e.target.closest('#hand,#acts,button'))pickTile(-1,-1)});   // a tap on the table puts the tile back
 /* slide up to discard: the tile follows the finger (only upward), past dragLim() it is thrown on release, let go lower and it drops back unselected.
@@ -3272,7 +3284,7 @@ function dragPaint(){const t=dragEl();if(!t)return;t.classList.add('drag');t.cla
 function dragStop(e,cancel){
   if(!DRAG.on||e.pointerId!==DRAG.id)return;DRAG.on=false;if(!DRAG.mv)return;   // never moved: an ordinary tap, the click handler deals with it
   DRAG.sup=performance.now();const t=dragEl();if(t){t.classList.remove('drag','go');t.style.transform=''}
-  const go=!cancel&&-DRAG.dy>=dragLim()&&G.v===DRAG.v&&G.st==='play'&&G.ph==='discard'&&G.turn===mySeat()&&!pending;
+  const go=!cancel&&-DRAG.dy>=dragLim()&&G.v===DRAG.v&&G.st==='play'&&G.ph==='discard'&&G.turn===mySeat()&&!pending&&!banOf(mySeat()).includes(DRAG.k);
   if(go&&t)throwPt(t);pickTile(-1,-1);if(go)doAct({t:'d',k:DRAG.k})}
 $('hand').addEventListener('pointerdown',e=>{
   const t=e.target.closest('.t');if(!t||DRAG.on||e.button>0)return;
