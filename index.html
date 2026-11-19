@@ -824,7 +824,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #netv .nrow{display:flex;align-items:baseline;gap:10px;margin:0 0 6px!important}#netv .nrow b{flex:1;color:#ece6f4;font-weight:700}
 #netv .nt{color:var(--cyt)}#netv .nt.on{color:#ff8ad8;text-shadow:0 0 6px #ff2fae}#netv i{font:400 12px var(--led);color:#ffc35a;font-style:normal}
 #netv .nsum{font:900 15px var(--ng)!important;color:var(--cyt)!important;text-shadow:0 0 6px #14c8ff88;margin:8px 0 10px!important}#netv .nsum.on{color:#ff8ad8!important;text-shadow:0 0 8px #ff2fae}
-#netRe{margin-top:10px}
+#setm .nbtns{display:flex;gap:8px;margin-top:10px}#setm .nbtns .sbtn{flex:1;min-width:0}#netTry:disabled{opacity:.5}
 /* 2026-11-18 neon art direction (see CLAUDE.md 霓虹規範); prototypes in test/neon/ */
 /* --- neon --- */
 /* ===== neon kit override (prototype) ===== */
@@ -1694,7 +1694,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
       <p class="ver" id="verLine">版本 <span class="verv"></span></p></section>
     <section data-p="net" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>連線狀態</h3></div>
-      <div class="scroll"><div id="netv"></div></div><button class="sbtn" id="netRe">重新查詢<em>↻</em></button></section>
+      <div class="scroll"><div id="netv"></div></div><div class="nbtns"><button class="sbtn" id="netRe">重新查詢<em>↻</em></button><button class="sbtn" id="netTry" hidden>重試直連<em>⇄</em></button></div></section>
     <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>台數表</h3></div>
       <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>地胡</td><td>閒家第一次摸牌就自摸，之前沒人吃碰槓</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>人胡</td><td>閒家還沒摸過牌就胡別人打的牌，之前沒人吃碰槓</td><td>8</td></tr><tr><td>八仙過海</td><td>一人集滿八張花，當場胡，三家付</td><td>8</td></tr><tr><td>七搶一</td><td>七張花、第八張在別人手上，當場胡，由他付</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>搶槓</td><td>胡別人加槓的那張牌，加槓的人付</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
     <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
@@ -2062,41 +2062,71 @@ function peerNet(opt){
   if(!cid)cid=Math.random().toString(36).slice(2,10);try{sessionStorage.setItem('mjCid',cid)}catch(e){}
   return{cid,join(name,jo){
     jo=jo||{};const HUB='mj16-'+name.replace(/[^a-z0-9-]/gi,'').toLowerCase();
-    let me={},table=new Map(),peer=null,hubConn=null,hubCid='',conns=new Map(),hub=false,bt=0,dead=false,hostG=null,lastG=null,retry=0;
+    let gk=null,me={},table=new Map(),peer=null,hubConn=null,hubCid='',conns=new Map(),hub=false,bt=0,dead=false,hostG=null,lastG=null,retry=0;
     const room={status:'connecting',cid};
     const viewFor=c=>redact(lastG,lastG&&lastG.seats?lastG.seats.indexOf(c):-1);
-    const sendTo=(c,id)=>{try{c.send({t:'tbl',hub:cid,tbl:[...table]});if(lastG)c.send({t:'G',G:viewFor(id)})}catch(e){}};
-    const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;for(const [id,c] of conns)if(c.open)try{c.send({t:'tbl',hub:cid,tbl:[...table]})}catch(e){}},40)};
+    // save traffic (TURN is metered): after one full state, a client that said dz:1 only gets the top-level keys that changed ({t:'D',d,x:removed})
+    const sendG=(c,id,full)=>{const v=viewFor(id);c._tx=Date.now();
+      if(!c._dz||full||!c._lg||!v||typeof v!=='object'){c._lg=null;if(c._dz&&v&&typeof v==='object'){c._lg={};for(const k in v){const j=JSON.stringify(v[k]);if(j!==undefined)c._lg[k]=j}}c.send({t:'G',G:v});return}
+      const d={},x=[],lg=c._lg;let n=0;
+      for(const k in v){const j=JSON.stringify(v[k]);if(j===undefined)continue;if(lg[k]!==j){lg[k]=j;d[k]=v[k];n++}}
+      for(const k in lg)if(!(k in v)||JSON.stringify(v[k])===undefined){delete lg[k];x.push(k)}
+      if(n||x.length)c.send(x.length?{t:'D',d,x}:{t:'D',d})};
+    const sendTo=(c,id)=>{try{c._tx=Date.now();c.send({t:'tbl',hub:cid,tbl:[...table]});if(lastG)sendG(c,id,true)}catch(e){}};
+    const bcast=()=>{if(bt)return;bt=setTimeout(()=>{bt=0;for(const [id,c] of conns)if(c.open)try{c._tx=Date.now();c.send({t:'tbl',hub:cid,tbl:[...table]})}catch(e){}},40)};
     const keep=pp=>pp.on('disconnected',()=>{if(pp===peer&&!pp.destroyed&&!dead)try{pp.reconnect()}catch(_){}});
     function asHub(res){hub=true;room.status='ok';table=new Map([[cid,me]]);hubCid=cid;
-      peer.on('connection',c=>{c.on('data',m=>{if(m&&m.t==='hb'){c._seen=Date.now();if(c._cid)try{c.send({t:'hb'})}catch(e){}return}
-          if(!m||m.t!=='p'||typeof m.cid!=='string')return;c._seen=Date.now();const fresh=conns.get(m.cid)!==c;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast();if(fresh)sendTo(c,m.cid)});
+      peer.on('connection',c=>{c.on('data',m=>{if(m&&m.t==='hb'){c._seen=Date.now();if(c._cid&&Date.now()-(c._tx||0)>3000)try{c._tx=Date.now();c.send({t:'hb'})}catch(e){}return}   // anything sent lately already proves we are alive
+          if(!m||m.t!=='p'||typeof m.cid!=='string')return;c._seen=Date.now();if(m.dz)c._dz=1;
+          if(m.try&&!c._cid){c._try=m.cid;setTimeout(async()=>{if(dead||!c.open)return;const [x]=await linkInfo([['',c]]);   // a direct retry: keep it only if it is not through TURN
+              if(x.t!=='host'&&x.t!=='srflx'){try{c.send({t:'tryno',k:x.t})}catch(e){}setTimeout(()=>{try{c.close()}catch(e){}},500);return}
+              const old=conns.get(m.cid);c._cid=m.cid;c._try=0;conns.set(m.cid,c);table.set(m.cid,m.pres||{});try{c.send({t:'tryok'})}catch(e){}sendTo(c,m.cid);
+              if(old&&old!==c)setTimeout(()=>{try{old.close()}catch(e){}},1500)},1500);return}
+          if(c._try)return;const fresh=conns.get(m.cid)!==c;conns.set(m.cid,c);c._cid=m.cid;table.set(m.cid,m.pres||{});bcast();if(fresh)sendTo(c,m.cid)});
         c.on('close',()=>drop(c))});
       setInterval(()=>{if(dead)return;const now=Date.now();for(const c of [...conns.values()])if(now-(c._seen||0)>12000){try{c.close()}catch(e){}drop(c)}},3000);res()}
     function drop(c){if(c._cid&&conns.get(c._cid)===c){conns.delete(c._cid);table.delete(c._cid);bcast()}}
     function asClient(res,rej){hub=false;room.stage='signal';
       const pp=new Peer(PEER_CFG);peer=pp;keep(pp);
       pp.on('open',()=>{room.stage='ice';const c=pp.connect(HUB,{reliable:true});hubConn=c;
-        c.on('open',()=>{retry=0;room.goneAt=0;room.status='ok';try{c.send({t:'p',cid,pres:me})}catch(e){}res&&res();res=null});
+        c.on('open',()=>{retry=0;room.goneAt=0;room.status='ok';gk=null;try{c.send({t:'p',cid,pres:me,dz:1})}catch(e){}res&&res();res=null});
+        wire(c)});
+      pp.on('error',e=>{if(pp!==peer)return;if(e.type==='peer-unavailable'&&!res&&!room.goneAt)room.goneAt=Date.now();   // while retrying: the host's id is not there (it left or is still refreshing)
+        if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
+    function wire(c){   // the link to the host: heartbeat + state messages (also used when a direct retry replaces the link)
         c._seen=Date.now();
         const hb=setInterval(()=>{if(dead||hubConn!==c){clearInterval(hb);return}
           if(Date.now()-c._seen>12000){clearInterval(hb);try{c.close()}catch(e){}lost();return}try{c.send({t:'hb'})}catch(e){}},4000);
-        c.on('data',m=>{if(!m)return;c._seen=Date.now();if(m.t==='hb')return;
-          if(m.t==='bye'){dead=true;room.status='closed';try{pp.destroy()}catch(e){}return}   // the host closed the room on purpose: no reconnecting
-          if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}else if(m.t==='G')hostG=m.G});
-        c.on('close',lost);c.on('error',lost)});
-      pp.on('error',e=>{if(e.type==='peer-unavailable'&&!res&&!room.goneAt)room.goneAt=Date.now();   // while retrying: the host's id is not there (it left or is still refreshing)
-        if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error'||e.type==='socket-error'){if(res&&!jo.wait){rej({code:e.type==='peer-unavailable'?'找不到這個房號':'連線失敗'});res=null}else lost()}else if(res){rej({code:e.type});res=null}})}
+        c.on('data',m=>{if(!m||hubConn!==c)return;c._seen=Date.now();if(m.t==='hb')return;
+          if(m.t==='bye'){dead=true;room.status='closed';try{peer.destroy()}catch(e){}return}   // the host closed the room on purpose: no reconnecting
+          if(m.t==='rd'){tryDirect();return}
+          if(m.t==='tbl'&&Array.isArray(m.tbl)){table=new Map(m.tbl);hubCid=m.hub||'';table.set(cid,me)}
+          else if(m.t==='G'){hostG=m.G;gk=null;if(m.G&&typeof m.G==='object'){gk={};for(const k in m.G){const j=JSON.stringify(m.G[k]);if(j!==undefined)gk[k]=j}}}
+          else if(m.t==='D'&&gk){for(const k in m.d||{})gk[k]=JSON.stringify(m.d[k]);for(const k of m.x||[])delete gk[k];const g={};for(const k in gk)g[k]=JSON.parse(gk[k]);hostG=g}});
+        c.on('close',()=>{if(hubConn===c)lost()});c.on('error',()=>{if(hubConn===c)lost()})}
+    // the host asked us to try a direct link again (we fell back to TURN earlier): open a second link beside the current one;
+    // the host keeps it only if it came up without TURN, then we drop the old one. The game never stops while trying.
+    let trying=false;
+    function tryDirect(){if(hub||dead||trying||!hubConn)return;trying=true;let done=false;const pp=new Peer(PEER_CFG);
+      const stop=()=>{if(done)return;done=true;trying=false;clearTimeout(tm);try{pp.destroy()}catch(e){}};const tm=setTimeout(stop,15000);
+      pp.on('error',stop);
+      pp.on('open',()=>{if(done)return;const c=pp.connect(HUB,{reliable:true});
+        c.on('open',()=>{try{c.send({t:'p',cid,pres:me,dz:1,try:1})}catch(e){}});
+        c.on('close',()=>{if(hubConn!==c)stop()});
+        c.on('data',m=>{if(!m||done)return;if(m.t==='tryno'){stop();return}
+          if(m.t==='tryok'){done=true;trying=false;clearTimeout(tm);const op=peer;peer=pp;keep(pp);hubConn=c;gk=null;wire(c);try{op&&op.destroy()}catch(e){}}})})}
     function lost(){   // the host went away: keep trying the same room (the host may be refreshing)
       if(dead||hub||room.status==='retry')return;room.status='retry';hubConn=null;
       const go=()=>{if(dead)return;try{peer&&peer.destroy()}catch(_){}room.status='retry';
         getIce().then(()=>{if(!dead)asClient(null,()=>{})});setTimeout(()=>{if(room.status!=='ok'&&!dead)go()},4000)};
       setTimeout(go,1500)}
     room.presence=patch=>{for(const k in patch){if(patch[k]===null)delete me[k];else me[k]=patch[k]}table.set(cid,me);
-      if(hub)bcast();else if(hubConn&&hubConn.open)try{hubConn.send({t:'p',cid,pres:me})}catch(e){}return Promise.resolve()};
-    room.setG=G=>{lastG=G;if(!hub)return;for(const [id,c] of conns)if(c.open)try{c.send({t:'G',G:viewFor(id)})}catch(e){}};
+      if(hub)bcast();else if(hubConn&&hubConn.open)try{hubConn.send({t:'p',cid,pres:me,dz:1})}catch(e){}return Promise.resolve()};
+    room.setG=G=>{lastG=G;if(!hub)return;for(const [id,c] of conns)if(c.open)try{sendG(c,id)}catch(e){}};
     room.peers=()=>[...table].map(([id,pr])=>({peer:id,isMe:id===cid,sameTab:id===cid,kind:'viewer',presence:!hub&&id===hubCid&&hostG?Object.assign({},pr,{G:hostG}):pr}));
     room.isHub=()=>hub;
+    room.retryDirect=async()=>{if(!hub)return 0;let n=0;   // host: ask every guest that is on TURN to try a direct link again
+      for(const [id,c] of conns){if(!c.open)continue;const [x]=await linkInfo([['',c]]);if(x.t==='relay'){try{c.send({t:'rd'});n++}catch(e){}}}return n};
     // which path each link took (host / srflx = direct, relay = through TURN), for the hidden line in settings
     room.netInfo=async()=>linkInfo(hub?[...conns].map(([id,c])=>[(table.get(id)||{}).nm||id,c]):hubConn?[['房主',hubConn]]:[]);
     const linkInfo=list=>Promise.all(list.map(async([nm,c])=>{const pc=c.peerConnection;if(!pc)return{nm,t:'?'};
@@ -2108,7 +2138,9 @@ function peerNet(opt){
           return{nm,t,rtt:pair.currentRoundTripTime,kb:Math.round(((pair.bytesSent||0)+(pair.bytesReceived||0))/1024)}}catch(e){return{nm,t:'?'}}}));
     // signal bars: the host measures every guest's round trip and shares it in its presence, only when it changes
     setInterval(async()=>{if(dead||!hub)return;const q={};
-      await Promise.all([...conns].map(async([id,c])=>{const [x]=await linkInfo([['',c]]);q[id]=[x.rtt!=null?Math.round(x.rtt*100)*10:-1,x.t==='relay'?1:0]}));
+      const lv=ms=>ms<0?0:ms<100?3:ms<250?2:1,old=me.q||{};
+      await Promise.all([...conns].map(async([id,c])=>{const [x]=await linkInfo([['',c]]);const n=[x.rtt!=null?Math.round(x.rtt*100)*10:-1,x.t==='relay'?1:0],o=old[id];
+        q[id]=o&&o[1]===n[1]&&lv(o[0])===lv(n[0])&&Math.abs(o[0]-n[0])<50?o:n}));
       const js=JSON.stringify(q);if(js!==room._q){room._q=js;me.q=q;table.set(cid,me);bcast()}},3000);
     room.close=()=>{if(hub)for(const [id,c] of conns)if(c.open)try{c.send({t:'bye'})}catch(e){}};   // host only: tell every client the room is over
     room.leave=()=>{dead=true;try{peer.destroy()}catch(e){}};
@@ -2617,7 +2649,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1634';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1716';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2626,8 +2658,13 @@ const NETT={host:'區網直連',srflx:'打洞直連',relay:'TURN 轉送','?':'�
 async function netShow(){const el=$('netv');if(!R||!R.netInfo){el.innerHTML='<p>沒有連線（單機或 claude.ai 版）</p>';return}
   el.innerHTML='<p>查詢中…</p>';const L=await R.netInfo(),relay=L.some(x=>x.t==='relay');
   el.innerHTML=(L.length?`<p class="nsum${relay?' on':''}">${relay?'有經過 TURN 轉送':'沒經過 TURN'}</p>`+L.map(x=>`<p class="nrow"><b>${esc(x.nm)}</b><span class="nt${x.t==='relay'?' on':''}">${NETT[x.t]||x.t}</span><i>${x.rtt!=null?Math.round(x.rtt*1000)+'ms':''}${x.kb!=null?' · '+x.kb+'KB':''}</i></p>`).join(''):'<p>目前沒有連線</p>')
-    +`<p class="nrow"><b>TURN 憑證</b><span class="nt">${({ok:'已取得',bad:'密碼不對',lock:'密碼錯太多次',err:'伺服器錯誤'}[turnSt]||'沒有')}</span></p>`}
-$('netRe').onclick=()=>netShow();
+    +`<p class="nrow"><b>TURN 憑證</b><span class="nt">${({ok:'已取得',bad:'密碼不對',lock:'密碼錯太多次',err:'伺服器錯誤'}[turnSt]||'沒有')}</span></p>`+(netMsg?`<p class="nrow"><b>${netMsg}</b></p>`:'');
+  $('netTry').hidden=!(R.isHub&&R.isHub()&&relay&&R.retryDirect)}
+let netMsg='';
+$('netRe').onclick=()=>{netMsg='';netShow()};
+$('netTry').onclick=async()=>{const b=$('netTry');if(b.disabled||!R||!R.retryDirect)return;b.disabled=true;
+  const n=await R.retryDirect();netMsg=n?`正在幫 ${n} 位重試直連…`:'沒有走 TURN 的連線';netShow();
+  if(n)setTimeout(()=>{netMsg='';b.disabled=false;netShow()},9000);else b.disabled=false};
 $('cfgBtn').onclick=()=>{$('netGo').hidden=!(R&&R.netInfo);setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
 $('setm').addEventListener('click',e=>{const t=e.target;if(t.id==='setm'||t.closest('[data-x]')){$('setm').classList.add('hide');return}const g=t.closest('[data-go]');if(g)setPage(g.dataset.go)});
 $('quitGo').onclick=()=>leaveRoom();
