@@ -1419,6 +1419,20 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 @keyframes lbFlick{0%{filter:brightness(1)}15%{filter:brightness(.25)}30%{filter:brightness(1.25)}45%{filter:brightness(.4)}60%,100%{filter:brightness(1)}}
 @media (prefers-reduced-motion:reduce){.st-rd img.sw{display:none}.st-lb.flick .box{animation:none}}
 
+#result [data-next] .nxc{font-family:var(--led);font-style:normal;color:#ffc35a;margin-left:.5em;text-shadow:0 0 6px rgba(255,195,90,.6)}
+#result [data-next] .nxc.hot{color:#ff4d5e;text-shadow:0 0 6px rgba(255,77,94,.75)}
+#result [data-next].rdy{filter:saturate(.35) brightness(.78)}
+#result [data-next]{position:relative}
+#result [data-next] .nxa{position:absolute;right:14px;top:0;transform:translateY(-58%);display:flex}
+#result [data-next] .nxa .fc{width:22px;height:22px;margin-left:-7px;border:1.5px solid #3a2f44;box-shadow:0 0 0 1.5px #07050c;filter:grayscale(.8) brightness(.45)}
+#result [data-next] .nxa .fc.on{border-color:#ff8ad8;filter:none;box-shadow:0 0 0 1.5px #07050c,0 0 7px #ff2fae}
+#result [data-next].rdy .nxa{filter:saturate(2.8) brightness(1.3)}
+.rb.dr .dc.dc.rdy img{filter:none!important}
+.rb.dr .dc.dc.rdy .dfr{border-color:var(--pkt)!important;box-shadow:0 0 0 2px #020104,0 0 10px var(--pk),inset 0 0 10px #ff2fae44!important}
+.rb.dr .dc.dc.rdy .dlb{opacity:1}
+.ork.pl.rdy{border-color:var(--pkt)!important;box-shadow:0 0 0 1px #ff8ad855,0 0 12px #ff2fae55!important}
+.ork.rdy .fc{border-color:#ff8ad8!important;box-shadow:0 0 0 1.5px #07050c,0 0 9px #ff2fae!important}
+.ork .ordy{margin-left:8px;font:900 11px/1 var(--ng);font-style:normal;color:var(--pkc);text-shadow:0 0 5px var(--pk)}
 </style>
 </head>
 <body>
@@ -1711,7 +1725,10 @@ function robOpen(seat,k,mi){
   G.ph='claim';bump({s:seat,t:'槓'});return true}
 function act(seat,a){
   if(!a||typeof a.t!=='string'||(G.pz&&a.t!=='next'))return;
-  if(a.t==='next'){if(G.st==='over')newGame();else if(G.st==='play'&&G.ph==='end')nextHand();return}
+  if(a.t==='next'){   // 連線: only marks this seat ready (see nxGo); practice: goes on at once
+    if(G.st==='over'){if(!R)newGame();else{readyUp(seat);if(allReady())newGame()}}
+    else if(G.st==='play'&&G.ph==='end'){if(!R)nextHand();else{readyUp(seat);if(allReady())nextHand()}}
+    return}
   if(G.st!=='play'||seat<0)return;
   if(G.ph==='discard'&&seat===G.turn){
     const h=G.hands[seat],c=cnt(h),need=5-G.melds[seat].length,k=a.k|0;
@@ -1725,13 +1742,22 @@ function act(seat,a){
     else if(a.t!=='pass')return;
     if(o.hu&&a.t!=='hu')passWater(seat);
     G.wait=G.wait.filter(x=>x!==seat);if(!G.wait.length)resolve();else bump()}}
+/* 結算準備: online, 下一局 only marks your own seat ready; when every human at the table is ready the next hand starts early, otherwise it starts
+   when the count runs out (胡 15 s, 流局 8 s, counted from when the result entrance has played). the match-over screen has no count:
+   再來一場 waits for every human. practice: the button goes on at once, and under 託管 the count runs and starts the next hand by itself */
+let nxAt=0;const NXC={k:'',t0:0};
+const NXW=r=>r.w<0?[1500,8]:[r.f<0?5000:5600,15];   // [entrance before the count shows (ms), seconds counted]
+function nxMs(){const r=G.res;if(!r)return 0;const w=NXW(r);return w[0]+w[1]*1000}
+function humans(){return [0,1,2,3].filter(s=>G.seats&&G.seats[s]&&!isBot(s))}
+function allReady(){const h=humans(),r=G.rdy||[];return h.length>0&&h.every(s=>r[s])}
+function readyUp(seat){if(seat<0)return;G.rdy=G.rdy||[0,0,0,0];if(G.rdy[seat])return;G.rdy[seat]=1;G.v++;dirty=true}
 function nextHand(){
   const r=G.res;
   if(r&&(r.w===G.dealer||r.w<0))G.lian++;
-  else{G.lian=0;G.dealer=(G.dealer+1)%4;G.ju++;if(G.ju>=4){G.ju=0;G.wind++;if(G.wind>=cfg().r){G.st='over';G.ph='';bump();return}}}
+  else{G.lian=0;G.dealer=(G.dealer+1)%4;G.ju++;if(G.ju>=4){G.ju=0;G.wind++;if(G.wind>=cfg().r){G.st='over';G.ph='';G.rdy=[0,0,0,0];bump();return}}}
   assignSeats();startHand()}
 function endHand(w,f,k,fw){   // fw: a flower hand (八仙過海 / 七搶一), a flat 8 whatever the tiles are
-  G.ph='end';G.wait=[];G.resp={};
+  G.ph='end';G.wait=[];G.resp={};G.rdy=[0,0,0,0];nxAt=0;
   if(w<0){G.res={w:-1};bump({s:-1,t:'流局'});return}
   const self=f<0,T=fw?{list:[[self?'八仙過海':'七搶一',8]],tot:8}:calcTai(w,k,self),dx=1+2*G.lian,d=[0,0,0,0];
   const payers=self?[0,1,2,3].filter(s=>s!==w):[f];
@@ -1834,6 +1860,7 @@ function botClaim(s,o){
     if(ba>=0&&((P.call>=1&&!P.big)||bs===0))return{t:'chi',a:ba}}
   return null}
 function hostTick(){
+  if(G.st==='over'){if(R&&allReady())newGame();return}
   if(G.st!=='play'||G.pz)return;const now=Date.now();if(now<introUntil)return;
   if(G.ph==='discard'){const s=G.turn;if(isBot(s)&&tAt-now>1000*SPEED)tAt=now+700*SPEED;if(now<tAt)return;
     if(isBot(s))botTurn(s);
@@ -1842,7 +1869,10 @@ function hostTick(){
     for(const s of [...G.wait])if(isBot(s)){const o=options(s),r=o&&botClaim(s,o);act(s,r||{t:'pass'});if(G.ph!=='claim')return}
     if(now>=tAt)resolve()}
   else if(G.ph==='fw'){if(now>=tAt){const x=G.fw;endHand(x.w,x.f,x.k,1)}}   // a flower hand from the opening deal: the opening has played, now it counts
-  else if(G.ph==='end'){if(AUTO&&now>=tAt)nextHand()}}
+  else if(G.ph==='end'){
+    if(AUTO){if(now>=tAt)nextHand();return}
+    if(!nxAt)nxAt=now+nxMs();
+    if(R?(allReady()||now>=nxAt):(myAuto&&now>=nxAt))nextHand()}}
 
 
 /* ---------- PeerJS room (outside claude.ai): the same surface the game uses from claude.ai's room (join → presence / peers), plus private state ----------
@@ -2400,7 +2430,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1024';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1054';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2621,7 +2651,7 @@ function renderResult(){
     const rank=[0,1,2,3].sort((a,b)=>G.score[b]-G.score[a]),st0=cfg().b*30,me=mySeat(),mx=Math.max(...G.score.map(v=>Math.abs(v-st0)),1),S=G.stat||[];
     const qw=rank[0]!==me?resQuip(rank[0],'zimo'):'',ql=rank[0]===me?resQuip(rank[3],'dealin'):'';
     el.innerHTML=fullImg(rank[0],false,qw,'冠軍')+`<div class="rb ov"><h1 class="bt">${cfg().r>1?'一將':'一圈'}結束</h1>`+rank.map((s,i)=>{const dv=G.score[s]-st0,t=S[s]||[0,0,0,0];
-      return `<div class="pl ork rk${i}"><b class="md m${i}">${i+1}</b><span class="fc c${chr(s)}"></span><div class="on"><div class="onn">${seatLabel(s)}</div>`+
+      return `<div class="pl ork rk${i}" data-s="${s}"><b class="md m${i}">${i+1}</b><span class="fc c${chr(s)}"></span><div class="on"><div class="onn">${seatLabel(s)}</div>`+
         `<div class="ost">胡 ${t[0]}・自摸 ${t[1]}・放槍 ${t[2]}${t[3]?`・最大 ${t[3]} 台`:''}</div></div>`+
         `<div class="osc"><div class="ov2 ${dv>0?'pos':dv<0?'neg':''}">${dv?fmt(dv):'±0'}</div><div class="obar"><i class="${dv<0?'n':''}" style="width:${(Math.abs(dv)/mx*100).toFixed(0)}%"></i></div><div class="otot">$${G.score[s]}</div></div></div>`}).join('')+
       `<button class="big" data-next="1">再來一場</button></div>`+fullImg(rank[3],true,ql,'墊底');
@@ -2813,11 +2843,29 @@ function render(){
     if(t==='碰')sfx('pon');else if(t==='吃')sfx('chi');else if(t==='槓')sfx('kan');else if(t==='流局')sfx('drawgame');
     else if(t==='胡'||t==='自摸'){sfx(G.ev.s===me?'win':(G.res&&G.res.d&&me>=0&&G.res.d[me]<0)?'lose':'other')}}lastEv=G.ev.n}else if(!G.ev&&lastEv<0)lastEv=0;
   soundHooks()}
+// the 下一局 / 再來一場 buttons: seconds left (the last 5 in red) and, once you are ready online, how many of the humans are
+function nxPaint(){
+  const bs=$('result').querySelectorAll('[data-next]');if(!bs.length)return;
+  const end=G.st==='play'&&G.ph==='end'&&G.res,over=G.st==='over',me=mySeat();let left=-1,wait='';
+  if(end&&!AUTO&&(R||myAuto)){const k=fhKey();if(NXC.k!==k){NXC.k=k;NXC.t0=Date.now()}
+    left=Math.min(NXW(G.res)[1],Math.max(0,Math.ceil((NXC.t0+nxMs()-Date.now())/1000)))}
+  if(R&&(end||over)&&me>=0&&G.rdy&&G.rdy[me]){wait='已準備'}
+  for(const b of bs){if(!b.dataset.l)b.dataset.l=b.textContent;
+    const hs=end&&G.res.w>=0&&!b.classList.contains('fhnext')&&R&&humans().length>1?`<span class="nxa">${humans().map(x=>`<i class="fc c${chr(x)}${G.rdy&&G.rdy[x]?' on':''}"></i>`).join('')}</span>`:'';
+    const html=(wait||esc(b.dataset.l))+(left>=0?`<i class="nxc${left<=5?' hot':''}">${left}</i>`:'')+hs;
+    if(b._nx!==html){b._nx=html;b.innerHTML=html}b.classList.toggle('rdy',!!wait)}
+  // who is ready, shown on what each screen already has (online, two or more humans): 流局 the seat's card lights up, 胡 the heads stacked on the
+  // 下一局 button light up, match over the seat's row lights up with 已準備 by the name
+  const H=R&&(end||over)?humans():[],on=x=>H.length>1&&H.includes(x)&&!!(G.rdy&&G.rdy[x]);
+  $('resCard').querySelectorAll('.rb.dr .dc').forEach((d,x)=>d.classList.toggle('rdy',on(x)));
+  $('resCard').querySelectorAll('.ork[data-s]').forEach(o=>{const x=+o.dataset.s,k=on(x);o.classList.toggle('rdy',k);
+    let t=o.querySelector('.ordy');if(k&&!t){t=document.createElement('em');t.className='ordy';t.textContent='已準備';o.querySelector('.onn').appendChild(t)}else if(!k&&t)t.remove()})}
 function updateTimer(){
   {let T=1,fx='';if(G.st==='play'&&G.ph==='end'&&G.res)fx=G.res.w>=0?'hu':'end';
    else if(G.st==='play'&&G.tl>0&&!G.pz&&G.ph==='discard'&&G.turn===mySeat())T=Math.max(0,Math.round((1-(performance.now()-phaseStart)/1000/G.tl)*40)/40);
    if(T!==window.__dialT||fx!==(window.__dialFx||'')){window.__dialT=T;window.__dialFx=fx;if(window.T3&&T3.redial)T3.redial()}}
   if(G.st==='lobby'&&!inMenu)renderLobby();
+  nxPaint();
   const el=$('timer');if(!el)return;
   if(G.st==='play'&&G.tl>0&&G.ph!=='end'&&!G.pz){const left=Math.max(0,Math.ceil(G.tl-(performance.now()-phaseStart)/1000));
     const mine=mySeat()>=0&&((G.ph==='discard'&&G.turn===mySeat())||(G.ph==='claim'&&G.wait.includes(mySeat())));
