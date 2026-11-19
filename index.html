@@ -1425,6 +1425,47 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #ginfo .gs em>i:first-child{margin-left:0}
 #ginfo .gr{font:500 10px/1 'Noto Sans TC',sans-serif;font-style:normal;color:#d8d0e4;text-shadow:none;letter-spacing:.06em}#ginfo .gh .gr{margin-left:7px;padding:2px 4px;border-radius:4px;box-shadow:inset 0 0 0 1px #ffffff24}
 #ginfo .gs u{width:1px;height:9px;margin:0 4px;background:#ffffff26}
+
+/* 近期戰績 (second page of 錢莊) */
+#st-bankm .bk-hl{margin-left:auto;align-self:center;display:flex;align-items:center;gap:3px;padding:6px 4px 6px 10px;border:0;background:none;font:900 11px/1 var(--ng);letter-spacing:.12em;color:var(--cyt);text-shadow:0 0 5px #14c8ff88;cursor:pointer}
+#st-bankm .bk-hl:active{color:#fff}
+#st-bankm .bk-bk{display:none;position:absolute;left:10px;top:9px;width:30px;height:30px;border-radius:50%;border:1px solid #ffffff44;background:none;color:#fff;padding:0;align-items:center;justify-content:center;cursor:pointer}
+#st-bankm .bk-bk:active{background:#ffffff14}
+#st-bankm #bkHist{display:none}
+#st-bankm.hist .bk-bk{display:flex}
+/* the title, back / close and the summary stay put; only the list scrolls */
+#st-bankm.hist .st-pn{display:flex;flex-direction:column;overflow:hidden}
+#st-bankm.hist #bkHist{display:flex;flex-direction:column;flex:1;min-height:0}
+#st-bankm .hs-sum{flex:none;border-bottom:1px solid #ffffff1f}
+#st-bankm .hs-list>.hs-row:first-child{border-top:0}
+#st-bankm .hs-list{-webkit-mask-image:linear-gradient(#0000,#000 10px);mask-image:linear-gradient(#0000,#000 10px)}
+#st-bankm .hs-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0 -6px 0 0;padding-right:6px}
+#st-bankm.hist :is(.bk-bal,#bkOpts,.bk-note){display:none}
+#st-bankm.hist h2{text-align:center;padding:0 34px}
+#st-bankm .hs-none{padding:26px 0 18px;text-align:center;font-size:11px;color:#8a8296}
+#st-bankm .hs-sum{display:flex;gap:16px;padding:2px 0 8px;font:400 13px/1 var(--led);color:var(--amb)}
+#st-bankm .hs-sum span{display:flex;align-items:baseline}
+#st-bankm .hs-sum i{font:500 10px/1 var(--ui);font-style:normal;color:#a99fb8;margin:0 3px}
+#st-bankm .hs-sum span i:first-child{margin-left:0}
+#st-bankm .hs-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid #ffffff14}
+#st-bankm .hs-n{flex:none;width:18px;text-align:center;font:400 16px/1 var(--led);color:#6d6480}
+#st-bankm .hs-n.n1{color:var(--amb);text-shadow:0 0 6px #ff8a00aa}#st-bankm .hs-n.n2{color:#d8d0e4}
+#st-bankm .hs-m{flex:1;min-width:0}
+#st-bankm .hs-t{display:flex;align-items:center;gap:7px;font-size:10px;color:#a99fb8;white-space:nowrap}
+#st-bankm .hs-t time{margin-left:auto;font:400 10px/1 var(--led);color:#8a8296}
+#st-bankm .hs-k{font:900 9.5px/1 var(--ng);letter-spacing:.1em;color:var(--cyt)}#st-bankm .hs-k b{font:400 10.5px/1 var(--led);letter-spacing:.06em;color:var(--amb);margin-left:4px;font-weight:400}
+#st-bankm .hs-k.pr{color:#cfc6dc}
+#st-bankm .hs-p{display:flex;align-items:center;gap:3px;margin-top:5px}
+#st-bankm .hs-p .fc{width:17px;height:17px;border:1px solid #ffffff22;box-shadow:none;opacity:.8}
+#st-bankm .hs-p .fc.hm{border-color:#7fe9ff66;opacity:.9}
+#st-bankm .hs-p .fc.me{border-color:var(--pkt);box-shadow:0 0 5px var(--pk);opacity:1}
+#st-bankm .hs-p em{margin-left:6px;font-size:10px;font-style:normal;color:#a99fb8;white-space:nowrap;overflow:hidden}#st-bankm .hs-p em b{font:400 11px/1 var(--led);color:#d8d0e4;margin:0 5px 0 2px}#st-bankm .hs-p em b:last-child{margin-right:2px}
+#st-bankm .hs-st{margin-top:5px;font-size:10px;color:#ff8a94}
+#st-bankm .hs-r{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:64px}
+#st-bankm .hs-r b,#st-bankm .hs-sum b{font:400 15px/1 var(--led);color:#d8d0e4}
+#st-bankm .hs-sum b{font-size:13px}
+#st-bankm :is(.hs-r,.hs-sum) b.pos{color:var(--amb)}#st-bankm :is(.hs-r,.hs-sum) b.neg{color:#ff4d5e}
+#st-bankm .hs-r small{font:400 9.5px/1 var(--led);color:#8a8296}
 </style>
 <style id="street">
 /* night-street lobby (2026-11-18), from proto/street/slice.html */
@@ -1605,8 +1646,8 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 </div>  <div id="st-ver">v<span class="verv">dev</span></div>
 <div id="st-bankm"><div class="st-pn">
     <button class="st-x" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
-    <h2>錢莊</h2>
-    <div class="bk-bal"><small>餘額</small><b id="bkBal">$10,000</b></div>
+    <h2 id="bkTtl">錢莊</h2>
+    <button class="bk-bk" data-bkh="0" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="bk-bal"><small>餘額</small><b id="bkBal">$10,000</b><button class="bk-hl" data-bkh="1">近期戰績<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div id="bkHist"></div>
     <div id="bkOpts"></div>
     <p class="bk-note"></p>
   </div></div><div id="st-info"><div class="st-pn">
@@ -2576,7 +2617,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1616';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1634';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3053,8 +3094,13 @@ function winCore(seat,pos,text,a,col,loser){
 const WAL0=10000,WRED=3000,WMIN=3000,WCOOL=600e3,WKEY='mjWallet',WMAX=9999999;
 // ±9,999,999 at most: an edited save (or a guest's presence) can't push a huge number into the layouts
 const walClamp=n=>{n=Math.round(+n);return Number.isFinite(n)?Math.max(-WMAX,Math.min(WMAX,n)):0};
-function walNew(){return {bal:WAL0,red:'',help:0,done:[],pend:{}}}
-function walLoad(){try{const w=JSON.parse(localStorage.getItem(WKEY)||'null');if(w&&Number.isFinite(+w.bal)){w.bal=walClamp(w.bal);w.pend=w.pend&&typeof w.pend==='object'&&!w.pend.k?w.pend:{};return Object.assign(walNew(),w)}}catch(e){}return walNew()}
+function walNew(){return {bal:WAL0,red:'',help:0,done:[],pend:{},hist:[]}}
+/* 近期戰績: one entry per finished match (written with the gid:over settle, so once), and one per hand abandoned (逃跑費). this browser only */
+const WHIST=50;
+function histEntry(){const me=mySeat(),c=cfg(),rank=[0,1,2,3].sort((a,b)=>G.score[b]-G.score[a]),st=(G.stat&&G.stat[me])||[0,0,0,0];
+  return {t:Date.now(),k:roomCode||'',c:[c.r,c.b,c.t],n:rank.indexOf(me)+1,d:G.score[me]|0,bal:G.bk[meId()]|0,s:st.slice(0,4).map(x=>x|0),
+    p:rank.map(s=>[chr(s),s===me?1:G.seats[s]?2:0])}}
+function walLoad(){try{const w=JSON.parse(localStorage.getItem(WKEY)||'null');if(w&&Number.isFinite(+w.bal)){w.bal=walClamp(w.bal);w.pend=w.pend&&typeof w.pend==='object'&&!w.pend.k?w.pend:{};w.hist=Array.isArray(w.hist)?w.hist.filter(e=>e&&typeof e==='object').slice(-WHIST):[];return Object.assign(walNew(),w)}}catch(e){}return walNew()}
 let W=walLoad(),walNote='';
 // this tab's id: other tabs of the same browser share the wallet, so a hand in progress is kept per tab, and every change re-reads the stored wallet first
 const WTAB=(()=>{let t='';try{t=sessionStorage.getItem('mjTab')||'';if(!t){t=Math.random().toString(36).slice(2,8);sessionStorage.setItem('mjTab',t)}}catch(e){t='t'}return t})();
@@ -3073,7 +3119,7 @@ function handKey(){return (G.gid||'x')+':'+G.wind+':'+G.ju+':'+(G.lian|0)}
 function walSync(){
   const me=mySeat(),mine=W.pend[WTAB];
   // the match is over: square the wallet with the ledger once (a hand whose result screen was never drawn here would otherwise be lost)
-  if(G.st==='over'&&me>=0&&G.gid&&G.bk&&typeof G.bk[meId()]==='number'&&!W.done.includes(G.gid+':over'))walDo(w=>{w.bal=G.bk[meId()];w.done=w.done.concat(G.gid+':over').slice(-40);delete w.pend[WTAB]});
+  if(G.st==='over'&&me>=0&&G.gid&&G.bk&&typeof G.bk[meId()]==='number'&&!W.done.includes(G.gid+':over'))walDo(w=>{w.bal=G.bk[meId()];w.done=w.done.concat(G.gid+':over').slice(-40);delete w.pend[WTAB];w.hist=w.hist.concat(histEntry()).slice(-WHIST)});
   if(G.st!=='play'||me<0||!G.gid){if(mine&&G.st!=='play')walDo(w=>{delete w.pend[WTAB]},false);return}
   const k=handKey();
   if(G.ph==='end'){if((G.res&&G.res.d&&!W.done.includes(k))||mine)walDo(w=>{let ch=false;
@@ -3085,7 +3131,7 @@ setInterval(()=>{if(W.pend[WTAB]&&!inMenu)walSync()},5000);
 function walEscape(){
   let q='';try{q=(new URLSearchParams(location.search).get('room')||'').toUpperCase()}catch(e){}
   let fee=0;walDo(w=>{for(const id in w.pend){const p=w.pend[id];
-      if(id===WTAB?!(p.room&&q===String(p.room).toUpperCase()):Date.now()-(p.t||0)>20000){fee+=p.f|0;delete w.pend[id]}}
+      if(id===WTAB?!(p.room&&q===String(p.room).toUpperCase()):Date.now()-(p.t||0)>20000){fee+=p.f|0;w.hist=w.hist.concat({t:p.t||Date.now(),k:String(p.room||'').slice(0,8),esc:p.f|0}).slice(-WHIST);delete w.pend[id]}}
     if(!fee)return false;w.bal-=fee},false);
   if(fee)walNote='上一局中途離開，扣了逃跑費 '+money(fee)}
 function walShort(){   // who at the table can't cover the buy-in (a guest whose page predates the wallet sends no balance: let them sit)
@@ -3104,7 +3150,21 @@ function walPaint(){
   const e=$('st-bal');if(e){e.querySelector('b').textContent=money(W.bal);e.classList.toggle('lo',W.bal<WMIN)}
   if($('st-bankm').classList.contains('on'))bankPaint()}
 let bankT=0;
-function bankOpen(){$('st-bankm').classList.add('on');bankPaint();clearInterval(bankT);bankT=setInterval(()=>{if(!$('st-bankm').classList.contains('on'))clearInterval(bankT);else bankPaint()},1000)}
+function histShow(on){const m=$('st-bankm');m.classList.toggle('hist',on);$('bkTtl').textContent=on?'近期戰績':'錢莊';if(on)histPaint();m.querySelector('.st-pn').scrollTop=0;const l=m.querySelector('.hs-list');if(l)l.scrollTop=0}
+function histPaint(){
+  const L=W.hist.slice().reverse(),games=L.filter(e=>!e.esc),sum=L.reduce((a,e)=>a+(e.esc?-(e.esc|0):(e.d|0)),0),first=games.filter(e=>e.n===1).length;
+  const sg=n=>(n>0?'+':n<0?'-':'±')+Math.abs(n|0).toLocaleString('en-US'),cls=n=>n>0?'pos':n<0?'neg':'';
+  const when=t=>{const d=new Date(+t||0);return (d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+  const tag=k=>k?`<span class="hs-k">包廂<b>${esc(String(k).slice(0,8))}</b></span>`:'<span class="hs-k pr">練習</span>';
+  $('bkHist').innerHTML=!L.length?'<p class="hs-none">還沒有戰績</p>':
+    `<div class="hs-sum"><span><i>近</i>${games.length}<i>場</i></span><span><i>第一名</i>${first}<i>次</i></span><span><i>合計</i><b class="${cls(sum)}">${sg(sum)}</b></span></div><div class="hs-list">`+
+    L.map(e=>{
+      if(e.esc)return `<div class="hs-row esc"><b class="hs-n">—</b><div class="hs-m"><div class="hs-t">${tag(e.k)}<time>${when(e.t)}</time></div><div class="hs-st">中途離開・扣逃跑費</div></div><div class="hs-r"><b class="neg">${money(-(e.esc|0))}</b></div></div>`;
+      const c=Array.isArray(e.c)?e.c:[1,0,0],s=Array.isArray(e.s)?e.s:[0,0,0,0],p=Array.isArray(e.p)?e.p:[];
+      return `<div class="hs-row"><b class="hs-n n${e.n|0}">${e.n|0}</b><div class="hs-m"><div class="hs-t">${tag(e.k)}<span>${c[0]===4?'一將':'一圈'}・底 ${c[1]|0}</span><time>${when(e.t)}</time></div>`+
+        `<div class="hs-p">${p.map(x=>`<span class="fc c${(x&&x[0])|0}${x&&x[1]===1?' me':x&&x[1]===2?' hm':''}"></span>`).join('')}<em>胡<b>${s[0]|0}</b>自摸<b>${s[1]|0}</b>放槍<b>${s[2]|0}</b>${s[3]?`最大<b>${s[3]|0}</b>台`:''}</em></div></div>`+
+        `<div class="hs-r"><b class="${cls(e.d)}">${sg(e.d)}</b><small>餘額 ${money(e.bal|0)}</small></div></div>`}).join('')+'</div>'}
+function bankOpen(){histShow(false);$('st-bankm').classList.add('on');bankPaint();clearInterval(bankT);bankT=setInterval(()=>{if(!$('st-bankm').classList.contains('on'))clearInterval(bankT);else bankPaint()},1000)}
 function bankTake(id){const b=bankState();
   if(id!=='red'&&id!=='help')return;let ok=false;walDo(w=>{const st=(W=w,bankState());if(id==='red'&&st.red){w.bal+=WRED;w.red=walDay();ok=true}else if(id==='help'&&st.help){w.bal=Math.max(w.bal,WMIN);w.help=Date.now();ok=true}return ok});if(!ok){bankPaint();return}sfx('pick');const bb=$('bkBal').parentNode;bb.classList.remove('pop');void bb.offsetWidth;bb.classList.add('pop')}
 function render(){
@@ -3630,7 +3690,7 @@ info.onclick=e=>{if(e.target===info||e.target.classList.contains('st-x'))info.cl
 addEventListener('keydown',e=>{if(e.key==='Escape')info.classList.remove('on')});
 document.querySelectorAll('.st-lb,.st-rd').forEach(b=>b.addEventListener('pointerdown',()=>{b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}));   // the game binds #roomBtn / #solo itself
 {const bm=document.getElementById('st-bankm');document.getElementById('st-bank').onclick=document.getElementById('st-bal').onclick=()=>bankOpen();
- bm.onclick=e=>{const t=e.target.closest('[data-bk]');if(t)bankTake(t.dataset.bk);else if(e.target===bm||e.target.classList.contains('st-x'))bm.classList.remove('on')};
+ bm.onclick=e=>{const t=e.target.closest('[data-bk]'),h=e.target.closest('[data-bkh]');if(h)histShow(h.dataset.bkh==='1');else if(t)bankTake(t.dataset.bk);else if(e.target===bm||e.target.classList.contains('st-x'))bm.classList.remove('on')};
  addEventListener('keydown',e=>{if(e.key==='Escape')bm.classList.remove('on')});
  walEscape();walPaint();let ob=0;try{ob=sessionStorage.getItem('mjBank');sessionStorage.removeItem('mjBank')}catch(e){}
  if(ob||walNote)setTimeout(()=>{bankOpen();if(walNote){const n=document.querySelector('#st-bankm .bk-note');if(n)n.textContent=walNote}},600)}
