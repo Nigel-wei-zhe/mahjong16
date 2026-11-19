@@ -790,8 +790,15 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .fhd{flex:none;width:56px;text-align:right;font:900 17px/1 var(--serif);font-variant-numeric:tabular-nums;color:#f3e9d266}.fhd.pos{color:#7CFC8A}.fhd.neg{color:#ff8a80}
 </style>
 <style id="neon">
+/* landscape phones: everything that reads or takes a tap keeps clear of the left / right screen edges (iPhone corners, native bars) */
+:root{--edge:max(40px,env(safe-area-inset-left),env(safe-area-inset-right))}
+#ginfo{left:var(--edge)!important}
+#mine{padding-left:var(--edge)!important;padding-right:var(--edge)!important}
+#prof .pfin{right:calc(var(--edge) + 46px)!important}#prof .pfx{right:var(--edge)!important}#prof .pfnav.l{left:var(--edge)!important}#prof .pfnav.r{right:var(--edge)!important}
+#lobby #lobbyCard{padding-left:var(--edge)!important;padding-right:var(--edge)!important}
+#fhp{padding-left:var(--edge)!important;padding-right:var(--edge)!important}
+#pause{padding-left:max(5%,var(--edge))!important}
 /* side margins for landscape phones (iPhone corners / native bars): settings and chat share one inset column */
-#table{--edge:max(26px,env(safe-area-inset-right))}
 #cfgBtn{right:var(--edge)!important}#auto{right:calc(var(--edge) + 50px)!important}
 #chatBtn{top:auto!important;right:var(--edge)!important;width:42px!important;bottom:calc(var(--bh) + var(--tw)*1.333 + 14px)}
 #chatP{top:auto!important;right:var(--edge)!important;bottom:calc(var(--bh) + var(--tw)*1.333 + 58px)}
@@ -1389,9 +1396,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #menu #mtop{z-index:43;pointer-events:none}
 
 
-#st-prof{left:auto;right:66px;bottom:46px;--sc:.78;--ry:-24deg;--c:#7fe9ff;--g:#14c8ff;--g2:#14c8ff44;--fs:13px}#st-prof .box{width:38px;height:96px}
-#st-infoB{left:auto;right:14px;bottom:12px;--sc:.86;--ry:-30deg;--c:#c9a8ff;--g:#9a5cff;--g2:#9a5cff44;--fs:15px}#st-infoB .box{width:40px;height:78px}
-#st-ver{right:18px!important;bottom:6px!important;z-index:44}
+#st-prof{left:auto;right:94px;bottom:46px;--sc:.78;--ry:-24deg;--c:#7fe9ff;--g:#14c8ff;--g2:#14c8ff44;--fs:13px}#st-prof .box{width:38px;height:96px}
+#st-infoB{left:auto;right:42px;bottom:12px;--sc:.86;--ry:-30deg;--c:#c9a8ff;--g:#9a5cff;--g2:#9a5cff44;--fs:15px}#st-infoB .box{width:40px;height:78px}
+#st-ver{right:42px!important;bottom:6px!important;z-index:44}
 
 /* road markings: 包廂 / 練習 are painted into img/plate.webp; these are the hotspots + press glow */
 .st-rd{position:absolute;z-index:6;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:#0000}
@@ -1464,7 +1471,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="st-row"><b>字型</b><p>Zen Maru Gothic・Noto Sans TC・Noto Serif TC・DotGothic16・Hachi Maru Pop（SIL OFL 1.1）</p></div>
     <h3>聲明</h3>
     <p>本作為免費網頁遊戲，不涉及金錢輸贏。角色、店家與故事均為虛構，角色皆為成年人。</p>
-  </div></div></div><div id="kv"></div><div id="mtop"><span class="dot"></span><span>線上</span><span class="sp"></span></div><div class="card">
+  </div></div></div><div id="kv"></div><div class="card">
     <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
     <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<br>語音：つくよみちゃん（CV.夢前黎）・JVNV（CC BY-SA）<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
@@ -2343,10 +2350,11 @@ function draw3D(me,live,lastKey){
     winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),
     dealer:(G.dealer-me+4)%4,turn:live?((G.ph==='claim'&&G.last?G.last.f:G.turn)-me+4)%4:-1})}
 /* my row: shrink the tiles when hand + flowers + melds would not fit across the screen */
+function edgePx(){return parseFloat(getComputedStyle($('mine')).paddingLeft)||40}
 function fitMine(){
   const m=$('mine');m.style.removeProperty('--tw');m.style.removeProperty('--mw');m.style.removeProperty('--sw');
-  const need=$('hand').scrollWidth+$('mr').scrollWidth+34;if(need<=RW)return;
-  const f=Math.max(.6,(RW-34)/(need-34)),tw=TWB*f;m.style.setProperty('--tw',tw+'px');m.style.setProperty('--mw',tw*.74+'px');m.style.setProperty('--sw',tw*.6+'px')}
+  const pad=2*edgePx()+14,need=$('hand').scrollWidth+$('mr').scrollWidth+pad;if(need<=RW)return;
+  const f=Math.max(.6,(RW-pad)/(need-pad)),tw=TWB*f;m.style.setProperty('--tw',tw+'px');m.style.setProperty('--mw',tw*.74+'px');m.style.setProperty('--sw',tw*.6+'px')}
 let lastDelta=0,shownLast='',shownDraw='',flHand='',flSeen=[0,0,0,0];
 /* ---------- sound (synthesised, no audio files) ---------- */
 const SND={ctx:null,on:true};try{SND.on=localStorage.getItem('mjSnd')!=='0'}catch(e){}
@@ -2392,7 +2400,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1007';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1024';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3197,8 +3205,8 @@ async function init(){
     camera.updateMatrixWorld();camP0.copy(camera.position);camT0.copy(tgt);
     // windows live in the strips outside the side hands, the top player's at the top right, mine above my hand at the left
     const sw=Math.round(H*.18),sh=sw*1.3;byId('root').style.setProperty('--cw',sw+'px');
-    const hl=P(-11.6,0,-3),hr=P(11.6,0,-3);
-    Object.assign(lay,{L:{x:Math.max(4,Math.min(W*.02,hl.x-sw-4)),y:H*.2},R:{x:Math.min(W-sw-4,Math.max(W*.98-sw,hr.x+4)),y:H*.2},T:{x:W*.66,y:sw*.3},B:{x:W*.2,y:HT-sh-14}});
+    const hl=P(-11.6,0,-3),hr=P(11.6,0,-3),EG=(parseFloat(getComputedStyle(byId('mine')).paddingLeft)||40)+14;   // window edge = screen edge margin + the name plate overhang
+    Object.assign(lay,{L:{x:Math.max(EG,Math.min(W*.02,hl.x-sw-4)),y:H*.2},R:{x:Math.min(W-sw-EG,Math.max(W*.98-sw,hr.x+4)),y:H*.2},T:{x:W*.66,y:sw*.3},B:{x:W*.2,y:HT-sh-14}});
     // the top player's window must stay left of the right player's tile row (its far end runs up into the top-right corner); 22px leaves room for the label overhang
     lay.T.x=Math.min(lay.T.x,Math.min(P(10.2,0,-11.4).x,P(10.2,0,-6).x)-sw-22);
     for(const k in lay){const o=lay[k];o.w=sw;o.h=sh;const d=byId('sw'+k);d.style.left=o.x+'px';d.style.top=o.y+'px';d.style.removeProperty('--cw')}
