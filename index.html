@@ -1236,6 +1236,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rm-inv{border-color:var(--cyt)!important;color:var(--cyc)!important;box-shadow:0 0 8px #14c8ff55!important;text-shadow:0 0 5px var(--cy)}
 .rm-pill{background:#0b0710cc!important;border:1px solid var(--cyt)!important;box-shadow:0 0 8px #14c8ff55!important;color:var(--cyc)!important;font-family:var(--ng)!important;font-weight:700!important}
 .rm-pill i{color:#6d6480!important}.rm-pill u{color:var(--cyt)!important}
+.rm-pill{cursor:default!important;border-color:transparent!important;box-shadow:none!important;background:#0b071088!important}.rm-cfg{height:36px!important}.rm-back svg{display:block}.rm-cfg{white-space:nowrap}
 .rm-code{font-family:var(--ui)!important;color:#a99fb8!important}.rm-code b{font:400 17px/1 var(--led)!important;color:var(--amb)!important;text-shadow:0 0 6px #ff8a00!important}
 .rm-cd .rm-fr{border:1.2px solid #f6e2ee26!important;background:radial-gradient(ellipse 90% 70% at 50% 30%,#2a1840,#120a1a 70%,#07050c)!important;box-shadow:0 8px 18px #000c!important}
 .rm-cd .rm-fr::before{background:linear-gradient(115deg,#0000 30%,#ffffff10 38%,#0000 46%)!important}
@@ -2435,7 +2436,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1103';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1106';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2554,10 +2555,10 @@ function renderLobby(){
     cards.push(`<div class="rm-cd${me?' rm-me':''}${!p&&R?' rm-emp':''}"${k!=null?` data-c="${k}" style="${col(k)}"`:''}><div class="rm-fr">${a.n||a.w?`<img alt=""${nNarrow(a)?' class="rm-nw"':''} src="${a.n||a.w}">`:''}<div class="rm-sh"></div></div>`+
       `${R&&i===0&&p?'<div class="rm-hs">房主</div>':''}<div class="rm-wn">${WIND[i]}</div>${!p&&R?'<button class="rm-add" data-inv="1" aria-label="邀請">+</button>':''}`+
       `${isHost&&k!=null?`<button class="rm-sw" data-sw="${i}" aria-label="換人">⇄</button>`:''}<div class="rm-inf">${inf}</div></div>`)}
-  const top=`<div class="rm-top"><button class="rm-back" id="leave" aria-label="返回">‹</button><div class="rm-ttl">${R?'好友包廂':'單機包廂'}</div>`+
-    `<button class="rm-pill" data-cfgp="1">${c.r===4?'一將':'一圈'} <i>·</i> ${c.b}／${c.t} <i>·</i> ${c.s} 秒<u>⚙</u></button>`+
-    `<div class="rm-r">${R?`<span class="rm-code">包廂號 <b>${esc(roomCode)}</b></span><button class="rm-inv" data-inv="1">邀請</button>`:''}</div></div>`;
-  const bot=`<div class="rm-bot">${isHost?'<button class="rm-rer" id="reroll">🎲 重骰</button>':''}`+
+  const top=`<div class="rm-top"><button class="rm-back" id="leave" aria-label="返回"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="rm-ttl">${R?'好友包廂':'單機包廂'}</div>`+
+    `<div class="rm-pill">${c.r===4?'一將':'一圈'} <i>·</i> ${c.b}／${c.t} <i>·</i> ${c.s} 秒</div>`+
+    `<div class="rm-r">${R?`<span class="rm-code">包廂號 <b>${esc(roomCode)}</b></span><button class="rm-inv" data-inv="1">邀請</button>`:''}<button class="rm-inv rm-cfg" data-cfgp="1">房間設定</button></div></div>`;
+  const bot=`<div class="rm-bot">${isHost?'<button class="rm-rer" id="reroll">隨機入座</button>':''}`+
     `${settling?'<span class="rm-wait">連線中…</span>':isHost?'<button class="big rm-go" id="start">入座開局</button>':'<span class="rm-wait">等房主開局…</span>'}<div class="lmsg"></div></div>`;
   let sh='';
   if(lobS==='cfg')sh=`<div class="lmask" data-sx="1"><div class="lsheet"><h3>牌局設定<small>${isHost?'':'由房主決定'}</small></h3>
