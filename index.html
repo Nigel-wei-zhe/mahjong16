@@ -35,13 +35,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0a10;color:#f3efe2;
 .sm{--tw:var(--sw)}.xs{--tw:calc(var(--sw)*.78)}
 .t.last{outline:2px solid #ffd54a;box-shadow:0 0 10px #ffd54a}
 .t.dim{filter:brightness(.82)}
-/* chips */
-.chips{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:12px;font-variant-numeric:tabular-nums;line-height:1.2}
-.chipg{display:inline-flex;align-items:center;gap:2px}
-.chip{display:inline-block;width:1.15em;height:1.15em;border-radius:50%;border:.17em dashed #ffffffd9;box-shadow:0 1px 0 #0008,0 2px 0 #0004}
-.c1000{background:#c9971c}.c500{background:#7a3fb0}.c100{background:#c0241c}.c20{background:#1b7a45}
-.tot{font-weight:800;color:#ffd54a;margin-left:2px}.card .tot{color:#14573a}
-.debt{color:#ff8a80;font-weight:800}
 /* layout: a WebGL table (canvas#gl, drawn by the module script) under HTML chrome: my hand row, buttons, and four small portrait windows */
 #table{position:absolute;inset:0;overflow:hidden;overflow:clip}
 #room{position:absolute;inset:0;background:
@@ -82,7 +75,6 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 .sw .lb::before{left:-4px}.sw .lb::after{right:-4px}
 .sw.on .lb{border-color:#ffe08a;box-shadow:inset 0 0 0 1px #8a4a1a,inset 0 1px 0 #fff2c055,0 0 0 1px #0009,0 0 10px #ffc95a99,0 3px 8px #000b}
 .sw .lb .wd{padding:0 3px;font-size:10px;line-height:1.3}.sw .lb .badge{margin:0;padding:0 5px;font:900 9.5px/1.45 system-ui,sans-serif;letter-spacing:0;border-radius:2px;box-shadow:0 0 6px #c0241c99}
-.sw .lb .chips{margin-left:4px;font-size:inherit}.sw .lb .tot{color:#e9c46a}.sw .lb .delta{opacity:.75;margin-left:3px;font-weight:600}
 .sw.on .fr{border-color:#ffd54a;box-shadow:0 0 0 2px #1c0810,0 0 18px #ffc76acc,0 6px 16px #000c}
 .sw.on img{filter:brightness(1.06) saturate(1.06) drop-shadow(0 0 2px #ffe2a0aa)}
 .sw.cuthide{opacity:0;transition:opacity .1s}
@@ -113,7 +105,7 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index
 #myMelds .t,#myFl .t{box-shadow:0 calc(var(--tw)*.1) 0 #2f95c8,0 calc(var(--tw)*.16) calc(var(--tw)*.12) #0007}
 #timer{top:auto;bottom:auto;width:28px;height:28px;padding:0;border-radius:50%;font-size:13px;line-height:26px;text-align:center}#timer.mine{background:linear-gradient(#f3d27e,#b8862b);color:#2a1406;border-color:#ffe08a}
 #ginfo{left:4px;top:4px;font-size:11px;color:#cfe6ff;line-height:1.4;padding:1px 6px}#ginfo:empty{display:none}
-.plate .chips{margin-left:5px;font-size:inherit}.plate .nm{margin-right:1px}
+.plate .nm{margin-right:1px}
 
 
 #acts{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--bh) + var(--tw)*1.333 + 6px);display:flex;gap:8px;align-items:center;z-index:7;white-space:nowrap}
@@ -142,8 +134,7 @@ input{width:100%;padding:11px;border-radius:12px;border:1px solid #b9b08e;backgr
 .tai span{background:#e9e2cb;border-radius:8px;padding:3px 9px;font-size:13px}
 .tai span b{color:#c0241c}
 .pay{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0;font-size:13px}
-.pay div{background:#e9e2cb;border-radius:8px;padding:5px 2px}.xfer{font-size:13px;margin:6px 0;line-height:1.7}.legend{font-size:11px;opacity:.7;margin:4px 0}.legend .chip{font-size:11px;vertical-align:-2px;margin:0 2px 0 8px}
-.pay .chips{justify-content:center}
+.pay div{background:#e9e2cb;border-radius:8px;padding:5px 2px}.xfer{font-size:13px;margin:6px 0;line-height:1.7}
 .pay .pos{color:#19743f;font-weight:800}.pay .neg{color:#c0241c;font-weight:800}
 
 /* ================= v2 theme: lacquer + gold ================= */
@@ -664,7 +655,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #kv .g.c2{--k:.66}
 #mtop{position:absolute;left:0;right:0;top:0;height:30px;z-index:6;display:flex;align-items:center;gap:10px;padding:0 12px;background:linear-gradient(#0d0407ee,#0d040700);font:700 12px system-ui;color:#f3e9d2cc;letter-spacing:1px}
 #mtop .dot{width:7px;height:7px;border-radius:50%;background:#5fd38a;box-shadow:0 0 6px #5fd38a}
-#mtop>*{flex:none;white-space:nowrap;writing-mode:horizontal-tb}#mtop .sp{flex:1}#mtop .mchip{display:inline-block;line-height:18px;padding:3px 10px;border:1px solid #c9973f66;border-radius:12px;background:#1a0a10aa}
+#mtop>*{flex:none;white-space:nowrap;writing-mode:horizontal-tb}#mtop .sp{flex:1}
 #mtop .cnt{color:#f6dc8c}
 #kv .nm8{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);z-index:8;font:700 10px system-ui;letter-spacing:2px;color:#ffe9c0;text-shadow:0 1px 3px #000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 #kv .g:hover .nm8,#kv .g.sel .nm8{opacity:1}
@@ -915,8 +906,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #table,#result{font-family:var(--ui)}
 #table button,#result button{font-family:var(--ui)}
 .sw .lb{font-size:11px!important}
+.sw .lb .wbal{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:2px;font:400 10px/1 var(--led);color:var(--amb);text-shadow:0 0 4px #ff8a0088;white-space:nowrap;pointer-events:none}.sw .lb .wbal.neg{color:#ff8a94;text-shadow:0 0 4px #ff4d5e88}
 .badge{font:900 10px/1.5 var(--ng)!important;letter-spacing:.05em!important}
-.plate,.sw .lb .tot,.sw .lb .chips{font-family:var(--led)!important;font-weight:400!important;color:var(--amb)!important;text-shadow:0 0 5px #ff8a00aa!important}
+.plate{font-family:var(--led)!important;font-weight:400!important;color:var(--amb)!important;text-shadow:0 0 5px #ff8a00aa!important}
 .ab small{font-family:var(--led)!important;font-weight:400!important;font-size:13px!important}
 /* result */
 .res.hu .rw,.res.hu .rw .nm{font:700 17px/1.2 var(--ui)!important;color:#ece6f4!important}
@@ -1167,6 +1159,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rb.ov .ork .ov2{font-size:22px!important}.rb.ov .ork .ov2.neg{color:#cfc6dc!important;text-shadow:none!important}
 .rb.ov .ork .otot{font-size:10.5px!important;color:#6d6480!important;margin-top:3px}
 .rb.ov button.big{width:auto!important;min-width:160px;align-self:flex-start;margin:22px 0 0!important;padding:11px 26px!important}
+.rb.ov .orow{display:flex;gap:12px;align-items:flex-end}.rb.ov .orow button.big.alt{min-width:110px;color:#a99fb8!important;text-shadow:none!important;font-family:var(--ui)!important;font-weight:500!important;box-shadow:inset 0 0 0 1px #ffffff22!important;background:#120a1a99!important}.rb.ov .orow button.big.alt::before{display:none}#result .rb.ov .orow button.big.alt,#result .rb.ov .orow button.big.alt *{color:#a99fb8!important;text-shadow:none!important;-webkit-text-stroke:0!important}
 .card.res:has(.rb.ov) .rb.ov{overflow:visible!important}.rb.ov .bt{margin-left:0!important;text-indent:0!important;align-self:flex-start!important;width:auto!important}
 .card.res:has(.rb.ov) .rp.win::after{display:none!important}
 #result .card.res:has(.rb.ov)::after{content:"";position:absolute;left:11%;width:32%;top:-4%;bottom:12%;z-index:1;pointer-events:none;
@@ -1540,7 +1533,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div id="st-serin"><img class="p" src="img/serin.webp" alt="瑟琳"></div>
   <div id="st-hit"></div>
   
-  <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb" id="st-bank" aria-label="錢莊"><div class="box"><span>錢莊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button id="st-bal" aria-label="餘額">餘額<b>10,000</b></button>
+  <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb" id="st-bank" aria-label="錢莊"><div class="box"><span>錢莊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button id="st-bal" aria-label="餘額">餘額<b>$10,000</b></button>
   <div id="st-say"><b>瑟琳</b><br>今晚，留下來陪我打一圈？</div>
   <div id="st-grade"></div><div id="st-grain"></div>
   
@@ -1548,7 +1541,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <div id="st-bankm"><div class="st-pn">
     <button class="st-x" aria-label="關閉">×</button>
     <h2>錢莊</h2>
-    <div class="bk-bal"><small>餘額</small><b id="bkBal">10,000</b></div>
+    <div class="bk-bal"><small>餘額</small><b id="bkBal">$10,000</b></div>
     <div id="bkOpts"></div>
     <p class="bk-note"></p>
   </div></div><div id="st-info"><div class="st-pn">
@@ -1639,7 +1632,6 @@ function tile(k,cls,attr){
   else{c='kx k'+k+' f '+(k<38?'fs':'fp');inner=`<em>${FLO[k-34]}</em><sup>${(k-34)%4+1}</sup>`}
   return `<span class="t ${c} ${cls||''}" ${attr||''}>${inner}</span>`}
 const START=3000,DEN=[1000,500,100,20];
-function chips(n){return n<0?`<span class="chips"><span class="debt">欠 $${-n}</span></span>`:`<span class="chips"><span class="tot">$${n}</span></span>`}
 
 /* ---------- hand analysis ---------- */
 function sets(c,n){
@@ -1700,7 +1692,7 @@ function assignSeats(){
   const ids=plist.map(p=>p.id),seats=(G.seats||['','','','']).map(p=>ids.includes(p)?p:'');
   for(const id of ids){if(seats.includes(id))continue;const i=seats.indexOf('');if(i<0)break;seats[i]=id}
   G.seats=seats;G.nm=seats.map((id,i)=>id?peerName(id,i):'')}
-function newGame(){const c0=cfg(),st0=c0.b*30,keep=G.lchs||G.chs,ob=G.bk||{};G={st:'play',v:G.v,ev:G.ev,gid:Math.random().toString(36).slice(2,8),seats:G.seats,cfg:c0,score:[st0,st0,st0,st0],dealer:0,wind:0,ju:0,lian:0,co:R?0:(G.st==='over'?Math.random()*3|0:G.co|0)};G.stat=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];assignSeats();G.bk={};for(const id of G.seats)if(id)G.bk[id]=ob[id]!=null?ob[id]:seedBal(id);G.chs=keep&&keep.length===4?keep.slice():dealChs();startHand()}
+function newGame(){const c0=cfg(),keep=G.lchs||G.chs,ob=G.bk||{};G={st:'play',v:G.v,ev:G.ev,gid:Math.random().toString(36).slice(2,8),seats:G.seats,cfg:c0,score:[0,0,0,0],dealer:0,wind:0,ju:0,lian:0,co:R?0:(G.st==='over'?Math.random()*3|0:G.co|0)};G.stat=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];assignSeats();G.bk={};for(const id of G.seats)if(id)G.bk[id]=ob[id]!=null?ob[id]:seedBal(id);G.chs=keep&&keep.length===4?keep.slice():dealChs();startHand()}
 function startHand(){
   const w=[];for(let k=0;k<34;k++)for(let i=0;i<4;i++)w.push(k);for(let k=34;k<42;k++)w.push(k);
   for(let i=w.length-1;i>0;i--){const j=Math.random()*(i+1)|0;const t=w[i];w[i]=w[j];w[j]=t}
@@ -2342,8 +2334,10 @@ function placeWin(k,s,lit,live,extra){
   if(!d.firstChild)d.innerHTML='<div class="fr"></div><div class="wn"><img alt=""></div><div class="lb"></div><div class="aut">託管</div>';
   const img=d.querySelector('img');if(a&&img.dataset.k!==c+vk){const was=img.dataset.k;img.dataset.k=c+vk;img.src=a[vk]||a[bk];
     if(was&&was[0]===c){d.classList.remove('mood');void d.offsetWidth;d.classList.add('mood')}}
-  const nm=`${s===G.dealer?`<span class="badge">莊${G.lian?'・連'+G.lian:''}</span>`:''}<span class="nm">${esc(nameOf(s))}</span>${extra||''}`,el=d.querySelector('.lb');if(el.innerHTML!==nm)el.innerHTML=nm;
+  const nm=`${s===G.dealer?`<span class="badge">莊${G.lian?'・連'+G.lian:''}</span>`:''}<span class="nm">${esc(nameOf(s))}</span>${extra||''}${walTag(s)}`,el=d.querySelector('.lb');if(el.innerHTML!==nm)el.innerHTML=nm;
   d.classList.toggle('nw',bk==='n');d.classList.toggle('nx',!!(a&&a.nx&&a.nx.includes(vk)));d.classList.toggle('on',lit);d.classList.toggle('off',live&&!lit);d.classList.toggle('au',autoTag(s))}
+// a real player's wallet under the name plate (the host's ledger; bots have none): its own line, so the plate never gets wider
+function walTag(s){const id=G.seats&&G.seats[s],b=id&&G.bk&&G.bk[id];return typeof b==='number'?`<span class="wbal${b<0?' neg':''}">${money(b)}</span>`:''}
 // a real player who let the computer play for them (託管 on); a player who dropped out is played by the computer too, so they get the same tag
 function autoTag(s){if(AUTO||!G.seats||G.st!=='play')return false;const p=G.seats[s];if(!R)return s===mySeat()&&myAuto;if(!p)return false;
   if(p===myPeer)return myAuto;if(!present().has(p))return true;const q=plist.find(x=>x.id===p);return !!(q&&q.pr.au)}
@@ -2459,7 +2453,8 @@ function draw3D(me,live,lastKey){
     melds:G.melds[s].map(m=>{if(m[0]==='c')return chiTiles(m);const k=kd(m[1]);return m[0]==='p'?[k,k,k]:m[0]==='a'?[-1,-1,-1,-1]:[k,k,k,k]})}});
   const lp=G.last&&lastKey?(G.last.f-me+4)%4:0,lt=fwPay()>=0?{pos:(G.res.f-me+4)%4,fl:1}:G.last&&lastKey?(G.last.q!=null?{pos:lp,m:G.last.q}:{pos:lp,i:G.disc[G.last.f].length-1}):null;
   T3.draw({seats,last:lt,lastKey,hi:hiK(),fast:introFast(),intro:!!IN,spec:mySeat()<0,round:WIND[G.wind]+'風'+WIND[G.ju]+'局',lian:G.lian|0,left:Math.max(0,G.wall.length-16),
-    winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),
+    winds:[0,1,2,3].map(pos=>WIND[((me+pos)%4-G.dealer+4)%4]),scores:[0,1,2,3].map(pos=>G.score[(me+pos)%4]),   // G.score = this match's win/loss from 0 (no chips since 2026-11-19: the only money is the wallet)
+
     dealer:(G.dealer-me+4)%4,turn:live?((G.ph==='claim'&&G.last?G.last.f:G.turn)-me+4)%4:-1})}
 /* my row: shrink the tiles when hand + flowers + melds would not fit across the screen */
 function edgePx(){return parseFloat(getComputedStyle($('mine')).paddingLeft)||40}
@@ -2512,7 +2507,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1352';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1432';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2651,7 +2646,7 @@ const QUIPS=[
  {take:["這張牌，你配嗎？算我賞你的。", "原來，你一直等著我這張。"],took:["親愛的，這張我就笑納了。", "這張收得不燒心，親愛的。"],dealin:["哎呀，被你看穿了，親愛的真壞。", "讓你一次……下次可沒這麼好說話。"],beatme:["親愛的，我要你輸得心服口服。", "上一世你讓我等了一整晚，這一世輪到你輸。"],zimo:["不好意思，我自己摸才優雅。", "運氣好到擋不住，真是抱歉呢。"],lian:["莊家的位子，我坐得很舒服。", "再來一局吧，今晚誰都不准走。"]},
  {take:["敢搶姊的牌？你很有種嘛！", "好啊，敢搶就要敢接招！"],took:["規矩姊先立好，這張歸我！", "這張送得好，姊記你一功！"],dealin:["我就爛！這把算姊請你的啦！", "哼，算你厲害，下一把討回來！"],beatme:["跪下叫姊！今晚宵夜你買單！", "宵夜你請，姊吃了不燒心！"],zimo:["這把姊自己摸，誰敢不服！", "重生回到這一局，這次姊不會再輸！"],lian:["莊家是我的，誰都別想搶！", "全場聽令，陪姊打到天亮！"]},
  {take:["喵嗚！搶小貓的牌，真的會謝～", "欸～那張我捨不得的耶。"],took:["嘿嘿，謝謝你餵我～", "這是你寵我的證據，收下囉喵～"],dealin:["嗚，芭比Q了，被你抓到尾巴了喵！", "好啦好啦，這次算你贏。"],beatme:["抓到你了～", "男人，你成功引起本喵的注意了～"],zimo:["自己摸到的魚最甜了喵～", "自己摸的魚，吃了不燒心喵～"],lian:["再一局嘛，好不好～", "贏了還要繼續，你陪本喵吃宵夜～"]},
- {take:["……計算之外。你記住了。", "好的呢，攔截我的專案是吧？"],took:["效率很好，謝謝配合。", "這張，納入我的季度報表。"],dealin:["這筆先記著。下一局，我會算回來。", "寧可少賺點，規矩不能壞。"],beatme:["結帳時間到了。", "三分鐘內，我要你賠光所有籌碼。"],zimo:["完美收支。", "不靠別人，這就是職場女強人。"],lian:["延長加班，你奉陪嗎？", "專案還沒結案，誰都不准下班。"]},
+ {take:["……計算之外。你記住了。", "好的呢，攔截我的專案是吧？"],took:["效率很好，謝謝配合。", "這張，納入我的季度報表。"],dealin:["這筆先記著。下一局，我會算回來。", "寧可少賺點，規矩不能壞。"],beatme:["結帳時間到了。", "三分鐘內，我要你把錢包賠光。"],zimo:["完美收支。", "不靠別人，這就是職場女強人。"],lian:["延長加班，你奉陪嗎？", "專案還沒結案，誰都不准下班。"]},
  {take:["想搶我的牌？膽子不小。", "敢劫警車？這張牌你也配？"],took:["這張，依法沒收。", "別發呆，牌交出來配合調查！"],dealin:["……這次算你逮到我。", "防線被突破了……算你狠！"],beatme:["你被逮捕了，罪名是輸給我。", "放棄抵抗，罰你今晚歸我管轄！"],zimo:["證據確鑿，自摸。", "親手破案，不假他人之手！"],lian:["先把規矩立住，路才能越走越寬。", "莊家我守著，今晚誰都別想保釋！"]},
  {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與本宮有緣。", "施主有心了，這張本宮收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給本宮，不丟臉喔。", "區區凡人，也敢與本宮爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，本宮自摸呢～"],lian:["上一世輸給你，這一世本宮連本帶利討回來。", "手氣正旺，陪本宮修煉到天亮～"]},
  {take:["主人好眼光，這張請收下。", "主人連女僕的牌都要搶，好貪心呢～"],took:["謝謝主人的賞賜～", "主人好大方，這張我收走囉～"],dealin:["主人真是壞心眼呢。", "啊，服務出包了……請主人手下留情～"],beatme:["貴是貴了點，但主人輸得不燒心～", "從今天起，換主人乖乖聽我的話囉～"],zimo:["服務完畢，請笑納。", "不勞主人動手，我自己摸最香～"],lian:["莊家的位子，我先幫您暖著。", "主人今晚，別想早睡囉～"]},
@@ -2717,7 +2712,7 @@ function evQuip(ev){
 /* result-screen line: stable across re-renders */
 function resQuip(seat,kind){
   const me=mySeat();if(me<0||seat<0||seat===me||!isBot(seat))return '';
-  const L=QUIPS[chr(seat)][kind],i=(G.wind*13+G.ju*7+G.lian*3+(G.score[0]|0))%L.length;return `<q>${esc(L[i])}</q>`}
+  const L=QUIPS[chr(seat)][kind],i=(((G.wind*13+G.ju*7+G.lian*3+(G.score[0]|0))%L.length)+L.length)%L.length;return `<q>${esc(L[i])}</q>`}
 function fullImg(seat,lose,q,tag){const a=seat>=0&&window.AVATARS&&window.AVATARS[chr(seat)],src=a&&(lose?a.X:a.W);return src?`<div class="rp ${lose?'lose':'win'}"><img alt="" src="${src}">${q||''}</div>`:''}
 /* the one who looks ruined: whoever dealt in, or on a self-draw whoever paid the most */
 function huArt(seat,lose,q){const a=seat>=0&&window.AVATARS&&window.AVATARS[chr(seat)],src=a&&(lose?a.X:a.W);const k=lose?'lose':'win';
@@ -2731,20 +2726,20 @@ let resHold=0;
 function renderResult(){
   const el=$('resCard');
   if(G.st==='over'){
-    const rank=[0,1,2,3].sort((a,b)=>G.score[b]-G.score[a]),st0=cfg().b*30,me=mySeat(),mx=Math.max(...G.score.map(v=>Math.abs(v-st0)),1),S=G.stat||[];
+    const rank=[0,1,2,3].sort((a,b)=>G.score[b]-G.score[a]),me=mySeat(),mx=Math.max(...G.score.map(v=>Math.abs(v)),1),S=G.stat||[];
     const qw=rank[0]!==me?resQuip(rank[0],'zimo'):'',ql=rank[0]===me?resQuip(rank[3],'dealin'):'';
-    el.innerHTML=fullImg(rank[0],false,qw,'冠軍')+`<div class="rb ov"><h1 class="bt">${cfg().r>1?'一將':'一圈'}結束</h1>`+rank.map((s,i)=>{const dv=G.score[s]-st0,t=S[s]||[0,0,0,0];
+    el.innerHTML=fullImg(rank[0],false,qw,'冠軍')+`<div class="rb ov"><h1 class="bt">${cfg().r>1?'一將':'一圈'}結束</h1>`+rank.map((s,i)=>{const dv=G.score[s],t=S[s]||[0,0,0,0];
       return `<div class="pl ork rk${i}" data-s="${s}"><b class="md m${i}">${i+1}</b><span class="fc c${chr(s)}"></span><div class="on"><div class="onn">${seatLabel(s)}</div>`+
         `<div class="ost">胡 ${t[0]}・自摸 ${t[1]}・放槍 ${t[2]}${t[3]?`・最大 ${t[3]} 台`:''}</div></div>`+
-        `<div class="osc"><div class="ov2 ${dv>0?'pos':dv<0?'neg':''}">${dv?fmt(dv):'±0'}</div><div class="obar"><i class="${dv<0?'n':''}" style="width:${(Math.abs(dv)/mx*100).toFixed(0)}%"></i></div><div class="otot">$${G.score[s]}</div></div></div>`}).join('')+
-      (me>=0?`<div class="obal${W.bal<buyIn()?' lo':''}">你的餘額<b>${money(W.bal)}</b></div>`:'')+(me>=0&&W.bal<buyIn()?`<button class="big" data-bank="1">餘額不足・去錢莊</button></div>`:`<button class="big" data-next="1">再來一場</button></div>`)+fullImg(rank[3],true,ql,'墊底');
+        `<div class="osc"><div class="ov2 ${dv>0?'pos':dv<0?'neg':''}">${dv?fmt(dv):'±0'}</div><div class="obar"><i class="${dv<0?'n':''}" style="width:${(Math.abs(dv)/mx*100).toFixed(0)}%"></i></div></div></div>`}).join('')+
+      (me>=0?`<div class="obal${W.bal<buyIn()?' lo':''}">你的餘額<b>${money(W.bal)}</b></div>`:'')+`<div class="orow">`+(me>=0&&W.bal<buyIn()?`<button class="big" data-bank="1">餘額不足・去錢莊</button></div>`:`<button class="big" data-next="1">再來一場</button>`)+`<button class="big alt" data-leave="1">離開</button></div></div>`+fullImg(rank[3],true,ql,'墊底');
     show('result',true);return}
   if(G.st!=='play'||G.ph!=='end'||!G.res){show('result',false);return}
   if(G.res.w>=0&&performance.now()<resHold){show('result',false);return}
   const r=G.res;let h;if(r.d)lastResD=r.d;
   if(r.w<0){const A=window.AVATARS||[];
     h=`<div class="dhd"><h1 class="bt">流局</h1><p>牌牆摸完，沒有人胡牌・<b>${esc(nameOf(G.dealer))}</b> 連莊${G.lian?`（已連 ${G.lian}）`:''}</p></div><div class="dgrid">`+[0,1,2,3].map(s=>{const a=A[chr(s)]||{},pk=dcPose(s),src=a[pk]||a.tL||a.t||'';
-      return `<div class="dc${s===G.dealer?' dl':''}${pk?' nw':''}${pk&&a.nx&&a.nx.includes(pk)?' nx':''}"><div class="dfr"></div><div class="dwn">${src?`<img alt="" src="${src}">`:''}</div>${s===G.dealer?'<em>連莊</em>':''}<div class="dlb">${seatLabel(s)}</div><div class="dsc">$${G.score[s]}</div></div>`}).join('')+`</div>`}
+      return `<div class="dc${s===G.dealer?' dl':''}${pk?' nw':''}${pk&&a.nx&&a.nx.includes(pk)?' nx':''}"><div class="dfr"></div><div class="dwn">${src?`<img alt="" src="${src}">`:''}</div>${s===G.dealer?'<em>連莊</em>':''}<div class="dlb">${seatLabel(s)}</div><div class="dsc">${(d=>d?fmt(d):'±0')(G.score[s])}</div></div>`}).join('')+`</div>`}
   else{
     const self=r.f<0,hand=[...G.hands[r.w]].map(kd);if(self){const i=hand.lastIndexOf(r.k);if(i>=0)hand.splice(i,1)}
     const lo=loserOf(r);
@@ -2921,7 +2916,7 @@ function walLoad(){try{const w=JSON.parse(localStorage.getItem(WKEY)||'null');if
 let W=walLoad(),walNote='';
 // this tab's id: other tabs of the same browser share the wallet, so a hand in progress is kept per tab, and every change re-reads the stored wallet first
 const WTAB=(()=>{let t='';try{t=sessionStorage.getItem('mjTab')||'';if(!t){t=Math.random().toString(36).slice(2,8);sessionStorage.setItem('mjTab',t)}}catch(e){t='t'}return t})();
-const money=n=>Math.round(n).toLocaleString('en-US');
+const money=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');   // every amount of money in the game: $9,860 / -$140
 function buyIn(c){return (c||cfg()).b*30}
 function walDay(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function walSave(net){W.bal=walClamp(W.bal);try{localStorage.setItem(WKEY,JSON.stringify(W))}catch(e){}walPaint();if(net!==false&&R)R.presence({bal:W.bal}).catch(()=>{})}
@@ -2935,6 +2930,8 @@ function handKey(){return (G.gid||'x')+':'+G.wind+':'+G.ju+':'+(G.lian|0)}
 // called on every render: settle a finished hand once (keyed by match + hand), remember a hand in progress (with a heartbeat, so an abandoned one can be told from another live tab)
 function walSync(){
   const me=mySeat(),mine=W.pend[WTAB];
+  // the match is over: square the wallet with the ledger once (a hand whose result screen was never drawn here would otherwise be lost)
+  if(G.st==='over'&&me>=0&&G.gid&&G.bk&&typeof G.bk[meId()]==='number'&&!W.done.includes(G.gid+':over'))walDo(w=>{w.bal=G.bk[meId()];w.done=w.done.concat(G.gid+':over').slice(-40);delete w.pend[WTAB]});
   if(G.st!=='play'||me<0||!G.gid){if(mine&&G.st!=='play')walDo(w=>{delete w.pend[WTAB]},false);return}
   const k=handKey();
   if(G.ph==='end'){if((G.res&&G.res.d&&!W.done.includes(k))||mine)walDo(w=>{let ch=false;
@@ -3048,10 +3045,11 @@ addEventListener('pointermove',e=>{
   dragPaint()});
 addEventListener('pointerup',e=>dragStop(e,false));addEventListener('pointercancel',e=>dragStop(e,true));
 $('acts').addEventListener('click',e=>{const b=e.target.closest('.ab');if(!b)return;try{doAct(JSON.parse(b.dataset.a))}catch(err){}});
-$('resCard').addEventListener('click',e=>{if(e.target.closest('[data-bank]')){try{sessionStorage.setItem('mjBank','1')}catch(x){}leaveRoom()}else if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
+$('resCard').addEventListener('click',e=>{if(e.target.closest('[data-leave]')){walDo(w=>{delete w.pend[WTAB]},false);leaveRoom()}else if(e.target.closest('[data-bank]')){try{sessionStorage.setItem('mjBank','1')}catch(x){}leaveRoom()}else if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
 let myJ=0;
 function enterRoom(code,room,saved){
-  R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
+  R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};{const o=(G.score||[]).reduce((a,b)=>a+b,0)/4;if(o)G.score=G.score.map(v=>v-o)}   /* a host save from before 2026-11-19 counted chips from 底×30 (scores sum to 4×that, now to 0) */
+  inMenu=false;
   show('menu',false);$('rmodal').classList.add('hide');show('lobby',G.st==='lobby');myJ=saved&&saved.j||Date.now();
   try{history.replaceState(null,'','?room='+code)}catch(e){}
   saveName();R.presence({j:myJ,nm:myName,bal:W.bal}).catch(()=>{});dirty=true}
@@ -3219,9 +3217,9 @@ async function init(){
       if(dl){up(-128,166,()=>{g.shadowColor='#ff3048';g.shadowBlur=14;g.fillStyle='#ff5a6a';g.beginPath();g.arc(0,0,6,0,7);g.fill();g.shadowBlur=0;
         if(v.lian){g.font=`400 20px ${LED}`;g.fillStyle='#ff8a94';g.textAlign='left';g.fillText('連'+v.lian,10,1)}})}
       // score: amber dot-matrix
-      const sc=v.scores[pos];g.font=`400 46px ${LED}`;g.fillStyle=sc<0?'#ff8a94':AMB;g.shadowColor=sc<0?'#ff4d5e':'#ff8a00';g.shadowBlur=10;
-      if(window.UPRIGHT){const side=pos%2===1,mw=side?88:190,w=g.measureText(String(sc)).width;if(w>mw)g.font=`400 ${Math.floor(46*mw/w)}px ${LED}`;g.textAlign='center';up(10,188,()=>g.fillText(String(sc),0,0))}
-      else{g.textAlign='center';g.fillText(String(sc),18,190)}g.shadowBlur=0;
+      const sc=v.scores[pos],sx=sc>0?'+'+sc:String(sc);g.font=`400 46px ${LED}`;g.fillStyle=sc<0?'#ff8a94':AMB;g.shadowColor=sc<0?'#ff4d5e':'#ff8a00';g.shadowBlur=10;
+      if(window.UPRIGHT){const side=pos%2===1,mw=side?88:190,w=g.measureText(sx).width;if(w>mw)g.font=`400 ${Math.floor(46*mw/w)}px ${LED}`;g.textAlign='center';up(10,188,()=>g.fillText(sx,0,0))}
+      else{g.textAlign='center';g.fillText(sx,18,190)}g.shadowBlur=0;
       g.restore()});
     // dice dome in the middle: glass bubble with a cyan ring tube
     g.save();g.shadowColor='#000';g.shadowBlur=22;q=g.createRadialGradient(236,222,10,256,256,96);q.addColorStop(0,'#2a2440');q.addColorStop(.7,'#0e0c18');q.addColorStop(1,'#07060c');
@@ -3230,12 +3228,15 @@ async function init(){
     q=g.createLinearGradient(190,170,300,300);q.addColorStop(0,'#ffffff22');q.addColorStop(.4,'#ffffff00');g.fillStyle=q;g.beginPath();g.arc(256,250,90,0,7);g.fill();   // glass highlight
     g.textAlign='center';g.textBaseline='middle';
     const r=String(v.round),r1=r.slice(0,2),r2=r.slice(2);
-    const w1=r1,w2=r2.slice(0,1);g.font=`900 60px ${NG}`;const W1=g.measureText(w1).width,W2=g.measureText(w2).width,x0=256-(W1+W2+6)/2;g.textAlign='left';
-    const lit=fx!=='end';g.fillStyle=lit?CYC:'#f6e2ee55';g.shadowColor=CY;g.shadowBlur=lit?20:0;g.fillText(w1,x0,250);if(lit){g.shadowBlur=7;g.fillText(w1,x0,250)}
-    g.fillStyle=lit?PKC:'#f6e2ee55';g.shadowColor=PK;g.shadowBlur=lit?24:0;g.fillText(w2,x0+W1+6,250);if(lit){g.shadowBlur=8;g.fillText(w2,x0+W1+6,250)}g.shadowBlur=0;g.textAlign='center';
+    const w1=r1,w2=r2.slice(0,1),TY=222;g.font=`900 55px ${NG}`;   // round + dealer and the tiles-left line form one block centred in the dome (r 104, centre y 250)
+    const W1=g.measureText(w1).width,W2=g.measureText(w2).width,x0=256-(W1+W2+6)/2;g.textAlign='left';
+    const lit=fx!=='end';g.fillStyle=lit?CYC:'#f6e2ee55';g.shadowColor=CY;g.shadowBlur=lit?20:0;g.fillText(w1,x0,TY);if(lit){g.shadowBlur=7;g.fillText(w1,x0,TY)}
+    g.fillStyle=lit?PKC:'#f6e2ee55';g.shadowColor=PK;g.shadowBlur=lit?24:0;g.fillText(w2,x0+W1+6,TY);if(lit){g.shadowBlur=8;g.fillText(w2,x0+W1+6,TY)}g.shadowBlur=0;g.textAlign='center';
     // tiles left: LED under the dome, red and blinking-ready when 8 or fewer remain
-    const low=v.left<=8;g.font=`400 30px ${LED}`;g.fillStyle='#cfc6dc';g.fillText('餘',206,316);
-    g.font=`400 50px ${LED}`;g.fillStyle=low?'#ff5a6a':AMB;g.shadowColor=low?'#ff3048':'#ff8a00';g.shadowBlur=12;g.fillText(String(v.left).padStart(2,'0'),272,316);g.shadowBlur=0;
+    const low=v.left<=8,nt=String(v.left).padStart(2,'0'),LY=287;g.textAlign='left';
+    g.font=`400 28px ${LED}`;const lw=g.measureText('餘').width;g.font=`400 50px ${LED}`;const nw=g.measureText(nt).width,lx=256-(lw+8+nw)/2;   // label + number centred as one unit
+    g.font=`400 28px ${LED}`;g.fillStyle='#cfc6dc';g.fillText('餘',lx,LY+3);
+    g.font=`400 50px ${LED}`;g.fillStyle=low?'#ff5a6a':AMB;g.shadowColor=low?'#ff3048':'#ff8a00';g.shadowBlur=12;g.fillText(nt,lx+lw+8,LY);g.shadowBlur=0;g.textAlign='center';
     ctex.needsUpdate=true}
   document.fonts&&document.fonts.load('400 40px "DotGothic16"').then(()=>document.fonts.load('900 40px "Zen Maru Gothic"')).then(()=>{cKey='';if(window.__dialV)drawCompass(window.__dialV)});
   window.__redial=()=>{cKey='';if(window.__dialV)drawCompass(window.__dialV)};
@@ -3418,7 +3419,7 @@ async function init(){
     // windows live in the strips outside the side hands, the top player's at the top right, mine above my hand at the left
     const sw=Math.round(H*.18),sh=sw*1.3;byId('root').style.setProperty('--cw',sw+'px');
     const hl=P(-11.6,0,-3),hr=P(11.6,0,-3),EG=(parseFloat(getComputedStyle(byId('mine')).paddingLeft)||40)+14;   // window edge = screen edge margin + the name plate overhang
-    Object.assign(lay,{L:{x:Math.max(EG,Math.min(W*.02,hl.x-sw-4)),y:H*.2},R:{x:Math.min(W-sw-EG,Math.max(W*.98-sw,hr.x+4)),y:H*.2},T:{x:W*.66,y:sw*.3},B:{x:W*.2,y:HT-sh-14}});
+    Object.assign(lay,{L:{x:Math.max(EG,Math.min(W*.02,hl.x-sw-4)),y:H*.2},R:{x:Math.min(W-sw-EG,Math.max(W*.98-sw,hr.x+4)),y:H*.2},T:{x:W*.66,y:sw*.3},B:{x:W*.2,y:HT-sh-24}});   // 24: room under my name plate for the wallet line (.wbal) above my hand
     // the top player's window must stay left of the right player's tile row (its far end runs up into the top-right corner); 22px leaves room for the label overhang
     lay.T.x=Math.min(lay.T.x,Math.min(P(10.2,0,-11.4).x,P(10.2,0,-6).x)-sw-22);
     for(const k in lay){const o=lay[k];o.w=sw;o.h=sh;const d=byId('sw'+k);d.style.left=o.x+'px';d.style.top=o.y+'px';d.style.removeProperty('--cw')}
