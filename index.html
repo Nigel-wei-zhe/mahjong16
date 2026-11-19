@@ -1415,14 +1415,14 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 
 #st-ver{position:absolute;right:8px;bottom:5px;z-index:42;font:500 8px/1 "Noto Sans TC";letter-spacing:.06em;color:#ffffff59}
 
-:is(#st-info,#st-bankm){position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:#03020acc;backdrop-filter:blur(3px)}
-:is(#st-info,#st-bankm).on{display:flex}
-:is(#st-info,#st-bankm) .st-pn{position:relative;width:400px;max-height:330px;overflow:auto;padding:16px 20px 14px;border-radius:12px;background:linear-gradient(#140b1df2,#08050ef7);border:1px solid #ff8ad8;box-shadow:0 0 0 3px #0b0710,0 0 0 4px #ff2fae44,0 0 22px #ff2fae55,0 14px 30px #000;font:500 11px/1.65 "Noto Sans TC";color:#e9e2f2}
-:is(#st-info,#st-bankm) h2{margin:0 0 10px;font:900 17px/1 'Zen Maru Gothic';letter-spacing:.3em;color:#fff6fc;text-shadow:0 0 4px #fff,0 0 10px #ff2fae,0 0 20px #ff2fae}
-:is(#st-info,#st-bankm) h3{margin:10px 0 3px;font:700 10.5px/1 'Zen Maru Gothic';letter-spacing:.2em;color:#7fe9ff;text-shadow:0 0 6px #14c8ff88}
-:is(#st-info,#st-bankm) p{margin:0}:is(#st-info,#st-bankm) a{color:#ffb4e6;text-decoration:none;border-bottom:1px dotted #ff8ad888}
-:is(#st-info,#st-bankm) .st-x{position:absolute;right:10px;top:10px;width:24px;height:24px;border-radius:50%;border:1px solid #ffffff44;background:none;color:#fff;font:16px/1 sans-serif;cursor:pointer}
-:is(#st-info,#st-bankm) .st-row{display:flex;gap:10px}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
+#st-info{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:#03020acc;backdrop-filter:blur(3px)}
+#st-info.on{display:flex}
+#st-info .st-pn{position:relative;width:400px;max-height:330px;overflow:auto;padding:16px 20px 14px;border-radius:12px;background:linear-gradient(#140b1df2,#08050ef7);border:1px solid #ff8ad8;box-shadow:0 0 0 3px #0b0710,0 0 0 4px #ff2fae44,0 0 22px #ff2fae55,0 14px 30px #000;font:500 11px/1.65 "Noto Sans TC";color:#e9e2f2}
+#st-info h2{margin:0 0 10px;font:900 17px/1 'Zen Maru Gothic';letter-spacing:.3em;color:#fff6fc;text-shadow:0 0 4px #fff,0 0 10px #ff2fae,0 0 20px #ff2fae}
+#st-info h3{margin:10px 0 3px;font:700 10.5px/1 'Zen Maru Gothic';letter-spacing:.2em;color:#7fe9ff;text-shadow:0 0 6px #14c8ff88}
+#st-info p{margin:0}#st-info a{color:#ffb4e6;text-decoration:none;border-bottom:1px dotted #ff8ad888}
+#st-info .st-x{position:absolute;right:10px;top:10px;width:24px;height:24px;border-radius:50%;border:1px solid #ffffff44;background:none;color:#fff;font:16px/1 sans-serif;cursor:pointer}
+#st-info .st-row{display:flex;gap:10px}#st-info .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
 
 #st-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(#0c0c22,#1a1a40 85%,#22224c)}
 /* squarer screens (iPad): fill the sky above the stage with a blurred mirror of the plate's top, fading to night; the stage top melts into it (2026-11-19) */
@@ -1437,34 +1437,6 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-prof{left:auto;right:94px;bottom:46px;--sc:.78;--ry:-24deg;--c:#7fe9ff;--g:#14c8ff;--g2:#14c8ff44;--fs:13px}#st-prof .box{width:38px;height:96px}
 #st-infoB{left:auto;right:42px;bottom:12px;--sc:.86;--ry:-30deg;--c:#c9a8ff;--g:#9a5cff;--g2:#9a5cff44;--fs:15px}#st-infoB .box{width:40px;height:78px}
 #st-ver{right:42px!important;bottom:6px!important;z-index:44}
-/* 錢莊 (wallet, 2026-11-19): a sign on the left pavement with the balance under it, and its sheet (same shell as 資訊) */
-#st-bank{left:44px;right:auto;bottom:40px;--sc:.86;--ry:26deg;--c:#ff8ad8;--g:#ff2fae;--g2:#ff2fae44;--fs:15px}#st-bank .box{width:40px;height:78px}
-#st-bal{position:absolute;left:40px;bottom:9px;z-index:21;padding:4px 10px 5px;border-radius:999px;background:#0b0710d8;box-shadow:inset 0 0 0 1px #4a4458,0 4px 10px #000a;font:500 10px/1 var(--ui);letter-spacing:.1em;color:#a99fb8;white-space:nowrap;cursor:pointer;border:0}
-#st-bal b{font:400 14px/1 var(--led);letter-spacing:.02em;color:var(--amb);text-shadow:0 0 6px #ff8a0099;margin-left:5px}
-#st-bal.lo b{color:#ff4d5e;text-shadow:0 0 6px #ff4d5e99}
-#st-bankm .st-pn{width:360px}
-#st-bankm .bk-bal{display:flex;align-items:baseline;gap:10px;margin:2px 0 8px}
-#st-bankm .bk-bal small{font:500 11px/1 var(--ui);color:#a99fb8;letter-spacing:.1em}
-#st-bankm .bk-bal b{font:400 30px/1 var(--led);color:var(--amb);text-shadow:0 0 8px #ff8a00aa}
-#st-bankm .bk-bal.lo b{color:#ff4d5e;text-shadow:0 0 8px #ff4d5eaa}
-#st-bankm .bk-bal.pop b{animation:bkPop .6s ease-out}@keyframes bkPop{30%{transform:scale(1.18);filter:brightness(1.6)}}
-#st-bankm .bk-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid #ffffff14}
-#st-bankm .bk-row>div{flex:1;min-width:0}
-#st-bankm .bk-row h3{margin:0 0 4px}
-#st-bankm .bk-row p{font-size:10.5px;color:#a99fb8}#st-bankm .bk-row p b{font:400 12px/1 var(--led);color:var(--amb)}
-#st-bankm .bk-b{position:relative;flex:none;min-width:92px;height:36px;padding:0 10px 1px;border-radius:9px;border:0;background:linear-gradient(#1a1222,#0b0710);box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710,0 4px 10px #000c;font:900 13px/1 'Zen Maru Gothic';letter-spacing:.14em;text-indent:.14em;color:#6d6480;cursor:default}
-#st-bankm .bk-b::before{content:"";position:absolute;inset:4px;border-radius:6px;border:1.5px solid #3a3346;pointer-events:none}
-#st-bankm .bk-b.pk{color:#fff6fc;cursor:pointer;text-shadow:0 0 2px #fff,0 0 8px #ff2fae}#st-bankm .bk-b.pk::before{border-color:#ff8ad8;box-shadow:0 0 6px #ff2fae,inset 0 0 6px #ff2fae}
-#st-bankm .bk-b.cy{color:#e6fbff;cursor:pointer;text-shadow:0 0 2px #fff,0 0 8px #14c8ff}#st-bankm .bk-b.cy::before{border-color:#7fe9ff;box-shadow:0 0 6px #14c8ff,inset 0 0 6px #14c8ff}
-#st-bankm .bk-b .n{font-family:var(--led);font-weight:400;letter-spacing:.02em}
-#st-bankm .bk-note{margin-top:8px!important;font-size:10px;color:#6d6480}
-.rm-bal{font:500 10px/1 var(--ui);letter-spacing:.08em;color:#a99fb8;white-space:nowrap}
-.rm-bal b{font:400 13px/1 var(--led);letter-spacing:.02em;color:var(--amb);text-shadow:0 0 5px #ff8a0088;margin-left:4px}
-.rm-bal.no b{color:#ff4d5e;text-shadow:0 0 5px #ff4d5e88}.rm-bal.no em{font-style:normal;color:#ff4d5e;margin-left:4px}
-.rfoot .rbal,.rb.ov .obal{font:500 11px/1 var(--ui)!important;letter-spacing:.1em;color:#a99fb8!important;white-space:nowrap}
-.rfoot .rbal b,.rb.ov .obal b{font:400 15px/1 var(--led);letter-spacing:.02em;color:var(--amb);text-shadow:0 0 6px #ff8a0099;margin-left:6px}
-.rb.ov .obal{display:block;text-align:center;margin:8px 0 2px}.rb.ov .obal.lo b{color:#ff4d5e;text-shadow:0 0 6px #ff4d5e99}
-
 
 /* road markings: 包廂 / 練習 are painted into img/plate.webp; these are the hotspots + press glow */
 .st-rd{position:absolute;z-index:6;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:#0000}
@@ -1535,18 +1507,12 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div id="st-serin"><img class="p" src="img/serin.webp" alt="瑟琳"></div>
   <div id="st-hit"></div>
   
-  <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb" id="st-bank" aria-label="錢莊"><div class="box"><span>錢莊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button id="st-bal" aria-label="餘額">餘額<b>10,000</b></button>
+  <button class="st-lb st-r" id="st-prof"><div class="box"><span>角色介紹</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button><button class="st-lb st-r" id="st-infoB" aria-label="資訊"><div class="box"><span>資訊</span></div><div class="pole"></div><div class="foot"></div><div class="refl"></div></button>
   <div id="st-say"><b>瑟琳</b><br>今晚，留下來陪我打一圈？</div>
   <div id="st-grade"></div><div id="st-grain"></div>
   
 </div>  <div id="st-ver">v<span class="verv">dev</span></div>
-<div id="st-bankm"><div class="st-pn">
-    <button class="st-x" aria-label="關閉">×</button>
-    <h2>錢莊</h2>
-    <div class="bk-bal"><small>餘額</small><b id="bkBal">10,000</b></div>
-    <div id="bkOpts"></div>
-    <p class="bk-note">錢存在這台裝置的瀏覽器裡，清掉瀏覽資料會重新發 10,000。</p>
-  </div></div><div id="st-info"><div class="st-pn">
+<div id="st-info"><div class="st-pn">
     <button class="st-x" aria-label="關閉">×</button>
     <h2>資訊</h2>
     <div class="st-row"><b>版本</b><span class="verv">dev</span></div>
@@ -1695,7 +1661,7 @@ function assignSeats(){
   const ids=plist.map(p=>p.id),seats=(G.seats||['','','','']).map(p=>ids.includes(p)?p:'');
   for(const id of ids){if(seats.includes(id))continue;const i=seats.indexOf('');if(i<0)break;seats[i]=id}
   G.seats=seats;G.nm=seats.map((id,i)=>id?peerName(id,i):'')}
-function newGame(){const c0=cfg(),st0=c0.b*30,keep=G.lchs||G.chs;G={st:'play',v:G.v,ev:G.ev,gid:Math.random().toString(36).slice(2,8),seats:G.seats,cfg:c0,score:[st0,st0,st0,st0],dealer:0,wind:0,ju:0,lian:0,co:R?0:(G.st==='over'?Math.random()*3|0:G.co|0)};G.stat=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];assignSeats();G.chs=keep&&keep.length===4?keep.slice():dealChs();startHand()}
+function newGame(){const c0=cfg(),st0=c0.b*30,keep=G.lchs||G.chs;G={st:'play',v:G.v,ev:G.ev,seats:G.seats,cfg:c0,score:[st0,st0,st0,st0],dealer:0,wind:0,ju:0,lian:0,co:R?0:(G.st==='over'?Math.random()*3|0:G.co|0)};G.stat=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];assignSeats();G.chs=keep&&keep.length===4?keep.slice():dealChs();startHand()}
 function startHand(){
   const w=[];for(let k=0;k<34;k++)for(let i=0;i<4;i++)w.push(k);for(let k=34;k<42;k++)w.push(k);
   for(let i=w.length-1;i>0;i--){const j=Math.random()*(i+1)|0;const t=w[i];w[i]=w[j];w[j]=t}
@@ -2091,7 +2057,7 @@ function closeCheck(){
   else if(R.status==='retry'&&R.goneAt&&Date.now()-R.goneAt>60000)why='gone';
   if(!why)return;closedWhy=why;closedAt=performance.now();
   try{if(R.leave)R.leave()}catch(e){}try{history.replaceState(null,'',location.pathname)}catch(e){}}
-function goHome(){if(goHome.done)return;goHome.done=1;W.pend=null;walSave(false);try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}
+function goHome(){if(goHome.done)return;goHome.done=1;try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}
 function closedHTML(){const left=Math.max(0,6-((performance.now()-closedAt)/1000|0));if(!left)setTimeout(goHome,0);
   return `<div class="logo"><small>牌局結束</small>包廂已解散</div><p>${closedWhy==='bye'?'房主已解散包廂。':'房主一直沒有回來，包廂已解散。'}</p>
     <p class="pzh">${left} 秒後回到主選單。</p><button class="big" id="pzHome">回主選單</button>`}
@@ -2611,7 +2577,6 @@ function pickChr(i,c){if(!isHost||G.st!=='lobby')return;const L=(G.lchs||[]).sli
 /* window art n is a wide canvas only when listed in nx; narrow (older) n shows at 100% */
 function nNarrow(a){return !!a.n&&!(a.nx||[]).includes('n')}
 function lobRedraw(){lobbyHTML='';renderLobby()}
-function balTag(b){if(typeof b!=='number')return '';const no=b<buyIn();return `<div class="rm-bal${no?' no':''}">餘額<b>${money(b)}</b>${no?'<em>不足</em>':''}</div>`}
 function renderLobby(){
   if(isHost&&!(G.lchs&&G.lchs.length===4)){G.lchs=G.chs&&G.chs.length===4?G.chs.slice():dealChs();G.v=(G.v|0)+1;dirty=true}
   if(!isHost&&lobS[0]==='p')lobS='';
@@ -2619,14 +2584,14 @@ function renderLobby(){
   const col=k=>{const x=CCOL[k]||CCOL[0];return `--c1:${x[0]}cc;--c2:${x[1]}`},g=k=>AIP[k]?`<b class="aig1 g${AIP[k].g}">${AIP[k].g}</b>`:'';
   const cards=[];for(let i=0;i<4;i++){const p=R?plist[i]:(i===0?{id:'me'}:null),me=p&&(R?p.id===myPeer:true),k=L[i],a=k!=null?A[k]||{}:{};
     let inf;
-    if(p)inf=`<div class="rm-lb"${me?' data-nm="1"':''}><span>${esc(me?(myName||'我'):peerName(p.id,i))}</span>${me?'<b title="改暱稱"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><rect x="9" y="1.5" width="6" height="3.5" rx="1.2"/><rect x="9" y="6.2" width="6" height="11"/><path d="M9 18.4h6L12 23.2z"/></g></svg></b>':''}</div><div class="rm-sub">${me?'你':'牌友'}${k!=null?'・扮'+BOTS[k]:''}</div>${balTag(me?W.bal:p.pr&&p.pr.bal)}`;
+    if(p)inf=`<div class="rm-lb"${me?' data-nm="1"':''}><span>${esc(me?(myName||'我'):peerName(p.id,i))}</span>${me?'<b title="改暱稱"><svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><rect x="9" y="1.5" width="6" height="3.5" rx="1.2"/><rect x="9" y="6.2" width="6" height="11"/><path d="M9 18.4h6L12 23.2z"/></g></svg></b>':''}</div><div class="rm-sub">${me?'你':'牌友'}${k!=null?'・扮'+BOTS[k]:''}</div>`;
     else if(R)inf=`<div class="rm-lb"><span>虛位以待</span></div><div class="rm-sub">${k!=null?`沒人來就 <em>${BOTS[k]}</em> ${g(k)}`:''}</div>`;
     else inf=`<div class="rm-lb"><span>${k!=null?BOTS[k]:'?'}</span></div><div class="rm-sub">${k!=null?g(k):''} 陪你打</div>`;
     cards.push(`<div class="rm-cd${me?' rm-me':''}${!p&&R?' rm-emp':''}"${k!=null?` data-c="${k}" style="${col(k)}"`:''}><div class="rm-fr">${a.n||a.w?`<img alt=""${nNarrow(a)?' class="rm-nw"':''} src="${a.n||a.w}">`:''}<div class="rm-sh"></div></div>`+
       `${R&&i===0&&p?'<div class="rm-hs">房主</div>':''}<div class="rm-wn">${WIND[i]}</div>${!p&&R?'<button class="rm-add" data-inv="1" aria-label="邀請">+</button>':''}`+
       `${isHost&&k!=null?`<button class="rm-sw" data-sw="${i}" aria-label="換人">⇄</button>`:''}<div class="rm-inf">${inf}</div></div>`)}
   const top=`<div class="rm-top"><button class="rm-back" id="leave" aria-label="返回"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="rm-ttl">${R?'好友包廂':'單機包廂'}</div>`+
-    `<div class="rm-pill"><span>${c.r===4?'一將':'一圈'}</span><i>·</i><span>底</span><b>${c.b}</b><span>台</span><b>${c.t}</b><i>·</i><b>${c.s}</b><span>秒</span><i>·</i><span>入座</span><b>${money(buyIn(c))}</b></div>`+
+    `<div class="rm-pill"><span>${c.r===4?'一將':'一圈'}</span><i>·</i><span>底</span><b>${c.b}</b><span>台</span><b>${c.t}</b><i>·</i><b>${c.s}</b><span>秒</span></div>`+
     `<div class="rm-r">${R?`<span class="rm-code">包廂號 <b>${esc(roomCode)}</b></span><button class="rm-inv" data-inv="1">邀請</button>`:''}<button class="rm-inv rm-cfg" data-cfgp="1">房間設定</button></div></div>`;
   const bot=`<div class="rm-bot">${isHost?'<button class="rm-rer" id="reroll">隨機入座</button>':''}`+
     `${settling?'<span class="rm-wait">連線中…</span>':isHost?'<button class="big rm-go" id="start">入座開局</button>':'<span class="rm-wait">等房主開局…</span>'}<div class="lmsg"></div></div>`;
@@ -2730,7 +2695,7 @@ function renderResult(){
       return `<div class="pl ork rk${i}" data-s="${s}"><b class="md m${i}">${i+1}</b><span class="fc c${chr(s)}"></span><div class="on"><div class="onn">${seatLabel(s)}</div>`+
         `<div class="ost">胡 ${t[0]}・自摸 ${t[1]}・放槍 ${t[2]}${t[3]?`・最大 ${t[3]} 台`:''}</div></div>`+
         `<div class="osc"><div class="ov2 ${dv>0?'pos':dv<0?'neg':''}">${dv?fmt(dv):'±0'}</div><div class="obar"><i class="${dv<0?'n':''}" style="width:${(Math.abs(dv)/mx*100).toFixed(0)}%"></i></div><div class="otot">$${G.score[s]}</div></div></div>`}).join('')+
-      (me>=0?`<div class="obal${W.bal<buyIn()?' lo':''}">你的餘額<b>${money(W.bal)}</b></div>`:'')+(me>=0&&W.bal<buyIn()?`<button class="big" data-bank="1">餘額不足・去錢莊</button></div>`:`<button class="big" data-next="1">再來一場</button></div>`)+fullImg(rank[3],true,ql,'墊底');
+      `<button class="big" data-next="1">再來一場</button></div>`+fullImg(rank[3],true,ql,'墊底');
     show('result',true);return}
   if(G.st!=='play'||G.ph!=='end'||!G.res){show('result',false);return}
   if(G.res.w>=0&&performance.now()<resHold){show('result',false);return}
@@ -2757,7 +2722,7 @@ function renderResult(){
       (G.fl[r.w]?`<span style="width:8px"></span>${[...G.fl[r.w]].map(x=>tile(kd(x),r.fw?'':'dim')).join('')}`:'')+`</div>`+
       `<div class="tl">${(r.tai.length?r.tai:[['無台',0]]).map(t=>`<div><span>${t[0]}</span><i></i><b>${t[1]} 台</b></div>`).join('')}${dlRow}</div>`+
       `<div class="pay">${[0,1,2,3].map(s=>`<div class="${s===r.w?'pw':s===lo?'pz':''}${r.d[s]?'':' p0'}"><div class="pn">${s===r.w?`<span class="wd">${WIND[(s-dl+4)%4]}</span><span class="ptag w">胡</span>`:seatLabel(s)}</div><div class="pd ${r.d[s]>0?'pos':r.d[s]<0?'neg':''}"${r.d[s]?` data-cnt="${r.d[s]}" data-sg="1"`:''}>${r.d[s]?fmt(r.d[s]):'—'}</div>${!self&&s===r.f?`<div class="pt"><span class="ptag f">${r.fw?'被搶花':'放槍'}</span></div>`:''}${self&&r.d[s]<0?`<div class="pt">${r.tot+((r.w===dl||s===dl)?ex:0)} 台</div>`:''}</div>`).join('')}</div>`+
-      `<div class="rfoot"><span>${mySeat()>=0?`<span class="rbal">餘額<b>${money(W.bal)}</b></span>`:''}</span><button class="big" data-next="1">下一局</button></div>`}
+      `<div class="rfoot"><span></span><button class="big" data-next="1">下一局</button></div>`}
   const me=mySeat(),lo=r.w>=0?loserOf(r):-1,qw=r.w>=0&&r.w!==me?(r.f===me?resQuip(r.w,'beatme'):r.f<0?resQuip(r.w,'zimo'):''):'',ql=r.w===me?resQuip(lo,'dealin'):'';
   // win: the side panels only carry the backdrop; both figures float above the whole screen (huArt) so they show whole and may overlap the middle
   const html=r.w<0?`<div class="rb dr">`+h+`<button class="big" data-next="1">下一局</button></div>`
@@ -2902,56 +2867,8 @@ function winCore(seat,pos,text,a,col,loser){
     `<b class="hut${zimo?' z':''}">${text}</b><span class="hun">${esc(nameOf(seat))}</span>${sp}`+
     (loser?`<div class="dulo">${loser.art?`<img alt="" src="${loser.art}">`:''}<span>${esc(nameOf(loser.seat))}<em>${fwPay()>=0?'被搶花':'放槍'}</em></span></div>`:'');
   root.appendChild(d);setTimeout(()=>{if(window.T3&&T3.shake)T3.shake(520,.9);if(window.T3&&T3.focus)T3.focus(pos,1800)},170);setTimeout(()=>d.remove(),2000);setTimeout(()=>{if(resHold){resHold=0;render()}},1750)}
-/* ---------- wallet (2026-11-19): a balance kept in this browser (localStorage mjWallet; gone → a fresh 10,000). every hand you play, practice or online,
-   moves it by your share of the hand (the same numbers the centre console counts, which start at the buy-in 底×30). you can't sit down below the buy-in.
-   the 錢莊 on the street gives a daily 紅包 and, when you are under the smallest buy-in, a top-up to it (10 min apart).
-   leaving in the middle of a hand (closing / reloading / leaving the room) costs one 底 the next time the page opens. trust-based, like any local save ---------- */
-const WAL0=10000,WRED=3000,WMIN=3000,WCOOL=600e3,WKEY='mjWallet';
-function walNew(){return {bal:WAL0,red:'',help:0,done:[],pend:null}}
-function walLoad(){try{const w=JSON.parse(localStorage.getItem(WKEY)||'null');if(w&&Number.isFinite(w.bal))return Object.assign(walNew(),w)}catch(e){}return walNew()}
-let W=walLoad(),walNote='';
-const money=n=>Math.round(n).toLocaleString('en-US');
-function buyIn(c){return (c||cfg()).b*30}
-function walDay(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
-function walSave(net){try{localStorage.setItem(WKEY,JSON.stringify(W))}catch(e){}walPaint();if(net!==false&&R)R.presence({bal:W.bal}).catch(()=>{})}
-function handKey(){return (G.gid||'x')+':'+G.wind+':'+G.ju+':'+(G.lian|0)}
-// called on every render: settle a finished hand once (keyed by match + hand), remember a hand in progress
-function walSync(){
-  const me=mySeat();
-  if(G.st!=='play'||me<0||!G.gid){if(W.pend&&G.st!=='play'){W.pend=null;walSave(false)}return}
-  const k=handKey();
-  if(G.ph==='end'){let ch=false;
-    if(G.res&&G.res.d&&!W.done.includes(k)){W.bal+=G.res.d[me]|0;W.done=W.done.concat(k).slice(-40);ch=true}
-    if(W.pend){W.pend=null;ch=true}if(ch)walSave()}
-  else if(!W.pend||W.pend.k!==k){W.pend={k,f:cfg().b,room:roomCode||''};walSave(false)}}
-// a hand left unfinished last time (unless this load is going straight back into that room)
-function walEscape(){
-  if(!W.pend)return;let q='';try{q=(new URLSearchParams(location.search).get('room')||'').toUpperCase()}catch(e){}
-  if(W.pend.room&&q===String(W.pend.room).toUpperCase())return;
-  const f=W.pend.f|0;W.bal-=f;W.pend=null;walSave(false);if(f)walNote='上一局中途離開，扣了逃跑費 '+money(f)}
-function walShort(){   // who at the table can't cover the buy-in (a guest whose page predates the wallet sends no balance: let them sit)
-  const need=buyIn(),out=[];if(!R)return W.bal<need?['你']:out;
-  plist.slice(0,4).forEach((p,i)=>{const b=p.id===myPeer?W.bal:p.pr.bal;if(typeof b==='number'&&b<need)out.push(p.id===myPeer?'你':peerName(p.id,i))});return out}
-function bankState(){const now=Date.now(),red=W.red!==walDay(),cool=Math.max(0,(W.help||0)+WCOOL-now),help=W.bal<WMIN&&!cool;return {red,help,cool}}
-function bankPaint(){
-  const el=$('bkOpts');if(!el)return;const b=bankState(),lo=W.bal<WMIN;
-  $('bkBal').textContent=money(W.bal);$('bkBal').parentNode.classList.toggle('lo',lo);
-  const pk=b.red?'red':b.help?'help':'';
-  const btn=(id,on,label)=>`<button class="bk-b${on?(pk===id?' pk':' cy'):''}"${on?` data-bk="${id}"`:' disabled'}>${label}</button>`;
-  const mm=b.cool?Math.floor(b.cool/60000)+':'+String(Math.floor(b.cool/1000)%60).padStart(2,'0'):'';
-  el.innerHTML=`<div class="bk-row"><div><h3>每日紅包</h3><p>一天領一次，<b>+${money(WRED)}</b></p></div>${btn('red',b.red,b.red?'領取':'明天再來')}</div>`+
-    `<div class="bk-row"><div><h3>破產救濟</h3><p>餘額不到 <b>${money(WMIN)}</b> 才能借，補到 <b>${money(WMIN)}</b></p></div>${btn('help',b.help,b.help?'借錢':b.cool&&lo?`<span class="n">${mm}</span>`:'還不用')}</div>`}
-function walPaint(){
-  const e=$('st-bal');if(e){e.querySelector('b').textContent=money(W.bal);e.classList.toggle('lo',W.bal<WMIN)}
-  if($('st-bankm').classList.contains('on'))bankPaint()}
-let bankT=0;
-function bankOpen(){$('st-bankm').classList.add('on');bankPaint();clearInterval(bankT);bankT=setInterval(()=>{if(!$('st-bankm').classList.contains('on'))clearInterval(bankT);else bankPaint()},1000)}
-function bankTake(id){const b=bankState();
-  if(id==='red'&&b.red){W.bal+=WRED;W.red=walDay()}else if(id==='help'&&b.help){W.bal=Math.max(W.bal,WMIN);W.help=Date.now()}else return;
-  walSave();sfx('pick');const bb=$('bkBal').parentNode;bb.classList.remove('pop');void bb.offsetWidth;bb.classList.add('pop')}
 function render(){
   if(G.v!==lastV){lastV=G.v;pending=false;sel=-1;phaseStart=performance.now()}
-  walSync();
   if(G.ev&&lastEv>=0&&G.ev.n>lastEv+1)fxOff=Math.max(fxOff,performance.now()+80);   // events were missed (reconnect, frozen page): draw the latest state, replay nothing
   turnWatch();
   const st=G.st;
@@ -3029,13 +2946,13 @@ addEventListener('pointermove',e=>{
   dragPaint()});
 addEventListener('pointerup',e=>dragStop(e,false));addEventListener('pointercancel',e=>dragStop(e,true));
 $('acts').addEventListener('click',e=>{const b=e.target.closest('.ab');if(!b)return;try{doAct(JSON.parse(b.dataset.a))}catch(err){}});
-$('resCard').addEventListener('click',e=>{if(e.target.closest('[data-bank]')){try{sessionStorage.setItem('mjBank','1')}catch(x){}leaveRoom()}else if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
+$('resCard').addEventListener('click',e=>{if(e.target.closest('[data-next]'))doAct({t:'next'});else $('resCard').classList.add('skip')});
 let myJ=0;
 function enterRoom(code,room,saved){
   R=room;roomCode=code;joinedAt=performance.now();G=saved&&saved.G?saved.G:{st:'lobby',v:0,cfg:loadCfg()};inMenu=false;
   show('menu',false);$('rmodal').classList.add('hide');show('lobby',G.st==='lobby');myJ=saved&&saved.j||Date.now();
   try{history.replaceState(null,'','?room='+code)}catch(e){}
-  saveName();R.presence({j:myJ,nm:myName,bal:W.bal}).catch(()=>{});dirty=true}
+  saveName();R.presence({j:myJ,nm:myName}).catch(()=>{});dirty=true}
 function newCode(){const cs='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<4;i++)c+=cs[Math.random()*cs.length|0];return c}
 async function joinCode(code,jo,saved){
   code=code.toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<4||!lobbyNs)return;
@@ -3077,7 +2994,7 @@ $('lobbyCard').addEventListener('click',e=>{const t=e.target,q=x=>t.closest(x);
   if(q('[data-inv]')){invite();return}
   if(q('[data-cfgp]')){lobS='cfg';lobRedraw();return}
   const b=q('button');
-  if(b){if(b.id==='start'){if(isHost){const sh=walShort();if(sh.length){flashMsg(sh.join('、')+'的餘額不到 '+money(buyIn())+'，先去錢莊補');return}lobS='';newGame()}}else if(b.id==='reroll'){rerollChs()}else if(b.id==='leave'){lobS='';leaveRoom()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v);return}
+  if(b){if(b.id==='start'){if(isHost){lobS='';newGame()}}else if(b.id==='reroll'){rerollChs()}else if(b.id==='leave'){lobS='';leaveRoom()}else if(b.dataset.cfg)setCfg(b.dataset.cfg,b.dataset.v);return}
   if(x=q('.rm-cd[data-c]'))openProf(+x.dataset.c)});
 /* nickname: edited from your own nameplate in the room (the 包廂 modal no longer asks) */
 function openName(){$('nameIn').value=myName;$('nmS').classList.remove('hide')}
@@ -3085,7 +3002,7 @@ function nameDone(){saveName();if(!myName){myName=rndName();$('nameIn').value=my
 $('nmOk').onclick=nameDone;$('nmS').addEventListener('click',e=>{if(e.target.id==='nmS')nameDone()});
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)nameDone()});
 $('pzCard').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave'){W.pend=null;walSave(false);leaveRoom()}else if(b.id==='pzHome')goHome()});
+  if(b.id==='pzSub'&&isHost&&G.pz){G.sub=(G.sub||[]).concat(G.pz.s.map(s=>G.seats[s]));dirty=true}else if(b.id==='pzLeave')leaveRoom();else if(b.id==='pzHome')goHome()});
 $('auto').onclick=$('autoBan').onclick=()=>{myAuto=!myAuto;if(R)R.presence({au:myAuto?1:0}).catch(()=>{});dirty=true;render()};
 window.onT3=()=>{resize();if(!inMenu&&G.st==='play')try{render()}catch(e){}};
 setTimeout(()=>{if(!window.T3)$('glmsg').classList.remove('hide')},12000);   // three.js never loaded
@@ -3464,11 +3381,6 @@ const info=document.getElementById('st-info');document.getElementById('st-infoB'
 info.onclick=e=>{if(e.target===info||e.target.classList.contains('st-x'))info.classList.remove('on')};
 addEventListener('keydown',e=>{if(e.key==='Escape')info.classList.remove('on')});
 document.querySelectorAll('.st-lb,.st-rd').forEach(b=>b.addEventListener('pointerdown',()=>{b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}));   // the game binds #roomBtn / #solo itself
-{const bm=document.getElementById('st-bankm');document.getElementById('st-bank').onclick=document.getElementById('st-bal').onclick=()=>bankOpen();
- bm.onclick=e=>{const t=e.target.closest('[data-bk]');if(t)bankTake(t.dataset.bk);else if(e.target===bm||e.target.classList.contains('st-x'))bm.classList.remove('on')};
- addEventListener('keydown',e=>{if(e.key==='Escape')bm.classList.remove('on')});
- walEscape();walPaint();let ob=0;try{ob=sessionStorage.getItem('mjBank');sessionStorage.removeItem('mjBank')}catch(e){}
- if(ob||walNote)setTimeout(()=>{bankOpen();if(walNote){const n=document.querySelector('#st-bankm .bk-note');if(n){n.textContent=walNote;n.style.color='#ff8a94'}}},600)}
 document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
 /* LED ticker inside the sign */
 (function(){
