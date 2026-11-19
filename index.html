@@ -1362,6 +1362,69 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 @keyframes dzRoll3{0%{transform:translate(var(--sx),var(--sy)) rotate3d(1,.6,.3,-560deg) scale(.6);opacity:0}
   12%{opacity:1}55%{transform:translate(calc(var(--sx)*-.12),-10px) rotate3d(.4,1,.2,40deg) scale(1.06)}
   80%{transform:translate(0,2px) rotate3d(0,0,1,-5deg) scale(.99)}100%{transform:none}}
+
+/* 互動道具 (gift): tap a window → glass panel of round tubes; flying item; hit marks on the window */
+#table.gfon #swL,#table.gfon #swT,#table.gfon #swR{pointer-events:auto;cursor:pointer}
+#gfP{position:absolute;z-index:12;padding:7px 10px 8px;border-radius:14px;background:linear-gradient(#150d1ef5,#0b0710f5);box-shadow:inset 0 0 0 1px #4a4458,inset 0 0 0 2px #0b0710,0 10px 24px #000d;transform-origin:var(--tx,50%) var(--ty,50%);animation:gfIn .14s ease-out}
+#gfP.hide{display:none}
+#gfP::before{content:"";position:absolute;width:10px;height:10px;background:#120b1a;box-shadow:inset 1px 1px 0 #4a4458;pointer-events:none}
+#gfP.t3::before{left:-5px;top:var(--ty);margin-top:-5px;rotate:-45deg}
+#gfP.t1::before{right:-5px;top:var(--ty);margin-top:-5px;rotate:135deg}
+#gfP.t2::before{top:-5px;left:var(--tx);margin-left:-5px;rotate:45deg}
+#gfP .hd{display:block;margin:0 0 6px 2px;font:900 10px/1 var(--ng);letter-spacing:.12em;color:var(--cyt);text-shadow:0 0 5px #14c8ff99;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+#gfP .row{display:flex;gap:6px}
+#gfP button{display:flex;flex-direction:column;align-items:center;gap:3px;width:52px;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#gfP .o{position:relative;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#1d1428,#0b0710 70%);box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710,0 3px 8px #000b}
+#gfP .o::before{content:"";position:absolute;inset:4px;border-radius:50%;border:1.4px solid #ffffff1f;pointer-events:none;transition:border-color .12s,box-shadow .12s}
+#gfP .o img{width:26px;height:26px;pointer-events:none;filter:drop-shadow(0 1px 2px #000a)}
+#gfP em{font:500 10px/1 'Noto Sans TC',sans-serif;font-style:normal;color:#cfc6dc;white-space:nowrap}
+#gfP button:active .o::before{border-color:var(--cyt);box-shadow:0 0 6px var(--cy),inset 0 0 6px var(--cy)}
+#gfP button:active .o img{transform:scale(.92)}
+#gfP .gfr .o::before{border-color:var(--pkt);box-shadow:0 0 7px var(--pk),inset 0 0 7px var(--pk)}
+#gfP .gfr em{color:var(--pkc);text-shadow:0 0 5px var(--pk)}
+#gfP .gfr small{margin-top:-1px;font:10px/1 'DotGothic16',monospace;color:var(--amb);text-shadow:0 0 4px #ff8a0099}
+#gfP .gfr.off .o::before{border-color:#ffffff1f;box-shadow:none}#gfP .gfr.off .o img{filter:grayscale(1) brightness(.55)}
+#gfP .gfr.off em{color:#8a8296;text-shadow:none}#gfP .gfr.off small{color:#6d6480;text-shadow:none}
+#gfP .tip{display:block;height:0;overflow:hidden;font:10px/1.3 'Noto Sans TC',sans-serif;color:#ff4d5e;text-align:center;font-style:normal;white-space:nowrap}
+#gfP .tip.on{height:auto;margin-top:6px}
+@keyframes gfIn{from{opacity:0;scale:.9}to{opacity:1;scale:1}}
+@media (prefers-reduced-motion:reduce){#gfP{animation:none}}
+.gfx{position:absolute;z-index:13;width:40px;height:40px;pointer-events:none;will-change:transform}
+.gfx img{width:100%;height:100%;display:block}
+.gfx.g2{width:54px;height:54px;filter:drop-shadow(0 0 8px #ff8ad8)}
+.gfm{position:absolute;z-index:13;pointer-events:none;transform:translate(-50%,-50%)}
+.gfm img{width:34px;height:34px;display:block;animation:gfPop .6s cubic-bezier(.2,.9,.3,1.3) forwards}
+.gfm.m0 img{width:26px;height:26px;animation:gfKiss 1.2s ease-out forwards}
+.gfm.m2 img{width:60px;height:60px;animation:gfSpk 1.2s ease-out forwards}
+@keyframes gfSpk{0%{transform:scale(.3) rotate(-20deg);opacity:1}40%{transform:scale(1.1) rotate(0);opacity:1}100%{transform:scale(1.3) rotate(10deg);opacity:0}}
+.gfm em{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:16px/1 'DotGothic16',monospace;font-style:normal;color:#ffc35a;text-shadow:0 0 6px #ffc35a,0 0 2px #000,0 1px 2px #000;white-space:nowrap;animation:gfUp 1.3s ease-out forwards}
+@keyframes gfPop{0%{transform:scale(.3);opacity:1}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1.25);opacity:0}}
+@keyframes gfKiss{0%{transform:scale(.4) rotate(-12deg);opacity:1}25%{transform:scale(1.1) rotate(-8deg);opacity:1}75%{opacity:1}100%{transform:scale(1) rotate(-8deg) translateY(-6px);opacity:0}}
+@keyframes gfUp{0%{opacity:0;translate:0 6px}15%{opacity:1}75%{opacity:1}100%{opacity:0;translate:0 -26px}}
+.sw.gk .fr{box-shadow:0 0 0 2px #ff2fae,0 0 18px #ff2fae!important;transition:none}
+.sw.gk img{animation:iaHop 1.1s ease-out!important}
+.sw.gh img{animation:gfShake .5s ease-out!important}
+.sw.gr .fr{box-shadow:0 0 0 2px #ffc35a,0 0 22px #ffc35a!important;transition:none}
+.sw.gr img{animation:iaHop 1.1s ease-out!important}
+@keyframes gfShake{0%,100%{rotate:0deg;translate:0 0}15%{rotate:-6deg;translate:-4% 2%}35%{rotate:5deg;translate:3% 1%}55%{rotate:-3deg;translate:-2% 0}75%{rotate:2deg}}
+.gfn{position:absolute;z-index:14;left:50%;top:60%;transform:translateX(-50%);padding:6px 16px;border-radius:8px;background:#0b0710ee;box-shadow:inset 0 0 0 1px #ff8ad8,0 0 14px #ff2fae55;color:#ece6f4;font:12px/1.4 'Noto Sans TC',sans-serif;white-space:nowrap;pointer-events:none;animation:gfBan 3s ease forwards}
+.gfn b{color:#fff;font-weight:700}.gfn em{font:13px 'DotGothic16',monospace;font-style:normal;color:#ffc35a;margin-left:4px}
+@keyframes gfBan{0%{opacity:0;translate:0 -8px}10%,85%{opacity:1;translate:0 0}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.gfm img,.gfm em,.gfn{animation-duration:.01s}}
+
+/* 包廂號＋這場的設定 (top left): a small room plate — dark glass, metal edge, an unlit cyan tube under it (the 名牌 look, never the brightest thing);
+   labels in the neon / info faces, numbers dot-matrix amber */
+#ginfo{display:flex!important;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 9px 8px!important;border:0!important;border-radius:9px!important;
+  background:linear-gradient(#150d1ee6,#0b0710eb)!important;box-shadow:inset 0 0 0 1px #4a4458,inset 0 0 0 2px #0b0710,0 4px 12px #000a!important;text-shadow:none!important}
+#ginfo::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:1.5px;border-radius:2px;background:var(--cyt);opacity:.55;box-shadow:0 0 4px var(--cy)}
+#ginfo>span{display:flex;align-items:center;line-height:1}
+#ginfo .gh i{font:900 9px/1 var(--ng);font-style:normal;letter-spacing:.12em;color:var(--cyt);text-shadow:0 0 4px #14c8ff88;margin-right:6px}
+#ginfo .gh b{font:400 15px/1 var(--led);letter-spacing:.06em;color:var(--amb);text-shadow:0 0 6px #ff8a0088}
+#ginfo .gs em{display:flex;align-items:baseline;font:400 11px/1 var(--led);font-style:normal;color:var(--amb);text-shadow:none}
+#ginfo .gs i{font:500 10px/1 'Noto Sans TC',sans-serif;font-style:normal;color:#a99fbb;margin:0 2px}
+#ginfo .gs em>i:first-child{margin-left:0}
+#ginfo .gr{font:500 10px/1 'Noto Sans TC',sans-serif;font-style:normal;color:#d8d0e4;text-shadow:none;letter-spacing:.06em}#ginfo .gh .gr{margin-left:7px;padding:2px 4px;border-radius:4px;box-shadow:inset 0 0 0 1px #ffffff24}
+#ginfo .gs u{width:1px;height:9px;margin:0 4px;background:#ffffff26}
 </style>
 <style id="street">
 /* night-street lobby (2026-11-18), from proto/street/slice.html */
@@ -1516,7 +1579,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div id="tray"></div><div id="acts"></div><div id="tips"></div><div id="autoBan" class="hide">託管中・點一下取消</div>
     <div id="mine"><div id="hand"></div><div id="mr"><div id="myFl"></div><div id="myMelds"></div></div></div>
     <div class="plate" id="timer"></div><div class="plate" id="ginfo"></div><button id="auto">託管</button><button id="cfgBtn" aria-label="設定"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M18.59 9.96 L21.02 10.17 L21.02 13.83 L18.59 14.04 L18.10 15.22 L19.67 17.08 L17.08 19.67 L15.22 18.10 L14.04 18.59 L13.83 21.02 L10.17 21.02 L9.96 18.59 L8.78 18.10 L6.92 19.67 L4.33 17.08 L5.90 15.22 L5.41 14.04 L2.98 13.83 L2.98 10.17 L5.41 9.96 L5.90 8.78 L4.33 6.92 L6.92 4.33 L8.78 5.90 L9.96 5.41 L10.17 2.98 L13.83 2.98 L14.04 5.41 L15.22 5.90 L17.08 4.33 L19.67 6.92 L18.10 8.78Z"/><circle cx="12" cy="12" r="3"/></svg></button>
-    <button id="chatBtn" class="hide" aria-label="快捷語"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></svg></button><div id="chatP" class="hide"></div>
+    <button id="chatBtn" class="hide" aria-label="快捷語"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></svg></button><div id="chatP" class="hide"></div><div id="gfP" class="hide"></div>
   </div>
 
   <div class="panel" id="menu"><div id="st-wrap"><div id="st-st">
@@ -1556,6 +1619,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="st-row"><b>牌面</b><p>Cangjie6 等（維基共享資源）<br>CC BY-SA 4.0</p></div>
     <div class="st-row"><b>語音</b><p>つくよみちゃんコーパス（CV.夢前黎）<br>JVNV コーパス（CC BY-SA 4.0）<br>Kokoro（Apache 2.0）</p></div>
     <div class="st-row"><b>字型</b><p>Zen Maru Gothic・Noto Sans TC・Noto Serif TC・DotGothic16・Hachi Maru Pop・LXGW WenKai TC（SIL OFL 1.1）</p></div>
+    <div class="st-row"><b>圖示</b><p>Noto Emoji（Google，Apache 2.0）</p></div>
     <div class="st-row"><b>程式庫</b><p>three.js・PeerJS（MIT）</p></div>
     <h3>聲明</h3>
     <p>本作為免費網頁遊戲。遊戲中的金錢是虛擬點數，不能儲值或兌換，不涉及真實金錢輸贏。角色、店家與故事均為虛構，角色皆為成年人。</p>
@@ -2141,7 +2205,7 @@ function beat(){
   else if(isHost){
     if(gap>4000&&G.st==='play'&&G.ph!=='end'){readPeers();readActions();introUntil=0;bump()}   // I was frozen: nobody could play meanwhile
     if(document.hidden&&now-hbAt>1500){hbAt=now;R.presence({hb:now%1e7}).catch(()=>{})}}
-  tick();readChat();closeCheck()}
+  tick();readChat();readGift();closeCheck()}
 let bgW=null;try{bgW=new Worker(URL.createObjectURL(new Blob(['let t=0;onmessage=e=>{clearInterval(t);if(e.data)t=setInterval(()=>postMessage(0),200)}'],{type:'text/javascript'})));bgW.onmessage=()=>{if(document.hidden)beat()}}catch(e){bgW=null}
 // guest side: the host's page is hidden and its heartbeat has stopped
 function hostAway(){
@@ -2512,7 +2576,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1439';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1616';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2544,7 +2608,7 @@ function renderTable(){
   {const hk=G.dealer+':'+G.ju+':'+G.lian+':'+(G.score||[]).join(',');if(hk!==flHand){flHand=hk;WPOSE=WPOSE.map(()=>Math.random()*3|0);flSeen=G.fl.map(x=>x.length);if(G.st==='play'&&G.ph!=='end'&&G.first&&G.disc.every(d=>!d))startIntro();if(G.st==='play'&&G.ph!=='end'){if(lastResD){const me=mySeat();lastResD.forEach((v,i)=>{if(v<0&&i!==me&&isBot(i))setMood(i,'L',9000)});lastResD=null}if(G.lian>0)quip(G.dealer,'lian',900)}}else G.fl.forEach((x,i)=>{if(x.length>flSeen[i]){flSeen[i]=x.length;voice(i,'flower',1.3)}})}
   draw3D(me,live,lastKey);
   $('auto').className=myAuto?'on':'';$('auto').textContent=myAuto?'託管中・取消':'託管';show('autoBan',false);
-  $('ginfo').innerHTML=roomCode?`房號 ${esc(roomCode)}`:'';chatPlace(ms);
+  {const c=cfg(),rr=`<em class="gr">${c.r===4?'一將':'一圈'}</em>`,gi=(roomCode?`<span class="gh"><i>包廂號</i><b>${esc(roomCode)}</b>${rr}</span>`:'')+`<span class="gs">${roomCode?'':rr+'<u></u>'}<em><i>底</i>${c.b}</em><u></u><em><i>台</i>${c.t}</em><u></u><em>${c.s}<i>秒</i></em></span>`;if($('ginfo').innerHTML!==gi)$('ginfo').innerHTML=gi}chatPlace(ms);
   $('mine').className=live&&G.turn===ms?'turn':'';
   if(ms<0){$('myMelds').innerHTML=G.melds[me].map(m=>meldHTML(m,'',false)).join('');$('myFl').innerHTML=[...G.fl[me]].map(x=>tile(kd(x))).join('');$('hand').innerHTML='';$('acts').innerHTML='';fitMine();return}
   const IN=introState();
@@ -2683,7 +2747,7 @@ function anchorQuip(d,pos){const w=window.T3&&T3.lay&&T3.lay[WINK[pos]];if(!w)re
    everyone shows it as a bubble beside the speaker's window. one line per player every 2 s, enforced by the sender and again by each receiver */
 const CHAT=['快一點嘛，花都謝了～','這張也敢打？佩服佩服','手下留情啊！','今晚手氣真旺，擋不住','再讓我摸一張就好……','謝謝招待，下次還找你','別急，好牌值得等','打完這圈，宵夜算我的','😏','😘','😭','😡','👍','🙏'],CHATN=8;
 const chatSeen={};let chatN=0,chatAt=-1e9;
-function chatPlace(ms){const b=$('chatBtn'),on=!!R&&ms>=0;b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
+function chatPlace(ms){const b=$('chatBtn'),on=!!R&&ms>=0;$('table').classList.toggle('gfon',gfOn());if(!gfOn()&&gfSeat>=0)gfClose();b.classList.toggle('hide',!on);if(!on){$('chatP').classList.add('hide');return}
   b.classList.toggle('cd',performance.now()-chatAt<2000)}
 function chatBubble(seat,i){
   if(mute()||seat<0||G.st!=='play'||!(i>=0&&i<CHAT.length))return;
@@ -2706,6 +2770,79 @@ $('chatBtn').onclick=()=>{const p=$('chatP');if(!p.firstChild)p.innerHTML=CHAT.s
   if(performance.now()-chatAt>=2000)p.classList.toggle('hide');try{sfx('pick')}catch(_){}};
 $('chatP').onclick=e=>{const b=e.target.closest('button');if(b)sendChat(+b.dataset.i)};
 $('table').addEventListener('pointerdown',e=>{if(!e.target.closest('#chatP,#chatBtn'))$('chatP').classList.add('hide')});
+/* 互動道具 (online only): tap another player's window → 💋 飛吻 / 🔨 槌子 (anyone, bots too) / 🚀 火箭 = 抖內 底×5 (real players only).
+   kiss and hammer are pure show, sent like quick chat (presence g:{n,s,i}) and sharing its 2 s cooldown.
+   a rocket is money: the sender asks with presence r:{n,s}; the host checks its ledger (the sender must keep the buy-in after paying),
+   moves G.bk without bumping G.v (a bump would reset everyone's tile selection and turn clock; the plates catch up with the next move)
+   and announces it in its own presence gf:[{n,f,s,a,b:[sender's, receiver's balance]}…] (last 4), which every screen plays and the two players' wallets follow */
+const GFK=['kiss','ham','rkt'];let gfSeat=-1,gfN=0,rkN=0,gfSeq=0,gfLive=0,gfList=[];const gfSeen={},rkSeen={};let gfHostSeen=null;
+const rktAmt=()=>cfg().b*5;
+function gfOn(){return !!R&&mySeat()>=0&&G.st==='play'&&!G.pz&&!inMenu}
+function gfCanRkt(s){const me=meId(),b=G.bk&&G.bk[me];return typeof b==='number'&&b-rktAmt()>=buyIn()}
+function gfPos(seat){const me=Math.max(0,mySeat()),w=window.T3&&T3.lay&&T3.lay[WINK[(seat-me+4)%4]];return w?{x:w.x+w.w/2,y:w.y+w.h*.38,w}:null}
+function gfOpen(s){
+  const p=$('gfP'),w=gfPos(s);if(!w||!gfOn()||s===mySeat())return;gfSeat=s;
+  const human=!!(G.seats&&G.seats[s]),ok=human&&gfCanRkt(s),bt=(i,k,t,x)=>`<button data-i="${i}"${x||''}><span class="o"><img src="img/gf_${k}.webp" alt=""></span><em>${t}</em></button>`;
+  p.innerHTML=`<b class="hd">給 ${esc(nameOf(s))}</b><div class="row">${bt(0,'kiss','飛吻')}${bt(1,'ham','槌子')}`+
+    (human?bt(2,'rkt','火箭',` class="gfr${ok?'':' off'}"`).replace('</em></button>',`</em><small>${money(rktAmt())}</small></button>`):'')+'</div><i class="tip"></i>';
+  const pos=(s-Math.max(0,mySeat())+4)%4;p.className='t'+pos;   // the tail points back at her window: left / right / top
+  const pw=p.offsetWidth,ph=p.offsetHeight,E=Math.max(40,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--edge'))||40),W=w.w;
+  let x=pos===3?W.x+W.w+24:W.x-24-pw,y=W.y+W.h*.42-16;   // below her face, so it stays clear of the top windowif(pos===2){x=w.x-pw/2;y=W.y+W.h+20}
+  x=Math.max(E,Math.min(RW-E-pw,x));y=Math.max(6,Math.min(RH-ph-6,y));p.style.left=x+'px';p.style.top=y+'px';
+  p.style.setProperty('--ty',Math.max(14,Math.min(ph-14,W.y+W.h*.42-y))+'px');p.style.setProperty('--tx',Math.max(16,Math.min(pw-16,w.x-x))+'px')}
+function gfClose(){gfSeat=-1;$('gfP').classList.add('hide')}
+function gfSend(s,i){
+  const now=performance.now();if(!gfOn()||s<0||s>3||s===mySeat())return gfClose();
+  if(i===2&&!(G.seats[s]&&gfCanRkt(s))){const t=$('gfP').querySelector('.tip');if(!t)return;t.textContent=G.seats[s]?'餘額要留 '+money(buyIn())+' 入座費':'';t.classList.add('on');return}
+  gfClose();if(now-chatAt<2000)return;chatAt=now;const b=$('chatBtn');b.classList.add('cd');setTimeout(()=>b.classList.remove('cd'),2000);
+  if(i===2){if(isHost)hostRkt(mySeat(),s);else{rkN++;R.presence({r:{n:rkN,s}}).catch(()=>{})}return}
+  gfN++;R.presence({g:{n:gfN,s,i}}).catch(()=>{});gfFly(mySeat(),s,i)}
+// host: a rocket request (its own, or a guest's presence r)
+function hostRkt(f,s){
+  if(G.st!=='play'||G.pz||f<0||s<0||s>3||s===f||!G.bk)return;const a=G.seats[f],b=G.seats[s],amt=rktAmt();
+  if(!a||!b||typeof G.bk[a]!=='number'||G.bk[a]-amt<buyIn())return;
+  G.bk[a]=walClamp(G.bk[a]-amt);G.bk[b]=walClamp((typeof G.bk[b]==='number'?G.bk[b]:seedBal(b))+amt);dirty=true;
+  const e={n:++gfSeq,f,s,a:amt,b:[G.bk[a],G.bk[b]],g:G.gid};gfList=gfList.concat(e).slice(-4);R.presence({gf:gfList}).catch(()=>{});gfRocket(e)}
+// everyone: kisses and hammers from the others, rocket requests (host), rocket announcements (guests)
+function readGift(){
+  if(!R||!G.seats)return;
+  for(const p of plist){const pr=p.pr,from=G.seats.indexOf(p.id);
+    const g=pr.g,n=g&&typeof g.n==='number'?g.n:0;
+    if(gfSeen[p.id]===undefined)gfSeen[p.id]=n;else if(n!==gfSeen[p.id]){gfSeen[p.id]=n;if(p.id!==myPeer&&from>=0&&gfOn()&&(g.i===0||g.i===1)&&g.s>=0&&g.s<4&&g.s!==from)gfFly(from,g.s|0,g.i)}
+    if(isHost&&p.id!==myPeer){const r=pr.r,rn=r&&typeof r.n==='number'?r.n:0;if(rkSeen[p.id]===undefined)rkSeen[p.id]=rn;else if(rn!==rkSeen[p.id]){rkSeen[p.id]=rn;hostRkt(from,r.s|0)}}}
+  if(isHost)return;const h=plist[0],L=h&&h.id!==myPeer&&Array.isArray(h.pr.gf)?h.pr.gf:[],top=L.length?L[L.length-1].n:0;
+  if(gfHostSeen===null||gfHostSeen.id!==(h&&h.id)||top<gfHostSeen.n){gfHostSeen={id:h&&h.id,n:top};return}   // whatever happened before I came in is not replayed
+  for(const e of L)if(e&&e.n>gfHostSeen.n&&e.g===G.gid)gfRocket(e);gfHostSeen.n=top}
+// a rocket that went through: the two players' wallets follow the host's numbers, and every screen plays it
+function gfRocket(e){
+  const me=mySeat(),id=meId();
+  if(me>=0&&(e.f===me||e.s===me)&&Array.isArray(e.b)){const v=walClamp(e.f===me?e.b[0]:e.b[1]);walDo(w=>{w.bal=v});if(!isHost&&G.bk)G.bk[id]=v}
+  if(!isHost&&G.bk&&G.seats){const a=G.seats[e.f],b=G.seats[e.s];if(a)G.bk[a]=walClamp(e.b[0]);if(b)G.bk[b]=walClamp(e.b[1]);dirty=true}
+  gfFly(e.f,e.s,2,e.a)}
+const RM=matchMedia('(prefers-reduced-motion: reduce)');
+function gfFly(f,s,i,amt){
+  if(mute()||$('table').classList.contains('hide'))return;const A=gfPos(f),B=gfPos(s);if(!A||!B)return;
+  const rk=i===2;if(gfLive>=3&&!rk)return;gfLive++;
+  if(rk){const n=document.createElement('div');n.className='gfn';n.innerHTML=`<b>${esc(nameOf(f))}</b> 送 <b>${esc(nameOf(s))}</b> 一支火箭 <em>${money(amt)}</em>`;$('table').appendChild(n);setTimeout(()=>n.remove(),3000)}
+  const el=document.createElement('div');el.className='gfx g'+i;el.innerHTML=`<img src="img/gf_${GFK[i]}.webp" alt="">`;el.style.left=A.x+'px';el.style.top=A.y+'px';$('table').appendChild(el);
+  const dx=B.x-A.x,dy=B.y-A.y,dur=RM.matches?1:rk?1100:i===1?700:800,lift=Math.min(120,Math.hypot(dx,dy)*.35)+30,K=[],N=14;
+  const ang=Math.atan2(dy,dx)*180/Math.PI;
+  for(let j=0;j<=N;j++){const t=j/N,x=dx*t,y=dy*t-4*lift*t*(1-t),sc=.6+.5*Math.sin(Math.PI*t)+(t===1?.1:0);
+    const r=i===1?-540*t:rk?ang+45-(1-t)*20*Math.sin(t*9):(-15+30*t);   // the rocket points where it flies (the art points up-right)
+    K.push({transform:`translate(-50%,-50%) translate(${x}px,${y}px) rotate(${r}deg) scale(${sc})`,opacity:j===N?.9:1})}
+  const an=el.animate(K,{duration:dur,easing:i===1?'cubic-bezier(.4,0,.8,.6)':'cubic-bezier(.3,.1,.5,1)',fill:'forwards'});
+  an.onfinish=()=>{el.remove();gfLive=Math.max(0,gfLive-1);gfHit(s,i,amt,B)}}
+function gfHit(s,i,amt,B){
+  const me=Math.max(0,mySeat()),d=$('sw'+WINK[(s-me+4)%4]);
+  if(d){d.className=d.className.replace(/\bia\d\b/g,'').replace(/\bg[khr]\b/g,'');void d.offsetWidth;const c=['gk','gh','gr'][i];d.classList.add(c);setTimeout(()=>d.classList.remove(c),1100)}
+  const m=document.createElement('div'),w=B.w;m.className='gfm m'+i;   // hammer: on top of her head; kiss: on her cheek; rocket: sparkles over the window
+  m.style.left=(i===0?w.x+w.w*.62:B.x)+'px';m.style.top=(i===1?w.y+w.h*.08:i===0?w.y+w.h*.3:w.y+w.h*.22)+'px';
+  m.innerHTML=i===1?'<img src="img/gf_boom.webp" alt="">':i===2?`<img src="img/gf_spk.webp" alt=""><em>+${money(amt)}</em>`:'<img src="img/gf_kiss.webp" alt="">';
+  $('table').appendChild(m);setTimeout(()=>m.remove(),1300);sfx(i===1?'clack':i===2?'other':'pick')}
+$('table').addEventListener('click',e=>{const d=e.target.closest&&e.target.closest('#swL,#swT,#swR');if(!d||e.target.closest('.sig'))return;
+  if(!gfOn())return;const s=(Math.max(0,mySeat())+WINK.indexOf(d.id.slice(2)))%4;if(gfSeat===s)gfClose();else gfOpen(s)});
+$('gfP').addEventListener('click',e=>{e.stopPropagation();const b=e.target.closest('button');if(b&&gfSeat>=0)gfSend(gfSeat,+b.dataset.i)});
+$('table').addEventListener('pointerdown',e=>{if(!e.target.closest('#gfP,#swL,#swT,#swR'))gfClose()});
 /* the countdown is a round badge on the right edge of my own window */
 function placeTimer(el,seat){const ms=Math.max(0,mySeat()),pos=seat>=0?(seat-ms+4)%4:0,k=WINK[pos],w=window.T3&&T3.lay&&T3.lay[k];
   if(!w){el.style.left='6px';el.style.top=(RH-TWB*1.6-40)+'px';return}
