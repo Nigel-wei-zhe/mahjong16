@@ -1195,6 +1195,21 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #setm .ver{font:400 11px/1 var(--led)!important;color:#6d6480!important}
 #setm td{border-bottom:1px solid #ffffff12!important;color:#ece6f4}#setm td:first-child{font-family:var(--ui)!important}#setm td:last-child{font-family:var(--led);color:var(--amb)}
 #setm .note,#setm .scroll p{color:#a99fb8!important;font-family:var(--ui)}
+/* settings sheet, 2026-11-19: back and close are one pair of round buttons (top-left / top-right), the quit confirm uses the shared neon tubes */
+#setm .shd{position:static}
+#setm .rx,#setm .back{position:absolute;top:17px;width:30px;height:30px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;translate:none;font-size:0;z-index:2}
+#setm .rx{right:12px}#setm .back{left:12px}
+#setm .rx:active,#setm .back:active{background:#ffffff14!important}
+#setm .qrow{margin-top:10px}
+#setm .qrow .big{position:relative;border:0!important;background:linear-gradient(#1a1222,#0b0710)!important;box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710,0 6px 14px #000c!important;font-family:var(--ng)!important;font-weight:900!important;letter-spacing:.2em!important;text-indent:.2em}   /* letter-spacing leaves a gap after the last glyph; indent the same amount so the word sits centred */
+#setm #quitGo{color:var(--pkc)!important;text-shadow:0 0 2px #fff,0 0 7px var(--pk),0 0 14px var(--pk)!important}
+#setm #quitGo::before{content:"";position:absolute;inset:4px;border-radius:inherit;border:1.4px solid var(--pkt);box-shadow:0 0 6px var(--pk),inset 0 0 6px var(--pk);pointer-events:none}
+#setm .qrow .alt{color:#a99fb8!important;text-shadow:none!important}
+#setm .qrow .big,#rmodal .big{padding:0 6px 1px!important;line-height:1.2!important}   /* buttons centre their content box: 11px padding + Zen Maru's tall line box left the word ~3px low; 1px at the bottom lifts its low-sitting glyphs to the middle */
+#setm .qtxt{font-family:var(--ui);color:#ece6f4cc!important;margin-top:4px}
+/* modal titles: indent by the letter-spacing so the word is centred; the round close sits on the title's centre line */
+#setm h3,#rmodal h3{text-indent:.3em}
+#rmodal .rx{top:21px!important}
 /* ===== four hands page ===== */
 #fhp{background:linear-gradient(#0b0710f2,#07050cf8),url(img/room.webp) center/cover!important}
 .fhtop b{font:900 17px/1 var(--ng)!important;color:var(--pkc)!important;text-shadow:0 0 3px #fff,0 0 9px var(--pk),0 0 18px var(--pk)!important;letter-spacing:.3em!important}
@@ -1226,7 +1241,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #rmodal .rx,#prof .pfx{border:1px solid #ffffff44!important;background:none!important;color:#fff!important;box-shadow:none!important}
 /* neon tube buttons shared by modals and sheets */
 #rmodal .big,.lok,#prof .pfgo,#rmodal #create,#rmodal #pwGo,#lobbyCard #start,#rmodal #join,#nmS #nameRnd{position:relative;border:0!important;background:linear-gradient(#1a1222,#0b0710)!important;box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710,0 6px 14px #000c!important;
-  font-family:var(--ng)!important;font-weight:900!important;letter-spacing:.2em!important;color:var(--pkc)!important;text-shadow:0 0 2px #fff,0 0 7px var(--pk),0 0 14px var(--pk)!important}
+  font-family:var(--ng)!important;font-weight:900!important;letter-spacing:.2em!important;text-indent:.2em;color:var(--pkc)!important;text-shadow:0 0 2px #fff,0 0 7px var(--pk),0 0 14px var(--pk)!important}
 #rmodal .big::before,.lok::before,#prof .pfgo::before,#lobbyCard #start::before,#nmS #nameRnd::before{content:"";position:absolute;inset:4px;border-radius:inherit;border:1.4px solid var(--pkt);box-shadow:0 0 6px var(--pk),inset 0 0 6px var(--pk);pointer-events:none}
 #rmodal #join,#nmS #nameRnd{color:var(--cyc)!important;text-shadow:0 0 2px #fff,0 0 7px var(--cy),0 0 14px var(--cy)!important}
 #rmodal #join::before,#nmS #nameRnd::before{border-color:var(--cyt);box-shadow:0 0 6px var(--cy),inset 0 0 6px var(--cy)}
@@ -1338,9 +1353,10 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #intro .dz i.on{background:radial-gradient(circle at 50% 62%,#16121c 0 52%,#2e2836 78%,#3d3646)!important;box-shadow:inset 0 1.5px 1.5px #000c,0 1px 0 #ffffffb0!important}
 #intro .dz.red i.on{background:radial-gradient(circle at 50% 62%,#a0101a 0 50%,#d42a32 78%,#e8484c)!important;box-shadow:inset 0 1.5px 1.5px #4a0006cc,0 1px 0 #ffffffb0!important}
 #intro .dz:not(:has(i.on~i.on)) i.on{transform:scale(1.75)}
-@keyframes dzRoll3{0%{transform:translate(var(--sx),var(--sy)) rotate3d(1,.6,.3,-560deg) scale(.6);opacity:0;filter:blur(2px)}
-  12%{opacity:1}55%{transform:translate(calc(var(--sx)*-.12),-10px) rotate3d(.4,1,.2,40deg) scale(1.06);filter:blur(.5px)}
-  80%{transform:translate(0,2px) rotate3d(0,0,1,-5deg) scale(.99);filter:none}100%{transform:none}}
+#intro .dz{will-change:transform,opacity;backface-visibility:hidden}
+@keyframes dzRoll3{0%{transform:translate(var(--sx),var(--sy)) rotate3d(1,.6,.3,-560deg) scale(.6);opacity:0}
+  12%{opacity:1}55%{transform:translate(calc(var(--sx)*-.12),-10px) rotate3d(.4,1,.2,40deg) scale(1.06)}
+  80%{transform:translate(0,2px) rotate3d(0,0,1,-5deg) scale(.99)}100%{transform:none}}
 </style>
 <style id="street">
 /* night-street lobby (2026-11-18), from proto/street/slice.html */
@@ -1515,7 +1531,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 
   <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
   <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉">✕</button><button class="pfnav l" data-pfn="-1" aria-label="上一位">‹</button><button class="pfnav r" data-pfn="1" aria-label="下一位">›</button></div>
-  <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉">✕</button>
+  <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <section data-p="main"><h3>設定</h3>
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
       <button class="sbtn" data-go="tai">台數表<em>›</em></button>
@@ -1523,11 +1539,11 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="sbtn" id="netGo" data-go="net" hidden>連線狀態<em>›</em></button>
       <button class="sbtn danger" data-go="quit">離開遊戲<em>›</em></button>
       <p class="ver" id="verLine">版本 <span class="verv"></span></p></section>
-    <section data-p="net" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>連線狀態</h3></div>
+    <section data-p="net" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>連線狀態</h3></div>
       <div class="scroll"><div id="netv"></div></div><button class="sbtn" id="netRe">重新查詢<em>↻</em></button></section>
-    <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>台數表</h3></div>
+    <section data-p="tai" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>台數表</h3></div>
       <div class="scroll"><table><tr><td>天胡</td><td>莊家配牌就胡</td><td>16</td></tr><tr><td>地胡</td><td>閒家第一次摸牌就自摸，之前沒人吃碰槓</td><td>16</td></tr><tr><td>大四喜</td><td>東南西北四組刻子</td><td>16</td></tr><tr><td>字一色</td><td>全部字牌</td><td>16</td></tr><tr><td>小四喜</td><td>三組風刻＋風牌當眼</td><td>8</td></tr><tr><td>大三元</td><td>中發白三組刻子</td><td>8</td></tr><tr><td>清一色</td><td>只有一種花色</td><td>8</td></tr><tr><td>五暗刻</td><td>五組自己摸到的刻子</td><td>8</td></tr><tr><td>人胡</td><td>閒家還沒摸過牌就胡別人打的牌，之前沒人吃碰槓</td><td>8</td></tr><tr><td>八仙過海</td><td>一人集滿八張花，當場胡，三家付</td><td>8</td></tr><tr><td>七搶一</td><td>七張花、第八張在別人手上，當場胡，由他付</td><td>8</td></tr><tr><td>四暗刻</td><td></td><td>5</td></tr><tr><td>混一色</td><td>一種花色＋字牌</td><td>4</td></tr><tr><td>碰碰胡</td><td>全部刻子</td><td>4</td></tr><tr><td>小三元</td><td>兩組三元刻＋三元當眼</td><td>4</td></tr><tr><td>門清自摸</td><td>沒吃碰又自摸</td><td>3</td></tr><tr><td>全求人</td><td>五組都吃碰、單吊別人放槍</td><td>2</td></tr><tr><td>平胡</td><td>全順子、無字無花、非自摸</td><td>2</td></tr><tr><td>三暗刻</td><td></td><td>2</td></tr><tr><td>花槓</td><td>春夏秋冬或梅蘭竹菊湊齊</td><td>2</td></tr><tr><td>自摸</td><td></td><td>1</td></tr><tr><td>門清</td><td>沒有吃碰槓</td><td>1</td></tr><tr><td>槓上開花</td><td>槓後補牌自摸</td><td>1</td></tr><tr><td>搶槓</td><td>胡別人加槓的那張牌，加槓的人付</td><td>1</td></tr><tr><td>海底撈月</td><td>最後一張自摸</td><td>1</td></tr><tr><td>獨聽</td><td>只聽一張</td><td>1</td></tr><tr><td>圈風／門風</td><td>對應的風牌刻子，各 1 台</td><td>1</td></tr><tr><td>三元牌</td><td>中、發、白刻子，每組</td><td>1</td></tr><tr><td>花牌</td><td>自己門風的花，每張</td><td>1</td></tr><tr><td>莊家</td><td>莊家胡或莊家付錢時加計</td><td>1</td></tr><tr><td>連莊</td><td>每連一次另加（連 N 拉 N）</td><td>2</td></tr></table><p class="note">同一手牌可以疊加，取最高的組合。每家付「底＋台數×每台」，莊家胡或莊家付錢時另加莊家與連莊的台數。</p></div></section>
-    <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
+    <section data-p="rule" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>規則說明</h3></div><div class="scroll"><h4>牌局</h4><p>台灣十六張：每人 16 張，胡牌要 5 組（順子或刻子）加 1 對。花牌摸到就亮出並補牌。</p>
 <h4>吃、碰、槓</h4><p>上家打的牌可以吃（湊順子）；任何人打的牌都可以碰（湊刻子）或槓。同時有人要時，胡＞碰／槓＞吃。</p>
 <h4>搶槓與過水</h4><p>別人把摸到的牌加進已經碰出的刻子（加槓）時，剛好胡那張牌的人可以搶槓胡，由加槓的人付，多 1 台；暗槓不能搶。別人打的牌可以胡卻按了「過」（或時間到沒按），到自己下一次摸牌之前都不能再胡別人的牌，這叫過水；自摸不受影響。</p>
 <h4>花牌胡</h4><p>一個人集滿八張花是「八仙過海」，當場胡牌，算自摸、三家都付。一個人有七張花、第八張在另一人手上是「七搶一」，七張的人當場胡，由拿第八張的人付。兩種都算 8 台，不看手牌，也不另計花牌、花槓。</p>
@@ -1535,7 +1551,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <h4>莊家與局數</h4><p>莊家胡牌或流局就連莊，否則換下家當莊。一圈 4 局、一將 16 局。牌牆剩 16 張還沒人胡就流局。</p>
 <h4>時間與託管</h4><p>輪到你時有倒數，時間到會自動打出剛摸的牌；開「託管」由電腦幫你打。出牌可以點一下選牌、再點一下打出，或按住牌往上滑；選到的牌，桌上同樣的牌會標成藍色。</p>
 <h4>連線</h4><p>開包廂後把房號或邀請連結給朋友，空位由她們補上，房主按「入座開局」出發。有人斷線會暫停等他回來，房主也可以先把他改成託管。房主把遊戲切到背景時，牌局會暫停等他回來；房主按「離開」則包廂解散，大家回到主選單。牌桌右上的對話鈕可以送快捷語和表情。</p></div></section>
-    <section data-p="quit" hidden><div class="shd"><button class="back" data-go="main">‹ 返回</button><h3>離開遊戲</h3></div>
+    <section data-p="quit" hidden><div class="shd"><button class="back" data-go="main" aria-label="返回"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h3>離開遊戲</h3></div>
       <p class="qtxt" id="quitTxt"></p><div class="qrow"><button class="big alt" data-go="main">取消</button><button class="big" id="quitGo">離開</button></div></section>
   </div></div>
   <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
@@ -1547,35 +1563,6 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
 <script src="tiles.js"></script>
 <script>bootStep('她們正在梳妝打扮…（立繪約 3.5 MB）',35)</script>
 <script src="avatars.js"></script>
-<script>
-/* room-light pass (2026-11-18): every portrait gets the private-room light at load time, the files stay untouched.
-   pink neon rim on the upper-left edge, a faint warm key from above, cool violet falloff toward the bottom. ?lit=0 turns it off for comparison. */
-(function(){
-  if(/[?&]lit=0/.test(location.search)||!window.AVATARS)return;
-  const KEYS=['n','n2','n3','c','p','w','W','X','Wp'],q=[];
-  KEYS.forEach(k=>window.AVATARS.forEach(a=>{if(a&&typeof a==='object'&&typeof a[k]==='string'&&a[k].startsWith('data:'))q.push([a,k])}));   // key-major: table windows first
-  const cv=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c};
-  function lit(im,full){
-    const w=im.naturalWidth,h=im.naturalHeight,m=cv(w,h),x=m.getContext('2d');x.drawImage(im,0,0);
-    const layer=(paint,op,alpha)=>{const c=cv(w,h),y=c.getContext('2d');paint(y);y.globalCompositeOperation='destination-in';y.drawImage(im,0,0);
-      x.save();x.globalCompositeOperation=op;x.globalAlpha=alpha;x.drawImage(c,0,0);x.restore()};
-    const s0=full?.38:.45;   // full-body shots start the falloff higher (legs)
-    layer(y=>{const g=y.createLinearGradient(0,0,0,h);g.addColorStop(0,'#fff');g.addColorStop(s0,'#fff');g.addColorStop(1,'rgb(212,200,232)');y.fillStyle=g;y.fillRect(0,0,w,h)},'multiply',1);
-    layer(y=>{const g=y.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,205,140,.10)');g.addColorStop(.42,'rgba(255,205,140,0)');y.fillStyle=g;y.fillRect(0,0,w,h)},'screen',1);
-    // rim: silhouette minus itself shifted down-right = a thin band on the upper-left edge, softened by stacking a few offsets
-    const d=Math.max(2,w*.018),r=cv(w,h),z=r.getContext('2d');z.fillStyle='#ff6ad0';z.fillRect(0,0,w,h);z.globalCompositeOperation='destination-in';z.drawImage(im,0,0);
-    z.globalCompositeOperation='destination-out';z.drawImage(im,d,d*.45);
-    x.save();x.globalCompositeOperation='source-atop';
-    [[0,0,.36],[-1,0,.18],[1,1,.14]].forEach(([ox,oy,a])=>{x.globalAlpha=a;x.drawImage(r,ox,oy)});x.restore();
-    return new Promise(res=>m.toBlob(b=>res(b?URL.createObjectURL(b):null),'image/webp',.92))}
-  let busy=false;
-  window.__litN=q.length;function next(){window.__litLeft=q.length;if(!q.length){window.__litDone=true;return}
-    const [a,k]=q.shift(),src=a[k],im=new Image();
-    im.onload=()=>lit(im,k==='W'||k==='X'||k==='Wp').then(u=>{if(u&&a[k]===src)a[k]=u;setTimeout(next,0)},()=>setTimeout(next,0));
-    im.onerror=()=>setTimeout(next,0);im.src=src}
-  next();
-})();
-</script>
 <script>bootStep('載入語音…',82)</script>
 <script src="voices.js"></script>
 <script>bootStep('入座中…',95)</script>
@@ -2179,7 +2166,7 @@ function kvBuild(){
   kv.onclick=e=>{const ib=e.target.closest('.kvi');if(ib){openProf(+ib.dataset.c);return}const g=e.target.closest('.g');if(g){kvFront(g);setTimeout(()=>kvSay(g,true),700);try{sfx('pick')}catch(_){}}};
   clearTimeout(kvT);kvT=setTimeout(kvCycle,2400)}
 function kvFront(g){const n=$('kv').querySelectorAll('.g').length,i=+g.dataset.i;kvTarget=-i*2*Math.PI/n}
-{let last=performance.now();const tick=now=>{requestAnimationFrame(tick);const dt=Math.min(50,now-last);last=now;const kv=$('kv');if(!kv||!kv.offsetParent)return;
+{let last=performance.now(),vis=false;const tick=now=>{requestAnimationFrame(tick);const dt=Math.min(50,now-last);last=now;const kv=$('kv');vis=pzOn;if(!kv||!vis)return;   // #kv is only on screen on the pause overlay (hidden in the menu); offsetParent here forced a layout every frame
   const gs=[...kv.querySelectorAll('.g')],n=gs.length;if(!n)return;
   if(kvTarget!=null){const d=((kvTarget-kvAng)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI;if(Math.abs(d)<.002){kvAng=kvTarget;kvTarget=null;kvHold=now+5000}else kvAng+=d*Math.min(1,dt*.006)}
   else if(now>kvHold&&!kv.classList.contains('focus')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)kvAng+=dt*.00012;
@@ -2222,7 +2209,7 @@ $('prof').addEventListener('click',e=>{const t=e.target;if(t.closest('[data-pfx]
   if(t.closest('[data-pfgo]')){pickChr(pfSeat,pfC);$('prof').classList.add('hide');return}
   const n=t.closest('[data-pfn]');if(n)stepProf(+n.dataset.pfn)});
 {let x0=null;$('prof').addEventListener('pointerdown',e=>{x0=e.clientX},{passive:true});$('prof').addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)stepProf(dx<0?1:-1)},{passive:true})}
-function kvCycle(){const kv=$('kv');if(!kv||!kv.offsetParent){kvT=setTimeout(kvCycle,3000);return}
+function kvCycle(){const kv=$('kv');if(!kv||!pzOn){kvT=setTimeout(kvCycle,3000);return}
   if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
   const g=[...kv.querySelectorAll('.g')].sort((a,b)=>(+b.style.zIndex)-(+a.style.zIndex))[0];if(g)kvSay(g,false)}
 // 包廂 modal and a nickname that is never empty
@@ -2440,7 +2427,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1118';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1159';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3280,7 +3267,7 @@ async function init(){
     RANGE[2]=[Math.max(-9.1,T.y-T.h*.45<stripBot?-along(xT,T.x-4,-12,12):-99),Math.min(11.15,-along(xT,4,-12,12))]}
 
   function resize(w,h,ht){
-    W=w;H=h;HT=ht;renderer.setPixelRatio(Math.min((devicePixelRatio||1)*(window.UIZ||1),3));renderer.setSize(W,H,false);fit();
+    W=w;H=h;HT=ht;renderer.setPixelRatio(Math.min((devicePixelRatio||1)*(window.UIZ||1),2))   /* 2026-11-19: was 3; a 3x phone drew 2.25x the pixels for no visible gain */;renderer.setSize(W,H,false);fit();
     needR=true;if(cur){lastSig='';draw(cur)}else req()}
 
   const ptSeat=(pos,x,z)=>{_v.set(x,0,z).applyAxisAngle(_Y,SEATROT[pos]).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
@@ -3290,6 +3277,7 @@ async function init(){
   const ptAt=(x,y,z)=>{_v.set(x,y,z).project(camera);return{x:(_v.x+1)/2*W,y:(1-_v.y)/2*H}};
   const redial=()=>{cKey='';if(window.__dialV){drawCompass(window.__dialV);req()}};
   const api={draw,resize,lay,hi,calls:()=>calls,renderer,scene,camera,shake,focus,throwPt,ptSeat,ptLast,ptAt,redial};
+  try{const w=renderer.compileAsync?renderer.compileAsync(scene,camera):Promise.resolve(renderer.compile(scene,camera));w.catch(()=>{})}catch(e){}   // compile every material up front (in the menu), not on the first frame of the intro
   window.T3=api;if(window.onT3)window.onT3()}
 if(!renderer)glFail();else init().catch(e=>{console.warn('3D table',e);glFail()});
 </script>
@@ -3334,8 +3322,13 @@ document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
   const cv=document.getElementById('st-led'),W=172,H=17,dpr=3;cv.width=W*dpr;cv.height=H*dpr;
   const x=cv.getContext('2d'),TXT='今晚包廂開放中 ★ 台灣十六張 ★ 歡迎光臨 ★ ',P=1.3,R=12,C=Math.floor((W-4)/P);let g=null,loop=0;
   document.fonts.load("500 11px 'Noto Sans TC'").then(()=>{const c=document.createElement('canvas'),m=c.getContext('2d');m.font="500 11px 'Noto Sans TC'";loop=Math.ceil(m.measureText(TXT).width);c.width=loop*2+C;c.height=R;m.font="500 11px 'Noto Sans TC'";m.fillStyle='#fff';m.textBaseline='middle';m.fillText(TXT+TXT,0,R/2+.5);const d=m.getImageData(0,0,c.width,R).data;g={w:c.width,a:new Uint8Array(c.width*R)};for(let i=0;i<g.a.length;i++)g.a[i]=d[i*4+3]>110});
-  const t0=performance.now();(function f(now){requestAnimationFrame(f);if(typeof inMenu!=='undefined'&&!inMenu)return;x.setTransform(dpr,0,0,dpr,0,0);x.fillStyle='#0a0406';x.fillRect(0,0,W,H);if(!g)return;const off=Math.floor((now-t0)/1000*20)%loop;
-    for(let r=0;r<R;r++)for(let c=0;c<C;c++){const on=g.a[r*g.w+c+off];x.fillStyle=on?'#ffc35a':'#2a1608';x.shadowColor=on?'#ff8a00':'transparent';x.shadowBlur=on?2:0;x.beginPath();x.arc(2+c*P+P/2,2+r*P,on?.55:.35,0,6.283);x.fill()}})(t0);
+  // every dot of the loop is drawn once into a long strip (2026-11-19: drawing ~1600 glowing dots each frame was 90% of the menu's main thread);
+  // a frame only copies the visible slice, and only when the text has moved one column (20/s)
+  let S=null,last=-1;const strip=()=>{const n=loop+C;S=document.createElement('canvas');S.width=Math.ceil((4+n*P)*dpr);S.height=H*dpr;const y=S.getContext('2d');y.setTransform(dpr,0,0,dpr,0,0);
+    for(let r=0;r<R;r++)for(let c=0;c<n;c++){const on=g.a[r*g.w+c];y.fillStyle=on?'#ffc35a':'#2a1608';y.shadowColor=on?'#ff8a00':'transparent';y.shadowBlur=on?2:0;y.beginPath();y.arc(2+c*P+P/2,2+r*P,on?.55:.35,0,6.283);y.fill()}};
+  const t0=performance.now();(function f(now){requestAnimationFrame(f);if(typeof inMenu!=='undefined'&&!inMenu){last=-1;return}if(!g){if(last!==-2){last=-2;x.setTransform(1,0,0,1,0,0);x.fillStyle='#0a0406';x.fillRect(0,0,cv.width,cv.height)}return}
+    if(!S)strip();const off=Math.floor((now-t0)/1000*20)%loop;if(off===last)return;last=off;
+    x.setTransform(1,0,0,1,0,0);x.imageSmoothingEnabled=false;x.fillStyle='#0a0406';x.fillRect(0,0,cv.width,cv.height);x.drawImage(S,Math.round(off*P*dpr),0,cv.width,cv.height,0,0,cv.width,cv.height)})(t0);
 })();
 
 /* the 755x395 street stage covers the menu at any size (RW/RH = logical size before UIZ zoom) */
