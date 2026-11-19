@@ -469,8 +469,8 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #prof .pfnote{font-size:10.5px;color:#f3e9d266;margin-top:-4px}
 #prof .pfq{display:flex;flex-direction:column;gap:6px;margin-top:2px}
 #prof .pfl{margin:0;padding:7px 12px;border-radius:10px;border:1px solid #b8862b77;background:#0e0508cc;color:#f6ead0;font:600 13px/1.45 var(--serif)}
-#prof .pfx{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;font:700 16px system-ui;cursor:pointer;z-index:2}
-#prof .pfnav{position:absolute;top:50%;translate:0 -50%;width:34px;height:54px;border-radius:8px;border:1px solid #c9973f66;background:#0d0407aa;color:#f6dc8c;font:700 24px system-ui;cursor:pointer;z-index:2}#prof .pfnav.l{left:8px}#prof .pfnav.r{right:8px}
+#prof .pfx{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;border:1px solid #c9973f88;background:#0d0407;color:#f6dc8c;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}#prof .pfx svg,#prof .pfnav svg{pointer-events:none}
+#prof .pfnav{position:absolute;top:50%;translate:0 -50%;width:34px;height:54px;border-radius:8px;border:1px solid #c9973f66;background:#0d0407aa;color:#f6dc8c;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}#prof .pfnav.l{left:8px}#prof .pfnav.r{right:8px}
 #prof .pfdots{position:absolute;left:44%;right:6%;bottom:5%;display:flex;gap:6px;justify-content:center}#prof .pfdots i{width:6px;height:6px;border-radius:50%;background:#ffffff33}#prof .pfdots i.on{background:#ffd96e;box-shadow:0 0 6px #ffd96e}
 #kvdlg .kvi{position:absolute;right:18px;top:-13px;pointer-events:auto;padding:3px 12px;border-radius:12px;border:1px solid #e2b45a;background:#1a0a10;color:#f6dc8c;font:700 12px/1.3 var(--serif);letter-spacing:2px;cursor:pointer}#pause #kvdlg .kvi{display:none}
 .cast>span[data-c]{cursor:pointer}
@@ -1417,8 +1417,10 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 :is(#st-info,#st-bankm) h2{margin:0 0 10px;font:900 17px/1 'Zen Maru Gothic';letter-spacing:.3em;color:#fff6fc;text-shadow:0 0 4px #fff,0 0 10px #ff2fae,0 0 20px #ff2fae}
 :is(#st-info,#st-bankm) h3{margin:10px 0 3px;font:700 10.5px/1 'Zen Maru Gothic';letter-spacing:.2em;color:#7fe9ff;text-shadow:0 0 6px #14c8ff88}
 :is(#st-info,#st-bankm) p{margin:0}:is(#st-info,#st-bankm) a{color:#ffb4e6;text-decoration:none;border-bottom:1px dotted #ff8ad888}
-:is(#st-info,#st-bankm) .st-x{position:absolute;right:10px;top:10px;width:24px;height:24px;border-radius:50%;border:1px solid #ffffff44;background:none;color:#fff;font:16px/1 sans-serif;cursor:pointer}
-:is(#st-info,#st-bankm) .st-row{display:flex;gap:10px}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
+:is(#st-info,#st-bankm) .st-x{position:absolute;right:10px;top:9px;width:30px;height:30px;border-radius:50%;border:1px solid #ffffff44;background:none;color:#fff;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer}:is(#st-info,#st-bankm) .st-x:active{background:#ffffff14}:is(#st-info,#st-bankm) .st-x svg{pointer-events:none}
+:is(#st-info,#st-bankm) .st-row{display:flex;gap:10px}
+#st-info .st-web{align-items:center}#st-info .st-sh{flex:none;width:28px;height:28px;margin-left:2px;padding:0;border-radius:50%;border:1px solid #7fe9ff88;background:#14c8ff14;box-shadow:0 0 8px #14c8ff44;cursor:pointer;display:flex;align-items:center;justify-content:center}#st-info .st-sh svg{width:15px;height:15px;fill:none;stroke:#bff4ff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}#st-info .st-sh:active{background:#14c8ff33}#st-info #st-shm{font-style:normal;font-size:10px;color:#7fe9ff}
+#st-info .st-cp{margin-top:10px;font-size:10px;line-height:1.5;color:#9a8fae}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
 
 #st-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(#0c0c22,#1a1a40 85%,#22224c)}
 /* squarer screens (iPad): fill the sky above the stage with a blurred mirror of the plate's top, fading to night; the stage top melts into it (2026-11-19) */
@@ -1539,22 +1541,25 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   
 </div>  <div id="st-ver">v<span class="verv">dev</span></div>
 <div id="st-bankm"><div class="st-pn">
-    <button class="st-x" aria-label="關閉">×</button>
+    <button class="st-x" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <h2>錢莊</h2>
     <div class="bk-bal"><small>餘額</small><b id="bkBal">$10,000</b></div>
     <div id="bkOpts"></div>
     <p class="bk-note"></p>
   </div></div><div id="st-info"><div class="st-pn">
-    <button class="st-x" aria-label="關閉">×</button>
+    <button class="st-x" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <h2>資訊</h2>
     <div class="st-row"><b>版本</b><span class="verv">dev</span></div>
-    <div class="st-row"><b>網站</b><a href="https://mahjong.nigel-lee.com/" target="_blank" rel="noopener">mahjong.nigel-lee.com</a></div>
+    <div class="st-row"><b>作者</b><span>Nigel Lee</span></div>
+    <div class="st-row st-web"><b>網站</b><a href="https://mahjong.nigel-lee.com/" target="_blank" rel="noopener">mahjong.nigel-lee.com</a><button class="st-sh" id="st-share" aria-label="分享網站"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M6 11H5v9h14v-9h-1"/></svg></button><em id="st-shm"></em></div>
     <h3>素材授權</h3>
     <div class="st-row"><b>牌面</b><p>Cangjie6 等（維基共享資源）<br>CC BY-SA 4.0</p></div>
-    <div class="st-row"><b>語音</b><p>つくよみちゃんコーパス（CV.夢前黎）<br>JVNV コーパス（CC BY-SA 4.0）</p></div>
-    <div class="st-row"><b>字型</b><p>Zen Maru Gothic・Noto Sans TC・Noto Serif TC・DotGothic16・Hachi Maru Pop（SIL OFL 1.1）</p></div>
+    <div class="st-row"><b>語音</b><p>つくよみちゃんコーパス（CV.夢前黎）<br>JVNV コーパス（CC BY-SA 4.0）<br>Kokoro（Apache 2.0）</p></div>
+    <div class="st-row"><b>字型</b><p>Zen Maru Gothic・Noto Sans TC・Noto Serif TC・DotGothic16・Hachi Maru Pop・LXGW WenKai TC（SIL OFL 1.1）</p></div>
+    <div class="st-row"><b>程式庫</b><p>three.js・PeerJS（MIT）</p></div>
     <h3>聲明</h3>
-    <p>本作為免費網頁遊戲，不涉及金錢輸贏。角色、店家與故事均為虛構，角色皆為成年人。</p>
+    <p>本作為免費網頁遊戲。遊戲中的金錢是虛擬點數，不能儲值或兌換，不涉及真實金錢輸贏。角色、店家與故事均為虛構，角色皆為成年人。</p>
+    <p class="st-cp">© 2026 Nigel Lee. All rights reserved.<br>上列素材依各自授權條款使用。</p>
   </div></div></div><div id="kv"></div><div class="card">
     <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
     <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<br>語音：つくよみちゃん（CV.夢前黎）・JVNV（CC BY-SA）<span class="verline">・版本 <span class="verv"></span></span></p>
@@ -1574,7 +1579,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="lok" id="nmOk">確定</button></div></div></div>
 
   <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
-  <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉">✕</button><button class="pfnav l" data-pfn="-1" aria-label="上一位">‹</button><button class="pfnav r" data-pfn="1" aria-label="下一位">›</button></div>
+  <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button><button class="pfnav l" data-pfn="-1" aria-label="上一位"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="pfnav r" data-pfn="1" aria-label="下一位"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
   <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <section data-p="main"><h3>設定</h3>
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
@@ -2228,7 +2233,7 @@ function kvSay(g,tap){const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c]||KVQ
 const BIO=['銀髮夜后，晚禮服配長手套。說話慢、出手狠，牌桌上最優雅的掠食者。','紅旗袍的大姊頭，豪爽愛起鬨。見碰就碰，輸了也要笑著乾杯。',
  '黑貓系少女，貓耳、鈴鐺、黑絲。打牌全憑心情，撒嬌比算牌在行。','精明的 OL，細框眼鏡後面全是算計。寧可不胡，也不放槍。',
  '值勤中的女警，雷厲風行。只想最快聽牌，誰擋路就把誰銬起來。','修行三百年的狐仙巫女，慵懶又神祕。愛門清、等自摸，像早就算好了天命。',
- '甜美的女僕，嘴上說服侍主人，其實膽子小，一緊張就打錯牌。','夜店 DJ，節奏感滿點。不屑小胡，要做就做碰碰胡、混一色這種大的。'];
+ '甜美的女僕，嘴上說服侍主人，其實膽子小，一緊張就打錯牌。','夜店 DJ，節奏感滿點。最愛把全場炒到最高點，牌桌上也一樣——要嘛不胡，一胡就要炸場。'];
 const STYD={'均衡':'攻守平衡，看情勢決定要衝還是收。','愛碰':'能碰就碰，用速度壓人。','隨性':'全憑感覺，偶爾會亂打。','守備':'別家一露出聽牌跡象，就改打安全牌。',
  '速攻':'只求最快聽牌，幾乎不防守。','門清':'不太吃碰，喜歡門清自摸。','保守':'很怕放槍，但牌效率不太好。','大牌':'偏好碰碰胡、混一色這類大牌。'};
 const AISTAT=[[28.6,14.9],[21.8,18.8],[17.4,18.6],[27.4,15.2],[31.4,17.5],[18.6,14.7],[21.0,14.9],[22.0,17.7]];   // win %, deal-in % vs three plain bots
@@ -2507,7 +2512,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1432';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1439';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3481,6 +3486,9 @@ let idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdl
 document.getElementById('st-hit').onclick=()=>{const n=performance.now();pokes=n-lastPoke<2500?pokes+1:0;lastPoke=n;say(pokes>=2?LINES.poke[Math.min(pokes-2,2)]:nextLine());clearInterval(idleT);idleT=setInterval(()=>{if(typeof inMenu!=='undefined'&&inMenu&&!window.stIdle)say(nextLine())},14000)};
 /* idle video (serin_idle.webm/.mp4) not produced yet: add back from proto/street/slice.html when it exists */
 const info=document.getElementById('st-info');document.getElementById('st-infoB').onclick=()=>info.classList.add('on');
+document.getElementById('st-share').onclick=async e=>{e.stopPropagation();const url='https://mahjong.nigel-lee.com/',m=document.getElementById('st-shm'),say=t=>{m.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>m.textContent='',2200)};
+  try{if(navigator.share){await navigator.share({title:'今夜有局',text:'今夜有局・台灣十六張麻將，來同桌打一圈',url});return}}catch(x){if(x&&x.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);say('已複製連結')}catch(x){say(url)}};
 info.onclick=e=>{if(e.target===info||e.target.classList.contains('st-x'))info.classList.remove('on')};
 addEventListener('keydown',e=>{if(e.key==='Escape')info.classList.remove('on')});
 document.querySelectorAll('.st-lb,.st-rd').forEach(b=>b.addEventListener('pointerdown',()=>{b.classList.remove('flash');void b.offsetWidth;b.classList.add('flash')}));   // the game binds #roomBtn / #solo itself
