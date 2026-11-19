@@ -545,7 +545,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rm-code{display:flex;align-items:center;gap:6px;font:700 12px/1 system-ui;color:#f3e9d2aa;letter-spacing:1px;white-space:nowrap}
 .rm-code b{font:900 15px/1 'Arial Black',system-ui;color:var(--gold);letter-spacing:2px}
 .rm-inv{height:32px;padding:0 12px;border-radius:10px;font:800 12.5px/1 inherit;letter-spacing:1px}
-.rm-cds{flex:1;display:flex;gap:12px;justify-content:center;align-items:center;margin:12px 0 8px;min-height:0;--cw:min(calc((100*var(--vw) - 2*var(--edge) - 36px)/4),calc((100*var(--vh) - 132px)*.64))}
+.rm-cds{flex:1;display:flex;gap:12px;justify-content:center;align-items:flex-end;margin:12px 0 8px;min-height:0;--cw:min(calc((100*var(--vw) - 2*var(--edge) - 36px)/4),calc((100*var(--vh) - 132px)*.64))}
 /* no cq units: WebKit applies the #root zoom twice to cqw/cqh (iPad overflow, 2026-11-19); --vw/--vh are logical (pre-zoom) units from resize(); tall screens cap the card at 1:1.9 */
 .rm-cd{position:relative;flex:0 1 auto;width:var(--cw);height:min(100%,calc(var(--cw)*1.9));min-width:0;cursor:pointer;--c1:#5a2a3a;--c2:#1a070d}
 .rm-cd .rm-fr{position:absolute;inset:0;border-radius:10px;overflow:hidden;border:1px solid #d9a95799;background:radial-gradient(ellipse at 50% 30%,var(--c1) 0%,var(--c2) 70%,#0b0306 100%);box-shadow:0 0 0 1px #0009,0 8px 20px #000c}
@@ -2437,7 +2437,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.1107';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1119.1109';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
