@@ -25,3 +25,11 @@
 - 座位固定 4 個。
 - 畫面掛在 `#root` 底下，class／id 用遊戲前綴（例 `b2-`），別撞到麻將或殼的名稱（`.t` 是麻將牌面，`.rm-` 是房間頁）。
 - 視覺照 CLAUDE.md 的霓虹規範；大廳不加無限循環動畫。
+
+## 私密動作的 presence（十三支起）
+
+除了 `redact(G,seat)`，遊戲可提供 `redactPresence(presence,senderId,recipientId)`。PeerJS 的首次座位表與後續廣播，都會逐收件者經過這個函式；房主本地仍保留原始動作用於權威驗證。沒提供此函式的既有遊戲行為不變。
+
+十三支的 `set` 動作含整手排法，開牌前不能直接廣播給其他客人；`games/c13/game.mjs` 會從其他人的 presence 移除該動作。只遮 `G` 不足以防止這條路徑洩漏。
+
+十三支僅在支援私密狀態的 PeerJS 包廂開局；舊 artifact 的公開 presence 模式不允許開十三支連線桌。
