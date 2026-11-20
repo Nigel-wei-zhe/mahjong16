@@ -1090,8 +1090,8 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
     repeating-linear-gradient(#0000 0 22px,#ffffff05 22px 23px),        /* faint floor boards */
     linear-gradient(#0000 0,#1a1026 14%,#120a1c 50%,#0a0610 100%)!important;
   animation:none!important;filter:none!important}
-.res.hu .rpa.lose{filter:brightness(.72) saturate(.85) blur(.3px) drop-shadow(0 -2px 10px #0009)!important}
-.res.hu .rpa.lose.l2,.res.hu .rpa.lose.l3{filter:brightness(.66) saturate(.8) blur(.4px)!important}
+/* 輸家不壓暗、不模糊：落寞的身體語言已經說明她輸了，焦點靠聚光燈與大小交給贏家（使用者 2026-11-20） */
+.res.hu .rpa.lose,.res.hu .rpa.lose.l2,.res.hu .rpa.lose.l3{filter:drop-shadow(0 -2px 10px #0009)!important}
 /* spotlight re-aimed: one coordinate system (whole card), centred on the winner at 27% */
 .res.hu .rp.win::after{display:none!important}
 .card.res.hu::after{content:"";position:absolute;left:11%;width:32%;top:-4%;bottom:12%;z-index:1;pointer-events:none;
@@ -1119,6 +1119,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rb.dr .dc:has(.dtg) img{filter:brightness(.62) saturate(.85)!important}
 .rb.dr .dc:has(.dtg) .dfr{border-color:var(--cyt)!important;box-shadow:0 0 0 2px #020104,0 0 10px var(--cy),inset 0 0 10px #14c8ff44!important}
 .rb.dr .dc .dlb{opacity:.7}.rb.dr .dc .dsc{color:#8a6a3a!important;text-shadow:none!important}
+/* 2026-11-20 使用者：流局卡不壓暗（亮度差太不明顯，看不出誰聽牌），改用明顯的「聽牌」標籤；跳電感留給標題、應急燈與背景 */
+.rb.dr .dc img,.rb.dr .dc:has(.dtg) img{filter:none!important}.rb.dr .dc em,.rb.dr .dc .dlb{opacity:1!important}.rb.dr .dc .dsc{color:#a99fb8!important}
+.rb.dr .dc .dtg{left:50%!important;top:-11px!important;transform:translateX(-50%)!important;padding:5px 12px 6px!important;border-radius:8px!important;font:900 13px/1 var(--ng)!important;letter-spacing:.2em;text-indent:.2em;color:var(--cyc)!important;background:#07050ce6!important;box-shadow:inset 0 0 0 1.5px var(--cyt),0 0 10px var(--cy),0 0 18px #14c8ff66!important;text-shadow:0 0 5px var(--cy),0 0 10px var(--cy)!important;white-space:nowrap}
 /* the only thing still lit: the way back to the light */
 .rb.dr .fhb{opacity:.55}
 
@@ -1710,6 +1713,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .rb.dr .dc.dc.rdy img{filter:none!important}
 .rb.dr .dc.dc.rdy .dfr{border-color:var(--pkt)!important;box-shadow:0 0 0 2px #020104,0 0 10px var(--pk),inset 0 0 10px #ff2fae44!important}
 .rb.dr .dc.dc.rdy .dlb{opacity:1}
+.rb.dr .dc.dc.rdy::after{content:'已準備';position:absolute;right:-4px;bottom:24%;z-index:3;padding:3px 8px 4px;border-radius:7px;font:900 10.5px/1 var(--ng);letter-spacing:.1em;color:var(--pkc);background:#07050ce6;box-shadow:inset 0 0 0 1.2px var(--pkt),0 0 8px var(--pk);text-shadow:0 0 5px var(--pk)}
 .ork.pl.rdy{border-color:var(--pkt)!important;box-shadow:0 0 0 1px #ff8ad855,0 0 12px #ff2fae55!important}
 .ork.rdy .fc{border-color:#ff8ad8!important;box-shadow:0 0 0 1.5px #07050c,0 0 9px #ff2fae!important}
 .ork .ordy{margin-left:8px;font:900 11px/1 var(--ng);font-style:normal;color:var(--pkc);text-shadow:0 0 5px var(--pk)}
@@ -2786,7 +2790,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1120.1328';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1342';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3202,7 +3206,7 @@ function fhSync(){
     const ft=el.querySelector('.rfoot'),nx=el.querySelector('[data-next]');
     if(ft)ft.insertBefore(b,ft.firstChild);
     else if(nx){const d=document.createElement('div');d.className='fhf';nx.parentNode.insertBefore(d,nx);d.appendChild(b);d.appendChild(nx)}
-    if(G.res.w<0)el.querySelectorAll('.dc').forEach((c,s)=>{if(fhWaits(s).length){const i=document.createElement('i');i.className='dtg';i.textContent='聽';c.appendChild(i)}})}
+    if(G.res.w<0)el.querySelectorAll('.dc').forEach((c,s)=>{if(fhWaits(s).length){const i=document.createElement('i');i.className='dtg';i.textContent='聽牌';c.appendChild(i)}})}
   if(FH.k)fhPaint()}
 $('resCard').addEventListener('click',e=>{if(e.target.closest('[data-fh]'))fhShow(true)});
 function toast(seat,text){
