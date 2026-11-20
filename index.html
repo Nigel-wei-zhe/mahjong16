@@ -1305,7 +1305,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #prof .pfbg{background:radial-gradient(ellipse 60% 50% at 46% 82%,#ff9fd03a,#ff2fae14 45%,#0000 75%),linear-gradient(#ffd0ea22,#ff9fd010 60%,#0000)!important;clip-path:polygon(40% 0,56% 0,92% 100%,4% 100%)!important;filter:blur(4px)}
 #prof .pfart{filter:none!important}
 #prof .pfhd h2{font:900 min(calc(10*var(--vmin)),42px)/1 var(--ng)!important;color:var(--pkc)!important;-webkit-text-stroke:0!important;text-shadow:0 0 3px #fff,0 0 10px var(--pk),0 0 22px var(--pk)!important;letter-spacing:.14em!important}
-#prof .pfbio{font:500 13.5px/1.7 var(--ui)!important;color:#ece6f4!important}
+#prof .pfbio{font:500 13.5px/1.7 var(--ui)!important;color:#ece6f4!important;text-wrap:pretty}
+#prof .pfcv{display:flex;align-items:baseline;gap:8px;font-size:12.5px;margin-top:-2px}#prof .pfcv span{flex:none;width:3.6em;font:900 12.5px var(--ng);letter-spacing:2px;color:var(--cyt);text-shadow:0 0 5px #14c8ff88}#prof .pfcv b{font:500 13px var(--ui);color:#ece6f4}#prof .pfcv em{font:normal 500 10.5px var(--ui);color:#9a8fae;letter-spacing:.06em}
+#prof .pfv{display:flex;align-items:center;gap:7px;width:100%;text-align:left;cursor:pointer}#prof .pfv svg{flex:none;width:15px;height:15px;fill:var(--pkc);filter:drop-shadow(0 0 3px var(--pk)) drop-shadow(0 0 7px var(--pk))}#prof .pfv.on svg{animation:pfvP .9s ease-out}@keyframes pfvP{0%{transform:scale(1.35)}100%{transform:none}}
 #prof .pfsty span,#prof .pfbar span{font-family:var(--ng)!important;color:var(--cyt)!important;text-shadow:0 0 5px #14c8ff88}
 #prof .pfsty b{font:900 15px var(--ng)!important;color:var(--pkc)!important;text-shadow:0 0 6px var(--pk)}#prof .pfsty em{color:#a99fb8!important;font-family:var(--ui)}
 #prof .pfbar i{background:#ffffff10!important}#prof .pfbar u{background:linear-gradient(90deg,#ff8a00,var(--amb))!important;box-shadow:0 0 6px #ff8a00}
@@ -1732,7 +1734,8 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
     <div class="st-row st-web"><b>網站</b><a href="https://mahjong.nigel-lee.com/" target="_blank" rel="noopener">mahjong.nigel-lee.com</a><button class="st-sh" id="st-share" aria-label="分享網站"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M6 11H5v9h14v-9h-1"/></svg></button><em id="st-shm"></em></div>
     <h3>素材授權</h3>
     <div class="st-row"><b>牌面</b><p>Cangjie6 等（維基共享資源）<br>CC BY-SA 4.0</p></div>
-    <div class="st-row"><b>語音</b><p>つくよみちゃんコーパス（CV.夢前黎）<br>JVNV コーパス（CC BY-SA 4.0）<br>Kokoro（Apache 2.0）</p></div>
+    <div class="st-row"><b>語音</b><p>AI 合成・VoxCPM2（OpenBMB，Apache 2.0）</p></div>
+    <div class="st-row"><b>聲線設計</b><span>Nigel Lee</span></div>
     <div class="st-row"><b>字型</b><p>Zen Maru Gothic・Noto Sans TC・Noto Serif TC・DotGothic16・Hachi Maru Pop・LXGW WenKai TC（SIL OFL 1.1）</p></div>
     <div class="st-row"><b>圖示</b><p>Noto Emoji（Google，Apache 2.0）</p></div>
     <div class="st-row"><b>程式庫</b><p>three.js・PeerJS（MIT）</p></div>
@@ -1749,7 +1752,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <button id="st-inBack" aria-label="回到街上"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="fade"></div></div><div id="kv"></div><div class="card">
     <div class="logo"><small>台灣十六張麻將</small>今夜有局</div>
-    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<br>語音：つくよみちゃん（CV.夢前黎）・JVNV（CC BY-SA）<span class="verline">・版本 <span class="verv"></span></span></p>
+    <p style="font-size:9.5px;opacity:.45;margin:2px 0 0">牌面：Cangjie6 等（維基共享資源）CC BY-SA 4.0<br>語音：AI 合成（VoxCPM2）<span class="verline">・版本 <span class="verv"></span></span></p>
   </div></div>
   <div id="rmodal" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" id="rmx" aria-label="關閉">✕</button><div id="rmMain"><h3>包廂</h3>
     <div class="rrow rmk"><button class="big" id="create" disabled>TURN包廂</button><button class="big" id="createL" disabled>網路包廂</button></div>
@@ -2430,7 +2433,7 @@ const KVQ=[["今晚，留下來陪我打一圈？", "牌桌上我從不手軟，
  ["喵～你終於來了！", "今天也要摸摸頭才開始喔～", "重生之我在牌桌當團寵，你要讓著我喔喵～"],
  ["你今晚的行程，我已經排好了。", "天涼了，讓其他三家破產吧……我是說開始吧。", "準時入座，麻將桌前無父子，公事公辦。"],
  ["坐下，不准逃。這是命令。", "今晚，我值你的班。", "在我面前誰犯規都上銬，包括你。"],
- ["本宮等你，已經等了三百年呢。", "坐近些，讓我看清你的牌……和心思。", "渡劫歸來，今夜本宮定要讓你傾家蕩產～"],
+ ["妾身等你，已經等了三百年呢。", "坐近些，讓我看清你的牌……和心思。", "渡劫歸來，今夜妾身定要讓你傾家蕩產～"],
  ["主人，您的位子已經暖好了。", "今晚由我服侍您……打牌，才怪。", "這一世我重生了，不再只當女僕——今晚我做莊～"],
  ["今晚的歌單，第一首就是你。", "音樂一下，今晚你就是我的。", "今晚全場的消費由本DJ買單……只要你贏得了我！"]];
 const KVW=[["人還沒回來？讓淑女等，真不懂禮貌。", "等人的時候，看著我就好。", "親愛的，趁沒人打擾，陪我喝杯紅酒？"],
@@ -2438,7 +2441,7 @@ const KVW=[["人還沒回來？讓淑女等，真不懂禮貌。", "等人的時
  ["喵～趁空檔摸摸我嘛～", "等得人家好寂寞，快抱抱我安慰一下喵～", "那個人是不是迷路了呀？怎麼還不回來喵～"],
  ["暫停中。等待時間我會記在帳上。", "遲到這麼久，是在哈囉？績效直接扣到底。", "趁這空檔，簽了這份陪我一輩子的合約如何？"],
  ["前世你逃了，這一世我親手把你銬回來。", "棄保潛逃？等我把他抓回來。", "看著我的眼睛！老實交代，心裡有沒有我？"],
- ["不急，本宮最擅長的就是等待。", "凡間的網路真是脆弱，不如陪本宮賞月？", "趁這空檔，讓我替你算算今晚的桃花劫？"],
+ ["不急，妾身最擅長的就是等待。", "凡間的網路真是脆弱，不如陪妾身賞月？", "趁這空檔，讓我替你算算今晚的桃花劫？"],
  ["主人，要不要先來杯紅茶？", "等人好無聊，我先幫主人捏捏肩吧～", "那位客人還沒回來呢，主人看我就好～"],
  ["斷線？那我先放首歌墊檔！", "這網速真的可撥，來，耳機分你一半！", "人跑哪去了？不管他，我們先來合拍一首！"]];
 let kvT=0,kvSel=-1,kvLast=-1,kvWait=false,dlgT=0,kvAng=0,kvTarget=null,kvHold=0;
@@ -2463,19 +2466,21 @@ function kvSay(g,tap){const kv=$('kv'),c=+g.dataset.c,L=(kvWait?KVW:KVQ)[c]||KVQ
   const sp=d.querySelector('.tx');let n=0;clearInterval(dlgT);dlgT=setInterval(()=>{n++;sp.textContent=t.slice(0,n);if(n>=t.length){clearInterval(dlgT);d.classList.add('done')}},55);
   kvSel=c;clearTimeout(kvT);kvT=setTimeout(kvCycle,tap?6500:5000)}
 /* character profile card: win art on a slanted panel, grade, a line about her, how she plays, numbers from test/aisim.py, a few of her lines (tap to hear her) */
-const BIO=['銀髮夜后，晚禮服配長手套。說話慢、出手狠，牌桌上最優雅的掠食者。','紅旗袍的大姊頭，豪爽愛起鬨。見碰就碰，輸了也要笑著乾杯。',
- '黑貓系少女，貓耳、鈴鐺、黑絲。打牌全憑心情，撒嬌比算牌在行。','精明的 OL，細框眼鏡後面全是算計。寧可不胡，也不放槍。',
- '值勤中的女警，雷厲風行。只想最快聽牌，誰擋路就把誰銬起來。','修行三百年的狐仙巫女，慵懶又神祕。愛門清、等自摸，像早就算好了天命。',
- '甜美的女僕，嘴上說服侍主人，其實膽子小，一緊張就打錯牌。','夜店 DJ，節奏感滿點。最愛把全場炒到最高點，牌桌上也一樣——要嘛不胡，一胡就要炸場。'];
+const BIO=['她總在店門口等你。說話輕、出牌慢，等你回過神，台數已經算好了。','整桌最吵的就是她。碰得最快、笑得最大聲，輸了也是第一個舉杯。',
+ '想理你的時候黏過來，不想理你就趴著打呵欠。打牌也一樣，全看心情。','上班算報表，下班算牌。眼鏡一推，你手上有什麼牌，她大概都猜到了。',
+ '一坐下就進入執勤模式。出牌比開罰單還快，誰擋路就把誰銬起來。','活了三百年，什麼牌沒見過。她不急著吃碰，只是笑著等那張自己送上門的牌。',
+ '端盤子會手抖，打牌也會。嘴上說「交給我吧，主人」，心裡其實怕得要命。','白天睡覺，晚上打碟。小胡她看不上，要胡就胡大的，最好整桌一起尖叫。'];
 const STYD={'均衡':'攻守平衡，看情勢決定要衝還是收。','愛碰':'能碰就碰，用速度壓人。','隨性':'全憑感覺，偶爾會亂打。','守備':'別家一露出聽牌跡象，就改打安全牌。',
  '速攻':'只求最快聽牌，幾乎不防守。','門清':'不太吃碰，喜歡門清自摸。','保守':'很怕放槍，但牌效率不太好。','大牌':'偏好碰碰胡、混一色這類大牌。'};
 const AISTAT=[[28.6,14.9],[21.8,18.8],[17.4,18.6],[27.4,15.2],[31.4,17.5],[18.6,14.7],[21.0,14.9],[22.0,17.7]];   // win %, deal-in % vs three plain bots
 let pfC=0;
 let pfSeat=-1;
+/* 角色介紹的台詞＝她的吃、碰、胡語音（▶ 可點，直接用 voices.js 的鍵）：VS[角色]={chi,pon,hu}，文字要跟語音一致（使用者 2026-11-20）。
+   CV（2026-11-20）：聲線名＝定聲音時選中的描述，AI 合成；換新聲音的角色才加 */
+const VS=[{"chi": "這麼甜的牌，我就吃了喔。", "pon": "親愛的，這張讓給我吧。", "hu": "胡了……抱歉，這局是我的。"}, {"chi": "這張給姊，謝啦！", "pon": "碰！這張是姊的，別搶！", "hu": "胡啦！來，乾杯！"}, {"chi": "這張我吃掉囉，謝謝你餵小貓，喵～", "pon": "碰～這張是我先看上的，喵。", "hu": "胡了喵～陪我再玩一局嘛。"}, {"chi": "這張我吃，都在計算之內。", "pon": "碰，跟我預料的一樣。", "hu": "胡了，這張我等很久了。"}, {"chi": "這張我吃，動作快一點。", "pon": "碰！這張不准過。", "hu": "胡了！雙手舉起來。"}, {"chi": "這張呀，我就收下當供品了。", "pon": "碰～緣分到了，躲也躲不掉呢。", "hu": "胡了呢，三百年可不是白修的。"}, {"chi": "主人，這張我就收下囉～", "pon": "主人，這張……可以讓我碰嗎？", "hu": "主人，我胡了！謝謝惠顧～"}, {"chi": "吃！先熱個身。", "pon": "碰！節奏跟上啊！", "hu": "胡啦！這把夠炸吧！"}],CVN=['慵懶耳語','得意起鬨','難以捉摸','勝券在握','執法威嚴','狡黠巫女','甜美女僕','派對女王'];
 function openProf(c,seat){const A=window.AVATARS||[];if(!A[c])return;pfC=c;pfSeat=seat>=0?seat:-1;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){};setTimeout(()=>{try{voiceC(c,'hu',1.4)}catch(_){}},350)}
 function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col=CCOL[c]||CCOL[0],st=AISTAT[c]||[0,0],el=$('pfBody');
-  const q=[...(KVQ[c]||[]).slice(0,2),(QUIPS[c]&&QUIPS[c].zimo&&QUIPS[c].zimo[0])||''].filter(Boolean);
-  if(pfSeat>=0&&G&&canSw(pfSeat))q.length=Math.min(q.length,2);   // the 讓她入座 button takes the third line's place
+  const cv=CVN[c],vs=VS[c];
   $('prof').style.setProperty('--c1',col[0]);$('prof').style.setProperty('--c2',col[1]);
   el.innerHTML=`<div class="pfbg"></div><img class="pfart" alt="" src="${a.w||a.W||''}">`+
    `<div class="pfin"><div class="pfhd"><h2>${esc(BOTS[c])}</h2>${aiTag(c)}</div><p class="pfbio">${esc(BIO[c]||'')}</p>`+
@@ -2483,13 +2488,15 @@ function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col
    `<div class="pfbar"><span>胡牌率</span><i><u style="width:${Math.min(100,st[0]/35*100).toFixed(0)}%"></u></i><b>${st[0].toFixed(1)}%</b></div>`+
    `<div class="pfbar bad"><span>放槍率</span><i><u style="width:${Math.min(100,st[1]/35*100).toFixed(0)}%"></u></i><b>${st[1].toFixed(1)}%</b></div>`+
    `<small class="pfnote">模擬對局數據：對三位普通電腦各 1600 局</small>`+
-   `<div class="pfq">${q.map(t=>`<p class="pfl">「${esc(t)}」</p>`).join('')}</div></div>`+
+   (cv?`<div class="pfcv"><span>CV</span><b>${esc(cv)}</b><em>AI Voice</em></div>`:'')+
+   (vs?`<div class="pfq">${Object.entries(vs).map(([k,t])=>`<button class="pfl pfv" data-pfv="${k}" aria-label="試聽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>「${esc(t)}」</button>`).join('')}</div>`:'')+'</div>'+
    `<div class="pfdots">${(window.AVATARS||[]).map((_,i)=>`<i class="${i===c?'on':''}"></i>`).join('')}</div>`+
    (pfSeat>=0&&G&&canSw(pfSeat)?(()=>{const L=G.lchs||[];return L[pfSeat]===c?'<button class="pfgo" disabled>就是她</button>':L.includes(c)&&seatHuman(L.indexOf(c))?'<button class="pfgo" disabled>已入座</button>':'<button class="pfgo" data-pfgo="1">讓她入座</button>'})():'');
   el.classList.remove('in');void el.offsetWidth;el.classList.add('in')}
 function stepProf(d){const n=(window.AVATARS||[]).length||8;pfC=(pfC+d+n)%n;renderProf();try{voiceC(pfC,'hu',1.4)}catch(_){}}
 $('prof').addEventListener('click',e=>{const t=e.target;if(t.closest('[data-pfx]')||t.id==='prof'){$('prof').classList.add('hide');return}
   if(t.closest('[data-pfgo]')){pickChr(pfSeat,pfC);$('prof').classList.add('hide');return}
+  {const v=t.closest('[data-pfv]');if(v){try{voiceC(pfC,v.dataset.pfv,1.4)}catch(_){}v.classList.remove('on');void v.offsetWidth;v.classList.add('on');return}}
   const n=t.closest('[data-pfn]');if(n)stepProf(+n.dataset.pfn)});
 {let x0=null;$('prof').addEventListener('pointerdown',e=>{x0=e.clientX},{passive:true});$('prof').addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)stepProf(dx<0?1:-1)},{passive:true})}
 function kvCycle(){const kv=$('kv');if(!kv||!pzOn){kvT=setTimeout(kvCycle,3000);return}
@@ -2745,7 +2752,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1119.2149';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1046';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2904,11 +2911,11 @@ const QUIPS=[
  {take:["喵嗚！搶小貓的牌，真的會謝～", "欸～那張我捨不得的耶。"],took:["嘿嘿，謝謝你餵我～", "這是你寵我的證據，收下囉喵～"],dealin:["嗚，芭比Q了，被你抓到尾巴了喵！", "好啦好啦，這次算你贏。"],beatme:["抓到你了～", "男人，你成功引起本喵的注意了～"],zimo:["自己摸到的魚最甜了喵～", "自己摸的魚，吃了不燒心喵～"],lian:["再一局嘛，好不好～", "贏了還要繼續，你陪本喵吃宵夜～"]},
  {take:["……計算之外。你記住了。", "好的呢，攔截我的專案是吧？"],took:["效率很好，謝謝配合。", "這張，納入我的季度報表。"],dealin:["這筆先記著。下一局，我會算回來。", "寧可少賺點，規矩不能壞。"],beatme:["結帳時間到了。", "三分鐘內，我要你把錢包賠光。"],zimo:["完美收支。", "不靠別人，這就是職場女強人。"],lian:["延長加班，你奉陪嗎？", "專案還沒結案，誰都不准下班。"]},
  {take:["想搶我的牌？膽子不小。", "敢劫警車？這張牌你也配？"],took:["這張，依法沒收。", "別發呆，牌交出來配合調查！"],dealin:["……這次算你逮到我。", "防線被突破了……算你狠！"],beatme:["你被逮捕了，罪名是輸給我。", "放棄抵抗，罰你今晚歸我管轄！"],zimo:["證據確鑿，自摸。", "親手破案，不假他人之手！"],lian:["先把規矩立住，路才能越走越寬。", "莊家我守著，今晚誰都別想保釋！"]},
- {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與本宮有緣。", "施主有心了，這張本宮收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給本宮，不丟臉喔。", "區區凡人，也敢與本宮爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，本宮自摸呢～"],lian:["上一世輸給你，這一世本宮連本帶利討回來。", "手氣正旺，陪本宮修煉到天亮～"]},
+ {take:["呵呵，被你搶先了呢。", "呵，連狐仙的貢品都敢搶～"],took:["這張牌，與妾身有緣。", "施主有心了，這張妾身收了～"],dealin:["三百年來，你是第一個。", "天機算盡竟破防……真有你的。"],beatme:["輸給妾身，不丟臉喔。", "區區凡人，也敢與妾身爭鋒？"],zimo:["自己摸到的，才是緣分。", "籤上早就寫了，妾身自摸呢～"],lian:["上一世輸給你，這一世妾身連本帶利討回來。", "手氣正旺，陪妾身修煉到天亮～"]},
  {take:["主人好眼光，這張請收下。", "主人連女僕的牌都要搶，好貪心呢～"],took:["謝謝主人的賞賜～", "主人好大方，這張我收走囉～"],dealin:["主人真是壞心眼呢。", "啊，服務出包了……請主人手下留情～"],beatme:["貴是貴了點，但主人輸得不燒心～", "從今天起，換主人乖乖聽我的話囉～"],zimo:["服務完畢，請笑納。", "不勞主人動手，我自己摸最香～"],lian:["莊家的位子，我先幫您暖著。", "主人今晚，別想早睡囉～"]},
  {take:["哇，你也聽到這個拍子？", "搶得走我的牌，搶不走我的節奏！"],took:["謝啦，這拍我接了！", "這拍送得剛好，我收下啦！"],dealin:["這一世我重生了，絕不再打錯這一拍！", "拍子掉了！這拍當作送你的福利啦！"],beatme:["胡啦！全場為我歡呼！", "聽好了，今晚你的心跳歸我控場！"],zimo:["自摸！音量開到最大！", "重低音下去，這把我自己嗨！"],lian:["安可！再來一局！", "DJ不下台，派對還沒結束呢！"]}];
 /* tile puns: text only (the long voiced takes were dropped); half the time a discard has one, a bubble beside whoever threw it */
-const TPUN=[{"9": "一筒，請你吃塊大餅。", "16": "八筒，頂級的烏魚子。", "31": "紅中，像櫻桃一樣甜。", "32": "發財，祝我們大家發財。", "33": "白板，親愛的自己刻吧。"}, {"5": "六萬，流氓出來開路！", "11": "三筒，看到紅綠燈停下！", "18": "一條，小鳥飛出去囉！", "19": "二條，吃姊的雙節棍！", "28": "南風，有什麼困難儘管說！"}, {"0": "一萬，好吃的魚丸喵～", "13": "五筒，分你一片披薩喵～", "16": "八筒，香噴噴的烏魚子喵～", "18": "一條，小鳥別跑本喵抓！", "25": "八條，想吃麥當勞薯條喵～"}, {"9": "一筒，部門訂的大餅到了。", "28": "南風，專案困難我處理。", "30": "北風，台北出差報公帳。", "32": "發財，祝各位股東發財。", "33": "白板，自己刻章簽核。"}, {"5": "六萬，流氓通通抓起來！", "9": "一筒，請你吃牢飯大餅！", "11": "三筒，紅綠燈別闖紅燈！", "19": "二條，雙節棍列管違禁品！", "30": "北風，台北分局支援！"}, {"9": "一筒，賞你一塊大餅～", "27": "東風，借本宮吹一陣～", "31": "紅中，紅通通的櫻桃呢～", "32": "發財，本宮賜你大家發財～", "33": "白板，白嫩的豆腐供品～"}, {"0": "一萬，熱騰騰的魚丸湯～", "9": "一筒，請主人吃塊大餅～", "13": "五筒，剛烤好的披薩喔～", "31": "紅中，甜點是櫻桃喔～", "33": "白板，手工嫩豆腐請慢用～"}, {"11": "三筒，紅綠燈霓虹燈閃起來！", "13": "五筒，宵夜場吃披薩囉！", "19": "二條，雙節棍甩起來！", "25": "八條，派對點份麥當勞！", "30": "北風，台北不夜城嗨起來！"}];
+const TPUN=[{"9": "一筒，請你吃塊大餅。", "16": "八筒，頂級的烏魚子。", "31": "紅中，像櫻桃一樣甜。", "32": "發財，祝我們大家發財。", "33": "白板，親愛的自己刻吧。"}, {"5": "六萬，流氓出來開路！", "11": "三筒，看到紅綠燈停下！", "18": "一條，小鳥飛出去囉！", "19": "二條，吃姊的雙節棍！", "28": "南風，有什麼困難儘管說！"}, {"0": "一萬，好吃的魚丸喵～", "13": "五筒，分你一片披薩喵～", "16": "八筒，香噴噴的烏魚子喵～", "18": "一條，小鳥別跑本喵抓！", "25": "八條，想吃麥當勞薯條喵～"}, {"9": "一筒，部門訂的大餅到了。", "28": "南風，專案困難我處理。", "30": "北風，台北出差報公帳。", "32": "發財，祝各位股東發財。", "33": "白板，自己刻章簽核。"}, {"5": "六萬，流氓通通抓起來！", "9": "一筒，請你吃牢飯大餅！", "11": "三筒，紅綠燈別闖紅燈！", "19": "二條，雙節棍列管違禁品！", "30": "北風，台北分局支援！"}, {"9": "一筒，賞你一塊大餅～", "27": "東風，借妾身吹一陣～", "31": "紅中，紅通通的櫻桃呢～", "32": "發財，妾身祝你大家發財～", "33": "白板，白嫩的豆腐供品～"}, {"0": "一萬，熱騰騰的魚丸湯～", "9": "一筒，請主人吃塊大餅～", "13": "五筒，剛烤好的披薩喔～", "31": "紅中，甜點是櫻桃喔～", "33": "白板，手工嫩豆腐請慢用～"}, {"11": "三筒，紅綠燈霓虹燈閃起來！", "13": "五筒，宵夜場吃披薩囉！", "19": "二條，雙節棍甩起來！", "25": "八條，派對點份麥當勞！", "30": "北風，台北不夜城嗨起來！"}];
 function punBubble(seat,k){
   if(mute()||seat<0||seat>3||G.st!=='play'||seat===mySeat()||!isBot(seat))return;const t=TPUN[chr(seat)]&&TPUN[chr(seat)][k];if(!t||Math.random()>=.5)return;
   const me=Math.max(0,mySeat()),pos=(seat-me+4)%4,d=document.createElement('div');d.className='quip pun p'+pos;
@@ -3168,7 +3175,7 @@ function toast(seat,text){
   const xy=pos===0?[.5,.64]:pos===1?[.85,.45]:pos===2?[.5,.18]:pos===3?[.15,.45]:[.5,.5];
   if(pos>0){const av=$('sw'+WINK[pos]);av.classList.remove('pop');void av.offsetWidth;av.classList.add('pop')}
   d.style.left=xy[0]*RW+'px';d.style.top=xy[1]*RH+'px';root.appendChild(d);setTimeout(()=>d.remove(),1200)}
-const CUT={'吃':1,'碰':1,'槓':1,'胡':2,'自摸':2},CCOL=[['#8a55c9','#2a1248'],['#d2332b','#5a0d12'],['#2f7fd0','#0b2a4a'],['#3f9a6b','#0f3a26'],['#3a64c0','#0e1d3e'],['#e0475a','#4a0d18'],['#d9a93a','#2a1d08'],['#d94fc2','#3a0f3a']];
+const CUT={'吃':1,'碰':1,'槓':1,'胡':2,'自摸':2},CCOL=[['#8a55c9','#2a1248'],['#d2332b','#5a0d12'],['#2f7fd0','#0b2a4a'],['#3f9a6b','#0f3a26'],['#a9b8cc','#1c2533'],['#f0782a','#4a1c06'],['#d9a93a','#2a1d08'],['#a6e83a','#22360a']];
 /* art used by effects is decoded once up front and kept referenced, so an effect never starts before its picture can show */
 const ARTC={};
 function warmArt(){
