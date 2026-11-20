@@ -19,15 +19,19 @@ function finish(){
  // Every client replays the same reveal from this moment; the ready countdown and auto-next start after it.
  G.c13RevealAt=Date.now();G.c13NextAt=G.c13RevealAt+(quick()?0:revealPlan(G.res).len)+15000;bump({s:G.res.w,t:'c13:reveal'});
 }
-function submit(s,rows){
- if(!Number.isInteger(s)||s<0||s>3||G.ph!=='arrange'||G.c13Ready[s]||!ownsLayout(G.c13Hands[s],rows))return false;
+// late: at the deadline the layout on the player's screen is taken as it is, 倒水 included (user rule 2026-11-21).
+function ownsCards(hand,rows){try{return rows.length===3&&rows.every((r,i)=>Array.isArray(r)&&r.length===caps[i])&&new Set(rows.flat()).size===13&&rows.flat().every(c=>hand.includes(c))}catch{return false}}
+function submit(s,rows,late){
+ if(!Number.isInteger(s)||s<0||s>3||G.ph!=='arrange'||G.c13Ready[s]||!(ownsLayout(G.c13Hands[s],rows)||(late&&ownsCards(G.c13Hands[s],rows))))return false;
  G.c13Rows[s]=rows.map(r=>r.slice());G.c13Ready[s]=true;bump();finish();return true;
 }
 // Reveal timeline: rows 頭→中→尾, seats East first; then one compare beat per row, shots one by one, home run last.
+const LATE=1500;   // grace around the deadline for a player's own (possibly foul) layout to arrive
 const RV={flip:600,cmp:1000,shot:800,hr:1500,tail:300};
 function revealPlan(res){
  const steps=[];let t=0;const add=(ms,x)=>{steps.push({t,...x});t+=ms};
- for(let row=0;row<3;row++){for(const s of ids)add(RV.flip,{k:'flip',row,s});add(RV.cmp,{k:'cmp',row})}
+ // Front and middle rows turn over together; only the back row goes seat by seat.
+ for(let row=0;row<3;row++){if(row<2)add(RV.flip,{k:'flip',row,s:ids[ids.length-1],all:1});else for(const s of ids)add(RV.flip,{k:'flip',row,s});add(RV.cmp,{k:'cmp',row})}
  // A home run replaces its three single shots with one bigger beat.
  for(const d of res?.duels||[])if(d.shot>=0&&!res.homeruns?.[d.shot])add(RV.shot,{k:'shot',s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier});
  (res?.homeruns||[]).forEach((h,s)=>{if(h)add(RV.hr,{k:'hr',s})});
@@ -42,11 +46,11 @@ Object.assign(C,{
  cfgSheet:()=>`<div class="opt"><span>局數</span>${seg('r',[[4,'小局','4 局'],[8,'續攤','8 局']])}</div><div class="opt"><span>底</span>${seg('b',[[100,'小玩','100'],[300,'中注','300'],[500,'豪賭','500']])}</div><div class="opt"><span>排牌</span>${seg('s',[[30,'快手','30 秒'],[60,'標準','60 秒'],[90,'悠閒','90 秒']])}</div>`,
  buyIn:c=>c.b*30,
  newGame(){if(R&&!R.setG){G.st='lobby';flashMsg('十三支需要私密連線，請使用網路或 TURN 包廂。',true);bump();return}G.hand=0;G.stat=ids.map(()=>[0,0,0]);deal()},
- act(s,a){if(a.t==='set'&&a.hand===G.hand&&a.gid===G.gid)submit(s,a.rows)},timers:clock,
+ act(s,a){if(a.t==='set'&&a.hand===G.hand&&a.gid===G.gid)submit(s,a.rows,Date.now()>=G.c13Deadline-LATE)},timers:clock,
  hostTick(){
   const before=G.c13Deadline;clock();if(before!==G.c13Deadline)bump();const now=Date.now();
   if(G.ph==='arrange'){
-   for(const s of ids){if(G.c13Ready[s])continue;if((isBot(s)&&now-G.c13Started>=700)||now>=G.c13Deadline)submit(s,arrange(G.c13Hands[s],ai[chr(s)]));if(G.ph!=='arrange')break}
+   for(const s of ids){if(G.c13Ready[s])continue;if((isBot(s)&&now-G.c13Started>=700)||now>=G.c13Deadline+(isBot(s)?0:LATE))submit(s,arrange(G.c13Hands[s],ai[chr(s)]));if(G.ph!=='arrange')break}
   }else if(G.ph==='end'&&((R&&allReady())||((R||myAuto||AUTO)&&now>=G.c13NextAt)))C.nextHand();
  },
  ended:()=>G.ph==='end',nextHand(){if(G.ph!=='end')return;G.hand++;if(G.hand>=cfg().r){G.st='over';G.ph='';G.rdy=[0,0,0,0];bump();return}assignSeats();deal()},
@@ -59,55 +63,109 @@ Object.assign(C,{
 });
 // Selection and unsubmitted drafts stay local to this module. Only accepted layouts enter G.
 // handKey resets the editor on the next hand; incoming snapshots do not erase local work.
-const ui={key:'',rows:[[],[],[]],selected:[],notice:'',waiting:null,retryAt:0,busy:false,job:0,seen:'',rvKey:'',rvAt:0,rvPlan:null,rvStep:-1,rvDone:''};
+const ui={key:'',rows:[[],[],[]],sel:-1,claim:[null,null,null],last:null,peek:null,combos:null,moved:null,drag:null,dragAt:0,ready:[0,0,0,0],was:null,notice:'',waiting:null,retryAt:0,busy:false,job:0,seen:'',rvKey:'',rvAt:0,rvPlan:null,rvStep:-1,rvDone:''};
 let worker=null,nextJob=0;const jobs=new Map();
 function fallbackWorker(){worker?.terminate();worker=null;for(const [id,j]of jobs){jobs.delete(id);setTimeout(()=>{try{j.resolve(arrange(j.hand,j.profile))}catch(e){j.reject(e)}},0)}}
 try{worker=new Worker(new URL('./arranger.mjs',import.meta.url),{type:'module'});worker.onmessage=({data})=>{const j=jobs.get(data.id);if(!j)return;jobs.delete(data.id);data.error?j.reject(Error(data.error)):j.resolve(data.rows)};worker.onerror=e=>{e.preventDefault();fallbackWorker()}}catch{}
 function suggest(hand,profile){return new Promise((resolve,reject)=>{if(worker){const id=++nextJob;jobs.set(id,{hand,profile,resolve,reject});worker.postMessage({id,hand,profile})}else setTimeout(()=>{try{resolve(arrange(hand,profile))}catch(e){reject(e)}},0)})}
-function mount(){let el=$('c13-game');if(el)return el;el=document.createElement('div');el.id='c13-game';el.innerHTML=`<div class="c13-felt"></div><header class="c13-head"><div><b>十三支</b><small id="c13-round"></small></div><span id="c13-clock"></span><div class="c13-tools"><button id="c13-auto-toggle">託管</button><button id="c13-settings">設定</button></div></header><div id="c13-players"></div><section id="c13-editor"><div id="c13-zones"></div><div id="c13-validation"></div></section><section id="c13-dock"><div id="c13-status" role="status"></div><div id="c13-hand"></div><footer><span id="c13-balance"></span><div><button id="c13-clear">收回全部</button><button id="c13-suggest">自動排牌</button><button id="c13-submit" class="c13-primary">確認排好</button></div></footer></section><section id="c13-rv" hidden></section><section id="c13-results" hidden></section>`;root.appendChild(el);
- el.addEventListener('click',onClick);el.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-c13-add]')){e.preventDefault();addRow(+e.target.dataset.c13Add)}});return el}
+function mount(){let el=$('c13-game');if(el)return el;el=document.createElement('div');el.id='c13-game';el.innerHTML=`<div class="c13-felt"></div><header class="c13-head"><div><b>十三支</b><small id="c13-round"></small></div><div class="c13-tools"><button id="c13-auto-toggle">託管</button><button id="c13-settings">設定</button></div></header><div id="c13-players"></div><section id="c13-board"><div id="c13-hand"></div><div id="c13-types"></div></section><section id="c13-dock"><div class="c13-dock-l"><button id="c13-suggest">自動排牌</button><button id="c13-clear">重來</button></div><div id="c13-status" role="status"></div><div class="c13-dock-r"><span id="c13-clock"></span><button id="c13-submit" class="c13-primary">確認排好</button></div></section><span id="c13-balance"></span><section id="c13-rv" hidden></section><section id="c13-results" hidden></section>`;root.appendChild(el);
+ el.addEventListener('click',onClick);el.addEventListener('pointerdown',onDown);el.addEventListener('pointermove',onMove);el.addEventListener('pointerup',onUp);el.addEventListener('pointercancel',onUp);return el}
 function cardLabel(c){return SUITS[c%4]+RANKS[c>>2]}
 function type(r){return [3,5].includes(r?.length)?TYPES[evaluate(r)[0]]:'尚未排滿'}
 function canEdit(){const s=mySeat();return G.st==='play'&&G.ph==='arrange'&&s>=0&&!G.c13Ready?.[s]&&!G.pz&&!ui.waiting&&!ui.busy&&!myAuto&&!AUTO}
-function resetEditor(){const key=C.handKey();if(ui.key===key)return;ui.key=key;ui.rows=G.c13Rows?.[mySeat()]?.map(r=>r.slice())||[[],[],[]];ui.selected=[];ui.notice='選手牌，再點頭／中／尾墩放入';ui.waiting=null;ui.busy=false;ui.job++}
-function portrait(s){const a=window.AVATARS?.[chr(s)]||{},wide=(a.nx||[]).includes('n');return `<div class="c13-window ${wide?'c13-wide':''}">${a.n?`<img alt="${esc(BOTS[chr(s)]||'')}" src="${a.n}">`:''}</div>`}
-function players(){const me=mySeat(),pov=Math.max(0,me);return ids.map(s=>{const rel=(s-pov+4)%4;if(!rel)return `<div class="c13-player c13-pos0">${portrait(s)}</div>`;return `<div class="c13-player c13-pos${rel}">${portrait(s)}<div class="c13-player-info"><b>${esc(nameOf(s))}</b><span>${G.st==='over'?'整場結束':G.ph==='end'?(G.rdy?.[s]?'已準備':'已開牌'):G.c13Ready?.[s]?'已排好':'排牌中'}</span><small>${fmt(G.score[s])}</small></div></div>`}).join('')}
+// The thirteen cards always sit in the three rows (no separate hand): dealt in rank order, big cards at the back.
+function dealtRows(hand){const l=(hand||[]).filter(c=>c>=0).sort((a,b)=>b-a);return l.length===13?[l.slice(10),l.slice(5,10),l.slice(0,5)]:[[],[],[]]}
+function resetEditor(){const key=C.handKey();if(ui.key===key)return;const me=mySeat();ui.key=key;ui.rows=G.c13Rows?.[me]?.map(r=>r.slice())||dealtRows(G.c13Hands?.[me]);ui.sel=-1;ui.claim=[null,null,null];ui.last=null;ui.peek=null;ui.combos=null;ui.notice='';ui.waiting=null;ui.busy=false;ui.job++;ui.drag=null;ui.ready=[0,0,0,0];ui.was=(G.c13Ready||[]).slice()}
+// Hand types found in my thirteen cards, strongest first; each candidate is the cards that make the type.
+function combosOf(hand){
+ const by=Array.from({length:13},()=>[]),suit=[[],[],[],[]],out=TYPES.map(()=>[]),seen=new Set();for(const c of hand.slice().sort((a,b)=>b-a)){by[c>>2].push(c);suit[c%4].push(c)}
+ const put=(t,cs)=>{const k=t+':'+cs.slice().sort((a,b)=>a-b).join();if(!seen.has(k)&&out[t].length<6){seen.add(k);out[t].push(cs)}},hi=[12,11,10,9,8,7,6,5,4,3,2,1,0];
+ const runs=[];for(let h=12;h>=4;h--)runs.push([h,h-1,h-2,h-3,h-4]);runs.push([12,3,2,1,0]);
+ for(const s of suit)for(const run of runs){const cs=run.map(r=>s.find(c=>c>>2===r));if(cs.every(c=>c!==undefined))put(8,cs)}
+ const pairs=hi.filter(r=>by[r].length>=2),trips=hi.filter(r=>by[r].length>=3);
+ for(const r of hi)if(by[r].length===4)put(7,by[r].slice());
+ for(const t of trips)for(const p of pairs)if(p!==t)put(6,[...by[t].slice(0,3),...by[p].slice(0,2)]);
+ for(const s of suit){const n=s.length;if(n<5)continue;const rec=(i,cs)=>{if(out[5].length>=6)return;if(cs.length===5){if(evaluate(cs)[0]===5)put(5,cs.slice());return}for(let j=i;j<=n-(5-cs.length);j++){cs.push(s[j]);rec(j+1,cs);cs.pop()}};rec(0,[])}
+ for(const run of runs){if(!run.every(r=>by[r].length))continue;const cs=run.map(r=>by[r][0]);if(evaluate(cs)[0]===8){const i=run.findIndex(r=>by[r].length>1);if(i<0)continue;cs[i]=by[run[i]][1]}put(4,cs)}
+ for(const t of trips)put(3,by[t].slice(0,3));
+ for(let i=0;i<pairs.length;i++)for(let j=i+1;j<pairs.length;j++)put(2,[...by[pairs[i]].slice(0,2),...by[pairs[j]].slice(0,2)]);
+ for(const p of pairs)put(1,by[p].slice(0,2));
+ return out}
+// Tapping a type puts it straight into a row: the back row first, then the middle; the same type again shows the next one.
+function pickCombo(t){
+ const list=ui.combos?.[t]||[];if(!list.length)return null;const n=list[0].length,same=ui.last?.t===t;
+ let row=same?ui.last.row:[2,1,0].find(r=>!ui.claim[r]&&caps[r]>=n);if(row===undefined)row=ui.last&&caps[ui.last.row]>=n?ui.last.row:2;
+ const busy=new Set(ui.claim.flatMap((c,r)=>c&&r!==row?c:[])),ok=list.filter(cs=>!cs.some(c=>busy.has(c)));if(!ok.length)return null;
+ const i=same?(ui.last.i+1)%ok.length:0;return{t,row,i,cards:ok[i]}}
+function where(c){for(let r=0;r<3;r++){const i=ui.rows[r].indexOf(c);if(i>=0)return[r,i]}return null}
+function staleClaims(){for(let r=0;r<3;r++)if(ui.claim[r]&&!ui.claim[r].every(c=>ui.rows[r].includes(c))){ui.claim[r]=null;if(ui.last?.row===r)ui.last=null}}
+function applyCombo(p){
+ const row=ui.rows[p.row],inc=p.cards.filter(c=>!row.includes(c)),out=row.filter(c=>!p.cards.includes(c)).sort((a,b)=>a-b);
+ inc.forEach((c,k)=>{const [q,i]=where(c),e=out[k];ui.rows[q][i]=e;row[row.indexOf(e)]=c});
+ ui.rows[p.row]=[...p.cards,...row.filter(c=>!p.cards.includes(c)).sort((a,b)=>b-a)];ui.claim[p.row]=p.cards.slice();ui.last={t:p.t,row:p.row,i:p.i};ui.moved=p.cards.slice();staleClaims();ui.sel=-1}
+function swapCards(a,b){const x=where(a),y=where(b);if(!x||!y||a===b)return;ui.rows[x[0]][x[1]]=b;ui.rows[y[0]][y[1]]=a;ui.moved=[a,b];staleClaims();ui.sel=-1}
+function swapRows(){[ui.rows[1],ui.rows[2]]=[ui.rows[2],ui.rows[1]];[ui.claim[1],ui.claim[2]]=[ui.claim[2],ui.claim[1]];if(ui.last&&ui.last.row>0)ui.last.row=3-ui.last.row;ui.moved=[...ui.rows[1],...ui.rows[2]];ui.sel=-1}
+// A row is marked when it is stronger than the row behind it (倒水).
+function fouls(rows){if(rows.flat().length!==13)return[false,false,false];const e=rows.map(evaluate);return[compare(e[0],e[1])>0,compare(e[1],e[2])>0,false]}
+function portrait(s,key='n'){const a=window.AVATARS?.[chr(s)]||{};if(!a[key])key='n';const wide=(a.nx||[]).includes(key);return `<div class="c13-window ${wide?'c13-wide':''}">${a[key]?`<img alt="${esc(BOTS[chr(s)]||'')}" src="${a[key]}">`:''}</div>`}
+// Seats face each other like the mahjong table. An opponent who finishes arranging changes pose and her name tag lights once.
+function players(){const me=mySeat(),pov=Math.max(0,me),now=Date.now();return ids.map(s=>{const rel=(s-pov+4)%4;if(!rel)return `<div class="c13-player c13-pos0">${portrait(s)}</div>`;const ready=G.ph==='arrange'&&G.c13Ready?.[s];if(ready&&ui.was&&!ui.was[s]){ui.was[s]=true;ui.ready[s]=now}
+ return `<div class="c13-player c13-pos${rel} ${ready&&now-ui.ready[s]<900?'c13-readied':''}">${portrait(s,ready?'n2':'n')}<div class="c13-player-info"><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s])}</small><span class="${ready?'c13-ok':''}">${G.st==='over'?'整場結束':G.ph==='end'?(G.rdy?.[s]?'已準備':'已開牌'):ready?'已排好':'排牌中…'}</span></div></div>`}).join('')}
+function put(id,html){const e=$(id);if(e._h!==html){e._h=html;e.innerHTML=html}}
 function renderC13(){
  const el=mount(),on=G.game==='c13'&&(G.st==='play'||G.st==='over');el.hidden=!on;if(!on)return;
  show('table',false);show('result',false);resetEditor();const me=mySeat();
  $('c13-round').textContent=`第 ${Math.min(G.hand+1,cfg().r)}／${cfg().r} 局 · 底 ${cfg().b}`;
- $('c13-players').innerHTML=players();$('c13-auto-toggle').textContent=myAuto?'取消託管':'託管';
- const open=G.ph==='end'||G.st==='over';$('c13-players').hidden=open;$('c13-editor').hidden=open;$('c13-dock').hidden=open;if(!open)ui.seen=C.handKey();
+ put('c13-players',players());$('c13-auto-toggle').textContent=myAuto?'取消託管':'託管';
+ el.style.setProperty('--c13-ww',(RW>=820?100:84)+'px');
+ const open=G.ph==='end'||G.st==='over';$('c13-players').hidden=open;$('c13-board').hidden=open;$('c13-dock').hidden=open;$('c13-balance').hidden=open;if(!open)ui.seen=C.handKey();
  const rv=open?revealNow():null;$('c13-rv').hidden=!rv;$('c13-results').hidden=!open||!!rv;
  if(open){if(rv)renderReveal(rv);else renderResults();frameC13();return}
- const submitted=!!G.c13Ready?.[me],hand=G.c13Hands?.[me]||[],current=submitted?(G.c13Rows?.[me]||ui.rows):ui.rows,used=new Set(current.flat()),pool=hand.filter(c=>c>=0&&!used.has(c)).sort((a,b)=>b-a),editable=canEdit();
+ const submitted=!!G.c13Ready?.[me],current=submitted?(G.c13Rows?.[me]||ui.rows):ui.rows,editable=canEdit(),full=current.flat().length===13,bad=fouls(current),legal=full&&!bad.some(Boolean);
  if(submitted){ui.waiting=null;ui.busy=false}
- $('c13-zones').innerHTML=current.map((r,i)=>`<div class="c13-zone ${editable&&ui.selected.length?'c13-target':''}"><div class="c13-zone-head"><button data-c13-add="${i}" ${editable?'':'disabled'}><b>${rowNames[i]}</b><small>${['最小','居中','最大'][i]}</small></button><span>${r.length}／${caps[i]}</span></div><div class="c13-slots" data-c13-add="${i}" role="button" tabindex="${editable?0:-1}" aria-label="放入${rowNames[i]}">${r.map(c=>`<button class="c13-zone-card" data-c13-remove="${c}" data-c13-row="${i}" aria-label="收回${cardLabel(c)}" ${editable?'':'disabled'}><img src="${cardFace(c)}" alt="${cardLabel(c)}"></button>`).join('')}</div><div class="c13-type">${type(r)}</div></div>`).join('');
- const available=Math.max(240,RW-80-150),cw=RH<=420?59:68,step=Math.max(16,Math.min(41,(available-cw-20)/Math.max(1,pool.length-1)));
- $('c13-hand').innerHTML=pool.map((c,i)=>{const t=pool.length>1?i/(pool.length-1)*2-1:0;return `<button class="c13-card ${ui.selected.includes(c)?'c13-selected':''}" data-c13-card="${c}" aria-label="${cardLabel(c)}" aria-pressed="${ui.selected.includes(c)}" ${editable?'':'disabled'} style="--c13-card:${cw}px;--c13-x:${(i-(pool.length-1)/2)*step}px;--c13-angle:${t*10}deg;--c13-rise:${(1-t*t)*13}px"><img alt="${cardLabel(c)}" src="${cardFace(c)}" draggable="false"></button>`}).join('');
- const complete=validLayout(current),full=current.flat().length===13,v=$('c13-validation');v.className=full?(complete?'c13-good':'c13-bad'):'';v.textContent=full?(complete?'排牌成立 · 尾墩 ≥ 中墩 ≥ 頭墩':'這樣會倒水，請調整三墩強弱'):'頭墩 3 張 · 中墩 5 張 · 尾墩 5 張';
- $('c13-status').textContent=submitted?'已排好，等待其他玩家':ui.waiting?'正在送出排法…':ui.busy?'正在找合適的排法…':full&&!complete?'這樣會倒水，請調整三墩強弱':ui.notice;
- $('c13-balance').textContent=`${esc(nameOf(me))} · 餘額 ${money(G.bk?.[meId()]??W.bal)}`;
- $('c13-submit').disabled=!editable||!complete;$('c13-clear').disabled=!editable;$('c13-suggest').disabled=!editable;frameC13();
+ if(!ui.combos&&full)ui.combos=combosOf(current.flat());
+ // Card size: three rows in the height between the top seat and the buttons, five cards in the width between the side seats.
+ const bw=$('c13-board').offsetWidth||520,wide=RW>=820,lw=wide?74:64,tw=wide?86:76,cw=Math.floor(Math.max(34,Math.min((RH-78-62-10)/3/1.42,(bw-lw-tw-22-16)/5)));
+ el.style.setProperty('--c13-cw',cw+'px');el.style.setProperty('--c13-ww',(wide?100:84)+'px');el.style.setProperty('--c13-lw',lw+'px');el.style.setProperty('--c13-tw',tw+'px');
+ const peek=ui.peek?.cards||[],moved=ui.moved||[];
+ put('c13-hand',current.map((r,i)=>`<div class="c13-row ${bad[i]?'c13-foul':''}"><div class="c13-rl">${i===2&&editable?'<button id="c13-swap" aria-label="中墩和尾墩整排對調"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M8 4v15m0 0l-4-4m4 4l4-4M16 20V5m0 0l-4 4m4-4l4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':''}<b>${rowNames[i]}</b><span>${type(r)}</span>${bad[i]?'<em>倒水</em>':''}</div><div class="c13-rc">${r.map(c=>`<button class="c13-card ${ui.sel===c?'c13-selected':''} ${peek.includes(c)?'c13-peek':''} ${moved.includes(c)?'c13-moved':''}" data-c13-card="${c}" aria-label="${cardLabel(c)}" aria-pressed="${ui.sel===c}" ${editable?'':'disabled'}><img alt="${cardLabel(c)}" src="${cardFace(c)}" draggable="false"></button>`).join('')}</div></div>`).join(''));
+ put('c13-types',editable&&ui.combos?[8,7,6,5,4,3,2,1].filter(t=>ui.combos[t].length).map(t=>`<button data-c13-type="${t}" class="${ui.last?.t===t?'c13-on':''}">${TYPES[t]}${ui.combos[t].length>1?`<i>×${ui.combos[t].length}</i>`:''}</button>`).join(''):'');
+ $('c13-status').textContent=submitted?'已排好，等其他人':ui.waiting?'送出中…':ui.busy?'排牌中…':ui.notice;
+ $('c13-balance').textContent=`餘額 ${money(G.bk?.[meId()]??W.bal)}`;
+ $('c13-submit').disabled=!editable||!legal;$('c13-submit').hidden=submitted;$('c13-clear').disabled=!editable;$('c13-suggest').disabled=!editable;frameC13();
 }
-function addRow(i){if(!canEdit())return;if(!ui.selected.length){ui.notice='先選下方的手牌，再點墩位';renderC13();return}if(ui.selected.length>caps[i]-ui.rows[i].length){ui.notice=`${rowNames[i]}還能放 ${caps[i]-ui.rows[i].length} 張`;renderC13();return}ui.rows[i].push(...[...ui.selected].sort((a,b)=>b-a));ui.selected=[];ui.notice='點已排的牌可收回，排好後確認';renderC13()}
 function sendDraft(){if(!ui.waiting)return;ui.retryAt=Date.now()+800;if(!pending)doAct({t:'set',gid:G.gid,hand:G.hand,rows:ui.waiting.map(r=>r.slice())})}
+// Drag one card onto another to swap them (a tap on two cards does the same). Pointer deltas are turned into table pixels.
+function onDown(e){
+ const t=e.target.closest?.('[data-c13-type]'),card=e.target.closest?.('[data-c13-card]');if(!canEdit()||e.button>0)return;
+ if(t){ui.peek=pickCombo(+t.dataset.c13Type);renderC13();return}   // hold: see which cards before they move
+ if(card)ui.drag={id:e.pointerId,c:+card.dataset.c13Card,x:e.clientX,y:e.clientY,on:false}}
+function onMove(e){
+ const d=ui.drag;if(!d||e.pointerId!==d.id)return;const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!d.on&&Math.hypot(dx,dy)<10)return;
+ const el=$('c13-hand').querySelector?.(`[data-c13-card="${d.c}"]`);if(!el){ui.drag=null;return}
+ if(!d.on){d.on=true;ui.sel=-1;el.classList.add('c13-drag')}
+ const z=typeof UIZ==='number'?UIZ:1,turned=typeof rot!=='undefined'&&rot;el.style.transform=`translate(${(turned?dy:dx)/z}px,${(turned?-dx:dy)/z}px) scale(1.06)`}
+function onUp(e){
+ if(ui.peek){ui.peek=null;setTimeout(renderC13,0)}
+ const d=ui.drag;if(!d||e.pointerId!==d.id)return;ui.drag=null;if(!d.on)return;ui.dragAt=Date.now();
+ const el=$('c13-hand').querySelector?.(`[data-c13-card="${d.c}"]`);if(el){el.classList.remove('c13-drag');el.style.transform=''}
+ const to=e.type==='pointerup'&&document.elementFromPoint?.(e.clientX,e.clientY)?.closest?.('[data-c13-card]');if(to&&canEdit())swapCards(d.c,+to.dataset.c13Card);renderC13()}
 async function onClick(e){
- const b=e.target.closest('button'),card=e.target.closest('[data-c13-card]'),remove=e.target.closest('[data-c13-remove]');
+ const b=e.target.closest('button'),card=e.target.closest('[data-c13-card]'),kind=e.target.closest('[data-c13-type]');
  if(b?.id==='c13-settings'){$('cfgBtn').click();return}
  if(b?.id==='c13-auto-toggle'){$('auto').click();return}
- if(revealNow()){ui.rvDone=C.handKey();renderC13();return}   // tap anywhere: straight to the table, this screen only
+ if(revealNow()){ui.rvTapped=1;const h=$('c13-rv-hint');if(h)h.hidden=true;revealSkip();renderC13();return}   // tap anywhere: on to the next part, this screen only
  if(b?.hasAttribute('data-c13-next')){doAct({t:'next'});renderC13();return}
  if(b?.hasAttribute('data-c13-leave')){leaveRoom();return}
  if(b?.hasAttribute('data-c13-profile')){openProf(chr(+b.dataset.c13Profile));return}
- if(!canEdit())return;
- if(card){const c=+card.dataset.c13Card;ui.selected.includes(c)?ui.selected=ui.selected.filter(x=>x!==c):ui.selected.push(c);ui.notice=ui.selected.length?`已選 ${ui.selected.length} 張 · 點上方墩位放入`:'選牌後點墩位放入';renderC13();return}
- if(remove){const c=+remove.dataset.c13Remove,i=+remove.dataset.c13Row;ui.rows[i]=ui.rows[i].filter(x=>x!==c);renderC13();return}
- const add=e.target.closest('[data-c13-add]');if(add){addRow(+add.dataset.c13Add);return}
- if(b?.id==='c13-clear'){ui.rows=[[],[],[]];ui.selected=[];ui.notice='已收回全部手牌';renderC13()}
- if(b?.id==='c13-submit'&&validLayout(ui.rows)){ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13()}
+ if(!canEdit()||Date.now()-(ui.dragAt||0)<350)return;ui.moved=null;
+ if(card){const c=+card.dataset.c13Card;if(ui.sel<0)ui.sel=c;else if(ui.sel===c)ui.sel=-1;else swapCards(ui.sel,c);renderC13();return}
+ if(kind){const p=pickCombo(+kind.dataset.c13Type);if(p)applyCombo(p);else ui.notice='這幾張已經用在別墩了';renderC13();return}
+ if(b?.id==='c13-swap'){swapRows();renderC13();return}
+ if(b?.id==='c13-clear'){ui.rows=dealtRows(G.c13Hands[mySeat()]);ui.sel=-1;ui.claim=[null,null,null];ui.last=null;ui.notice='';renderC13();return}
+ if(b?.id==='c13-submit'&&validLayout(ui.rows)){ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13();return}
  if(b?.id==='c13-suggest'){
-  const key=ui.key,job=++ui.job;ui.busy=true;ui.selected=[];renderC13();try{const rows=await suggest(G.c13Hands[mySeat()].slice(),profileFor({pat:1,risk:1,agg:1,whim:0}));if(ui.key!==key||ui.job!==job)return;ui.rows=rows;ui.notice='已排好建議，可收回牌微調，再確認'}catch{ui.notice='暫時無法自動排牌，仍可手動安排'}finally{if(ui.key===key&&ui.job===job){ui.busy=false;renderC13()}}
+  const key=ui.key,job=++ui.job;ui.busy=true;ui.sel=-1;renderC13();try{const rows=await suggest(G.c13Hands[mySeat()].slice(),profileFor({pat:1,risk:1,agg:1,whim:0}));if(ui.key!==key||ui.job!==job)return;ui.rows=rows;ui.claim=[null,null,null];ui.last=null;ui.notice=''}catch{ui.notice='暫時無法自動排牌'}finally{if(ui.key===key&&ui.job===job){ui.busy=false;renderC13()}}
  }
 }
 // Local reveal position. The host timestamp is used when this client has it; guests count from the moment
@@ -115,44 +173,59 @@ async function onClick(e){
 // A tab that never saw this hand being arranged (reload, late join) goes straight to the table.
 function revealNow(){
  if(G.st!=='play'||G.ph!=='end'||!G.res)return null;const key=C.handKey();
- if(ui.rvKey!==key){ui.rvKey=key;ui.rvAt=ui.seen===key?Date.now():0;ui.rvPlan=revealPlan(G.res);ui.rvStep=-1}
+ if(ui.rvKey!==key){ui.rvKey=key;ui.rvAt=ui.seen===key?Date.now():0;ui.rvPlan=revealPlan(G.res);ui.rvStep=-1;ui.rvSkip=0}
  if(ui.rvDone===key)return null;
- const e=Math.max(0,Date.now()-(G.c13RevealAt??ui.rvAt));
+ const e=Math.max(0,Date.now()-(G.c13RevealAt??ui.rvAt))+(ui.rvSkip||0);
  if(quick()||calm()||e>=ui.rvPlan.len){ui.rvDone=key;return null}
  let i=0;while(i+1<ui.rvPlan.steps.length&&ui.rvPlan.steps[i+1].t<=e)i++;
  return{i,step:ui.rvPlan.steps[i]};
 }
+// A tap moves this screen on to the next part (next row, then the shots, then the table); the host clock is untouched.
+function revealSkip(){
+ const p=ui.rvPlan,e=Math.max(0,Date.now()-(G.c13RevealAt??ui.rvAt))+(ui.rvSkip||0),first=f=>p.steps.find(f)?.t;
+ const next=[first(x=>x.row===1),first(x=>x.row===2),first(x=>x.k==='shot'||x.k==='hr')].find(t=>t>e);
+ if(next===undefined)ui.rvDone=C.handKey();else ui.rvSkip=(ui.rvSkip||0)+next-e}
 function renderReveal(rv){
  const el=$('c13-rv'),key=C.handKey(),me=mySeat(),pov=Math.max(0,me),res=G.res,st=rv.step,who=s=>s===me?'你':esc(nameOf(s));
  if(el.dataset.key!==key){
   el.dataset.key=key;ui.rvStep=-1;
   // Scores and balance stay at their pre-hand values until the table appears.
-  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who">${portrait(s)}<b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small></div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
-  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-beam" hidden></div><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me">${portrait(pov)}</div>${seat(pov)}</div><footer><span>${esc(nameOf(pov))} · 餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span>點一下畫面跳過</span></footer>`;
+  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who"><span id="c13-rv-win${s}">${portrait(s)}</span><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small>${validLayout(G.c13Rows[s])?'':'<em class="c13-rv-foul">倒水</em>'}</div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
+  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me" id="c13-rv-win${pov}">${portrait(pov)}</div>${seat(pov)}${me>=0?'<div class="c13-rv-sum">本局<i id="c13-rv-sum"></i></div>':''}</div><footer><span>${validLayout(G.c13Rows[pov])?'':'<em class="c13-rv-foul">你倒水了</em> '}餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span id="c13-rv-hint"${ui.rvTapped?' hidden':''}>點一下跳到下一段</span></footer>`;
  }
  if(ui.rvStep===rv.i)return;ui.rvStep=rv.i;
- const cur=st.k==='flip'||st.k==='cmp'?st.row:3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
- const vs=(s,row)=>{const d=res.duels.find(x=>x.a===Math.min(s,me)&&x.b===Math.max(s,me));return d.d[row]*(d.a===me?1:-1)};
+ const base=cfg().b,best=row=>Math.max(...ids.map(s=>pts(s,row))),cur=st.k==='flip'||st.k==='cmp'?st.row:3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
+ // Seats that have been shot so far swap their window to the dejected pose (no dimming, no extra art).
+ const past=ui.rvPlan.steps.slice(0,rv.i+1),hit=s=>past.some(x=>x.k==='shot'?x.to===s:x.k==='hr'&&x.s!==s);
+ if(ui.rvSfx!==key+':'+rv.i){ui.rvSfx=key+':'+rv.i;const n0=me>=0&&st.k==='cmp'?pts(me,st.row):0;try{if(typeof sfx==='function')sfx(st.k==='flip'?'clack':st.k==='shot'?'pon':st.k==='hr'?'win':n0>0?'other':n0<0?'lose':'turn')}catch{}}
  for(const s of ids){
   $('c13-rv-rows'+s).innerHTML=(G.c13Rows[s]||[[],[],[]]).map((r,row)=>{
-   const now=st.k==='flip'&&st.row===row&&st.s===s,up=row<cur||(row===cur&&(st.k==='cmp'||s<=st.s)),done=row<cur||(row===cur&&st.k==='cmp');
-   // Every number is from your side of the table: opponents show your result against them, your own rows your net.
-   const n=me<0||s===me?pts(s,row):vs(s,row),tag=me<0||s===me?'':n>0?'你贏 ':n<0?'你輸 ':'平手 ';
-   const mark=done?`<em class="c13-rv-mark ${n>0?'c13-rv-win':n<0?'c13-rv-lose':'c13-rv-tie'} ${row===cur?'c13-rv-pop':''}">${tag}<i>${fmt(n)}</i></em>`:'';
-   return `<div class="c13-rv-row ${up?'c13-rv-up':''} ${now?'c13-rv-now':''}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}">${up?`<img src="${cardFace(c)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab"><b>${s===pov?rowNames[row]+(up?' · ':''):''}${up?type(r):s===pov?'':rowNames[row]}</b>${mark}</div></div>`;
+   const now=st.k==='flip'&&st.row===row&&(st.all||st.s===s),up=row<cur||(row===cur&&(st.k==='cmp'||s<=st.s)),done=row<cur||(row===cur&&st.k==='cmp');
+   // Every seat shows its own net for the row (the four add up to zero), in the same unit as the table.
+   const n=pts(s,row);
+   const mark=done?`<em class="c13-rv-mark ${n>0?'c13-rv-win':n<0?'c13-rv-lose':'c13-rv-tie'} ${row===cur?'c13-rv-pop':''}"><i>${fmt(n*base)}</i></em>`:'';
+   // Only the row being compared is shown large; finished and waiting rows shrink to one line (mine: small cards).
+   const big=row===cur;
+   // Only the best hand of the compared row lights up; rows still face down carry no text.
+   const frame=done&&big&&n>0&&n===best(row)?'c13-rv-w':'';
+   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${type(r)}</b>`:''}${mark}</div></div>`;
   }).join('');
-  const role=st.k==='flip'?(st.s===s?'c13-rv-on':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':'c13-rv-dim'):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
+  const role=st.k==='flip'?(st.all||st.s===s?'c13-rv-on':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
   $('c13-rv-seat'+s).className='c13-rv-seat c13-rv-pos'+((s-pov+4)%4)+' '+role;
+  el.classList?.toggle('c13-rv-fx',st.k==='shot'||st.k==='hr');   // the cut-in owns the middle: opponents' row lists step aside
+  const w=$('c13-rv-win'+s),pose=hit(s)?'X':'n';if(w&&w.dataset.pose!==pose){w.dataset.pose=pose;w.innerHTML=portrait(s,pose);w.classList?.toggle('c13-rv-down',pose==='X')}
  }
  const net=me>=0&&st.k==='cmp'?pts(me,st.row):0;
- $('c13-rv-banner').innerHTML=st.k==='flip'?`<div class="c13-rv-step"><b>${rowNames[st.row]}</b><span>${'東南西北'[st.s]}家 ${who(st.s)} 開牌</span></div>`
-  :st.k==='cmp'?`<div class="c13-rv-step c13-rv-cmp"><b>${rowNames[st.row]}比牌</b>${me>=0?`<i class="${net<0?'c13-negative':''}">${fmt(net)}</i>`:''}</div>`
-  :st.k==='shot'?`<div class="c13-rv-shot"><b>打槍！</b><span>${who(st.s)} <u>▶</u> ${who(st.to)} <i>×${st.m}</i></span></div>`
-  :`<div class="c13-rv-shot c13-rv-hr"><b>全壘打！</b><span>${who(st.s)} 通殺三家 <i>×4</i></span></div>`;
- // The shot beam runs from the shooter's seat to the victim's (layout offsets: unaffected by the root zoom).
- const beam=$('c13-rv-beam'),a=$('c13-rv-seat'+st.s),b=st.k==='shot'&&$('c13-rv-seat'+st.to);beam.hidden=!(b&&a?.offsetWidth);
- if(!beam.hidden){const box=beam.offsetParent||el,at=e=>{let x=e.offsetWidth/2,y=e.offsetHeight/2;for(let n=e;n&&n!==box&&n!==el;n=n.offsetParent){x+=n.offsetLeft;y+=n.offsetTop}return box===el?[x,y]:[x-box.offsetLeft,y-box.offsetTop]},[x1,y1]=at(a),[x2,y2]=at(b);   // seat centres in the beam's own box
-  const L=Math.hypot(x2-x1,y2-y1),cut=Math.min(70,L*.3),ux=(x2-x1)/L,uy=(y2-y1)/L;beam.style.cssText=`left:${x1+ux*cut}px;top:${y1+uy*cut}px;width:${L-cut*2}px;transform:rotate(${Math.atan2(y2-y1,x2-x1)}rad)`;beam.className='';void beam.offsetWidth;beam.className='c13-rv-go'}
+ // Running total of this hand in points: rows compared so far, doubled once the shot or home run has played.
+ if(me>=0&&$('c13-rv-sum')){const rowsDone=row=>row<cur||(row===cur&&st.k==='cmp');let sum=0;
+  for(const d of res.duels){if(d.a!==me&&d.b!==me)continue;const sign=d.a===me?1:-1,other=d.shot===d.a?d.b:d.a,played=d.shot>=0&&past.some(x=>res.homeruns[d.shot]?x.k==='hr'&&x.s===d.shot:x.k==='shot'&&x.s===d.shot&&x.to===other);
+   sum+=sign*(played?d.total:[0,1,2].reduce((n,row)=>n+(rowsDone(row)?d.d[row]:0),0))}
+  const e=$('c13-rv-sum');e.textContent=fmt(sum*base);e.className=sum<0?'c13-negative':''}
+ const art=(s,k,cls)=>{const a=window.AVATARS?.[chr(s)]||{};return a[k]?`<img class="c13-rv-art ${cls}" src="${a[k]}" alt="">`:''};
+ $('c13-rv-banner').innerHTML=st.k==='flip'?`<div class="c13-rv-step"><b>${rowNames[st.row]}</b><span>${st.all?'四家一起開牌':`${'東南西北'[st.s]}家 ${who(st.s)} 開牌`}</span></div>`
+  :st.k==='cmp'?`<div class="c13-rv-step c13-rv-cmp"><b>${rowNames[st.row]}比牌</b>${me>=0?`<i class="${net<0?'c13-negative':''}">${fmt(net*base)}</i>`:''}</div>`
+  :st.k==='shot'?`<div class="c13-rv-shot">${art(st.s,'p','c13-rv-a')}<b>打槍！</b><span>${who(st.s)} <u>▶</u> ${who(st.to)} <i>×${st.m}</i></span></div>`
+  :`<div class="c13-rv-shot c13-rv-hr">${art(st.s,'W','c13-rv-a')}<b>全壘打！</b><span>${who(st.s)} 通殺三家 <i>×4</i></span></div>`;
 }
 function renderResults(){
  const el=$('c13-results'),key=G.gid+':'+G.hand+':'+G.st+':'+(G.rdy||[]).join('');if(el.dataset.key===key)return;el.dataset.key=key;
@@ -172,10 +245,10 @@ function renderResults(){
  }else{
   body=`<div class="c13-result-grid c13-labels"><span>牌搭子</span><span>頭墩</span><span>中墩</span><span>尾墩</span><span>本局</span></div>`+ids.map(s=>{
    const duel=s===me?null:res.duels.find(x=>x.a===Math.min(s,me)&&x.b===Math.max(s,me));
-   const note=G.rdy?.[s]?'已準備':res.homeruns[s]?'全壘打 ×4':duel?.shot>=0?`${duel.shot===me?'你':'對方'}打槍 ×${duel.multiplier}`:res.shots[s]?`打槍 ${res.shots[s]} 家`:'已開牌';
+   const note=G.rdy?.[s]?'已準備':!validLayout(G.c13Rows[s])?'倒水':res.homeruns[s]?'全壘打 ×4':duel?.shot>=0?`${duel.shot===me?'你':'對方'}打槍 ×${duel.multiplier}`:res.shots[s]?`打槍 ${res.shots[s]} 家`:'已開牌';
    return `<div class="c13-result-grid ${s===me?'c13-me':''}">${person(s,note)}${G.c13Rows[s].map((r,i)=>{
     const d=duel?duel.d[i]*(duel.a===me?1:-1):null;
-    return `<div class="c13-reveal" style="--c13-delay:${i*160}ms"><div class="c13-result-cards">${r.map(c=>`<img src="${cardFace(c)}" alt="${cardLabel(c)}">`).join('')}</div><small>${type(r)}${d===null?'':d>0?' · 你贏':d<0?' · 你輸':' · 平手'}</small></div>`;
+    return `<div class="c13-reveal" style="--c13-delay:${i*160}ms"><div class="c13-result-cards">${r.map(c=>`<img src="${cardFace(c,1)}" alt="${cardLabel(c)}">`).join('')}</div><small>${type(r)}${d===null?'':d>0?' · 你贏':d<0?' · 你輸':' · 平手'}</small></div>`;
    }).join('')}<strong class="${res.d[s]<0?'c13-negative':''}">${fmt(res.d[s])}</strong></div>`;
   }).join('');
  }
@@ -185,7 +258,9 @@ function renderResults(){
 function frameC13(){
  const el=$('c13-game');if(!el||el.hidden)return;
  if(G.st==='play'&&G.ph==='end'){const rv=revealNow();if(rv)renderReveal(rv);else if(!$('c13-rv').hidden)renderC13()}
- const clockEl=$('c13-clock');if(clockEl){clockEl.hidden=G.ph!=='arrange';const left=G.ph==='arrange'?Math.max(0,Math.ceil((G.c13Deadline-Date.now())/1000)):0;clockEl.textContent=G.ph==='arrange'?`${G.pz?'暫停 · ':''}${left} 秒`:'';clockEl.classList.toggle('c13-hot',left<=10)}
- if(ui.waiting&&G.ph==='arrange'&&!G.pz&&Date.now()>=ui.retryAt&&!G.c13Ready?.[mySeat()])sendDraft();
+ const clockEl=$('c13-clock');if(clockEl){clockEl.hidden=G.ph!=='arrange';const left=G.ph==='arrange'?Math.max(0,Math.ceil((G.c13Deadline-Date.now())/1000)):0;const txt=G.ph==='arrange'?`${G.pz?'暫停 ':''}${left}`:'';if(clockEl.textContent!==txt){clockEl.textContent=txt;const hot=left<=10&&!G.pz;clockEl.classList.toggle('c13-hot',hot);if(hot&&clockEl.animate&&!calm())clockEl.animate([{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:260,easing:'ease-out'})}}
+ if(G.ph==='arrange'&&ui.ready.some(t=>t&&Date.now()-t>=900&&Date.now()-t<1200))put('c13-players',players());
+ const me=mySeat();if(G.st==='play'&&G.ph==='arrange'&&!G.pz&&me>=0&&!G.c13Ready?.[me]&&!ui.waiting&&!myAuto&&!AUTO&&ui.rows.flat().length===13&&Date.now()>=G.c13Deadline-400){ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13();return}   // time is up: what is on screen goes in
+ if(ui.waiting&&G.ph==='arrange'&&!G.pz&&Date.now()>=ui.retryAt&&!G.c13Ready?.[me])sendDraft();
  const next=$('c13-next-clock');if(next)next.textContent=G.st!=='over'&&(R||myAuto)?` ${Math.max(0,Math.ceil((G.c13NextAt-Date.now())/1000))}`:'';
 }

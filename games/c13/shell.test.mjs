@@ -17,7 +17,14 @@ const secret={a:{t:'set',rows},nm:'guest',bal:10000};assert(!game.redactPresence
 now+=1000;game.hostTick();assert.equal(ctx.G.ph,'end');assert.equal(settlements,1);assert.equal(ctx.G.score.reduce((a,b)=>a+b),0);assert.equal(ctx.G.bk.me,10000+ctx.G.score[0]);game.hostTick();assert.equal(settlements,1);
 // Readiness goes through the shell; the game's nextHand performs match progression only once.
 game.nextHand();assert.equal(ctx.G.hand,1);const old=ctx.G.c13Hands[0].slice();game.nextHand();assert.equal(ctx.G.hand,1);assert.deepEqual(ctx.G.c13Hands[0],old);
-ctx.G.c13Deadline=now-1;game.hostTick();assert.equal(ctx.G.ph,'end','timeout auto-submits human');assert.equal(settlements,2);
-for(let i=0;i<2;i++){game.nextHand();ctx.G.c13Deadline=now-1;game.hostTick()}
+// Deadline (2026-11-21): a foul layout is refused while the clock runs and taken as it is once time is up;
+// the host only arranges for a human seat that never answered, after a short grace.
+{const good=engine.arrange(ctx.G.c13Hands[0]),foul=[good[0],good[2],good[1]];
+ if(!engine.validLayout(foul)){game.act(0,{t:'set',gid:'test',hand:1,rows:foul});assert.equal(ctx.G.c13Ready[0],false,'foul refused before the deadline');
+  ctx.G.c13Deadline=now;game.act(0,{t:'set',gid:'test',hand:1,rows:foul});assert.equal(ctx.G.c13Ready[0],true,'foul taken at the deadline');game.hostTick();assert.equal(ctx.G.ph,'end');assert(ctx.G.res.d[0]<0,'a foul hand loses to everyone');assert.equal(ctx.G.res.d.reduce((a,b)=>a+b),0)}
+ else{ctx.G.c13Deadline=now-1501;game.hostTick()}}
+assert.equal(ctx.G.ph,'end');assert.equal(settlements,2);
+game.nextHand();ctx.G.c13Deadline=now-1;game.hostTick();assert.equal(ctx.G.ph,'arrange','grace before the host arranges for a silent human');ctx.G.c13Deadline=now-1501;game.hostTick();assert.equal(ctx.G.ph,'end','timeout auto-submits a silent human');
+game.nextHand();ctx.G.c13Deadline=now-1501;game.hostTick();
 game.nextHand();assert.equal(ctx.G.st,'over');assert.equal(settlements,4);assert.equal(ctx.G.bk.me,10000+ctx.G.score[0]);
 console.log('PASS: host ownership/stale-action rejection, private presence, 60-second clock, timeout, once-only settlement, ledger and four-hand match');

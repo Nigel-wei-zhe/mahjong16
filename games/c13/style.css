@@ -123,3 +123,159 @@
 #c13-hand{margin-left:64px}   /* the fan clears my own window at the bottom left */
 .c13-slots{height:48px}
 #c13-status{line-height:16px}
+/* 手機看得清楚（2026-11-21 使用者回饋「牌太小」後整頁重排）
+   排牌：十三張直接排成三墩（沒有另外的手牌區），大牌面、不重疊；右邊列出手上有的牌型；左右兩家立繪放大。
+   開牌：一次只放大正在比的那一墩，其他墩縮成一行。 */
+#c13-board{position:absolute;top:78px;bottom:62px;left:calc(var(--edge) + var(--c13-ww) + 8px);right:calc(var(--edge) + var(--c13-ww) + 8px);display:flex;align-items:center;justify-content:center;gap:12px;z-index:2}
+#c13-hand{position:static;height:auto;margin:0;display:flex;flex-direction:column;gap:5px;isolation:auto}
+#c13-hand:empty:before{content:none}
+.c13-row{display:flex;align-items:stretch;justify-content:center;gap:8px}
+.c13-rl{position:relative;width:var(--c13-lw);flex-shrink:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;text-align:right}
+.c13-rl b{font:900 15px var(--ng);letter-spacing:2px;margin-right:-2px}
+.c13-rl span{font-size:11px;color:#7fe9ff;margin-top:1px}
+.c13-rl em{font:700 11px var(--ng);font-style:normal;color:#ff4d5e;border:1px solid #ff4d5e;border-radius:7px;padding:1px 7px;margin-top:3px;background:#2a0b12;box-shadow:0 0 10px #ff4d5e66}
+.c13-foul .c13-rl b,.c13-foul .c13-rl span{color:#ff4d5e}
+.c13-rc{display:flex;gap:5px}
+#c13-game .c13-card{position:relative;left:auto;bottom:auto;width:var(--c13-cw);transform:none;transition:transform .12s;box-shadow:0 3px 8px #0007;border-radius:6px;touch-action:none;flex-shrink:0;cursor:pointer}
+#c13-game .c13-card:disabled{opacity:1;cursor:default}
+.c13-card img{border-radius:6px}
+#c13-game .c13-card.c13-selected{transform:translateY(-8px);box-shadow:0 0 0 2px #ff8ad8,0 0 14px #ff2fae88;z-index:2}
+#c13-game .c13-card.c13-peek{transform:translateY(-6px);box-shadow:0 0 0 2px #7fe9ff,0 0 12px #14c8ff88;z-index:2}
+#c13-game .c13-card.c13-moved{animation:c13-moved .22s ease-out}
+#c13-game .c13-card.c13-drag{transition:none;z-index:5;pointer-events:none;box-shadow:0 10px 22px #000a,0 0 0 2px #ff8ad8}
+@keyframes c13-moved{from{transform:scale(.86);opacity:.5}to{transform:none;opacity:1}}
+#c13-game #c13-swap{position:absolute;left:0;top:-16px;width:26px;height:26px;min-height:0;padding:0;border-radius:50%;display:grid;place-items:center;color:#7fe9ff;border-color:#7fe9ff55;background:#0d1a26;z-index:3}
+#c13-types{display:flex;flex-direction:column;gap:5px;width:var(--c13-tw);flex-shrink:0}
+#c13-game #c13-types button{font:700 12px var(--ng);padding:0;min-height:28px;border-color:#7fe9ff66;color:#effcff;background:#0d1a26;white-space:nowrap;touch-action:manipulation}
+#c13-types button i{font:11px var(--led);font-style:normal;color:#ffc35a;margin-left:3px}
+#c13-game #c13-types button.c13-on{border-color:#7fe9ff;background:#12303f;box-shadow:0 0 10px #14c8ff55}
+#c13-dock{position:absolute;bottom:9px;left:calc(var(--edge) + 84px);right:var(--edge);display:flex;align-items:center;gap:10px;z-index:2}
+.c13-dock-l,.c13-dock-r{display:flex;gap:8px;align-items:center}
+#c13-status{flex:1;text-align:center;font-size:10px;color:#d4c1df;line-height:16px}
+#c13-clock{position:static;min-width:0;padding:0;border:0;background:none;font:24px var(--led);color:#7fe9ff;display:inline-block}
+#c13-clock:after{content:'秒';font:10px var(--ui);color:#a899ba;margin-left:3px}
+#c13-clock.c13-hot{color:#ff4d5e}
+#c13-game #c13-submit{font-size:14px;padding:9px 16px}
+#c13-game #c13-submit:disabled{opacity:1;color:#8d7a9c;border-color:#9a7da94d;background:#160e20;box-shadow:none}
+#c13-balance{position:absolute;left:var(--edge);bottom:8px;font-size:10px;color:#ba9dcc;z-index:2}
+#c13-players .c13-pos0{bottom:26px}
+#c13-players .c13-pos0 .c13-window.c13-wide img{max-height:88px}
+#c13-players .c13-pos2{top:26px;left:50%;right:auto;margin:0 0 0 -32px}
+#c13-players .c13-pos2 .c13-window.c13-wide img{max-height:64px}
+#c13-players .c13-pos1,#c13-players .c13-pos3{top:96px;width:var(--c13-ww)}
+#c13-players .c13-pos1 .c13-window,#c13-players .c13-pos3 .c13-window{width:var(--c13-ww);height:calc(var(--c13-ww)*1.28);border-radius:14px}
+#c13-players .c13-pos1 .c13-window.c13-wide img,#c13-players .c13-pos3 .c13-window.c13-wide img{max-height:calc(var(--c13-ww)*1.66)}
+#c13-players .c13-pos1 .c13-window img,#c13-players .c13-pos3 .c13-window img{max-height:calc(var(--c13-ww)*1.5)}
+#c13-players .c13-player-info b{display:inline;max-width:none}
+#c13-players .c13-player-info small{display:inline;margin:0 0 0 5px}
+#c13-players .c13-player-info{white-space:nowrap}
+.c13-player-info span{font-size:10px}
+.c13-readied .c13-window{animation:c13-readied .5s ease-out}
+.c13-readied .c13-player-info span{animation:c13-okflash .8s ease-out}
+@keyframes c13-readied{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes c13-okflash{0%{color:#fff;text-shadow:0 0 10px #14c8ff}100%{color:#7fe9ff;text-shadow:none}}
+/* 開牌 */
+.c13-rv-seat{align-items:flex-start}
+.c13-rv-rows{gap:2px}
+.c13-rv-row{flex-direction:column;align-items:flex-start;gap:2px}
+.c13-rv-row .c13-rv-cards{display:none;width:auto}
+.c13-rv-cur{order:-1}
+.c13-rv-cur .c13-rv-cards{display:flex}
+.c13-rv-card{width:44px;margin-left:-9px;border-radius:5px}
+.c13-rv-card img{border-radius:5px}
+.c13-rv-lab{width:auto;display:flex;gap:6px;align-items:baseline;line-height:14px}
+.c13-rv-lab b{font-size:10px;color:#8d7a9c}
+.c13-rv-cur .c13-rv-lab b{font-size:11px}
+.c13-rv-mark{display:inline}
+.c13-rv-foul{display:block;font:700 10px var(--ng);font-style:normal;color:#ff4d5e}
+#c13-rv footer .c13-rv-foul{display:inline}
+#c13-rv .c13-rv-pos1 .c13-rv-row{flex-direction:column;align-items:flex-end}
+#c13-rv .c13-rv-pos3,#c13-rv .c13-rv-pos1{top:87px}
+#c13-rv .c13-rv-pos3 .c13-rv-rows,#c13-rv .c13-rv-pos1 .c13-rv-rows{display:grid;grid-template-columns:auto auto;column-gap:10px;row-gap:1px;justify-content:start}
+#c13-rv .c13-rv-pos1 .c13-rv-rows{justify-content:end}
+#c13-rv .c13-rv-pos3 .c13-rv-cur,#c13-rv .c13-rv-pos1 .c13-rv-cur{grid-column:1 / -1}
+#c13-rv .c13-rv-pos3 .c13-rv-card,#c13-rv .c13-rv-pos1 .c13-rv-card{margin-left:-14px}
+#c13-rv .c13-rv-pos3 .c13-rv-card:first-child,#c13-rv .c13-rv-pos1 .c13-rv-card:first-child{margin-left:0}
+.c13-rv-seat{padding:2px 4px}
+#c13-rv .c13-rv-pos2 .c13-rv-rows{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto 1fr;column-gap:10px}
+#c13-rv .c13-rv-pos2 .c13-rv-cur{grid-row:1 / span 3;grid-column:1}
+#c13-rv .c13-rv-mid{top:86px;bottom:122px}
+.c13-rv-step b{letter-spacing:4px;text-indent:4px}
+.c13-rv-cmp{gap:8px}
+.c13-rv-mine .c13-rv-rows{flex-direction:row;align-items:flex-end;gap:16px}
+.c13-rv-mine .c13-rv-row{align-items:center}
+.c13-rv-mine .c13-rv-cur{order:0}
+.c13-rv-mine .c13-rv-row .c13-rv-cards{display:flex}
+.c13-rv-mine .c13-rv-card{width:30px;margin-left:-8px}
+.c13-rv-mine .c13-rv-cur .c13-rv-card{width:56px;margin-left:-12px}
+#c13-rv .c13-rv-mine{bottom:16px}
+.c13-rv-mine .c13-rv-row{gap:2px}
+.c13-rv-mine .c13-rv-lab{min-height:14px}
+.c13-result-cards img{width:26px;margin-left:-7px}
+/* 開牌第二輪（2026-11-21 使用者同意的六點）：左右立繪維持排牌時的大小、打槍用立繪演、輸贏用顏色框、本局累計、點一下跳下一段。 */
+#c13-rv .c13-rv-pos1 .c13-rv-who,#c13-rv .c13-rv-pos3 .c13-rv-who{width:var(--c13-ww)}
+#c13-rv .c13-rv-pos1 .c13-rv-who .c13-window,#c13-rv .c13-rv-pos3 .c13-rv-who .c13-window{width:var(--c13-ww);height:calc(var(--c13-ww)*1.1);border-radius:14px}
+#c13-rv .c13-rv-pos1 .c13-rv-who .c13-window.c13-wide img,#c13-rv .c13-rv-pos3 .c13-rv-who .c13-window.c13-wide img{max-height:calc(var(--c13-ww)*1.5)}
+#c13-rv .c13-rv-pos1 .c13-rv-who .c13-window img,#c13-rv .c13-rv-pos3 .c13-rv-who .c13-window img{max-height:calc(var(--c13-ww)*1.35)}
+.c13-rv-who b{display:inline;font-size:11px}
+.c13-rv-who small{display:inline;margin-left:5px}
+#c13-rv .c13-rv-pos3,#c13-rv .c13-rv-pos1{top:80px}
+#c13-rv .c13-rv-pos3 .c13-rv-rows,#c13-rv .c13-rv-pos1 .c13-rv-rows{margin-top:8px}
+.c13-rv-wait .c13-rv-lab{display:none}
+.c13-rv-seat:not(.c13-rv-pos0) .c13-rv-wait:not(.c13-rv-cur){display:none}
+.c13-rv-mine .c13-rv-seat .c13-rv-wait:not(.c13-rv-cur){display:flex}
+.c13-rv-w .c13-rv-cards,.c13-rv-l .c13-rv-cards,.c13-rv-t .c13-rv-cards{border-radius:7px;outline:2px solid #a899ba;outline-offset:2px}
+.c13-rv-w .c13-rv-cards{outline-color:#ff8ad8;box-shadow:0 0 14px 2px #ff2fae88}
+.c13-rv-l .c13-rv-cards{outline-color:#ff4d5e}
+.c13-rv-mark i{font-size:13px}
+.c13-rv-win i{color:#ffc35a}
+.c13-rv-row .c13-rv-lab{margin-top:2px}
+.c13-rv-sum{position:absolute;right:0;bottom:22px;font:700 11px var(--ng);color:#d8c8e3;letter-spacing:2px;text-align:right}
+.c13-rv-sum i{display:block;font:26px var(--led);font-style:normal;color:#ffc35a;letter-spacing:0}
+.c13-rv-sum i.c13-negative{color:#ff4d5e}
+.c13-rv-shot{z-index:4}
+.c13-rv-art{position:absolute;bottom:-10px;height:132px;width:auto;pointer-events:none;filter:drop-shadow(0 6px 10px #000a)}
+.c13-rv-a{right:100%;margin-right:-30px;animation:c13-rv-ina .32s ease-out both}
+.c13-rv-b{left:100%;margin-left:-30px;height:104px;animation:c13-rv-inb .32s .12s ease-out both}
+.c13-rv-hr .c13-rv-a{height:150px;margin-right:-22px}
+@keyframes c13-rv-ina{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes c13-rv-inb{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+.c13-rv-mine .c13-rv-cur .c13-rv-card:first-child{margin-left:0}
+#c13-rv .c13-rv-pos3,#c13-rv .c13-rv-pos1{top:74px}
+#c13-rv .c13-rv-pos2 .c13-rv-cur{display:contents}
+#c13-rv .c13-rv-pos2 .c13-rv-cur .c13-rv-cards{grid-column:1;grid-row:1 / span 3}
+#c13-rv .c13-rv-pos2 .c13-rv-lab{white-space:nowrap;margin-top:0}
+#c13-rv .c13-rv-pos2 .c13-rv-cur .c13-rv-lab{grid-column:2;order:-1}
+#c13-rv .c13-rv-pos2 .c13-rv-row:not(.c13-rv-cur){grid-column:2}
+#c13-rv .c13-rv-pos1 .c13-rv-who .c13-window,#c13-rv .c13-rv-pos3 .c13-rv-who .c13-window{height:var(--c13-ww)}
+#c13-rv .c13-rv-me .c13-window.c13-wide img{max-height:88px}
+.c13-rv-art{height:112px}
+.c13-rv-b{height:92px}
+.c13-rv-hr .c13-rv-a{height:128px}
+/* 開牌第三輪（2026-11-21）：三墩標籤固定頭中尾、只有最大的那手發光、被打的人換落寞圖 */
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-rows{display:grid;grid-template-columns:auto auto;column-gap:10px;row-gap:1px;justify-content:start;justify-items:start}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-row{display:contents}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-cards{grid-column:1 / -1;grid-row:1;margin-bottom:4px}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-lab{grid-column:1;order:0;margin-top:0;white-space:nowrap;text-shadow:0 1px 3px #0b0713,0 0 6px #0b0713}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-row:nth-child(1) .c13-rv-lab{grid-row:2}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-row:nth-child(2) .c13-rv-lab{grid-row:2;grid-column:2}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-row:nth-child(3) .c13-rv-lab{grid-row:3}
+#c13-rv .c13-rv-pos1 .c13-rv-rows{justify-content:end;justify-items:end}
+#c13-rv .c13-rv-pos2 .c13-rv-rows{grid-template-columns:auto auto;grid-template-rows:auto auto auto;align-content:center}
+#c13-rv .c13-rv-seat.c13-rv-pos2 .c13-rv-cards{grid-column:1;grid-row:1 / span 3;margin-bottom:0}
+#c13-rv .c13-rv-seat.c13-rv-pos2 .c13-rv-row:nth-child(1) .c13-rv-lab{grid-row:1;grid-column:2}
+#c13-rv .c13-rv-seat.c13-rv-pos2 .c13-rv-row:nth-child(2) .c13-rv-lab{grid-row:2;grid-column:2}
+#c13-rv .c13-rv-seat.c13-rv-pos2 .c13-rv-row:nth-child(3) .c13-rv-lab{grid-row:3;grid-column:2}
+#c13-rv .c13-rv-rows{z-index:3}
+.c13-rv-cur .c13-rv-lab b{color:#fff6fc}
+.c13-rv-hit{border-color:transparent}
+.c13-rv-art{height:164px;bottom:-34px}
+.c13-rv-hr .c13-rv-a{height:172px;margin-right:-14px}
+.c13-rv-shot{margin-left:36px}
+.c13-rv-down .c13-window img{max-height:none!important;height:150%}
+#c13-results:not(.c13-match-over) .c13-result-person{display:grid;grid-template-columns:30px minmax(0,1fr);gap:0 6px;align-content:center}
+#c13-results:not(.c13-match-over) .c13-result-person .c13-window{grid-row:1 / span 2}
+#c13-results:not(.c13-match-over) .c13-result-person>small{grid-column:2;width:auto;margin-top:1px}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-rows{transition:opacity .15s}
+#c13-rv.c13-rv-fx .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-rows{opacity:0}
+#c13-rv .c13-rv-shooter,#c13-rv .c13-rv-hit{border-color:transparent;background:none;box-shadow:none}
