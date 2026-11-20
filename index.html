@@ -1563,6 +1563,24 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #setm .tg li{display:grid;grid-template-columns:76px 1fr;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid #ffffff0d}#setm .tg li:last-child{border-bottom:0}#setm .tg li b{font:700 13px/1.4 'Noto Sans TC',sans-serif;color:#fff6fc;white-space:nowrap}#setm .tg li span{font-size:11.5px;line-height:1.5;color:#a99fb8}#setm .tg li i{font:normal 400 12px 'DotGothic16',monospace;color:#ffc35a}
 #setm .rg{margin:0 0 12px}#setm .rg h4{display:flex;align-items:baseline;gap:7px;margin:0 0 5px!important}#setm .rg h4 i{font:normal 400 12px 'DotGothic16',monospace;color:#ff8ad8;text-shadow:0 0 6px #ff2fae88;letter-spacing:0}
 #setm .rg li{position:relative;padding-left:13px;margin:0 0 3px;font:400 12px/1.6 'Noto Sans TC',sans-serif;color:#cfc6dc}#setm .rg li::before{content:"";position:absolute;left:2px;top:.72em;width:4px;height:4px;border-radius:50%;background:#7fe9ff;box-shadow:0 0 4px #14c8ff}#setm .rg li b{font-weight:700;color:#fff6fc}
+/* ===== 角色介紹 v2（電影海報＋頭像列，2026-11-20）===== */
+#prof .pf{background:#07050c!important}#prof .pvbg{position:absolute;inset:0;background:linear-gradient(90deg,#07050c 0,#07050cf2 38%,#07050c66 70%,#07050c99),url(img/room.webp) 70% 38%/cover no-repeat}
+#prof .pvart{position:absolute;right:calc(var(--edge) - 10px);bottom:-8%;height:108%;max-width:50%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 0 20px #ff2fae33);pointer-events:none}
+#prof .pf.in .pvart{animation:artUp .5s cubic-bezier(.15,.9,.25,1.05) both}#prof .pf.in .pvl{animation:fadeR .4s .1s both}
+#prof .pvl{position:absolute;left:var(--edge);top:22px;width:min(390px,52%);display:flex;flex-direction:column;gap:8px}
+#prof .pvnm{display:flex;align-items:flex-end;gap:12px}#prof .pvnm h2{margin:0;font:900 48px/1 'Zen Maru Gothic';letter-spacing:.12em;color:var(--pkc);text-shadow:0 0 3px #fff,0 0 10px var(--pk),0 0 22px var(--pk)}#prof .pvnm .aig b{font-size:16px;padding:3px 7px 4px}
+#prof .pvcv{display:flex;align-items:baseline;gap:8px;font-size:12px}#prof .pvcv span{font:700 10.5px 'Zen Maru Gothic';letter-spacing:.2em;color:var(--cyt);text-shadow:0 0 6px #14c8ff88}#prof .pvcv b{font:500 12.5px var(--ui);color:#ece6f4}#prof .pvcv em{font:normal 500 10px var(--ui);color:#9a8fae}
+#prof .pvbio{margin:0;max-width:340px;font:500 13px/1.7 var(--ui);color:#ece6f4;text-wrap:pretty}
+#prof .pvsub{min-height:30px;padding-top:4px;font:700 17px/1.5 'Noto Serif TC',serif;color:#fff;text-shadow:0 1px 2px #000,0 0 12px #000}
+#prof .pvch{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#prof .pvv{display:flex;align-items:center;gap:7px;height:32px;padding:0 14px;border-radius:9px;border:1px solid #ffffff1a;background:#ffffff08;color:#ffd6f1;font:700 11px 'Zen Maru Gothic';letter-spacing:.1em;cursor:pointer}
+#prof .pvv svg{width:12px;height:12px;fill:var(--pkc);filter:drop-shadow(0 0 3px var(--pk)) drop-shadow(0 0 6px var(--pk))}
+#prof .pvv.on{border-color:var(--pkt);box-shadow:0 0 8px #ff2fae55,inset 0 0 8px #ff2fae22}
+#prof .pvch .pfgo{position:relative!important;right:auto!important;bottom:auto!important;height:34px!important;margin-left:6px}
+#prof .pvmeta{position:absolute;left:var(--edge);bottom:58px;display:flex;align-items:center;gap:14px;font:500 11.5px var(--ui);color:#9a8fae}#prof .pvmeta b{color:#fff6fc;font-weight:700;margin-right:4px}#prof .pvmeta i{font:normal 400 15px 'DotGothic16',monospace;color:var(--amb)}#prof .pvmeta i.bad{color:#ff7a86}
+#prof .pvgs{display:flex;gap:4px}#prof .pvgs button{height:22px;padding:0 9px;border-radius:11px;border:1px solid #ffffff22;background:none;color:#9a8fae;font:700 10.5px var(--ui)}#prof .pvgs button.on{border-color:var(--cyt);color:#effcff;box-shadow:0 0 6px #14c8ff66}
+#prof .pvh{position:absolute;left:var(--edge);bottom:12px;display:flex;gap:8px;width:min(390px,52%);overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:3px 2px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),#0000);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),#0000)}#prof .pvh::-webkit-scrollbar{display:none}
+#prof .pvh button{flex:none;width:32px;height:32px;border-radius:50%;padding:0;border:1.5px solid #ffffff33;background:#120a1a center/cover;opacity:.55;scroll-snap-align:start;cursor:pointer}#prof .pvh button.on{opacity:1;border-color:var(--pkt);box-shadow:0 0 6px #fff,0 0 12px var(--pk)}
 #setm .snote{margin:-3px 0 9px 16px;font:500 10.5px/1.4 'Noto Sans TC',sans-serif;color:#9a8fae}
 #st-info .st-cp{margin-top:10px;font-size:10px;line-height:1.5;color:#9a8fae}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
 
@@ -1780,7 +1798,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
       <button class="lok" id="nmOk">確定</button></div></div></div>
 
   <div class="panel hide" id="pause"><div class="card" id="pzCard"></div></div>
-  <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button><button class="pfnav l" data-pfn="-1" aria-label="上一位"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="pfnav r" data-pfn="1" aria-label="下一位"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  <div id="prof" class="hide"><div class="pf" id="pfBody"></div><button class="pfx" data-pfx="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
   <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <section data-p="main"><h3>設定</h3>
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
@@ -2059,8 +2077,9 @@ function tileVal(c,k){
    call: 0 keeps the hand closed, 1 normal, 2 calls whenever it does not hurt; big: aims for all-pungs / one suit; mis: chance of a random discard.
    bots only ever look at their own hand and the table (rivers, exposed melds), never the wall or other hands */
 // grades come from test/aisim.py (one seat vs three plain greedy bots, 1600 hands, money per hand): S +17, A +10, B about 0, C -13, D -34 or worse
-const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'D',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'A',st:'守備',lv:2,def:2,call:1},
-  {g:'S',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'B',st:'保守',lv:0,def:1,call:1,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
+/* 等級三級（使用者 2026-11-20，原 S–D 五級）：依 aisim 實測強度分群 A＝凜 瑟琳 蜜雅、B＝艾莉絲 露娜 蕾歐、C＝白音 薇拉 */
+const AIP=[{g:'A',st:'均衡',lv:2,def:1,call:1},{g:'B',st:'愛碰',lv:1,def:0,call:2},{g:'C',st:'隨性',lv:0,def:0,call:2,mis:.3},{g:'A',st:'守備',lv:2,def:2,call:1},
+  {g:'A',st:'速攻',lv:2,def:0,call:1},{g:'C',st:'門清',lv:2,def:1,call:0},{g:'B',st:'保守',lv:0,def:1,call:1,mis:.15},{g:'B',st:'大牌',lv:2,def:0,call:1,big:1}];
 function aiTag(c){const p=AIP[c];return p?`<span class="aig g${p.g}" title="${p.st}"><b>${p.g}</b></span>`:''}   // letter only (the user's call); the style word shows on the profile card
 const AIL=[{lv:0,def:0,call:2,mis:.3},{lv:1,def:0,call:1},{lv:2,def:1,call:1}];
 // window.__aiSeat: test-only per-seat override (a level 0-2 or a profile object)
@@ -2477,31 +2496,40 @@ const BIO=['她總在店門口等你。說話輕、出牌慢，等你回過神�
 const STYD={'均衡':'攻守平衡，看情勢決定要衝還是收。','愛碰':'能碰就碰，用速度壓人。','隨性':'全憑感覺，偶爾會亂打。','守備':'別家一露出聽牌跡象，就改打安全牌。',
  '速攻':'只求最快聽牌，幾乎不防守。','門清':'不太吃碰，喜歡門清自摸。','保守':'很怕放槍，但牌效率不太好。','大牌':'偏好碰碰胡、混一色這類大牌。'};
 const AISTAT=[[28.6,14.9],[21.8,18.8],[17.4,18.6],[27.4,15.2],[31.4,17.5],[18.6,14.7],[21.0,14.9],[22.0,17.7]];   // win %, deal-in % vs three plain bots
+/* 角色資料分層（2026-11-20，為之後的大老二、撿紅點等鋪路）：
+   角色本身（BOTS 名字、BIO、CVN、VS、CCOL、立繪）八款遊戲共用；TRAIT＝角色本性（每項 0–2：agg 積極、risk 冒險、pat 耐心、bluff 虛張聲勢、whim 隨性），
+   新遊戲的 AI 參數由 TRAIT 換算，打法才跨遊戲一致；GAME_AI[遊戲]＝該遊戲自己的等級／風格／AI 參數／實測（等級每款各自實測，只分 A B C）。
+   麻將目前沿用調好的 AIP／AISTAT（GAME_AI.mahjong 指向同一份）。各遊戲語音另用前綴鍵（例 'b2:pass'），麻將維持原 40 鍵。 */
+const TRAIT=[{agg:1,risk:1,pat:2,bluff:2,whim:0},{agg:2,risk:2,pat:0,bluff:1,whim:0},{agg:1,risk:2,pat:0,bluff:1,whim:2},{agg:0,risk:0,pat:2,bluff:1,whim:0},
+  {agg:2,risk:1,pat:0,bluff:0,whim:0},{agg:0,risk:0,pat:2,bluff:2,whim:0},{agg:0,risk:0,pat:1,bluff:0,whim:1},{agg:2,risk:2,pat:1,bluff:1,whim:0}];
+const GAME_AI={mahjong:{name:'麻將',ai:AIP,stat:AISTAT,styd:STYD,lab:['胡牌率','放槍率']}};
+let pfGame='mahjong';
+function gameInfo(c,g){const G_=GAME_AI[g]||GAME_AI.mahjong,a=G_.ai[c]||{},st=G_.stat[c]||[0,0];return {g:a.g,st:a.st,desc:G_.styd[a.st]||'',stat:st,lab:G_.lab}}
 let pfC=0;
 let pfSeat=-1;
 /* 角色介紹的台詞＝她的吃、碰、胡語音（▶ 可點，直接用 voices.js 的鍵）：VS[角色]={chi,pon,hu}，文字要跟語音一致（使用者 2026-11-20）。
    CV（2026-11-20）：聲線名＝定聲音時選中的描述，AI 合成；換新聲音的角色才加 */
 const VS=[{"chi": "這麼甜的牌，我就吃了喔。", "pon": "親愛的，這張讓給我吧。", "hu": "胡了……抱歉，這局是我的。"}, {"chi": "這張給姊，謝啦！", "pon": "碰！這張是姊的，別搶！", "hu": "胡啦！來，乾杯！"}, {"chi": "這張我吃掉囉，謝謝你餵小貓，喵～", "pon": "碰～這張是我先看上的，喵。", "hu": "胡了喵～陪我再玩一局嘛。"}, {"chi": "這張我吃，都在計算之內。", "pon": "碰，跟我預料的一樣。", "hu": "胡了，這張我等很久了。"}, {"chi": "這張我吃，動作快一點。", "pon": "碰！這張不准過。", "hu": "胡了！雙手舉起來。"}, {"chi": "這張呀，我就收下當供品了。", "pon": "碰～緣分到了，躲也躲不掉呢。", "hu": "胡了呢，三百年可不是白修的。"}, {"chi": "主人，這張我就收下囉～", "pon": "主人，這張……可以讓我碰嗎？", "hu": "主人，我胡了！謝謝惠顧～"}, {"chi": "吃！先熱個身。", "pon": "碰！節奏跟上啊！", "hu": "胡啦！這把夠炸吧！"}],CVN=['慵懶耳語','得意起鬨','難以捉摸','勝券在握','執法威嚴','狡黠巫女','甜美女僕','派對女王'];
-function openProf(c,seat){const A=window.AVATARS||[];if(!A[c])return;pfC=c;pfSeat=seat>=0?seat:-1;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){};setTimeout(()=>{try{voiceC(c,'hu',1.4)}catch(_){}},350)}
-function renderProf(){const c=pfC,a=(window.AVATARS||[])[c]||{},P=AIP[c]||{},col=CCOL[c]||CCOL[0],st=AISTAT[c]||[0,0],el=$('pfBody');
-  const cv=CVN[c],vs=VS[c];
+function openProf(c,seat){const A=window.AVATARS||[];if(!A[c])return;pfC=c;pfSeat=seat>=0?seat:-1;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){}}   // 不自動播語音，玩家自己點 ▶（使用者 2026-11-20）
+function renderProf(){const c=pfC,A=window.AVATARS||[],a=A[c]||{},col=CCOL[c]||CCOL[0],el=$('pfBody'),gi=gameInfo(c,pfGame),cv=CVN[c],vs=VS[c]||{},ks=Object.keys(vs);
+  /* 角色介紹 v2（2026-11-20 使用者選「電影海報＋頭像列」）：立繪靠右，左＝名字／CV／BIO／台詞字幕（▶ 吃碰胡，點了才播），左下＝牌風一行＋頭像列（角色多了就橫向捲動） */
   $('prof').style.setProperty('--c1',col[0]);$('prof').style.setProperty('--c2',col[1]);
-  el.innerHTML=`<div class="pfbg"></div><img class="pfart" alt="" src="${a.w||a.W||''}">`+
-   `<div class="pfin"><div class="pfhd"><h2>${esc(BOTS[c])}</h2>${aiTag(c)}</div><p class="pfbio">${esc(BIO[c]||'')}</p>`+
-   `<div class="pfsty"><span>牌風</span><b>${esc(P.st||'')}</b><em>${esc(STYD[P.st]||'')}</em></div>`+
-   `<div class="pfbar"><span>胡牌率</span><i><u style="width:${Math.min(100,st[0]/35*100).toFixed(0)}%"></u></i><b>${st[0].toFixed(1)}%</b></div>`+
-   `<div class="pfbar bad"><span>放槍率</span><i><u style="width:${Math.min(100,st[1]/35*100).toFixed(0)}%"></u></i><b>${st[1].toFixed(1)}%</b></div>`+
-   `<small class="pfnote">模擬對局數據：對三位普通電腦各 1600 局</small>`+
-   (cv?`<div class="pfcv"><span>CV</span><b>${esc(cv)}</b><em>AI Voice</em></div>`:'')+
-   (vs?`<div class="pfq">${Object.entries(vs).map(([k,t])=>`<button class="pfl pfv" data-pfv="${k}" aria-label="試聽"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>「${esc(t)}」</button>`).join('')}</div>`:'')+'</div>'+
-   `<div class="pfdots">${(window.AVATARS||[]).map((_,i)=>`<i class="${i===c?'on':''}"></i>`).join('')}</div>`+
-   (pfSeat>=0&&G&&canSw(pfSeat)?(()=>{const L=G.lchs||[];return L[pfSeat]===c?'<button class="pfgo" disabled>就是她</button>':L.includes(c)&&seatHuman(L.indexOf(c))?'<button class="pfgo" disabled>已入座</button>':'<button class="pfgo" data-pfgo="1">讓她入座</button>'})():'');
-  el.classList.remove('in');void el.offsetWidth;el.classList.add('in')}
-function stepProf(d){const n=(window.AVATARS||[]).length||8;pfC=(pfC+d+n)%n;renderProf();try{voiceC(pfC,'hu',1.4)}catch(_){}}
+  const games=Object.keys(GAME_AI),seatBtn=pfSeat>=0&&G&&canSw(pfSeat)?(()=>{const L=G.lchs||[];return L[pfSeat]===c?'<button class="pfgo" disabled>就是她</button>':L.includes(c)&&seatHuman(L.indexOf(c))?'<button class="pfgo" disabled>已入座</button>':'<button class="pfgo" data-pfgo="1">讓她入座</button>'})():'';
+  el.innerHTML=`<div class="pvbg"></div><img class="pvart" alt="" src="${a.w||a.W||''}">`+
+   `<div class="pvl"><div class="pvnm"><h2>${esc(BOTS[c])}</h2>${aiTag(c)}</div>`+
+   (cv?`<div class="pvcv"><span>CV</span><b>${esc(cv)}</b><em>AI Voice</em></div>`:'')+
+   `<p class="pvbio">${esc(BIO[c]||'')}</p>`+
+   (ks.length?`<div class="pvsub">「${esc(vs[ks[0]])}」</div><div class="pvch">${ks.map((k,n)=>`<button class="pvv${n?'':' on'}" data-pfv="${k}" aria-label="播放"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>${{chi:'吃',pon:'碰',hu:'胡',kan:'槓',zimo:'自摸'}[k]||k}</button>`).join('')}${seatBtn}</div>`:seatBtn)+`</div>`+
+   `<div class="pvmeta">${games.length>1?`<span class="pvgs">${games.map(g=>`<button class="${g===pfGame?'on':''}" data-pfg="${g}">${GAME_AI[g].name}</button>`).join('')}</span>`:''}<span><b>牌風</b>${esc(gi.st||'')}</span><span>${gi.lab[0]} <i>${gi.stat[0].toFixed(1)}%</i></span><span>${gi.lab[1]} <i class="bad">${gi.stat[1].toFixed(1)}%</i></span></div>`+
+   `<div class="pvh">${A.map((x,n)=>`<button class="${n===c?'on':''}" data-pfh="${n}" style="background-image:url(${x.a||''})" aria-label="${esc(BOTS[n]||'')}"></button>`).join('')}</div>`;
+  el.classList.remove('in');void el.offsetWidth;el.classList.add('in');
+  const o=el.querySelector('.pvh .on');if(o)o.scrollIntoView({inline:'nearest',block:'nearest'})}
+function stepProf(d){const n=(window.AVATARS||[]).length||8;pfC=(pfC+d+n)%n;renderProf()}
 $('prof').addEventListener('click',e=>{const t=e.target;if(t.closest('[data-pfx]')||t.id==='prof'){$('prof').classList.add('hide');return}
   if(t.closest('[data-pfgo]')){pickChr(pfSeat,pfC);$('prof').classList.add('hide');return}
-  {const v=t.closest('[data-pfv]');if(v){try{voiceC(pfC,v.dataset.pfv,1.4)}catch(_){}v.classList.remove('on');void v.offsetWidth;v.classList.add('on');return}}
-  const n=t.closest('[data-pfn]');if(n)stepProf(+n.dataset.pfn)});
+  {const v=t.closest('[data-pfv]');if(v){try{voiceC(pfC,v.dataset.pfv,1.4)}catch(_){}const sb=$('pfBody').querySelector('.pvsub');if(sb)sb.textContent='「'+((VS[pfC]||{})[v.dataset.pfv]||'')+'」';$('pfBody').querySelectorAll('.pvv').forEach(b=>b.classList.toggle('on',b===v));return}}
+  {const h=t.closest('[data-pfh]');if(h){pfC=+h.dataset.pfh;renderProf();return}}
+  {const g=t.closest('[data-pfg]');if(g){pfGame=g.dataset.pfg;renderProf();return}}});
 {let x0=null;$('prof').addEventListener('pointerdown',e=>{x0=e.clientX},{passive:true});$('prof').addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>60)stepProf(dx<0?1:-1)},{passive:true})}
 function kvCycle(){const kv=$('kv');if(!kv||!pzOn){kvT=setTimeout(kvCycle,3000);return}
   if(kv.classList.contains('focus')){kv.classList.remove('focus');kv.querySelectorAll('.g').forEach(x=>x.classList.remove('sel'));const d=$('kvdlg');if(d)d.classList.remove('on');kvT=setTimeout(kvCycle,3500);return}
@@ -2756,7 +2784,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1120.1301';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1320';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
