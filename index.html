@@ -1330,7 +1330,14 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #boot .bt{display:none!important}
 #boot .bb{height:3px!important;background:#f6e2ee1a!important;border-radius:2px!important;overflow:visible!important}
 #boot .bb b{background:var(--pkc)!important;box-shadow:0 0 4px #fff,0 0 10px var(--pk),0 0 20px var(--pk)!important;border-radius:2px}
-#bootMsg{font-family:var(--led)!important;letter-spacing:.2em!important;color:var(--amb)!important;text-shadow:0 0 5px #ff8a00}
+#boot .bb{position:relative;margin-top:10px}
+#boot .bb b{width:100%!important;transform:scaleX(0);transform-origin:left;transition:none!important;will-change:transform}
+#bootHead{position:absolute;top:50%;left:0;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff,0 0 12px var(--pk),0 0 24px var(--pk)}
+#boot .brow{display:flex;justify-content:space-between;align-items:baseline;width:min(240px,calc(60*var(--vw)));margin-top:-4px}
+#bootMsg{font:500 11px/1.3 var(--ui);letter-spacing:.12em;color:#a99fb8}
+#bootSlow{position:absolute;top:calc(50% + 92px);left:0;right:0;text-align:center;font:500 11px/1 var(--ui);letter-spacing:.12em;color:#6f6880}
+#bootPct{font:15px/1 var(--led);color:var(--amb);text-shadow:0 0 5px #ff8a0088;min-width:3em;text-align:right}
+#boot.full .bb{background:#f6e2ee33!important}#boot.full #bootHead{opacity:0;transition:opacity .2s}#boot.full .bl{text-shadow:0 0 4px #fff,0 0 16px var(--pk),0 0 36px var(--pk),0 0 72px var(--pk)!important}
 /* ===== pause (waiting for a player) ===== */
 #pause{background:#03020ab0!important}
 #pause::before{background:linear-gradient(90deg,#07050cf5 0,#07050cc8 38%,#07050c40 70%,#07050c66)!important}
@@ -1356,7 +1363,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #kbar .kr .big{position:relative;border:0!important;background:linear-gradient(#1a1222,#0b0710)!important;box-shadow:inset 0 0 0 1px #ffffff22!important;color:#a99fb8!important;font-family:var(--ui)!important}
 #kbar #kbOk{box-shadow:inset 0 0 0 1.5px #4a4458,inset 0 0 0 3px #0b0710!important;color:var(--pkc)!important;font:900 16px/1 var(--ng)!important;letter-spacing:.2em!important;text-shadow:0 0 2px #fff,0 0 7px var(--pk)}
 #kbar #kbOk::before{content:"";position:absolute;inset:4px;border-radius:inherit;border:1.4px solid var(--pkt);box-shadow:0 0 6px var(--pk),inset 0 0 6px var(--pk)}
-#boot .bl{font-size:46px!important}#boot .bb{width:240px!important}
+#boot .bl{font-size:46px!important}#boot .bb,#boot .brow{width:240px!important}
 
 /* --- dice (2026-11-18): ivory cube with bevel + thickness, recessed pips, big red ace, tumbles in 3D --- */
 #intro .idice{perspective:420px}
@@ -1720,11 +1727,23 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 </style>
 </head>
 <body>
-<div id="boot"><div class="bl">今夜有局</div><div class="bs" style="margin-top:-8px">台灣十六張麻將</div><div class="bt"><i></i><i></i><i></i><i></i></div><div class="bb"><b id="bootBar"></b></div><div class="bs" id="bootMsg">進站中…</div></div>
-<script>function bootStep(t,p){var m=document.getElementById('bootMsg'),b=document.getElementById('bootBar');if(m)m.textContent=t;if(b)b.style.width=p+'%'}
-function bootDone(){var b=document.getElementById('boot');if(!b)return;b.classList.add('out');setTimeout(function(){b.remove()},600)}
+<div id="boot"><div class="bl">今夜有局</div><div class="bs" style="margin-top:-8px">夜未央・包廂營業中</div><div class="bt"><i></i><i></i><i></i><i></i></div><div class="bb"><b id="bootBar"></b><i id="bootHead"></i></div><div class="brow"><span id="bootMsg">進站中…</span><span id="bootPct">0%</span></div><div id="bootSlow" hidden>網路較慢，請稍候</div></div>
+<script>/* loading bar: stages are weighted by download size (avatars.js and voices.js are preloaded together, so the art stage covers most of both); the big stages' pace scales with how long the small ones took (number <20 = multiple of elapsed time); between checkpoints the bar eases toward the next one (never reaching it) so it keeps moving, then bootDone() runs it to 100% */
+(function(){var W={peer:5,tiles:10,art:90,voice:96,init:99},cur=0,tF=0,from=0,to=3,t0=performance.now(),tau=600,shown=0,done=0,raf=0;
+var bar=document.getElementById('bootBar'),head=document.getElementById('bootHead'),pct=document.getElementById('bootPct');
+function paint(){var t=performance.now(),k;
+  if(done){shown+=Math.max(.6,(100-shown)*.18);if(shown>100)shown=100}
+  else{k=(t-t0)/tau;k=k/(1+k);var goal=from+(to-from)*.96*k;shown+=(Math.max(goal,shown)-shown)*.25}
+  var v=shown/100;if(bar)bar.style.transform='scaleX('+v+')';if(head)head.style.left=(v*100)+'%';if(pct)pct.textContent=Math.floor(shown)+'%';
+  if(done&&shown>=100){raf=0;if(typeof done==='function')done();return}
+  raf=requestAnimationFrame(paint)}
+window.bootStep=function(t,key,ms){var m=document.getElementById('bootMsg');if(m&&t)m.textContent=t;
+  from=Math.max(shown,cur);cur=to;to=W[key]||to;t0=performance.now();if(!tF)tF=t0;tau=ms<20?Math.max(300,ms*(t0-tF)):ms||600;if(!raf)raf=requestAnimationFrame(paint)};
+window.bootDone=function(){var b=document.getElementById('boot');if(!b||done)return;var m=document.getElementById('bootMsg');if(m)m.textContent='開店了';
+  done=function(){b.classList.add('full');setTimeout(function(){b.classList.add('out');setTimeout(function(){b.remove()},600)},260)};if(!raf)raf=requestAnimationFrame(paint)};
+raf=requestAnimationFrame(paint)})();
 addEventListener('load',function(){setTimeout(bootDone,300)});   // fallback if the game script failed half way
-setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.getElementById('boot')&&!document.getElementById('boot').classList.contains('out'))m.textContent+='（網路較慢，請稍候）'},9000)</script>
+setTimeout(function(){var m=document.getElementById('bootSlow'),b=document.getElementById('boot');if(m&&b&&!b.classList.contains('full'))m.hidden=false},9000)</script>
 <div id="kbar" class="hide"><div class="kb"><h3 id="kbT"></h3><input id="kbIn" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done"><div class="kr"><button class="big alt" id="kbNo">取消</button><button class="big" id="kbOk">確認</button></div></div></div>
 <div id="root">
   <div id="table" class="hide">
@@ -1823,15 +1842,15 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div id="netBan" class="hide">與房主的連線中斷，正在重新連線…</div>
   <div class="panel hide" id="result"><div class="card wide res" id="resCard"></div></div>
 </div>
-<script>bootStep('準備牌桌…',12)</script>
+<script>bootStep('準備牌桌…','peer',500)</script>
 <script src="lib/peerjs.min.js"></script>
-<script>bootStep('載入牌面…',22)</script>
+<script>bootStep('擺好桌椅…','tiles',800)</script>
 <script src="tiles.js"></script>
-<script>bootStep('她們正在梳妝打扮…（立繪約 3.5 MB）',35)</script>
+<script>bootStep('她們正在梳妝打扮…','art',.45)</script>
 <script src="avatars.js"></script>
-<script>bootStep('載入語音…',82)</script>
+<script>bootStep('調好麥克風…','voice',.15)</script>
 <script src="voices.js"></script>
-<script>bootStep('入座中…',95)</script>
+<script>bootStep('點亮招牌…','init',500)</script>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
@@ -2790,7 +2809,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1120.1342';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1355';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
