@@ -1565,7 +1565,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #setm .rg li{position:relative;padding-left:13px;margin:0 0 3px;font:400 12px/1.6 'Noto Sans TC',sans-serif;color:#cfc6dc}#setm .rg li::before{content:"";position:absolute;left:2px;top:.72em;width:4px;height:4px;border-radius:50%;background:#7fe9ff;box-shadow:0 0 4px #14c8ff}#setm .rg li b{font-weight:700;color:#fff6fc}
 /* ===== 角色介紹 v2（電影海報＋頭像列，2026-11-20）===== */
 #prof .pf{background:#07050c!important}#prof .pvbg{position:absolute;inset:0;background:linear-gradient(90deg,#07050c 0,#07050cf2 38%,#07050c66 70%,#07050c99),url(img/room.webp) 70% 38%/cover no-repeat}
-#prof .pvart{position:absolute;right:calc(var(--edge) - 10px);bottom:-8%;height:108%;max-width:50%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 0 20px #ff2fae33);pointer-events:none}
+#prof .pvart{position:absolute;right:calc(var(--edge) + 36px);bottom:0;height:calc(100% - 14px);max-width:46%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 0 20px #ff2fae33);pointer-events:none}
 #prof .pf.in .pvart{animation:artUp .5s cubic-bezier(.15,.9,.25,1.05) both}#prof .pf.in .pvl{animation:fadeR .4s .1s both}
 #prof .pvl{position:absolute;left:var(--edge);top:22px;width:min(390px,52%);display:flex;flex-direction:column;gap:8px}
 #prof .pvnm{display:flex;align-items:flex-end;gap:12px}#prof .pvnm h2{margin:0;font:900 48px/1 'Zen Maru Gothic';letter-spacing:.12em;color:var(--pkc);text-shadow:0 0 3px #fff,0 0 10px var(--pk),0 0 22px var(--pk)}#prof .pvnm .aig b{font-size:16px;padding:3px 7px 4px}
@@ -2503,19 +2503,21 @@ const AISTAT=[[28.6,14.9],[21.8,18.8],[17.4,18.6],[27.4,15.2],[31.4,17.5],[18.6,
 const TRAIT=[{agg:1,risk:1,pat:2,bluff:2,whim:0},{agg:2,risk:2,pat:0,bluff:1,whim:0},{agg:1,risk:2,pat:0,bluff:1,whim:2},{agg:0,risk:0,pat:2,bluff:1,whim:0},
   {agg:2,risk:1,pat:0,bluff:0,whim:0},{agg:0,risk:0,pat:2,bluff:2,whim:0},{agg:0,risk:0,pat:1,bluff:0,whim:1},{agg:2,risk:2,pat:1,bluff:1,whim:0}];
 const GAME_AI={mahjong:{name:'麻將',ai:AIP,stat:AISTAT,styd:STYD,lab:['胡牌率','放槍率']}};
-let pfGame='mahjong';
+let pfGame='mahjong',pfArt={c:-1,i:0};
 function gameInfo(c,g){const G_=GAME_AI[g]||GAME_AI.mahjong,a=G_.ai[c]||{},st=G_.stat[c]||[0,0];return {g:a.g,st:a.st,desc:G_.styd[a.st]||'',stat:st,lab:G_.lab}}
 let pfC=0;
 let pfSeat=-1;
 /* 角色介紹的台詞＝她的吃、碰、胡語音（▶ 可點，直接用 voices.js 的鍵）：VS[角色]={chi,pon,hu}，文字要跟語音一致（使用者 2026-11-20）。
    CV（2026-11-20）：聲線名＝定聲音時選中的描述，AI 合成；換新聲音的角色才加 */
 const VS=[{"chi": "這麼甜的牌，我就吃了喔。", "pon": "親愛的，這張讓給我吧。", "hu": "胡了……抱歉，這局是我的。"}, {"chi": "這張給姊，謝啦！", "pon": "碰！這張是姊的，別搶！", "hu": "胡啦！來，乾杯！"}, {"chi": "這張我吃掉囉，謝謝你餵小貓，喵～", "pon": "碰～這張是我先看上的，喵。", "hu": "胡了喵～陪我再玩一局嘛。"}, {"chi": "這張我吃，都在計算之內。", "pon": "碰，跟我預料的一樣。", "hu": "胡了，這張我等很久了。"}, {"chi": "這張我吃，動作快一點。", "pon": "碰！這張不准過。", "hu": "胡了！雙手舉起來。"}, {"chi": "這張呀，我就收下當供品了。", "pon": "碰～緣分到了，躲也躲不掉呢。", "hu": "胡了呢，三百年可不是白修的。"}, {"chi": "主人，這張我就收下囉～", "pon": "主人，這張……可以讓我碰嗎？", "hu": "主人，我胡了！謝謝惠顧～"}, {"chi": "吃！先熱個身。", "pon": "碰！節奏跟上啊！", "hu": "胡啦！這把夠炸吧！"}],CVN=['慵懶耳語','得意起鬨','難以捉摸','勝券在握','執法威嚴','狡黠巫女','甜美女僕','派對女王'];
-function openProf(c,seat){const A=window.AVATARS||[];if(!A[c])return;pfC=c;pfSeat=seat>=0?seat:-1;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){}}   // 不自動播語音，玩家自己點 ▶（使用者 2026-11-20）
+function openProf(c,seat){const A=window.AVATARS||[];if(!A[c])return;pfC=c;pfArt.c=-1;pfSeat=seat>=0?seat:-1;renderProf();$('prof').classList.remove('hide');try{sfx('pick')}catch(_){}}   // 不自動播語音，玩家自己點 ▶（使用者 2026-11-20）
 function renderProf(){const c=pfC,A=window.AVATARS||[],a=A[c]||{},col=CCOL[c]||CCOL[0],el=$('pfBody'),gi=gameInfo(c,pfGame),cv=CVN[c],vs=VS[c]||{},ks=Object.keys(vs);
   /* 角色介紹 v2（2026-11-20 使用者選「電影海報＋頭像列」）：立繪靠右，左＝名字／CV／BIO／台詞字幕（▶ 吃碰胡，點了才播），左下＝牌風一行＋頭像列（角色多了就橫向捲動） */
   $('prof').style.setProperty('--c1',col[0]);$('prof').style.setProperty('--c2',col[1]);
   const games=Object.keys(GAME_AI),seatBtn=pfSeat>=0&&G&&canSw(pfSeat)?(()=>{const L=G.lchs||[];return L[pfSeat]===c?'<button class="pfgo" disabled>就是她</button>':L.includes(c)&&seatHuman(L.indexOf(c))?'<button class="pfgo" disabled>已入座</button>':'<button class="pfgo" data-pfgo="1">讓她入座</button>'})():'';
-  el.innerHTML=`<div class="pvbg"></div><img class="pvart" alt="" src="${a.w||a.W||''}">`+
+  /* 立繪用中性的大廳姿勢 Wp（不拿麻將牌，跨遊戲共用；使用者 2026-11-20），每次打開隨機一張，沒有才退回結算贏 W */
+  if(pfArt.c!==c){pfArt.c=c;pfArt.i=Math.random()*((a.Wp||[]).length||1)|0}const art=(a.Wp&&a.Wp[pfArt.i])||a.W||a.w||'';
+  el.innerHTML=`<div class="pvbg"></div><img class="pvart" alt="" src="${art}">`+
    `<div class="pvl"><div class="pvnm"><h2>${esc(BOTS[c])}</h2>${aiTag(c)}</div>`+
    (cv?`<div class="pvcv"><span>CV</span><b>${esc(cv)}</b><em>AI Voice</em></div>`:'')+
    `<p class="pvbio">${esc(BIO[c]||'')}</p>`+
@@ -2784,7 +2786,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1120.1320';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1328';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
