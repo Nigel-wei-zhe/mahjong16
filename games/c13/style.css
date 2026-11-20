@@ -85,3 +85,41 @@
 @keyframes c13-rv-bang{from{opacity:0;transform:scale(1.5)}to{opacity:1;transform:scale(1)}}
 @keyframes c13-rv-hit{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
 @keyframes c13-rv-beam{from{clip-path:inset(-10px 100% -10px 0)}to{clip-path:inset(-10px -10px -10px 0)}}
+
+/* 四家面對面（2026-11-20 使用者要求：像麻將的座位）：自己左下、下家在右、對家在上、上家在左。排牌與開牌同一套座位。 */
+#c13-clock{left:132px;top:4px}
+#c13-players{position:absolute;inset:0;display:block;pointer-events:none;z-index:1}
+#c13-players .c13-player{position:absolute;min-width:0;gap:6px}
+#c13-players .c13-pos2{top:62px;left:0;right:0;margin:auto;width:max-content}
+#c13-players .c13-pos1,#c13-players .c13-pos3{top:132px;width:76px;flex-direction:column;align-items:center;text-align:center;gap:4px}
+#c13-players .c13-pos3{left:var(--edge)}
+#c13-players .c13-pos1{right:var(--edge)}
+#c13-players .c13-pos1 .c13-window,#c13-players .c13-pos3 .c13-window{width:72px;height:46px}
+#c13-players .c13-pos1 .c13-window.c13-wide img,#c13-players .c13-pos3 .c13-window.c13-wide img{max-height:100px}
+#c13-players .c13-pos1 .c13-player-info b,#c13-players .c13-pos3 .c13-player-info b{max-width:76px}
+#c13-players .c13-pos0{left:var(--edge);bottom:46px}
+#c13-players .c13-pos0 .c13-window{width:72px;height:46px;border-color:#ff8ad888;box-shadow:0 0 10px #ff2fae44}
+#c13-players .c13-pos0 .c13-window.c13-wide img{max-height:100px}
+#c13-editor{left:calc(var(--edge) + 88px);right:calc(var(--edge) + 88px)}
+#c13-game .c13-zone-card{width:32px;margin-left:-9px}
+/* 開牌：每家三墩擺在自己那一側，中間留給比牌與打槍 */
+#c13-rv{display:block}
+#c13-rv .c13-rv-seat{position:absolute}
+#c13-rv .c13-rv-pos2{top:0;left:0;right:0;margin:auto;width:max-content}
+#c13-rv .c13-rv-pos3{left:0;top:100px}
+#c13-rv .c13-rv-pos1{right:0;top:100px;flex-direction:row-reverse}
+#c13-rv .c13-rv-pos1 .c13-rv-row{flex-direction:row-reverse}
+#c13-rv .c13-rv-pos1 .c13-rv-lab{text-align:right}
+#c13-rv .c13-rv-mid{position:absolute;left:0;right:0;top:104px;bottom:92px}
+#c13-rv .c13-rv-mine{position:absolute;left:0;right:0;bottom:17px;display:flex;justify-content:center}
+#c13-rv .c13-rv-mine .c13-rv-seat{position:static}
+#c13-rv .c13-rv-me{position:absolute;left:0;bottom:4px}
+#c13-rv .c13-rv-me .c13-window{width:72px;height:46px;border-color:#ff8ad888;box-shadow:0 0 10px #ff2fae44}
+#c13-rv .c13-rv-me .c13-window.c13-wide img{max-height:100px}
+#c13-rv footer{position:absolute;left:0;right:0;bottom:0;margin:0}
+.c13-rv-shot{padding:7px 30px 8px}
+.c13-rv-hr{padding:8px 20px 9px}
+.c13-rv-hr b{font-size:33px;letter-spacing:7px;text-indent:7px}
+#c13-hand{margin-left:64px}   /* the fan clears my own window at the bottom left */
+.c13-slots{height:48px}
+#c13-status{line-height:16px}

@@ -71,7 +71,7 @@ function type(r){return [3,5].includes(r?.length)?TYPES[evaluate(r)[0]]:'尚未�
 function canEdit(){const s=mySeat();return G.st==='play'&&G.ph==='arrange'&&s>=0&&!G.c13Ready?.[s]&&!G.pz&&!ui.waiting&&!ui.busy&&!myAuto&&!AUTO}
 function resetEditor(){const key=C.handKey();if(ui.key===key)return;ui.key=key;ui.rows=G.c13Rows?.[mySeat()]?.map(r=>r.slice())||[[],[],[]];ui.selected=[];ui.notice='選手牌，再點頭／中／尾墩放入';ui.waiting=null;ui.busy=false;ui.job++}
 function portrait(s){const a=window.AVATARS?.[chr(s)]||{},wide=(a.nx||[]).includes('n');return `<div class="c13-window ${wide?'c13-wide':''}">${a.n?`<img alt="${esc(BOTS[chr(s)]||'')}" src="${a.n}">`:''}</div>`}
-function players(){const me=mySeat();return ids.filter(s=>s!==me).map(s=>{const rel=(s-Math.max(0,me)+4)%4;return `<div class="c13-player c13-pos${rel}">${portrait(s)}<div class="c13-player-info"><b>${esc(nameOf(s))}</b><span>${G.st==='over'?'整場結束':G.ph==='end'?(G.rdy?.[s]?'已準備':'已開牌'):G.c13Ready?.[s]?'已排好':'排牌中'}</span><small>${fmt(G.score[s])}</small></div></div>`}).join('')}
+function players(){const me=mySeat(),pov=Math.max(0,me);return ids.map(s=>{const rel=(s-pov+4)%4;if(!rel)return `<div class="c13-player c13-pos0">${portrait(s)}</div>`;return `<div class="c13-player c13-pos${rel}">${portrait(s)}<div class="c13-player-info"><b>${esc(nameOf(s))}</b><span>${G.st==='over'?'整場結束':G.ph==='end'?(G.rdy?.[s]?'已準備':'已開牌'):G.c13Ready?.[s]?'已排好':'排牌中'}</span><small>${fmt(G.score[s])}</small></div></div>`}).join('')}
 function renderC13(){
  const el=mount(),on=G.game==='c13'&&(G.st==='play'||G.st==='over');el.hidden=!on;if(!on)return;
  show('table',false);show('result',false);resetEditor();const me=mySeat();
@@ -83,7 +83,7 @@ function renderC13(){
  const submitted=!!G.c13Ready?.[me],hand=G.c13Hands?.[me]||[],current=submitted?(G.c13Rows?.[me]||ui.rows):ui.rows,used=new Set(current.flat()),pool=hand.filter(c=>c>=0&&!used.has(c)).sort((a,b)=>b-a),editable=canEdit();
  if(submitted){ui.waiting=null;ui.busy=false}
  $('c13-zones').innerHTML=current.map((r,i)=>`<div class="c13-zone ${editable&&ui.selected.length?'c13-target':''}"><div class="c13-zone-head"><button data-c13-add="${i}" ${editable?'':'disabled'}><b>${rowNames[i]}</b><small>${['最小','居中','最大'][i]}</small></button><span>${r.length}／${caps[i]}</span></div><div class="c13-slots" data-c13-add="${i}" role="button" tabindex="${editable?0:-1}" aria-label="放入${rowNames[i]}">${r.map(c=>`<button class="c13-zone-card" data-c13-remove="${c}" data-c13-row="${i}" aria-label="收回${cardLabel(c)}" ${editable?'':'disabled'}><img src="${cardFace(c)}" alt="${cardLabel(c)}"></button>`).join('')}</div><div class="c13-type">${type(r)}</div></div>`).join('');
- const available=Math.max(240,RW-80),cw=RH<=420?59:68,step=Math.max(16,Math.min(41,(available-cw-20)/Math.max(1,pool.length-1)));
+ const available=Math.max(240,RW-80-150),cw=RH<=420?59:68,step=Math.max(16,Math.min(41,(available-cw-20)/Math.max(1,pool.length-1)));
  $('c13-hand').innerHTML=pool.map((c,i)=>{const t=pool.length>1?i/(pool.length-1)*2-1:0;return `<button class="c13-card ${ui.selected.includes(c)?'c13-selected':''}" data-c13-card="${c}" aria-label="${cardLabel(c)}" aria-pressed="${ui.selected.includes(c)}" ${editable?'':'disabled'} style="--c13-card:${cw}px;--c13-x:${(i-(pool.length-1)/2)*step}px;--c13-angle:${t*10}deg;--c13-rise:${(1-t*t)*13}px"><img alt="${cardLabel(c)}" src="${cardFace(c)}" draggable="false"></button>`}).join('');
  const complete=validLayout(current),full=current.flat().length===13,v=$('c13-validation');v.className=full?(complete?'c13-good':'c13-bad'):'';v.textContent=full?(complete?'排牌成立 · 尾墩 ≥ 中墩 ≥ 頭墩':'這樣會倒水，請調整三墩強弱'):'頭墩 3 張 · 中墩 5 張 · 尾墩 5 張';
  $('c13-status').textContent=submitted?'已排好，等待其他玩家':ui.waiting?'正在送出排法…':ui.busy?'正在找合適的排法…':full&&!complete?'這樣會倒水，請調整三墩強弱':ui.notice;
@@ -127,8 +127,8 @@ function renderReveal(rv){
  if(el.dataset.key!==key){
   el.dataset.key=key;ui.rvStep=-1;
   // Scores and balance stay at their pre-hand values until the table appears.
-  const seat=s=>`<div class="c13-rv-seat" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who">${portrait(s)}<b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small></div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
-  el.innerHTML=`<div class="c13-rv-top">${ids.filter(s=>s!==pov).map(seat).join('')}</div><div class="c13-rv-mid"><div id="c13-rv-beam" hidden></div><div id="c13-rv-banner"></div></div><div class="c13-rv-mine">${seat(pov)}</div><footer><span>${esc(nameOf(pov))} · 餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span>點一下畫面跳過</span></footer>`;
+  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who">${portrait(s)}<b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small></div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
+  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-beam" hidden></div><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me">${portrait(pov)}</div>${seat(pov)}</div><footer><span>${esc(nameOf(pov))} · 餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span>點一下畫面跳過</span></footer>`;
  }
  if(ui.rvStep===rv.i)return;ui.rvStep=rv.i;
  const cur=st.k==='flip'||st.k==='cmp'?st.row:3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
@@ -142,7 +142,7 @@ function renderReveal(rv){
    return `<div class="c13-rv-row ${up?'c13-rv-up':''} ${now?'c13-rv-now':''}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}">${up?`<img src="${cardFace(c)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab"><b>${s===pov?rowNames[row]+(up?' · ':''):''}${up?type(r):s===pov?'':rowNames[row]}</b>${mark}</div></div>`;
   }).join('');
   const role=st.k==='flip'?(st.s===s?'c13-rv-on':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':'c13-rv-dim'):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
-  $('c13-rv-seat'+s).className='c13-rv-seat '+role;
+  $('c13-rv-seat'+s).className='c13-rv-seat c13-rv-pos'+((s-pov+4)%4)+' '+role;
  }
  const net=me>=0&&st.k==='cmp'?pts(me,st.row):0;
  $('c13-rv-banner').innerHTML=st.k==='flip'?`<div class="c13-rv-step"><b>${rowNames[st.row]}</b><span>${'東南西北'[st.s]}家 ${who(st.s)} 開牌</span></div>`
@@ -151,8 +151,8 @@ function renderReveal(rv){
   :`<div class="c13-rv-shot c13-rv-hr"><b>全壘打！</b><span>${who(st.s)} 通殺三家 <i>×4</i></span></div>`;
  // The shot beam runs from the shooter's seat to the victim's (layout offsets: unaffected by the root zoom).
  const beam=$('c13-rv-beam'),a=$('c13-rv-seat'+st.s),b=st.k==='shot'&&$('c13-rv-seat'+st.to);beam.hidden=!(b&&a?.offsetWidth);
- if(!beam.hidden){const at=(e,s)=>[e.offsetLeft+e.offsetWidth/2,s===pov?e.offsetTop-4:e.offsetTop+e.offsetHeight+4],[x1,y1]=at(a,st.s),[x2,y2]=at(b,st.to);
-  beam.style.cssText=`left:${x1}px;top:${y1}px;width:${Math.hypot(x2-x1,y2-y1)}px;transform:rotate(${Math.atan2(y2-y1,x2-x1)}rad)`;beam.className='';void beam.offsetWidth;beam.className='c13-rv-go'}
+ if(!beam.hidden){const box=beam.offsetParent||el,at=e=>{let x=e.offsetWidth/2,y=e.offsetHeight/2;for(let n=e;n&&n!==box&&n!==el;n=n.offsetParent){x+=n.offsetLeft;y+=n.offsetTop}return box===el?[x,y]:[x-box.offsetLeft,y-box.offsetTop]},[x1,y1]=at(a),[x2,y2]=at(b);   // seat centres in the beam's own box
+  const L=Math.hypot(x2-x1,y2-y1),cut=Math.min(70,L*.3),ux=(x2-x1)/L,uy=(y2-y1)/L;beam.style.cssText=`left:${x1+ux*cut}px;top:${y1+uy*cut}px;width:${L-cut*2}px;transform:rotate(${Math.atan2(y2-y1,x2-x1)}rad)`;beam.className='';void beam.offsetWidth;beam.className='c13-rv-go'}
 }
 function renderResults(){
  const el=$('c13-results'),key=G.gid+':'+G.hand+':'+G.st+':'+(G.rdy||[]).join('');if(el.dataset.key===key)return;el.dataset.key=key;
