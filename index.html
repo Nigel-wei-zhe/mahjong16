@@ -1555,6 +1555,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-info .st-cr div{grid-template-columns:64px 1fr;gap:10px}#st-info .st-cr b{text-align:left;margin-right:0;letter-spacing:.2em}
 #st-info .st-lic p{display:grid;grid-template-columns:64px 1fr;gap:10px;margin:0 0 4px;font-size:11px;line-height:1.55;color:#cfc6dc}#st-info .st-lic i{font-style:normal;font-size:10px;letter-spacing:.2em;color:#7fe9ffcc}
 #st-info .st-note{margin:0 0 0 74px;font-size:10.5px;line-height:1.65;color:#a89fb8}#st-info .st-cp{margin-left:74px}
+#setm .snote{margin:-3px 0 9px 16px;font:500 10.5px/1.4 'Noto Sans TC',sans-serif;color:#9a8fae}
 #st-info .st-cp{margin-top:10px;font-size:10px;line-height:1.5;color:#9a8fae}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
 
 #st-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(#0c0c22,#1a1a40 85%,#22224c)}
@@ -1775,6 +1776,7 @@ setTimeout(function(){var m=document.getElementById('bootMsg');if(m&&document.ge
   <div id="setm" class="hide"><div class="rm"><span class="cn a"></span><span class="cn b"></span><span class="cn c"></span><span class="cn d"></span><button class="rx" data-x="1" aria-label="關閉"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
     <section data-p="main"><h3>設定</h3>
       <div class="srow"><span>音效與語音</span><button id="snd"></button></div>
+      <p class="snote" id="iosMute" hidden>iPhone 沒聲音？請確認側邊的靜音開關</p>
       <button class="sbtn" data-go="tai">台數表<em>›</em></button>
       <button class="sbtn" data-go="rule">規則說明<em>›</em></button>
       <button class="sbtn" id="netGo" data-go="net" hidden>連線狀態<em>›</em></button>
@@ -2753,7 +2755,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1120.1118';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1120.1142';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -2772,6 +2774,8 @@ $('netTry').onclick=async()=>{const b=$('netTry');if(b.disabled||!R||!R.retryDir
 $('cfgBtn').onclick=()=>{$('netGo').hidden=!(R&&R.netInfo);setPage('main');$('setm').classList.remove('hide');try{sfx('pick')}catch(_){}};
 $('setm').addEventListener('click',e=>{const t=e.target;if(t.id==='setm'||t.closest('[data-x]')){$('setm').classList.add('hide');return}const g=t.closest('[data-go]');if(g)setPage(g.dataset.go)});
 $('quitGo').onclick=()=>leaveRoom();
+/* iOS：側邊靜音開關會連 Web Audio 一起靜音，網頁讀不到開關狀態，只能提示（使用者 2026-11-20 選尊重靜音開關） */
+if(/iP(hone|ad|od)/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1))$('iosMute').hidden=false;
 $('snd').onclick=()=>{SND.on=!SND.on;try{localStorage.setItem('mjSnd',SND.on?'1':'0')}catch(e){}sndBtn();if(SND.on){audio();sfx('pick')}};sndBtn();
 let wasMine=false,lastTick=-1;
 function soundHooks(){
