@@ -2,6 +2,13 @@ import {RANKS,SUITS,TYPES,evaluate,compare,validLayout,ownsLayout,settle as scor
 import {cardFace} from './cards.mjs';
 import {MEASURED} from './stats.mjs';
 const css=document.createElement('link');css.rel='stylesheet';css.href=new URL('./style.css',import.meta.url);document.head.appendChild(css);
+// Big-hand calls (衝三 葫蘆 鐵支 同花順) by one announcer (user 2026-11-22: 4 clips, not per character):
+// games/c13/voices.js sets window.C13V={t3,t6,t7,t8} as mp3 data URLs; decoded on first use with the shell's audio.
+const c13Buf={};
+function c13Voice(t){
+ const d=window.C13V?.['t'+t];if(!d||typeof SND==='undefined'||!SND.on)return;const c=audio();if(!c||c.state!=='running')return;
+ const b=c13Buf[t];if(b&&b!=='pending'){playBuf(b,1.5);return}if(b)return;c13Buf[t]='pending';
+ try{const s=atob(d.split(',')[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);c.decodeAudioData(u.buffer,x=>{c13Buf[t]=x;playBuf(x,1.5)},()=>{c13Buf[t]=null})}catch{c13Buf[t]=null}}
 const C=GAMES.c13,ids=[0,1,2,3],caps=[3,5,5],rowNames=['頭墩','中墩','尾墩'];
 const ai=TRAIT.map((t,i)=>({...profileFor(t),g:MEASURED[i].grade}));
 GAME_AI.c13={name:'十三支',ai,stat:MEASURED.map(x=>[x.win,x.shot]),lab:['贏分率','打槍率'],styd:{均衡:'三墩兼顧，先排出不倒水的穩定組合。',尾墩強攻:'把較多牌力留給尾墩，追求強牌與打槍機會。',頭墩搶分:'多照顧頭墩，爭取每一墩的小優勢。',隨性:'偶爾跳過最穩的排法，讓牌局多一點變化。'}};
@@ -32,23 +39,27 @@ function submit(s,rows,late){
 // cards turning one at a time, and the result at once (shot / escaped / dodged). Spectators keep the plain order.
 // seg marks where a tap jumps to; lit:o lights the back-row head-to-head dot of seat o.
 const LATE=1500;   // grace around the deadline for a player's own (possibly foul) layout to arrive
-const RV={flip:600,cmp:1000,warn:1500,mine:900,sus:1600,card:480,hold:500,res:1100,hit:1500,shot:800,hr:1500,tail:300};
+const RV={flip:600,f0:1200,f1:1500,f2:1500,big:1800,cmp:1000,warn:1500,mine:1500,sus:1600,card:480,hold:500,res:1100,hit:1500,shot:800,hr:1500,tail:300};
 const slowLen=n=>n*RV.card+RV.card*.8+RV.hold;
 function duelOf(res,a,b){return res?.duels?.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))}
 function vsMe(res,me,o,row){const d=duelOf(res,me,o);return d?.d?(d.a===me?1:-1)*d.d[row]:0}
 function stakeOf(res,me,o){if(me<0||o===me)return'';const n=vsMe(res,me,o,0)+vsMe(res,me,o,1);return n===2?'aim':n===-2?'danger':''}
+// Big hands by common table custom: 頭墩三條 (衝三), and 葫蘆 or better in the middle and back rows.
+function bigHand(r,row){if(!r||r.length!==caps[row])return false;const t=evaluate(r)[0];return row?t>=6:t===3}
 function revealPlan(res,me=-1){
  const steps=[];let t=0;const add=(ms,x)=>{steps.push({t,...x});t+=ms};
- add(RV.flip,{k:'flip',row:0,s:ids[ids.length-1],all:1});add(RV.cmp,{k:'cmp',row:0});
- add(RV.flip,{k:'flip',row:1,s:ids[ids.length-1],all:1,seg:1});add(RV.cmp,{k:'cmp',row:1});
+ // Every row opens one seat at a time, 東 first and clockwise (user 2026-11-21); a big hand gets its own beat after the flip.
+ const big=(s,row)=>res?.valid?.[s]!==false&&bigHand(typeof G!=='undefined'&&G.c13Rows?.[s]?.[row],row),flip=(ms,row,s,x={})=>{add(ms,{k:'flip',row,s,...x});if(big(s,row))add(RV.big,{k:'big',row,s})};
+ ids.forEach(s=>flip(RV.f0,0,s));add(RV.cmp,{k:'cmp',row:0});
+ ids.forEach((s,i)=>flip(RV.f1,1,s,i?{}:{seg:1}));add(RV.cmp,{k:'cmp',row:1});
  const opp=ids.filter(o=>o!==me),aims=opp.filter(o=>stakeOf(res,me,o)==='aim'),dangers=opp.filter(o=>stakeOf(res,me,o)==='danger'),played=new Set();
  if(aims.length||dangers.length)add(RV.warn,{k:'warn',row:1,seg:1});
- if(me<0)ids.forEach((s,i)=>add(RV.flip,{k:'flip',row:2,s,...(i?{}:{seg:1})}));
+ if(me<0)ids.forEach((s,i)=>flip(RV.f2,2,s,i?{}:{seg:1}));
  else{
-  add(RV.mine,{k:'flip',row:2,s:me,seg:1});
-  for(const o of opp)if(!aims.includes(o)&&!dangers.includes(o))add(RV.flip,{k:'flip',row:2,s:o,lit:o});
+  flip(RV.mine,2,me,{seg:1});
+  for(const o of opp)if(!aims.includes(o)&&!dangers.includes(o))flip(RV.f2,2,o,{lit:o});
   for(const o of [...aims,...dangers]){const st=stakeOf(res,me,o),d=duelOf(res,me,o);
-   add(RV.sus,{k:'sus',row:2,s:o,st});add(slowLen(3+2),{k:'slow',row:2,s:o,st});
+   add(RV.sus,{k:'sus',row:2,s:o,st});add(slowLen(3+2),{k:'slow',row:2,s:o,st});if(big(o,2))add(RV.big,{k:'big',row:2,s:o});
    if(d.shot>=0){played.add(d);add(RV.hit,{k:'shot',row:2,s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier,lit:o,seg:1})}
    else add(RV.res,{k:st==='aim'?'miss':'dodge',row:2,s:o,lit:o,seg:1})}
  }
@@ -248,6 +259,7 @@ function renderReveal(rv){
   if(st.k==='slow')for(let j=0;j<5;j++)later('clack',j*RV.card+(j===4?RV.card*.8:0));
   else if(st.k==='sus'){snd('beat');later('beat',800)}
   else if(st.k==='warn'){const a=ids.filter(o=>stakeOf(res,me,o)==='aim').length;snd(a?'lock':'alarm');if(a&&ids.some(o=>stakeOf(res,me,o)==='danger'))later('alarm',400)}
+  else if(st.k==='big'){snd('pon');c13Voice(evaluate(G.c13Rows[st.s][st.row])[0])}
   else snd(st.k==='flip'?'clack':st.k==='shot'?(st.to===me?'kan':'pon'):st.k==='hr'?'win':st.k==='miss'?'drawgame':st.k==='dodge'?'other':n0>0?'other':n0<0?'lose':'turn')}
  for(const s of ids){
   const slow=st.k==='slow'&&st.s===s;
@@ -260,12 +272,12 @@ function renderReveal(rv){
    const big=row===cur,sl=slow&&row===2;
    // Only the best hand of the compared row lights up; rows still face down carry no text.
    const frame=done&&big&&n>0&&n===best(row)?'c13-rv-w':'';
-   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${sl?'c13-rv-slow':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}${sl?`;--d:${j*RV.card+(j===r.length-1?RV.card*.8:0)}ms`:''}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${type(r)}</b>`:''}${mark}</div></div>`;
+   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${sl?'c13-rv-slow':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}${sl?`;--d:${j*RV.card+(j===r.length-1?RV.card*.8:0)}ms`:''}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${typeKey(r,row)}</b>`:''}${mark}</div></div>`;
   }).join('');
-  const role=st.k==='flip'?(st.all||st.s===s?'c13-rv-on':''):st.k==='sus'||st.k==='slow'?(st.s===s?'c13-rv-spot':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
+  const role=st.k==='flip'||st.k==='big'?(st.all||st.s===s?'c13-rv-on':''):st.k==='sus'||st.k==='slow'?(st.s===s?'c13-rv-spot':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
   const sk=s===me?'':stake(s);
   $('c13-rv-seat'+s).className='c13-rv-seat c13-rv-pos'+((s-pov+4)%4)+' '+role+(sk?' c13-rv-'+sk:'');
-  el.classList?.toggle('c13-rv-fx',st.k==='shot'||st.k==='hr');   // the cut-in owns the middle: opponents' row lists step aside
+  el.classList?.toggle('c13-rv-fx',st.k==='shot'||st.k==='hr'||st.k==='big');   // the cut-in owns the middle: opponents' row lists step aside
   // Seats that have been shot so far swap their window to the dejected pose (no dimming, no extra art).
   const w=$('c13-rv-win'+s),pose=hit(s)?'X':'n';if(w&&w.dataset.pose!==pose){w.dataset.pose=pose;const o=w.querySelector('.c13-window');if(o)o.outerHTML=portrait(s,pose);else w.innerHTML=portrait(s,pose);w.classList?.toggle('c13-rv-down',pose==='X')}
   // Head-to-head lights: row by row; the back-row light of a seat comes on when that seat is settled.
@@ -282,7 +294,9 @@ function renderReveal(rv){
  const art=(s,k,cls)=>{const a=window.AVATARS?.[chr(s)]||{};return a[k]?`<img class="c13-rv-art ${cls}" src="${a[k]}" alt="">`:''};
  const step=(b,sub,cls='')=>`<div class="c13-rv-step ${cls}"><b>${b}</b><span>${sub}</span></div>`,names=l=>l.map(o=>esc(nameOf(o))).join('、');
  const aimL=ids.filter(o=>stakeOf(res,me,o)==='aim'),dgL=ids.filter(o=>stakeOf(res,me,o)==='danger');
- $('c13-rv-banner').innerHTML=st.k==='flip'?(st.row===2&&st.s===me?step('尾墩',`你亮牌：${type(G.c13Rows[me][2])}`):step(rowNames[st.row],st.all?'四家一起開牌':`${'東南西北'[st.s]}家 ${who(st.s)} 開牌`))
+ const tk=(s,row)=>typeKey(G.c13Rows[s]?.[row],row);
+ $('c13-rv-banner').innerHTML=st.k==='flip'?`<div class="c13-rv-step c13-rv-say"><span>${rowNames[st.row]}・${'東南西北'[st.s]}家 ${who(st.s)}</span><b>${tk(st.s,st.row)}</b></div>`
+  :st.k==='big'?`<div class="c13-rv-shot c13-rv-big">${art(st.s,'p','c13-rv-a')}<b>${type(G.c13Rows[st.s][st.row])}</b><span>${who(st.s)} ${rowNames[st.row]}${st.row?'':'・衝三'}</span></div>`
   :st.k==='warn'?step('槍口對準了',[aimL.length?`你瞄準 ${names(aimL)}`:'',dgL.length?`${names(dgL)} 瞄準你`:''].filter(Boolean).join('・'),aimL.length?'c13-rv-pk':'c13-rv-rd')
   :st.k==='sus'||st.k==='slow'?(st.st==='aim'?step(`${esc(nameOf(st.s))}……`,'贏這墩就打槍','c13-rv-pk'):step(`${esc(nameOf(st.s))}……`,'輸這墩就被打槍','c13-rv-rd'))
   :st.k==='miss'?step('被她逃了',`${esc(nameOf(st.s))} 尾墩 ${type(G.c13Rows[st.s][2])}`)

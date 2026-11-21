@@ -336,3 +336,8 @@
 #c13-game #c13-pool .c13-card:active:not(:disabled){transform:translateY(-6px)}
 #c13-game #c13-pool .c13-card.c13-peek{transform:translateY(-6px)}
 .c13-arr .c13-row{justify-content:flex-start}
+/* One seat at a time (2026-11-21): the seat's place and name above, her hand type large below. */
+.c13-rv-step.c13-rv-say span{margin:0 0 2px;font-size:11px;color:#c9bfd8}
+.c13-rv-step.c13-rv-say b{font-size:24px;color:#fff;text-shadow:0 0 6px #7fe9ff,0 0 16px #14c8ff}
+/* Compare beat stacks the points under the title so it fits between two five-card rows. */
+.c13-rv-cmp{flex-direction:column;align-items:center;gap:2px}

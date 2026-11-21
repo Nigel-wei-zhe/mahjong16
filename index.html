@@ -1887,7 +1887,7 @@ const CFG0={r:1,b:100,t:20,s:30},TMAP={100:20,300:50,500:100};
    遊戲沒載完：大廳以外的畫面顯示「整理牌桌…」（#gload）並等它；麻將的程式寫在本檔，所以它的大廳不用等。
    設定面板裡屬於某款遊戲的按鈕加 data-g="<id>"，只在那款遊戲的牌桌出現 */
 const GAMES={},GAME0='mahjong';
-GAMES.c13={id:'c13',name:'十三支',sub:'三墩見真章',files:[{src:'games/c13/game.mjs',mod:1}]};
+GAMES.c13={id:'c13',name:'十三支',sub:'三墩見真章',files:[{src:'games/c13/voices.js'},{src:'games/c13/game.mjs',mod:1}]};
 let curGame=GAME0;   // the game picked in the shop: a new table (practice or a room) is that game
 const gameOf=g=>GAMES[(g&&g.game)||GAME0]||GAMES[GAME0];
 const gm=()=>gameOf(typeof G!=='undefined'?G:null);
@@ -2881,7 +2881,7 @@ function sfx(name){
     case 'lock':tone(t,1600,.05,.07,'square');tone(t+.09,2000,.08,.07,'square');break
     case 'alarm':tone(t,520,.12,.08,'square');tone(t+.13,390,.16,.08,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1121.2331';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1122.0041';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}

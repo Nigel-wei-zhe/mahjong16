@@ -33,17 +33,18 @@ await ctx.onClick(btn('c13-clear'));assert.deepEqual(J(U().rows),[[],[],[]]);ass
 {const u=U(),good=engine.arrange(ctx.G.c13Hands[0]),foul=[good[0],good[2],good[1]];if(!engine.validLayout(foul)){u.rows=foul.map(r=>r.slice());ctx.renderC13();assert(el('c13-hand').innerHTML.includes('倒水'));assert(el('c13-submit').disabled)}await ctx.onClick(btn('c13-clear'))}
 const auto=ctx.onClick(btn('c13-suggest'));assert(U().busy);while(queue.length)queue.shift()();await auto;assert(engine.validLayout(U().rows));assert(!el('c13-submit').disabled);assert(!el('c13-hand').innerHTML.includes('倒水'));
 await ctx.onClick(btn('c13-submit'));assert(ctx.G.c13Ready[0]);now+=1000;ctx.GAMES.c13.hostTick();ctx.renderC13();assert.equal(ctx.G.ph,'end');
-// Reveal (seen from seat 0): front and middle for all four, gun warning if any, back row mine first then stake seats last.
+// Reveal (seen from seat 0): front and middle one seat at a time from 東, gun warning if any, back row mine first then stake seats last.
 const res=ctx.G.res,plan=ctx.revealPlan(res,0),maxLen=Math.max(...[-1,0,1,2,3].map(s=>ctx.revealPlan(res,s).len)),tBack=plan.steps.find(x=>x.row===2).t,tCmp2=plan.steps.find(x=>x.k==='cmp'&&x.row===2).t,t0=ctx.G.c13RevealAt,rowsOf=s=>el('c13-rv-rows'+s).innerHTML.split('<div class="c13-rv-row ').slice(1),upCount=()=>[0,1,2,3].map(s=>rowsOf(s).map(r=>r.startsWith('c13-rv-up')?1:0));
-assert.equal(t0,now);assert.equal(plan.steps.slice(0,4).map(x=>x.k==='flip'?`${x.row}${x.all?'*':x.s}`:'c'+x.row).join(' '),'0* c0 1* c1');
+assert.equal(t0,now);for(const row of [0,1]){const f=plan.steps.filter(x=>x.row===row&&x.k==='flip'),c=plan.steps.find(x=>x.row===row&&x.k==='cmp');assert.equal(f.map(x=>x.s).join(),'0,1,2,3','row '+row+' opens one seat at a time from 東');assert(f.every(x=>x.t<c.t))}
+assert(plan.steps.filter(x=>x.k==='big').every(x=>plan.steps.some(y=>(y.k==='flip'||y.k==='slow')&&y.s===x.s&&y.row===x.row&&y.t<x.t)),'a big hand beat follows its flip');
 {const back=plan.steps.filter(x=>x.row===2&&(x.k==='flip'||x.k==='sus'));assert.equal(back[0].s,0,'my back row opens first');assert.equal(back.map(x=>x.s).sort().join(),'0,1,2,3');
  const stakes=[1,2,3].filter(o=>{const d=res.duels.find(x=>x.a===0&&x.b===o).d;return d[0]+d[1]===2||d[0]+d[1]===-2});
  assert.equal(plan.steps.some(x=>x.k==='warn'),stakes.length>0,'gun warning only when someone is 2-0');assert.equal(back.slice(back.length-stakes.length).map(x=>x.k).join(),stakes.map(()=>'sus').join(),'stake seats open last')}
 assert.equal(ctx.G.c13NextAt,t0+maxLen+15000,'next-hand countdown starts when the longest reveal ends');
 assert(el('c13-results').hidden&&!el('c13-rv').hidden,'reveal plays on the table before the result panel');
-assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]],'the front row opens for all four at once');assert(!el('c13-rv-rows0').innerHTML.includes('c13-rv-mark'));
+assert.deepEqual(upCount(),[[1,0,0],[0,0,0],[0,0,0],[0,0,0]],'東 opens the front row alone');assert(!el('c13-rv-rows0').innerHTML.includes('c13-rv-mark'));
 assert(el('c13-rv').innerHTML.includes('$'+(ctx.G.bk.me-res.d[0])),'balance stays at the pre-hand value during the reveal');
-now=t0+1000;ctx.frameC13();assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===1),'front row compared before the middle row opens');
+const tCmp0=plan.steps.find(x=>x.k==='cmp'&&x.row===0).t;now=t0+tCmp0+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===1),'front row compared before the middle row opens');
 now=t0+tBack+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,0],[1,1,0],[1,1,0]],'my back row opens first');
 now=t0+tCmp2+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===3));
 now=t0+plan.len-1;ctx.frameC13();assert(el('c13-results').hidden,'table waits for the last beat');
@@ -51,8 +52,8 @@ ctx.myAuto=true;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end');now=t0+max
 now=t0+plan.len;ctx.frameC13();assert(!el('c13-results').hidden&&el('c13-rv').hidden);assert(el('c13-results').innerHTML.includes('data-c13-next'));assert(el('c13-results').innerHTML.includes('$'+ctx.G.bk.me),'table shows the new balance');
 now=t0+100;ctx.frameC13();assert(!el('c13-results').hidden,'a finished reveal never restarts');
 // Shots and home run: timeline from a fixed result.
-const fake={duels:[{a:0,b:1,shot:0,multiplier:4},{a:0,b:2,shot:0,multiplier:4},{a:0,b:3,shot:0,multiplier:4},{a:1,b:2,shot:2,multiplier:2},{a:1,b:3,shot:-1,multiplier:1},{a:2,b:3,shot:-1,multiplier:1}],homeruns:[true,false,false,false]},tail=ctx.revealPlan(fake).steps.slice(9);
-assert.deepEqual(JSON.parse(JSON.stringify(tail.map(x=>[x.k,x.s,x.to??-1,x.t]))),[['shot',2,1,6600],['hr',0,-1,7400]]);assert.equal(ctx.revealPlan(fake).len,9200);
+const fake={duels:[{a:0,b:1,shot:0,multiplier:4},{a:0,b:2,shot:0,multiplier:4},{a:0,b:3,shot:0,multiplier:4},{a:1,b:2,shot:2,multiplier:2},{a:1,b:3,shot:-1,multiplier:1},{a:2,b:3,shot:-1,multiplier:1}],homeruns:[true,false,false,false]},fp=ctx.revealPlan(fake),tail=fp.steps.filter(x=>x.k==='shot'||x.k==='hr');
+assert.deepEqual(JSON.parse(JSON.stringify(tail.map(x=>[x.k,x.s,x.to??-1]))),[['shot',2,1],['hr',0,-1]]);assert.equal(tail[1].t-tail[0].t,800);assert.equal(fp.len,tail[1].t+1500+300);
 // Tap anywhere skips (this screen only: no action, no state change).
 const play=async()=>{ctx.GAMES.c13.nextHand();ctx.renderC13();const rows=engine.arrange(ctx.G.c13Hands[0]);ctx.GAMES.c13.act(0,{t:'set',gid:ctx.G.gid,hand:ctx.G.hand,rows});now+=1000;ctx.GAMES.c13.hostTick();ctx.renderC13()};
 await play();assert.equal(ctx.G.ph,'end');assert(el('c13-results').hidden&&!el('c13-rv').hidden);const v=ctx.G.v;
