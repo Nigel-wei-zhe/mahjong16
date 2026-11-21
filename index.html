@@ -1593,14 +1593,15 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #prof .pvmeta{position:absolute;left:var(--edge);bottom:58px;display:flex;align-items:center;gap:14px;font:500 11.5px var(--ui);color:#9a8fae}#prof .pvmeta b{color:#fff6fc;font-weight:700;margin-right:4px}#prof .pvmeta i{font:normal 400 15px 'DotGothic16',monospace;color:var(--amb)}#prof .pvmeta i.bad{color:#ff7a86}
 #prof .pvgs{display:flex;gap:4px}#prof .pvgs button{height:22px;padding:0 9px;border-radius:11px;border:1px solid #ffffff22;background:none;color:#9a8fae;font:700 10.5px var(--ui)}#prof .pvgs button.on{border-color:var(--cyt);color:#effcff;box-shadow:0 0 6px #14c8ff66}
 #prof .pvh{position:absolute;left:var(--edge);bottom:12px;display:flex;gap:8px;width:min(390px,52%);overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding:3px 2px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),#0000);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),#0000)}#prof .pvh::-webkit-scrollbar{display:none}
+/* 平板（螢幕比較方）：文字欄、牌風、頭像列照高度放大，最多 1.3 倍（2026-11-21） */#prof .pvl{transform:scale(var(--pz,1));transform-origin:0 0}#prof .pvmeta{bottom:calc(58px*var(--pz,1));transform:scale(var(--pz,1));transform-origin:0 100%}#prof .pvh{transform:scale(var(--pz,1));transform-origin:0 100%}#prof .pvart{width:calc(100% - var(--edge)*2 - 36px - min(390px,52%)*var(--pz,1))!important}
 #prof .pvh button{flex:none;width:32px;height:32px;border-radius:50%;padding:0;border:1.5px solid #ffffff33;background:#120a1a center/cover;opacity:.55;scroll-snap-align:start;cursor:pointer}#prof .pvh button.on{opacity:1;border-color:var(--pkt);box-shadow:0 0 6px #fff,0 0 12px var(--pk)}
 #setm .snote{margin:-3px 0 9px 16px;font:500 10.5px/1.4 'Noto Sans TC',sans-serif;color:#9a8fae}
 #st-info .st-cp{margin-top:10px;font-size:10px;line-height:1.5;color:#9a8fae}:is(#st-info,#st-bankm) .st-row b{flex:none;width:48px;color:#bdaf9b;font-weight:500}
 
 #st-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(#0c0c22,#1a1a40 85%,#22224c)}
-/* squarer screens (iPad): fill the sky above the stage with a blurred mirror of the plate's top, fading to night; the stage top melts into it (2026-11-19) */
-#st-wrap::before{content:"";position:absolute;left:-40px;right:-40px;top:-40px;height:calc(var(--gap,0px) + 80px);background:url(img/plate.webp) 50% 0/calc(100% - 80px) auto no-repeat;transform:scaleY(-1);filter:blur(22px) brightness(.6) saturate(1.2);pointer-events:none}
-#st-wrap::after{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--gap,0px) + 2px);background:linear-gradient(#07050c 0%,#07050cd0 35%,#07050c00 100%);pointer-events:none}
+/* squarer screens (iPad): the plate continues upward (img/plate_top.webp = outpainted sky/rooftops, 1568x441, its bottom 70px overlap the plate's top rows; same 790-wide placement as #st-bg); stage top melts into it; beyond it, fade to night (2026-11-21) */
+#st-wrap::before{content:"";position:absolute;left:calc(50% - var(--sk,1)*395px);width:calc(var(--sk,1)*790px);top:calc(var(--gap,0px) - var(--sk,1)*188.94px);height:calc(var(--sk,1)*222.19px);background:url(img/plate_top.webp) 0 0/100% 100% no-repeat;pointer-events:none}
+#st-wrap::after{content:"";position:absolute;left:0;right:0;top:0;height:max(0px,calc(var(--gap,0px) - var(--sk,1)*188.94px + 60px));background:linear-gradient(#0c0c22 0,#0c0c22 calc(100% - 60px),#0c0c2200);pointer-events:none}
 #st-st{-webkit-mask-image:linear-gradient(#0000,#000 34px);mask-image:linear-gradient(#0000,#000 34px)}
 #st-bg{-webkit-mask:linear-gradient(#0000,#000 9%);mask:linear-gradient(#0000,#000 9%)}
 #menu>#kv,#menu>.card{display:none!important}
@@ -1660,10 +1661,10 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-in>.bg{position:absolute;inset:0;background:url(img/room.webp) 50% 50%/cover;filter:brightness(.45) saturate(1.1)}
 #st-in>.vg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 75% at 60% 50%,#0000 35%,#07050cdd 100%),linear-gradient(#07050c00 60%,#07050ccc)}
 #st-in>.fade{position:absolute;inset:0;z-index:9;background:#07050c;pointer-events:none;animation:stInFade .7s ease-out .05s forwards}@keyframes stInFade{0%{opacity:1}100%{opacity:0}}
-#st-ist{position:absolute;left:50%;bottom:0;width:755px;height:395px;transform-origin:50% 100%;transform:translateX(-50%) scale(var(--ik,1))}
-#st-hs{position:absolute;left:30px;bottom:0;width:170px;height:338px;pointer-events:none}
+#st-ist{position:absolute;left:50%;bottom:0;width:755px;height:calc(395px + var(--ig,0px));transform-origin:50% 100%;transform:translateX(-50%) scale(var(--ik,1))}
+#st-hs{position:absolute;left:30px;bottom:0;width:calc(170px + var(--ig,0px)*.36);height:calc(338px + var(--ig,0px)*.72);pointer-events:none}
 #st-hs img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 0 10px #ff2fae55)}
-#st-hsay{position:absolute;left:176px;top:70px;z-index:4;max-width:236px;padding:20px 34px 24px 24px;margin:-8px 0 0 -8px;border:0;border-radius:0;box-shadow:none;background:radial-gradient(closest-side,#07050cea 55%,#07050c00);font:500 13px/1.8 "Noto Serif TC",serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px #000,0 0 10px #000;text-wrap:balance;opacity:0;translate:0 6px;transition:opacity .35s .5s,translate .35s .5s}
+#st-hsay{position:absolute;left:calc(176px + var(--ig,0px)*.36);top:calc(70px + var(--ig,0px)*.28);z-index:4;max-width:236px;padding:20px 34px 24px 24px;margin:-8px 0 0 -8px;border:0;border-radius:0;box-shadow:none;background:radial-gradient(closest-side,#07050cea 55%,#07050c00);font:500 13px/1.8 "Noto Serif TC",serif;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px #000,0 0 10px #000;text-wrap:balance;opacity:0;translate:0 6px;transition:opacity .35s .5s,translate .35s .5s}
 #st-in.on #st-hsay{opacity:1;translate:0 0}
 #st-inBack{position:absolute;left:var(--edge);top:14px;z-index:6;width:32px;height:32px;border-radius:50%;border:1px solid #ffffff44;background:#0b0710aa;color:#fff;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
 #st-inBack:active{background:#ffffff14}
@@ -2880,7 +2881,7 @@ function sfx(name){
     case 'lock':tone(t,1600,.05,.07,'square');tone(t+.09,2000,.08,.07,'square');break
     case 'alarm':tone(t,520,.12,.08,'square');tone(t+.13,390,.16,.08,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1121.2130';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1121.2331';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3746,7 +3747,7 @@ $i('st-gMj').onclick=()=>{curGame='mahjong';loadGame(curGame).catch(()=>{});inPa
 $i('st-gC13').onclick=()=>{curGame='c13';loadGame(curGame).catch(()=>{});inPane('mode')};
 $i('st-gBig').onclick=()=>{hline('大老二還在裝潢，過陣子再來。')};
 /* the 755x395 street stage covers the menu at any size (RW/RH = logical size before UIZ zoom); the shop interior fits whole (contain) */
-function stFit(){const m=document.getElementById('st-wrap');if(m&&typeof RW!=='undefined'){m.style.setProperty('--sk',RW/755);m.style.setProperty('--gap',Math.max(0,Math.ceil(RH-395*RW/755))+'px');$i('st-ist').style.setProperty('--ik',Math.min(RW/755,RH/395))}/* fit the width, street anchored to the bottom: wide screens lose sky, squarer ones get extra sky */}
+function stFit(){const m=document.getElementById('st-wrap');if(m&&typeof RW!=='undefined'){m.style.setProperty('--sk',RW/755);m.style.setProperty('--gap',Math.max(0,Math.ceil(RH-395*RW/755))+'px');document.documentElement.style.setProperty('--pz',Math.min(1.3,Math.max(1,RH/440)).toFixed(3));const ik=Math.min(RW/755,RH/395),is=$i('st-ist').style;is.setProperty('--ik',ik);is.setProperty('--ig',Math.max(0,Math.floor(RH/ik-395))+'px')}/* fit the width, street anchored to the bottom: wide screens lose sky, squarer ones get extra sky */}
 addEventListener('resize',()=>setTimeout(stFit,0));setTimeout(stFit,0);setTimeout(stFit,600);
 setTimeout(()=>{new Image().src='img/room.webp'},3000);/* 2026-11-21: warm the shop interior so it doesn't pop in late on the first enter */
 
