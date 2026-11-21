@@ -279,3 +279,31 @@
 #c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-rows{transition:opacity .15s}
 #c13-rv.c13-rv-fx .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-rows{opacity:0}
 #c13-rv .c13-rv-shooter,#c13-rv .c13-rv-hit{border-color:transparent;background:none;box-shadow:none}
+/* Gun warning (2026-11-21, prototype proto/c13rv): head-to-head lights, sight on seats I can shoot, red frame when I can be shot,
+   spotlight + slow flip on the deciding back rows. Labels and frames only; portraits are never dimmed. */
+.c13-rv-wb{position:relative;display:block}
+.c13-rv-h2h{display:flex;justify-content:center;gap:3px;margin-top:2px}
+.c13-rv-h2h i{width:15px;height:15px;border-radius:50%;border:1px solid #ffffff30;background:#1a1226;font:700 10px/13px var(--ui);font-style:normal;color:#6d6280;text-align:center}
+.c13-rv-h2h i.c13-rv-hw{background:#ff2fae;border-color:#ff8ad8;color:#fff;box-shadow:0 0 6px #ff2fae;animation:c13-rv-pop .32s cubic-bezier(.2,1.4,.4,1) both}
+.c13-rv-h2h i.c13-rv-hl{background:#8a1b2a;border-color:#ff4d5e;color:#ffd6db;box-shadow:0 0 5px #ff4d5e;animation:c13-rv-pop .32s cubic-bezier(.2,1.4,.4,1) both}
+.c13-rv-h2h i.c13-rv-ht{background:#4a4458;border-color:#9a93a8;color:#ddd;animation:c13-rv-pop .32s both}
+.c13-rv-sight{position:absolute;left:50%;top:50%;width:130%;aspect-ratio:1;translate:-50% -50%;pointer-events:none;opacity:0;filter:drop-shadow(0 0 3px #ff2fae);z-index:2}
+.c13-rv-aim .c13-rv-sight{opacity:1;animation:c13-rv-lock .55s cubic-bezier(.2,1,.3,1) both}
+@keyframes c13-rv-lock{from{transform:scale(2.2) rotate(-60deg);opacity:0}to{transform:none;opacity:1}}
+.c13-rv-tag{position:absolute;left:50%;top:-17px;translate:-50% 0;z-index:3;white-space:nowrap;font:900 10px/1 var(--ng);font-style:normal;letter-spacing:1px;padding:3px 7px;border-radius:9px;opacity:0;transition:opacity .2s;pointer-events:none}
+.c13-rv-aim .c13-rv-tag-a{opacity:1;color:#fff6fc;background:#2a0c2ae6;border:1px solid #ff8ad8;text-shadow:0 0 6px #ff2fae}
+.c13-rv-danger .c13-rv-tag-d,.c13-rv-me.c13-rv-danger .c13-rv-tag-d{opacity:1;color:#ffe3e6;background:#2a0c12e6;border:1px solid #ff4d5e;text-shadow:0 0 6px #ff4d5e}
+.c13-rv-danger .c13-window,.c13-rv-me.c13-rv-danger .c13-window{border-color:#ff4d5e!important;box-shadow:0 0 0 1px #ff4d5e,0 0 14px #ff4d5e88!important}
+.c13-rv-spot .c13-rv-who .c13-window{box-shadow:0 0 0 2px #ff8ad8,0 0 24px #ff2fae}
+.c13-rv-spot.c13-rv-danger .c13-rv-who .c13-window{box-shadow:0 0 0 2px #ff4d5e,0 0 24px #ff4d5e!important}
+.c13-rv-spot .c13-rv-cur .c13-rv-cards{filter:drop-shadow(0 0 7px #ff2fae)}
+.c13-rv-slow .c13-rv-card{animation:c13-rv-flip .5s ease-in-out both,c13-rv-bg .5s step-end both;animation-delay:var(--d)}
+.c13-rv-slow .c13-rv-card img{animation:c13-rv-face .5s step-end both;animation-delay:var(--d)}
+.c13-rv-step.c13-rv-pk b{color:#fff6fc;text-shadow:0 0 8px #ff8ad8,0 0 18px #ff2fae}
+.c13-rv-step.c13-rv-rd b{color:#ffe3e6;text-shadow:0 0 8px #ff4d5e,0 0 18px #ff4d5e}
+.c13-rv-step{animation:c13-rv-bang .3s cubic-bezier(.2,1.3,.4,1) both}
+.c13-rv-shot-me:before,.c13-rv-shot-me:after{background:linear-gradient(90deg,transparent,#ff4d5e 22%,#fff 50%,#ff4d5e 78%,transparent);box-shadow:0 0 10px #ff4d5e}
+.c13-rv-shot-me b{color:#ffe3e6;text-shadow:0 0 6px #ff4d5e,0 0 22px #ff4d5e}
+/* top seat: the lights stand left of the window (under the name they run into the side seats' big row) */
+#c13-rv .c13-rv-pos2 .c13-rv-who{position:relative}
+#c13-rv .c13-rv-pos2 .c13-rv-h2h{position:absolute;right:calc(100% + 5px);top:6px;flex-direction:column;margin:0}

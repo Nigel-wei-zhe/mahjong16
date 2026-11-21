@@ -17,7 +17,7 @@ function finish(){
  settle(d);for(const s of ids){if(result.scores[s]>0)G.stat[s][0]++;G.stat[s][1]+=result.shots[s];if(result.homeruns[s])G.stat[s][2]++}
  G.res={...result,d,w:result.scores.indexOf(Math.max(...result.scores))};G.ph='end';G.rdy=[0,0,0,0];
  // Every client replays the same reveal from this moment; the ready countdown and auto-next start after it.
- G.c13RevealAt=Date.now();G.c13NextAt=G.c13RevealAt+(quick()?0:revealPlan(G.res).len)+15000;bump({s:G.res.w,t:'c13:reveal'});
+ G.c13RevealAt=Date.now();G.c13NextAt=G.c13RevealAt+(quick()?0:Math.max(...[-1,...ids].map(s=>revealPlan(G.res,s).len)))+15000;bump({s:G.res.w,t:'c13:reveal'});
 }
 // late: at the deadline the layout on the player's screen is taken as it is, 倒水 included (user rule 2026-11-21).
 function ownsCards(hand,rows){try{return rows.length===3&&rows.every((r,i)=>Array.isArray(r)&&r.length===caps[i])&&new Set(rows.flat()).size===13&&rows.flat().every(c=>hand.includes(c))}catch{return false}}
@@ -25,16 +25,37 @@ function submit(s,rows,late){
  if(!Number.isInteger(s)||s<0||s>3||G.ph!=='arrange'||G.c13Ready[s]||!(ownsLayout(G.c13Hands[s],rows)||(late&&ownsCards(G.c13Hands[s],rows))))return false;
  G.c13Rows[s]=rows.map(r=>r.slice());G.c13Ready[s]=true;bump();finish();return true;
 }
-// Reveal timeline: rows 頭→中→尾, seats East first; then one compare beat per row, shots one by one, home run last.
+// Reveal timeline: rows 頭→中→尾. Front and middle turn over for all four at once.
+// Seen from a seat (me>=0, 2026-11-21 user-approved prototype proto/c13rv): after the middle row, opponents I beat
+// in both rows get a gun sight ("aim") and those who beat me in both are a threat ("danger"); the back row then opens
+// mine first, the no-stake seats, then the stake seats last (danger last of all), each with a heartbeat pause,
+// cards turning one at a time, and the result at once (shot / escaped / dodged). Spectators keep the plain order.
+// seg marks where a tap jumps to; lit:o lights the back-row head-to-head dot of seat o.
 const LATE=1500;   // grace around the deadline for a player's own (possibly foul) layout to arrive
-const RV={flip:600,cmp:1000,shot:800,hr:1500,tail:300};
-function revealPlan(res){
+const RV={flip:600,cmp:1000,warn:1500,mine:900,sus:1600,card:480,hold:500,res:1100,hit:1500,shot:800,hr:1500,tail:300};
+const slowLen=n=>n*RV.card+RV.card*.8+RV.hold;
+function duelOf(res,a,b){return res?.duels?.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))}
+function vsMe(res,me,o,row){const d=duelOf(res,me,o);return d?.d?(d.a===me?1:-1)*d.d[row]:0}
+function stakeOf(res,me,o){if(me<0||o===me)return'';const n=vsMe(res,me,o,0)+vsMe(res,me,o,1);return n===2?'aim':n===-2?'danger':''}
+function revealPlan(res,me=-1){
  const steps=[];let t=0;const add=(ms,x)=>{steps.push({t,...x});t+=ms};
- // Front and middle rows turn over together; only the back row goes seat by seat.
- for(let row=0;row<3;row++){if(row<2)add(RV.flip,{k:'flip',row,s:ids[ids.length-1],all:1});else for(const s of ids)add(RV.flip,{k:'flip',row,s});add(RV.cmp,{k:'cmp',row})}
- // A home run replaces its three single shots with one bigger beat.
- for(const d of res?.duels||[])if(d.shot>=0&&!res.homeruns?.[d.shot])add(RV.shot,{k:'shot',s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier});
- (res?.homeruns||[]).forEach((h,s)=>{if(h)add(RV.hr,{k:'hr',s})});
+ add(RV.flip,{k:'flip',row:0,s:ids[ids.length-1],all:1});add(RV.cmp,{k:'cmp',row:0});
+ add(RV.flip,{k:'flip',row:1,s:ids[ids.length-1],all:1,seg:1});add(RV.cmp,{k:'cmp',row:1});
+ const opp=ids.filter(o=>o!==me),aims=opp.filter(o=>stakeOf(res,me,o)==='aim'),dangers=opp.filter(o=>stakeOf(res,me,o)==='danger'),played=new Set();
+ if(aims.length||dangers.length)add(RV.warn,{k:'warn',row:1,seg:1});
+ if(me<0)ids.forEach((s,i)=>add(RV.flip,{k:'flip',row:2,s,...(i?{}:{seg:1})}));
+ else{
+  add(RV.mine,{k:'flip',row:2,s:me,seg:1});
+  for(const o of opp)if(!aims.includes(o)&&!dangers.includes(o))add(RV.flip,{k:'flip',row:2,s:o,lit:o});
+  for(const o of [...aims,...dangers]){const st=stakeOf(res,me,o),d=duelOf(res,me,o);
+   add(RV.sus,{k:'sus',row:2,s:o,st});add(slowLen(3+2),{k:'slow',row:2,s:o,st});
+   if(d.shot>=0){played.add(d);add(RV.hit,{k:'shot',row:2,s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier,lit:o,seg:1})}
+   else add(RV.res,{k:st==='aim'?'miss':'dodge',row:2,s:o,lit:o,seg:1})}
+ }
+ add(RV.cmp,{k:'cmp',row:2,seg:played.size?1:0});
+ // Remaining shots one by one; a home run replaces its three single shots with one bigger beat at the end.
+ let first=1;for(const d of res?.duels||[])if(d.shot>=0&&!played.has(d)&&!res.homeruns?.[d.shot]){add(RV.shot,{k:'shot',s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier,...(first?{seg:1}:{})});first=0}
+ (res?.homeruns||[]).forEach((h,s)=>{if(h){add(RV.hr,{k:'hr',s,...(first?{seg:1}:{})});first=0}});
  return{steps,len:t+RV.tail};
 }
 function quick(){return(typeof SPEED!=='undefined'&&SPEED>50)||AUTO}
@@ -173,7 +194,7 @@ async function onClick(e){
 // A tab that never saw this hand being arranged (reload, late join) goes straight to the table.
 function revealNow(){
  if(G.st!=='play'||G.ph!=='end'||!G.res)return null;const key=C.handKey();
- if(ui.rvKey!==key){ui.rvKey=key;ui.rvAt=ui.seen===key?Date.now():0;ui.rvPlan=revealPlan(G.res);ui.rvStep=-1;ui.rvSkip=0}
+ if(ui.rvKey!==key){ui.rvKey=key;ui.rvAt=ui.seen===key?Date.now():0;ui.rvPlan=revealPlan(G.res,mySeat());ui.rvStep=-1;ui.rvSkip=0}
  if(ui.rvDone===key)return null;
  const e=Math.max(0,Date.now()-(G.c13RevealAt??ui.rvAt))+(ui.rvSkip||0);
  if(quick()||calm()||e>=ui.rvPlan.len){ui.rvDone=key;return null}
@@ -183,48 +204,71 @@ function revealNow(){
 // A tap moves this screen on to the next part (next row, then the shots, then the table); the host clock is untouched.
 function revealSkip(){
  const p=ui.rvPlan,e=Math.max(0,Date.now()-(G.c13RevealAt??ui.rvAt))+(ui.rvSkip||0),first=f=>p.steps.find(f)?.t;
- const next=[first(x=>x.row===1),first(x=>x.row===2),first(x=>x.k==='shot'||x.k==='hr')].find(t=>t>e);
+ const next=first(x=>x.seg&&x.t>e);
  if(next===undefined)ui.rvDone=C.handKey();else ui.rvSkip=(ui.rvSkip||0)+next-e}
 function renderReveal(rv){
  const el=$('c13-rv'),key=C.handKey(),me=mySeat(),pov=Math.max(0,me),res=G.res,st=rv.step,who=s=>s===me?'你':esc(nameOf(s));
+ const sight='<svg class="c13-rv-sight" viewBox="0 0 92 92" aria-hidden="true"><g fill="none" stroke="#ff8ad8" stroke-width="2.4"><circle cx="46" cy="46" r="36"/><circle cx="46" cy="46" r="4" fill="#fff6fc"/><path d="M46 2v20M46 70v20M2 46h20M70 46h20"/></g></svg>';
  if(el.dataset.key!==key){
   el.dataset.key=key;ui.rvStep=-1;
   // Scores and balance stay at their pre-hand values until the table appears.
-  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who"><span id="c13-rv-win${s}">${portrait(s)}</span><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small>${validLayout(G.c13Rows[s])?'':'<em class="c13-rv-foul">倒水</em>'}</div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
-  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me" id="c13-rv-win${pov}">${portrait(pov)}</div>${seat(pov)}${me>=0?'<div class="c13-rv-sum">本局<i id="c13-rv-sum"></i></div>':''}</div><footer><span>${validLayout(G.c13Rows[pov])?'':'<em class="c13-rv-foul">你倒水了</em> '}餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span id="c13-rv-hint"${ui.rvTapped?' hidden':''}>點一下跳到下一段</span></footer>`;
+  // Head-to-head lights (頭 中 尾, from my side) only for a seated player.
+  const h2h=s=>me>=0?`<span class="c13-rv-h2h" id="c13-rv-h2h${s}"><i>頭</i><i>中</i><i>尾</i></span>`:'';
+  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who"><span class="c13-rv-wb" id="c13-rv-win${s}">${portrait(s)}${me>=0?`${sight}<em class="c13-rv-tag c13-rv-tag-a">再一墩就打槍</em><em class="c13-rv-tag c13-rv-tag-d">她在瞄你</em>`:''}</span><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small>${h2h(s)}${validLayout(G.c13Rows[s])?'':'<em class="c13-rv-foul">倒水</em>'}</div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
+  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me" id="c13-rv-win${pov}">${portrait(pov)}${me>=0?'<em class="c13-rv-tag c13-rv-tag-d">小心被打槍</em>':''}</div>${seat(pov)}${me>=0?'<div class="c13-rv-sum">本局<i id="c13-rv-sum"></i></div>':''}</div><footer><span>${validLayout(G.c13Rows[pov])?'':'<em class="c13-rv-foul">你倒水了</em> '}餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span id="c13-rv-hint"${ui.rvTapped?' hidden':''}>點一下跳到下一段</span></footer>`;
  }
  if(ui.rvStep===rv.i)return;ui.rvStep=rv.i;
- const base=cfg().b,best=row=>Math.max(...ids.map(s=>pts(s,row))),cur=st.k==='flip'||st.k==='cmp'?st.row:3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
- // Seats that have been shot so far swap their window to the dejected pose (no dimming, no extra art).
+ const base=cfg().b,best=row=>Math.max(...ids.map(s=>pts(s,row))),cur=st.row??3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
  const past=ui.rvPlan.steps.slice(0,rv.i+1),hit=s=>past.some(x=>x.k==='shot'?x.to===s:x.k==='hr'&&x.s!==s);
- if(ui.rvSfx!==key+':'+rv.i){ui.rvSfx=key+':'+rv.i;const n0=me>=0&&st.k==='cmp'?pts(me,st.row):0;try{if(typeof sfx==='function')sfx(st.k==='flip'?'clack':st.k==='shot'?'pon':st.k==='hr'?'win':n0>0?'other':n0<0?'lose':'turn')}catch{}}
+ const compared=row=>past.some(x=>x.k==='cmp'&&x.row===row),warned=past.some(x=>x.k==='warn'),settled=o=>compared(2)||past.some(x=>x.lit===o);
+ const stake=o=>warned&&!settled(o)?stakeOf(res,me,o):'';
+ // Back row: a seat is face up once its own flip (or slow flip) has started.
+ const opened=(s,row)=>row<cur||(row===cur&&(st.k==='cmp'||past.some(x=>x.row===row&&(x.k==='flip'||x.k==='slow')&&(x.all||x.s===s))));
+ if(ui.rvSfx!==key+':'+rv.i){ui.rvSfx=key+':'+rv.i;const n0=me>=0&&st.k==='cmp'?pts(me,st.row):0,snd=k=>{try{if(typeof sfx==='function')sfx(k)}catch{}},later=(k,ms)=>setTimeout(()=>{if(ui.rvSfx===key+':'+rv.i)snd(k)},ms);
+  if(st.k==='slow')for(let j=0;j<5;j++)later('clack',j*RV.card+(j===4?RV.card*.8:0));
+  else if(st.k==='sus'){snd('beat');later('beat',800)}
+  else if(st.k==='warn'){const a=ids.filter(o=>stakeOf(res,me,o)==='aim').length;snd(a?'lock':'alarm');if(a&&ids.some(o=>stakeOf(res,me,o)==='danger'))later('alarm',400)}
+  else snd(st.k==='flip'?'clack':st.k==='shot'?(st.to===me?'kan':'pon'):st.k==='hr'?'win':st.k==='miss'?'drawgame':st.k==='dodge'?'other':n0>0?'other':n0<0?'lose':'turn')}
  for(const s of ids){
+  const slow=st.k==='slow'&&st.s===s;
   $('c13-rv-rows'+s).innerHTML=(G.c13Rows[s]||[[],[],[]]).map((r,row)=>{
-   const now=st.k==='flip'&&st.row===row&&(st.all||st.s===s),up=row<cur||(row===cur&&(st.k==='cmp'||s<=st.s)),done=row<cur||(row===cur&&st.k==='cmp');
+   const up=opened(s,row),now=!slow&&st.k==='flip'&&st.row===row&&(st.all||st.s===s),done=row<cur||(row===cur&&(st.k==='cmp'||st.k==='warn'));
    // Every seat shows its own net for the row (the four add up to zero), in the same unit as the table.
    const n=pts(s,row);
    const mark=done?`<em class="c13-rv-mark ${n>0?'c13-rv-win':n<0?'c13-rv-lose':'c13-rv-tie'} ${row===cur?'c13-rv-pop':''}"><i>${fmt(n*base)}</i></em>`:'';
    // Only the row being compared is shown large; finished and waiting rows shrink to one line (mine: small cards).
-   const big=row===cur;
+   const big=row===cur,sl=slow&&row===2;
    // Only the best hand of the compared row lights up; rows still face down carry no text.
    const frame=done&&big&&n>0&&n===best(row)?'c13-rv-w':'';
-   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${type(r)}</b>`:''}${mark}</div></div>`;
+   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${sl?'c13-rv-slow':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}${sl?`;--d:${j*RV.card+(j===r.length-1?RV.card*.8:0)}ms`:''}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${type(r)}</b>`:''}${mark}</div></div>`;
   }).join('');
-  const role=st.k==='flip'?(st.all||st.s===s?'c13-rv-on':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
-  $('c13-rv-seat'+s).className='c13-rv-seat c13-rv-pos'+((s-pov+4)%4)+' '+role;
+  const role=st.k==='flip'?(st.all||st.s===s?'c13-rv-on':''):st.k==='sus'||st.k==='slow'?(st.s===s?'c13-rv-spot':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
+  const sk=s===me?'':stake(s);
+  $('c13-rv-seat'+s).className='c13-rv-seat c13-rv-pos'+((s-pov+4)%4)+' '+role+(sk?' c13-rv-'+sk:'');
   el.classList?.toggle('c13-rv-fx',st.k==='shot'||st.k==='hr');   // the cut-in owns the middle: opponents' row lists step aside
-  const w=$('c13-rv-win'+s),pose=hit(s)?'X':'n';if(w&&w.dataset.pose!==pose){w.dataset.pose=pose;w.innerHTML=portrait(s,pose);w.classList?.toggle('c13-rv-down',pose==='X')}
+  // Seats that have been shot so far swap their window to the dejected pose (no dimming, no extra art).
+  const w=$('c13-rv-win'+s),pose=hit(s)?'X':'n';if(w&&w.dataset.pose!==pose){w.dataset.pose=pose;const o=w.querySelector('.c13-window');if(o)o.outerHTML=portrait(s,pose);else w.innerHTML=portrait(s,pose);w.classList?.toggle('c13-rv-down',pose==='X')}
+  // Head-to-head lights: row by row; the back-row light of a seat comes on when that seat is settled.
+  const hh=$('c13-rv-h2h'+s);if(hh){const dots=hh.querySelectorAll?.('i')||[];[0,1,2].forEach(row=>{const v=vsMe(res,me,s,row),on=row<2?compared(row):settled(s),c=on?(v>0?'c13-rv-hw':v<0?'c13-rv-hl':'c13-rv-ht'):'';if(dots[row]&&dots[row].className!==c)dots[row].className=c})}
  }
+ // My window: red while someone still has me in her sights.
+ const mw=$('c13-rv-win'+pov);if(mw&&me>=0)mw.classList?.toggle('c13-rv-danger',ids.some(o=>stake(o)==='danger'));
  const net=me>=0&&st.k==='cmp'?pts(me,st.row):0;
  // Running total of this hand in points: rows compared so far, doubled once the shot or home run has played.
- if(me>=0&&$('c13-rv-sum')){const rowsDone=row=>row<cur||(row===cur&&st.k==='cmp');let sum=0;
+ if(me>=0&&$('c13-rv-sum')){const rowsDone=row=>row<cur||(row===cur&&(st.k==='cmp'||st.k==='warn'));let sum=0;
   for(const d of res.duels){if(d.a!==me&&d.b!==me)continue;const sign=d.a===me?1:-1,other=d.shot===d.a?d.b:d.a,played=d.shot>=0&&past.some(x=>res.homeruns[d.shot]?x.k==='hr'&&x.s===d.shot:x.k==='shot'&&x.s===d.shot&&x.to===other);
    sum+=sign*(played?d.total:[0,1,2].reduce((n,row)=>n+(rowsDone(row)?d.d[row]:0),0))}
   const e=$('c13-rv-sum');e.textContent=fmt(sum*base);e.className=sum<0?'c13-negative':''}
  const art=(s,k,cls)=>{const a=window.AVATARS?.[chr(s)]||{};return a[k]?`<img class="c13-rv-art ${cls}" src="${a[k]}" alt="">`:''};
- $('c13-rv-banner').innerHTML=st.k==='flip'?`<div class="c13-rv-step"><b>${rowNames[st.row]}</b><span>${st.all?'四家一起開牌':`${'東南西北'[st.s]}家 ${who(st.s)} 開牌`}</span></div>`
+ const step=(b,sub,cls='')=>`<div class="c13-rv-step ${cls}"><b>${b}</b><span>${sub}</span></div>`,names=l=>l.map(o=>esc(nameOf(o))).join('、');
+ const aimL=ids.filter(o=>stakeOf(res,me,o)==='aim'),dgL=ids.filter(o=>stakeOf(res,me,o)==='danger');
+ $('c13-rv-banner').innerHTML=st.k==='flip'?(st.row===2&&st.s===me?step('尾墩',`你亮牌：${type(G.c13Rows[me][2])}`):step(rowNames[st.row],st.all?'四家一起開牌':`${'東南西北'[st.s]}家 ${who(st.s)} 開牌`))
+  :st.k==='warn'?step('槍口對準了',[aimL.length?`你瞄準 ${names(aimL)}`:'',dgL.length?`${names(dgL)} 瞄準你`:''].filter(Boolean).join('・'),aimL.length?'c13-rv-pk':'c13-rv-rd')
+  :st.k==='sus'||st.k==='slow'?(st.st==='aim'?step(`${esc(nameOf(st.s))}……`,'贏這墩就打槍','c13-rv-pk'):step(`${esc(nameOf(st.s))}……`,'輸這墩就被打槍','c13-rv-rd'))
+  :st.k==='miss'?step('被她逃了',`${esc(nameOf(st.s))} 尾墩 ${type(G.c13Rows[st.s][2])}`)
+  :st.k==='dodge'?step('閃過！',`你的${type(G.c13Rows[me][2])}擋下來了`,'c13-rv-pk')
   :st.k==='cmp'?`<div class="c13-rv-step c13-rv-cmp"><b>${rowNames[st.row]}比牌</b>${me>=0?`<i class="${net<0?'c13-negative':''}">${fmt(net*base)}</i>`:''}</div>`
-  :st.k==='shot'?`<div class="c13-rv-shot">${art(st.s,'p','c13-rv-a')}<b>打槍！</b><span>${who(st.s)} <u>▶</u> ${who(st.to)} <i>×${st.m}</i></span></div>`
+  :st.k==='shot'?`<div class="c13-rv-shot ${st.to===me?'c13-rv-shot-me':''}">${art(st.s,'p','c13-rv-a')}<b>${st.to===me?'被打槍！':'打槍！'}</b><span>${who(st.s)} <u>▶</u> ${who(st.to)} <i>×${st.m}</i></span></div>`
   :`<div class="c13-rv-shot c13-rv-hr">${art(st.s,'W','c13-rv-a')}<b>全壘打！</b><span>${who(st.s)} 通殺三家 <i>×4</i></span></div>`;
 }
 function renderResults(){

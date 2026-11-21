@@ -25,19 +25,21 @@ await ctx.onClick(btn('c13-clear'));assert.deepEqual(J(U().rows),[sorted.slice(1
 {const u=U(),good=engine.arrange(ctx.G.c13Hands[0]),foul=[good[0],good[2],good[1]];if(!engine.validLayout(foul)){u.rows=foul.map(r=>r.slice());ctx.renderC13();assert(el('c13-hand').innerHTML.includes('倒水'));assert(el('c13-submit').disabled)}await ctx.onClick(btn('c13-clear'))}
 const auto=ctx.onClick(btn('c13-suggest'));assert(U().busy);while(queue.length)queue.shift()();await auto;assert(engine.validLayout(U().rows));assert(!el('c13-submit').disabled);assert(!el('c13-hand').innerHTML.includes('倒水'));
 await ctx.onClick(btn('c13-submit'));assert(ctx.G.c13Ready[0]);now+=1000;ctx.GAMES.c13.hostTick();ctx.renderC13();assert.equal(ctx.G.ph,'end');
-// Reveal: rows 頭→中→尾, seats East first, one compare beat per row; shots and home run after; then the table.
-const res=ctx.G.res,plan=ctx.revealPlan(res),t0=ctx.G.c13RevealAt,rowsOf=s=>el('c13-rv-rows'+s).innerHTML.split('<div class="c13-rv-row ').slice(1),upCount=()=>[0,1,2,3].map(s=>rowsOf(s).map(r=>r.startsWith('c13-rv-up')?1:0));
-assert.equal(t0,now);assert.equal(plan.steps.slice(0,9).map(x=>x.k==='flip'?`${x.row}${x.all?'*':x.s}`:'c'+x.row).join(' '),'0* c0 1* c1 20 21 22 23 c2');
-assert.equal(plan.steps.length,9+res.duels.filter(d=>d.shot>=0&&!res.homeruns[d.shot]).length+res.homeruns.filter(Boolean).length);
-assert.equal(ctx.G.c13NextAt,t0+plan.len+15000,'next-hand countdown starts when the reveal ends');
+// Reveal (seen from seat 0): front and middle for all four, gun warning if any, back row mine first then stake seats last.
+const res=ctx.G.res,plan=ctx.revealPlan(res,0),maxLen=Math.max(...[-1,0,1,2,3].map(s=>ctx.revealPlan(res,s).len)),tBack=plan.steps.find(x=>x.row===2).t,tCmp2=plan.steps.find(x=>x.k==='cmp'&&x.row===2).t,t0=ctx.G.c13RevealAt,rowsOf=s=>el('c13-rv-rows'+s).innerHTML.split('<div class="c13-rv-row ').slice(1),upCount=()=>[0,1,2,3].map(s=>rowsOf(s).map(r=>r.startsWith('c13-rv-up')?1:0));
+assert.equal(t0,now);assert.equal(plan.steps.slice(0,4).map(x=>x.k==='flip'?`${x.row}${x.all?'*':x.s}`:'c'+x.row).join(' '),'0* c0 1* c1');
+{const back=plan.steps.filter(x=>x.row===2&&(x.k==='flip'||x.k==='sus'));assert.equal(back[0].s,0,'my back row opens first');assert.equal(back.map(x=>x.s).sort().join(),'0,1,2,3');
+ const stakes=[1,2,3].filter(o=>{const d=res.duels.find(x=>x.a===0&&x.b===o).d;return d[0]+d[1]===2||d[0]+d[1]===-2});
+ assert.equal(plan.steps.some(x=>x.k==='warn'),stakes.length>0,'gun warning only when someone is 2-0');assert.equal(back.slice(back.length-stakes.length).map(x=>x.k).join(),stakes.map(()=>'sus').join(),'stake seats open last')}
+assert.equal(ctx.G.c13NextAt,t0+maxLen+15000,'next-hand countdown starts when the longest reveal ends');
 assert(el('c13-results').hidden&&!el('c13-rv').hidden,'reveal plays on the table before the result panel');
 assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]],'the front row opens for all four at once');assert(!el('c13-rv-rows0').innerHTML.includes('c13-rv-mark'));
 assert(el('c13-rv').innerHTML.includes('$'+(ctx.G.bk.me-res.d[0])),'balance stays at the pre-hand value during the reveal');
 now=t0+1000;ctx.frameC13();assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===1),'front row compared before the middle row opens');
-now=t0+4000;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,0],[1,1,0]],'only the back row goes seat by seat');
-now=t0+6000;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===3));
+now=t0+tBack+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,0],[1,1,0],[1,1,0]],'my back row opens first');
+now=t0+tCmp2+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===3));
 now=t0+plan.len-1;ctx.frameC13();assert(el('c13-results').hidden,'table waits for the last beat');
-ctx.myAuto=true;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end');now=t0+plan.len+14999;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end','auto-next waits reveal + 15 s');ctx.myAuto=false;
+ctx.myAuto=true;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end');now=t0+maxLen+14999;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end','auto-next waits reveal + 15 s');ctx.myAuto=false;
 now=t0+plan.len;ctx.frameC13();assert(!el('c13-results').hidden&&el('c13-rv').hidden);assert(el('c13-results').innerHTML.includes('data-c13-next'));assert(el('c13-results').innerHTML.includes('$'+ctx.G.bk.me),'table shows the new balance');
 now=t0+100;ctx.frameC13();assert(!el('c13-results').hidden,'a finished reveal never restarts');
 // Shots and home run: timeline from a fixed result.
@@ -48,8 +50,8 @@ const play=async()=>{ctx.GAMES.c13.nextHand();ctx.renderC13();const rows=engine.
 await play();assert.equal(ctx.G.ph,'end');assert(el('c13-results').hidden&&!el('c13-rv').hidden);const v=ctx.G.v;
 // Tap: on to the next part (middle row, back row, shots if any, then the table).
 {const tap=()=>ctx.onClick({target:{closest:()=>null}}),row=()=>vm.runInContext('ui',ctx).rvPlan.steps[vm.runInContext('ui',ctx).rvStep];
- await tap();assert(!el('c13-rv').hidden);assert.equal(row().row,1,'first tap: middle row');await tap();assert.equal(row().row,2,'second tap: back row');
- for(let i=0;i<3&&el('c13-results').hidden;i++)await tap()}
+ await tap();assert(!el('c13-rv').hidden);assert.equal(row().row,1,'first tap: middle row');await tap();if(row().k==='warn')await tap();assert.equal(row().row,2,'next tap: back row (after the gun warning, if any)');
+ for(let i=0;i<10&&el('c13-results').hidden;i++)await tap()}
 assert(!el('c13-results').hidden&&el('c13-rv').hidden,'taps end at the table');assert.equal(ctx.G.v,v);assert.equal(ctx.G.ph,'end');
 // Fast simulation / AUTO: no reveal, and the countdown is the plain 15 s.
 ctx.SPEED=100;await play();assert(!el('c13-results').hidden&&el('c13-rv').hidden,'SPEED>50 goes straight to the table');assert.equal(ctx.G.c13NextAt,ctx.G.c13RevealAt+15000);ctx.SPEED=1;
