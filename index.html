@@ -6,6 +6,7 @@
 <title>今夜有局｜台灣十六張麻將</title>
 <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="今夜有局">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1644,6 +1645,9 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-enter{left:409.2px;top:269px;width:168.3px;height:100.8px}
 #st-enter.hit img{animation:rdHit 1s ease-out forwards}@keyframes rdHit{0%{opacity:0}12%{opacity:1}100%{opacity:.85}}
 /* 入店 (2026-11-19): the road marking is the only way in; push toward the door, then the shop interior picks the game and the mode */
+#swUp{position:absolute;right:var(--edge);top:max(10px,env(safe-area-inset-top));z-index:30;display:flex;align-items:baseline;gap:8px;padding:6px 14px 7px;border-radius:999px;background:#120a1ae8;border:1px solid #7fe9ff88;box-shadow:0 0 0 2px #07050c,0 0 12px #14c8ff55,inset 0 0 8px #14c8ff33;color:#7fe9ff;font:900 12px 'Zen Maru Gothic',sans-serif;letter-spacing:1px;text-indent:1px;text-shadow:0 0 6px #14c8ff;cursor:pointer;animation:nIgn 1s steps(1,end) both}
+#swUp span{font:500 11px 'Noto Sans TC',sans-serif;letter-spacing:0;text-indent:0;color:#f3e9d2;text-shadow:none}
+#swUp:disabled{opacity:.6}
 #st-wrap.st-wc{will-change:transform}   /* only around the zoom (st-wc added on the enter tap, ~550ms before the zoom so the 1x raster is ready; dropped later when the street is out of sight, see stZoom) — 2026-11-21: the enter/leave zoom is driven from JS (stZoom). A CSS transition made Chrome re-raster the whole street at the final 3.4x (≈8700x4900 px on a 2560 screen) and show missing tiles; a will-change layer keeps its 1x raster and is only scaled */
 #st-glow{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--gx,27%) var(--gy,60%),#fff6fc 0,#ff8ad8 12%,#ff2fae 28%,#2a0618 60%,#07050c 85%)}
 #st-glow.on{animation:stGlow 1.05s ease-in forwards}@keyframes stGlow{0%{opacity:0}55%{opacity:.25}100%{opacity:1}}
@@ -2871,7 +2875,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1121.1110';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1121.1127';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3611,6 +3615,34 @@ if(/[?&]perf=1/.test(location.search))(function(){
 })();
 window.__dbg={G:()=>G,set:(k,v)=>{if(k==='AUTO')AUTO=v;if(k==='SPEED')SPEED=v;if(k==='SIDEK')SIDEK=v},hostTick,canWin,cnt,shanten,calcTai,act,mySeat,setG:g=>{G=g}};
 bootDone();
+</script>
+<script>
+/* offline cache (2026-11-21): GitHub Pages only (not the claude.ai artifact; localhost only with ?sw=1). sw.js serves everything from one
+   versioned cache; a new deploy installs in the background and #swUp asks (only in the menu) before switching.
+   safety net: if the live index.html's ETag differs from the cached one but no new worker shows up (sw.js not re-stamped), the same
+   button drops the caches and reloads. ?nosw=1 = emergency exit: unregister, clear, reload. */
+(()=>{if(!('serviceWorker' in navigator))return;const Q=location.search,SW=navigator.serviceWorker;
+  const wipe=()=>SW.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))).then(()=>caches.keys()).then(ks=>Promise.all(ks.filter(k=>k.startsWith('mj-')).map(k=>caches.delete(k))));
+  if(/[?&]nosw=1/.test(Q)){try{localStorage.removeItem('mjSWdev')}catch(e){}wipe().finally(()=>location.replace(location.pathname));return}
+  try{if(/[?&]sw=1/.test(Q))localStorage.mjSWdev=1}catch(e){}
+  const dev=(()=>{try{return localStorage.mjSWdev}catch(e){}})();
+  if(window.claude||!(location.protocol==='https:'&&location.hostname!=='localhost'||dev))return;
+  let reload=false,asked=0;SW.addEventListener('controllerchange',()=>{if(reload)location.reload()});
+  function ask(fn){if(asked)return;asked=1;const show=()=>{if(typeof inMenu!=='undefined'&&!inMenu){setTimeout(show,3000);return}
+      const m=document.getElementById('menu');if(!m)return;const b=document.createElement('button');b.id='swUp';b.innerHTML='有新版本<span>點一下更新</span>';
+      b.onclick=()=>{b.disabled=true;b.lastChild.textContent='更新中…';fn()};m.appendChild(b)};show()}
+  const viaWorker=w=>ask(()=>{reload=true;w.postMessage('skip');setTimeout(()=>location.reload(),4000)});
+  const onLoad=f=>document.readyState==='complete'?f():addEventListener('load',f);
+  onLoad(()=>setTimeout(()=>SW.register('sw.js').then(reg=>{
+    const watch=w=>w&&w.addEventListener('statechange',()=>{if(w.state==='installed'&&SW.controller)viaWorker(w)});
+    if(reg.waiting&&SW.controller)viaWorker(reg.waiting);watch(reg.installing);
+    reg.addEventListener('updatefound',()=>watch(reg.installing));
+    setInterval(()=>reg.update().catch(()=>{}),3600e3);
+    if(!SW.controller||!navigator.onLine)return;
+    Promise.all([fetch('./',{method:'HEAD',cache:'no-store'}).then(r=>r.headers.get('etag')),caches.match('./').then(r=>r&&r.headers.get('etag'))]).then(([live,mine])=>{
+      if(!live||!mine||live===mine)return;reg.update().catch(()=>{});
+      setTimeout(()=>{if(!asked&&!reg.installing&&!reg.waiting)ask(()=>wipe().finally(()=>location.reload()))},12000)}).catch(()=>{})
+  }).catch(()=>{}),3000))})();
 </script>
 <script>
 /* night-street lobby */
