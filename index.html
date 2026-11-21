@@ -1644,9 +1644,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 #st-enter{left:409.2px;top:269px;width:168.3px;height:100.8px}
 #st-enter.hit img{animation:rdHit 1s ease-out forwards}@keyframes rdHit{0%{opacity:0}12%{opacity:1}100%{opacity:.85}}
 /* 入店 (2026-11-19): the road marking is the only way in; push toward the door, then the shop interior picks the game and the mode */
-#st-wrap{transition:transform 1s cubic-bezier(.55,0,.85,.35)}
-#st-wrap.st-go{transform:scale(3.4)}
-#st-wrap.st-back{transition:transform .9s cubic-bezier(.15,.65,.35,1)}
+#st-wrap.st-wc{will-change:transform}   /* only around the zoom (st-wc added on the enter tap, ~550ms before the zoom so the 1x raster is ready; dropped later when the street is out of sight, see stZoom) — 2026-11-21: the enter/leave zoom is driven from JS (stZoom). A CSS transition made Chrome re-raster the whole street at the final 3.4x (≈8700x4900 px on a 2560 screen) and show missing tiles; a will-change layer keeps its 1x raster and is only scaled */
 #st-glow{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--gx,27%) var(--gy,60%),#fff6fc 0,#ff8ad8 12%,#ff2fae 28%,#2a0618 60%,#07050c 85%)}
 #st-glow.on{animation:stGlow 1.05s ease-in forwards}@keyframes stGlow{0%{opacity:0}55%{opacity:.25}100%{opacity:1}}
 #st-glow.off{animation:stGlowOff .5s ease-out forwards}@keyframes stGlowOff{0%{opacity:1}100%{opacity:0}}
@@ -1695,7 +1693,7 @@ input::placeholder{color:#f3e9d255;letter-spacing:2px;font-size:15px}
 .st-mb.pri .st-mt{color:#fff6fc;text-shadow:0 0 3px #fff,0 0 10px #ff2fae,0 0 20px #ff2fae}
 .st-mb.pri .st-md{color:#ffd6f1}
 .st-mb:active{scale:.98}
-@media (prefers-reduced-motion:reduce){#st-wrap,#st-wrap.st-back{transition:none}}
+
 
 /* affordance: road markings get a headlight sweep, the standing signs flicker now and then */
 .st-rd img.sw{opacity:1;
@@ -2873,7 +2871,7 @@ function sfx(name){
     case 'turn':tone(t,880,.12,.14,'sine');tone(t+.1,1175,.2,.12,'sine');break;
     case 'tick':tone(t,1000,.05,.09,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1121.0711';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1121.1110';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
@@ -3677,6 +3675,16 @@ document.getElementById('st-prof').onclick=()=>{try{openProf(0)}catch(e){}};
 /* 入店: push toward the shop door (stage point 206,236), then the shop interior. ST_GAMES>1 shows the game shelf first; with one game it opens on 包廂／練習 */
 const ST_GAMES=2,$i=id=>document.getElementById(id),wrapE=$i('st-wrap'),inE=$i('st-in'),glow=$i('st-glow'),enterB=$i('st-enter');
 const RM=matchMedia('(prefers-reduced-motion: reduce)');let stBusy=false;
+/* street zoom: rAF-driven scale on the will-change layer (see #st-wrap css); bz = cubic-bezier easing */
+const bz=(x1,y1,x2,y2)=>t=>{let a=0,b=1,u=t;for(let i=0;i<20;i++){u=(a+b)/2;const x=3*x1*u*(1-u)**2+3*x2*u*u*(1-u)+u**3;if(x<t)a=u;else b=u}return 3*y1*u*(1-u)**2+3*y2*u*u*(1-u)+u**3};
+let zCur=1,zId=0;
+function stZoom(to,ms,ease){const from=zCur,t0=performance.now(),id=++zId;
+  const step=n=>{if(id!==zId)return;const k=Math.min(1,(n-t0)/ms);zCur=k<1?from+(to-from)*ease(k):to;wrapE.style.transform=zCur===1?'':'scale('+zCur+')';if(k<1)requestAnimationFrame(step)};
+  if(ms<=0){zCur=to;wrapE.style.transform=to===1?'':'scale('+to+')';return}requestAnimationFrame(step)}
+const zIn=bz(.55,0,.85,.35),zOut=bz(.15,.65,.35,1);
+/* dropping the layer re-rasters the whole street (a missing-tile frame on big screens), so only drop it while the street is out of sight: in a game, tab hidden, or lobby idle */
+setInterval(()=>{if(zCur===1&&!zBusy()&&wrapE.classList.contains('st-wc')&&((typeof inMenu!=='undefined'&&!inMenu)||document.hidden||window.stIdle))wrapE.classList.remove('st-wc')},1000);
+const zBusy=()=>stBusy;
 const hline=t=>{$i('st-hline').innerHTML=stLine(t,inE.classList.contains('on')?0:600)};
 function inPane(p){const g=$i('st-games'),m=$i('st-mode');
   if(p==='games'){g.className='st-pane';m.className='st-pane later';$i('st-isub').textContent='選一張桌';hline('想玩哪一桌？')}
@@ -3687,15 +3695,15 @@ function openIn(){const A=window.AVATARS&&window.AVATARS[0],im=$i('st-hs').first
   im.src=A&&A.Wp?A.Wp[Math.random()*A.Wp.length|0]:'img/serin.webp';
   inE.classList.remove('out');const f=inE.querySelector('.fade');f.style.animation='none';void f.offsetWidth;f.style.animation='';
   inPane(ST_GAMES>1?'games':'mode');inE.classList.add('on');window.stIn=true;stBusy=false}
-enterB.onclick=()=>{if(stBusy||inE.classList.contains('on'))return;stBusy=true;if(ST_GAMES===1)loadGame(curGame).catch(()=>{});enterB.classList.add('hit');
+enterB.onclick=()=>{if(stBusy||inE.classList.contains('on'))return;stBusy=true;if(!RM.matches)wrapE.classList.add('st-wc');if(ST_GAMES===1)loadGame(curGame).catch(()=>{});enterB.classList.add('hit');
   if(RM.matches){openIn();return}
   say('跟我來。');
   setTimeout(()=>{const sk=RW/755,x=206*sk,y=RH-(395-236)*sk;wrapE.style.transformOrigin=x+'px '+y+'px';glow.style.setProperty('--gx',x+'px');glow.style.setProperty('--gy',y+'px');
-    wrapE.classList.remove('st-back');wrapE.classList.add('st-go');glow.className='on'},550);
+    wrapE.classList.remove('st-back');wrapE.classList.add('st-go');stZoom(3.4,1000,zIn);glow.className='on'},550);
   setTimeout(openIn,1650)};
 function leaveIn(){inE.classList.add('out');
   setTimeout(()=>{inE.classList.remove('on','out');enterB.classList.remove('hit');window.stIn=false;
-    wrapE.classList.add('st-back');wrapE.classList.remove('st-go');glow.className=RM.matches?'':'off';say('這麼快就要走？')},330)}
+    wrapE.classList.add('st-back');wrapE.classList.remove('st-go');stZoom(1,RM.matches?0:900,zOut);glow.className=RM.matches?'':'off';say('這麼快就要走？')},330)}
 $i('st-inBack').onclick=()=>{if(ST_GAMES>1&&!$i('st-mode').classList.contains('later'))inPane('games');else leaveIn()};
 $i('st-gMj').onclick=()=>{curGame='mahjong';loadGame(curGame).catch(()=>{});inPane('mode')};
 $i('st-gC13').onclick=()=>{curGame='c13';loadGame(curGame).catch(()=>{});inPane('mode')};
@@ -3703,6 +3711,7 @@ $i('st-gBig').onclick=()=>{hline('大老二還在裝潢，過陣子再來。')};
 /* the 755x395 street stage covers the menu at any size (RW/RH = logical size before UIZ zoom); the shop interior fits whole (contain) */
 function stFit(){const m=document.getElementById('st-wrap');if(m&&typeof RW!=='undefined'){m.style.setProperty('--sk',RW/755);m.style.setProperty('--gap',Math.max(0,Math.ceil(RH-395*RW/755))+'px');$i('st-ist').style.setProperty('--ik',Math.min(RW/755,RH/395))}/* fit the width, street anchored to the bottom: wide screens lose sky, squarer ones get extra sky */}
 addEventListener('resize',()=>setTimeout(stFit,0));setTimeout(stFit,0);setTimeout(stFit,600);
+setTimeout(()=>{new Image().src='img/room.webp'},3000);/* 2026-11-21: warm the shop interior so it doesn't pop in late on the first enter */
 
 })();
 </script>
