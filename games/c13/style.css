@@ -126,7 +126,7 @@
 /* 手機看得清楚（2026-11-21 使用者回饋「牌太小」後整頁重排）
    排牌：十三張直接排成三墩（沒有另外的手牌區），大牌面、不重疊；右邊列出手上有的牌型；左右兩家立繪放大。
    開牌：一次只放大正在比的那一墩，其他墩縮成一行。 */
-#c13-board{position:absolute;top:78px;bottom:62px;left:calc(var(--edge) + var(--c13-ww) + 8px);right:calc(var(--edge) + var(--c13-ww) + 8px);display:flex;align-items:center;justify-content:center;gap:12px;z-index:2}
+#c13-board{position:absolute;top:60px;bottom:56px;left:var(--edge);right:var(--edge);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:4}
 #c13-hand{position:static;height:auto;margin:0;display:flex;flex-direction:column;gap:5px;isolation:auto}
 #c13-hand:empty:before{content:none}
 .c13-row{display:flex;align-items:stretch;justify-content:center;gap:8px}
@@ -145,11 +145,17 @@
 #c13-game .c13-card.c13-drag{transition:none;z-index:5;pointer-events:none;box-shadow:0 10px 22px #000a,0 0 0 2px #ff8ad8}
 @keyframes c13-moved{from{transform:scale(.86);opacity:.5}to{transform:none;opacity:1}}
 #c13-game #c13-swap{position:absolute;left:0;top:-16px;width:26px;height:26px;min-height:0;padding:0;border-radius:50%;display:grid;place-items:center;color:#7fe9ff;border-color:#7fe9ff55;background:#0d1a26;z-index:3}
-#c13-types{display:flex;flex-direction:column;gap:5px;width:var(--c13-tw);flex-shrink:0}
-#c13-game #c13-types button{font:700 12px var(--ng);padding:0;min-height:28px;border-color:#7fe9ff66;color:#effcff;background:#0d1a26;white-space:nowrap;touch-action:manipulation}
-#c13-types button i{font:11px var(--led);font-style:normal;color:#ffc35a;margin-left:3px}
+#c13-types{display:flex;flex-direction:column;gap:3px;width:var(--c13-tw);flex-shrink:0}
+#c13-game #c13-types button{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:3px;font:700 12px var(--ng);padding:0 6px 1px 4px;min-height:0;height:24px;border-color:#7fe9ff66;color:#effcff;background:#0d1a26;white-space:nowrap;touch-action:manipulation;text-indent:0;letter-spacing:0}
+#c13-types button b{font:inherit}
+#c13-types button i{font:11px var(--led);font-style:normal;color:#ffc35a;margin-left:auto}
+#c13-game #c13-types button.c13-no{border-color:#ffffff14;background:#0a0812aa;color:#ffffff40;box-shadow:none;pointer-events:none}
+#c13-game #c13-types button.c13-no.c13-has{color:#ffffff8c;border-color:#ffffff30}
+.c13-mks{display:flex;gap:2px;min-width:16px}
+.c13-mk{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;font:900 10px var(--ng);text-decoration:none;color:#fff6fc;background:#ff2fae;box-shadow:0 0 6px #ff2fae99}
+.c13-mk.c13-mkbad{background:#ff4d5e;box-shadow:0 0 6px #ff4d5e}
 #c13-game #c13-types button.c13-on{border-color:#7fe9ff;background:#12303f;box-shadow:0 0 10px #14c8ff55}
-#c13-dock{position:absolute;bottom:9px;left:calc(var(--edge) + 84px);right:var(--edge);display:flex;align-items:center;gap:10px;z-index:2}
+#c13-dock{position:absolute;bottom:9px;left:var(--edge);right:var(--edge);display:flex;align-items:center;gap:10px;z-index:4}
 .c13-dock-l,.c13-dock-r{display:flex;gap:8px;align-items:center}
 #c13-status{flex:1;text-align:center;font-size:10px;color:#d4c1df;line-height:16px}
 #c13-clock{position:static;min-width:0;padding:0;border:0;background:none;font:24px var(--led);color:#7fe9ff;display:inline-block}
@@ -307,3 +313,26 @@
 /* top seat: the lights stand left of the window (under the name they run into the side seats' big row) */
 #c13-rv .c13-rv-pos2 .c13-rv-who{position:relative}
 #c13-rv .c13-rv-pos2 .c13-rv-h2h{position:absolute;right:calc(100% + 5px);top:6px;flex-direction:column;margin:0}
+
+/* 理牌遮罩（2026-11-21 使用者：深色遮罩壓上去，整個畫面都拿來理牌）
+   開局三墩全空；左＝三墩空格、中＝手牌（三行疊放只露左上大字）、右＝牌型梯子。另外三家在上方小標籤。 */
+#c13-mask{position:absolute;inset:0;z-index:3;background:#0c0716b8;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.c13-arr .c13-head{z-index:4}
+#c13-chips{position:absolute;top:12px;left:50%;translate:-50% 0;display:flex;gap:6px;z-index:4;white-space:nowrap}
+.c13-chip{display:flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;background:#120a1acc;border:1px solid #ffffff1c;font-size:11px}
+.c13-chip b{font-weight:600;max-width:64px;overflow:hidden;text-overflow:ellipsis}
+.c13-chip i{font-style:normal;font-size:10px;color:#a899ba}
+.c13-chip.c13-ok{border-color:#7fe9ff55}.c13-chip.c13-ok i{color:#7fe9ff}
+.c13-chip.c13-readied{animation:c13-readied .5s ease-out}.c13-chip.c13-readied i{animation:c13-okflash .8s ease-out}
+.c13-rl[data-c13-row]{cursor:pointer;border-radius:8px;padding-right:6px;margin-right:-6px}
+.c13-cur .c13-rl{background:linear-gradient(90deg,transparent,#ff2fae26);box-shadow:inset -3px 0 0 #ff2fae}
+.c13-cur .c13-rl b{color:#ff8ad8;text-shadow:0 0 10px #ff2fae}
+.c13-slot{width:var(--c13-cw);aspect-ratio:100/142;flex-shrink:0;border:1.5px dashed #ffffff3a;border-radius:6px;background:#0b071240;box-sizing:border-box}
+.c13-cur .c13-slot{border-color:#ff8ad8aa;background:#ff2fae14}
+.c13-slot.c13-next{box-shadow:0 0 0 1px #ff8ad8,0 0 12px #ff2fae66}
+#c13-pool{position:relative;width:var(--c13-pw);flex-shrink:0;display:flex;flex-direction:column;gap:5px;align-self:center}
+.c13-pl{position:relative;height:calc(var(--c13-cw)*1.42)}
+#c13-game #c13-pool .c13-card{position:absolute;top:0;touch-action:manipulation}
+#c13-game #c13-pool .c13-card:active:not(:disabled){transform:translateY(-6px)}
+#c13-game #c13-pool .c13-card.c13-peek{transform:translateY(-6px)}
+.c13-arr .c13-row{justify-content:flex-start}

@@ -4,23 +4,31 @@ const ctx={...engine,scoreRound:engine.settle,privateView:engine.redact,cardFace
 vm.createContext(ctx);vm.runInContext(fs.readFileSync(new URL('./game.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replaceAll('import.meta.url',"'http://test/games/c13/game.mjs'"),ctx);
 const J=x=>JSON.parse(JSON.stringify(x)),U=()=>vm.runInContext('ui',ctx),btn=id=>({target:{closest:selector=>selector==='button'?{id,hasAttribute:()=>false}:null}}),target=(kind,data)=>({target:{closest:selector=>selector===kind?{dataset:data}:null}}),cardsShown=()=>(el('c13-hand').innerHTML.match(/data-c13-card=/g)||[]).length;
 ctx.GAMES.c13.newGame();ctx.renderC13();
-// Arrange: the thirteen cards are always in the three rows, dealt in rank order with the big cards at the back.
-assert.equal(cardsShown(),13);const sorted=ctx.G.c13Hands[0].slice().sort((a,b)=>b-a);assert.deepEqual(J(U().rows),[sorted.slice(10),sorted.slice(5,10),sorted.slice(0,5)]);
-// Tap two cards: they swap.
-const a0=U().rows[0][0],b0=U().rows[2][4];await ctx.onClick(target('[data-c13-card]',{c13Card:String(a0)}));assert.equal(U().sel,a0);assert(el('c13-hand').innerHTML.includes('c13-selected'));
-await ctx.onClick(target('[data-c13-card]',{c13Card:String(b0)}));assert.equal(U().rows[0][0],b0);assert.equal(U().rows[2][4],a0);assert.equal(U().sel,-1);assert.equal(cardsShown(),13);
-// Whole-row swap (middle and back), then 重來 returns to the dealt order.
-const mid=U().rows[1].slice();await ctx.onClick(btn('c13-swap'));assert.deepEqual(J(U().rows[2]),J(mid));
-await ctx.onClick(btn('c13-clear'));assert.deepEqual(J(U().rows),[sorted.slice(10),sorted.slice(5,10),sorted.slice(0,5)]);
-// Hand types: only the ones in the hand are listed; tapping one puts it in the back row, the next type in the middle row.
+// Arrange starts empty: the thirteen cards wait in the hand under the mask.
+const inHand=()=>(el('c13-pool').innerHTML.match(/data-c13-in=/g)||[]).length,card=c=>target('[data-c13-card]',{c13Card:String(c)}),hc=c=>target('[data-c13-in]',{c13In:String(c)});
+assert.equal(cardsShown(),0);assert.equal(inHand(),13);assert.deepEqual(J(U().rows),[[],[],[]]);assert.equal(U().cur,2);
+const hand0=ctx.G.c13Hands[0].slice().sort((a,b)=>b-a);
+// Hand cards fill the back row first, then the middle.
+for(const c of hand0.slice(0,6))await ctx.onClick(hc(c));
+assert.deepEqual(J(U().rows[2]),hand0.slice(0,5));assert.deepEqual(J(U().rows[1]),[hand0[5]]);assert.equal(U().cur,1);assert.equal(inHand(),7);
+// A placed card: tap twice = back to the hand; tap one then another = swap; lift one then tap a hand card = replace.
+const a=hand0[5];await ctx.onClick(card(a));assert.equal(U().sel,a);assert(el('c13-hand').innerHTML.includes('c13-selected'));await ctx.onClick(card(a));assert.deepEqual(J(U().rows[1]),[]);assert.equal(inHand(),8);assert.equal(U().sel,-1);
+await ctx.onClick(card(hand0[0]));await ctx.onClick(card(hand0[4]));assert.equal(U().rows[2][0],hand0[4]);assert.equal(U().rows[2][4],hand0[0]);
+await ctx.onClick(card(hand0[1]));await ctx.onClick(hc(a));assert.equal(U().rows[2][1],a);assert(ctx.left().includes(hand0[1]));assert.equal(U().rows.flat().length,5);
+// The row label picks the row; whole-row swap; 全部收回 empties the rows.
+await ctx.onClick(target('[data-c13-row]',{c13Row:'0'}));assert.equal(U().cur,0);await ctx.onClick(hc(hand0[12]));assert.deepEqual(J(U().rows[0]),[hand0[12]]);
+const back=U().rows[2].slice();await ctx.onClick(btn('c13-swap'));assert.deepEqual(J(U().rows[1]),J(back));assert.deepEqual(J(U().rows[2]),[]);
+await ctx.onClick(btn('c13-clear'));assert.deepEqual(J(U().rows),[[],[],[]]);assert.equal(inHand(),13);assert.equal(U().cur,2);
+// The ladder lists every type; the ones still in the hand are buttons. A type goes into the current row; the same type again swaps in the next one.
 {const hand=[0,4,8,12,16, 1,5, 2,6,10, 21,26,31].map(Number),cs=ctx.combosOf(hand);   // clubs 2-6 (straight flush), pairs/trips of 2 and 3
  assert.equal(cs[8].length,1);assert(cs[6].length>=1&&cs[3].length>=1&&cs[1].length>=2&&cs[2].length>=1);assert.equal(cs[7].length,0);
  for(let t=1;t<9;t++)for(const c of cs[t])if(c.length===5)assert.equal(engine.evaluate(c)[0],t,'candidate is the type it is listed under');
- const u=U(),keep={rows:u.rows,combos:u.combos};u.rows=ctx.dealtRows(hand);u.combos=cs;u.claim=[null,null,null];u.last=null;
- await ctx.onClick(target('[data-c13-type]',{c13Type:'8'}));assert.equal(engine.evaluate(u.rows[2])[0],8,'first type goes to the back row');assert.equal(u.rows.flat().length,13);assert.equal(new Set(u.rows.flat()).size,13);
- await ctx.onClick(target('[data-c13-type]',{c13Type:'1'}));assert(u.claim[1]&&u.claim[1].every(c=>u.rows[1].includes(c)),'next type goes to the middle row');assert.equal(engine.evaluate(u.rows[2])[0],8,'back row untouched');
- const first=u.claim[1].slice();await ctx.onClick(target('[data-c13-type]',{c13Type:'1'}));assert.notDeepEqual(J(u.claim[1]),J(first),'same type again: next candidate');assert.equal(new Set(u.rows.flat()).size,13);
- u.rows=keep.rows;u.combos=keep.combos;u.claim=[null,null,null];u.last=null}
+ const u=U(),keep=ctx.G.c13Hands[0];ctx.G.c13Hands[0]=hand;u.rows=[[],[],[]];u.cur=2;u.last=null;ctx.renderC13();
+ assert.equal((el('c13-types').innerHTML.match(/<button/g)||[]).length,9);assert(el('c13-types').innerHTML.includes('data-c13-type="8"'));assert(!el('c13-types').innerHTML.includes('data-c13-type="7"'));
+ await ctx.onClick(target('[data-c13-type]',{c13Type:'8'}));assert.equal(engine.evaluate(u.rows[2])[0],8,'first type goes to the back row');assert.equal(u.cur,1);
+ await ctx.onClick(target('[data-c13-type]',{c13Type:'1'}));assert.equal(u.rows[1].length,2,'next type goes to the middle row');assert.equal(engine.evaluate(u.rows[2])[0],8,'back row untouched');
+ const first=u.rows[1].slice();await ctx.onClick(target('[data-c13-type]',{c13Type:'1'}));assert.equal(u.rows[1].length,2);assert.notDeepEqual(J(u.rows[1]),J(first),'same type again: next candidate');assert.equal(new Set(u.rows.flat()).size,7);
+ ctx.G.c13Hands[0]=keep;u.rows=[[],[],[]];u.cur=2;u.last=null}
 // 倒水 is marked on the row that is too strong and the confirm button stays off.
 {const u=U(),good=engine.arrange(ctx.G.c13Hands[0]),foul=[good[0],good[2],good[1]];if(!engine.validLayout(foul)){u.rows=foul.map(r=>r.slice());ctx.renderC13();assert(el('c13-hand').innerHTML.includes('倒水'));assert(el('c13-submit').disabled)}await ctx.onClick(btn('c13-clear'))}
 const auto=ctx.onClick(btn('c13-suggest'));assert(U().busy);while(queue.length)queue.shift()();await auto;assert(engine.validLayout(U().rows));assert(!el('c13-submit').disabled);assert(!el('c13-hand').innerHTML.includes('倒水'));
@@ -61,6 +69,9 @@ ctx.matchMedia=()=>({matches:true});ctx.G.hand=0;await play();assert(!el('c13-re
 // Time is up: what is on screen goes in as it is, 倒水 included.
 {ctx.GAMES.c13.nextHand();ctx.renderC13();const u=U(),good=engine.arrange(ctx.G.c13Hands[0]),foul=[good[0],good[2],good[1]];
  if(!engine.validLayout(foul)){u.rows=foul.map(r=>r.slice());now=ctx.G.c13Deadline-401;ctx.frameC13();assert(!ctx.G.c13Ready[0]);now=ctx.G.c13Deadline-399;ctx.frameC13();assert(ctx.G.c13Ready[0],'sent at the deadline');assert.deepEqual(JSON.parse(JSON.stringify(ctx.G.c13Rows[0])),foul);}}
+// Time is up with cards still in hand: they fill the empty slots as they are (big cards to the back) and go in.
+{now+=1000;ctx.GAMES.c13.hostTick();ctx.GAMES.c13.nextHand();ctx.renderC13();const u=U(),h=ctx.G.c13Hands[0].slice().sort((a,b)=>a-b);u.rows=[[h[0]],[],[]];now=ctx.G.c13Deadline-399;ctx.frameC13();assert(ctx.G.c13Ready[0],'sent at the deadline');const r=ctx.G.c13Rows[0];
+ assert.deepEqual([r[0].length,r[1].length,r[2].length],[3,5,5]);assert(r[0].includes(h[0]));assert.deepEqual(J(r[2]).sort((a,b)=>b-a),h.slice(1).sort((a,b)=>b-a).slice(0,5))}
 assert(!('c13Ui' in ctx.G),'draft is not in game state');
 assert(!el('c13-players').innerHTML.includes('$'),'scores use fmt');
 assert(!el('c13-results').innerHTML.match(/<strong[^>]*>[^<]*\$/),'result scores must not use money');

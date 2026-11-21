@@ -84,19 +84,24 @@ Object.assign(C,{
 });
 // Selection and unsubmitted drafts stay local to this module. Only accepted layouts enter G.
 // handKey resets the editor on the next hand; incoming snapshots do not erase local work.
-const ui={key:'',rows:[[],[],[]],sel:-1,claim:[null,null,null],last:null,peek:null,combos:null,moved:null,drag:null,dragAt:0,ready:[0,0,0,0],was:null,notice:'',waiting:null,retryAt:0,busy:false,job:0,seen:'',rvKey:'',rvAt:0,rvPlan:null,rvStep:-1,rvDone:''};
+const ui={key:'',rows:[[],[],[]],sel:-1,cur:2,bySuit:false,last:null,peek:null,combos:null,moved:null,drag:null,dragAt:0,ready:[0,0,0,0],was:null,notice:'',waiting:null,retryAt:0,busy:false,job:0,seen:'',rvKey:'',rvAt:0,rvPlan:null,rvStep:-1,rvDone:''};
 let worker=null,nextJob=0;const jobs=new Map();
 function fallbackWorker(){worker?.terminate();worker=null;for(const [id,j]of jobs){jobs.delete(id);setTimeout(()=>{try{j.resolve(arrange(j.hand,j.profile))}catch(e){j.reject(e)}},0)}}
 try{worker=new Worker(new URL('./arranger.mjs',import.meta.url),{type:'module'});worker.onmessage=({data})=>{const j=jobs.get(data.id);if(!j)return;jobs.delete(data.id);data.error?j.reject(Error(data.error)):j.resolve(data.rows)};worker.onerror=e=>{e.preventDefault();fallbackWorker()}}catch{}
 function suggest(hand,profile){return new Promise((resolve,reject)=>{if(worker){const id=++nextJob;jobs.set(id,{hand,profile,resolve,reject});worker.postMessage({id,hand,profile})}else setTimeout(()=>{try{resolve(arrange(hand,profile))}catch(e){reject(e)}},0)})}
-function mount(){let el=$('c13-game');if(el)return el;el=document.createElement('div');el.id='c13-game';el.innerHTML=`<div class="c13-felt"></div><header class="c13-head"><div><b>十三支</b><small id="c13-round"></small></div><div class="c13-tools"><button id="c13-auto-toggle">託管</button><button id="c13-settings">設定</button></div></header><div id="c13-players"></div><section id="c13-board"><div id="c13-hand"></div><div id="c13-types"></div></section><section id="c13-dock"><div class="c13-dock-l"><button id="c13-suggest">自動排牌</button><button id="c13-clear">重來</button></div><div id="c13-status" role="status"></div><div class="c13-dock-r"><span id="c13-clock"></span><button id="c13-submit" class="c13-primary">確認排好</button></div></section><span id="c13-balance"></span><section id="c13-rv" hidden></section><section id="c13-results" hidden></section>`;root.appendChild(el);
+function mount(){let el=$('c13-game');if(el)return el;el=document.createElement('div');el.id='c13-game';el.innerHTML=`<div class="c13-felt"></div><header class="c13-head"><div><b>十三支</b><small id="c13-round"></small></div><div class="c13-tools"><button id="c13-auto-toggle">託管</button><button id="c13-settings">設定</button></div></header><div id="c13-players"></div><div id="c13-mask"></div><div id="c13-chips"></div><section id="c13-board"><div id="c13-hand"></div><div id="c13-pool"></div><div id="c13-types"></div></section><section id="c13-dock"><div class="c13-dock-l"><button id="c13-suggest">自動排牌</button><button id="c13-clear">全部收回</button><button id="c13-sort">依花色</button></div><div id="c13-status" role="status"></div><div class="c13-dock-r"><span id="c13-clock"></span><button id="c13-submit" class="c13-primary">確認排好</button></div></section><span id="c13-balance"></span><section id="c13-rv" hidden></section><section id="c13-results" hidden></section>`;root.appendChild(el);
  el.addEventListener('click',onClick);el.addEventListener('pointerdown',onDown);el.addEventListener('pointermove',onMove);el.addEventListener('pointerup',onUp);el.addEventListener('pointercancel',onUp);return el}
 function cardLabel(c){return SUITS[c%4]+RANKS[c>>2]}
 function type(r){return [3,5].includes(r?.length)?TYPES[evaluate(r)[0]]:'尚未排滿'}
+// Row label with the deciding rank, so two rows of the same type still show which one is bigger.
+function typeKey(r,i){if(!r?.length)return'空';if(r.length!==caps[i])return`${r.length}／${caps[i]}`;const e=evaluate(r);return TYPES[e[0]]+' '+RANKS[e[1]-2]}
+// Strength ladder: all nine types strongest first; the ones in my hand are buttons, and each row sits on its rung.
+function ladder(rows,bad,editable){const e=rows.map((r,i)=>r.length===caps[i]?evaluate(r):null);
+ return TYPES.map((_,t)=>8-t).map(t=>{const n=t?ui.combos?.[t]?.length||0:0,on=n&&editable,mk=[2,1,0].filter(i=>e[i]?.[0]===t).sort((a,b)=>compare(e[b],e[a])).map(i=>`<s class="c13-mk${bad[i]?' c13-mkbad':''}">${rowNames[i][0]}</s>`).join('');
+  return `<button ${on?`data-c13-type="${t}"`:'tabindex="-1"'} class="${on?'':'c13-no'} ${ui.last?.t===t?'c13-on':''} ${mk?'c13-has':''}"><span class="c13-mks">${mk}</span><b>${TYPES[t]}</b>${n>1&&editable?`<i>×${n}</i>`:''}</button>`}).join('')}
 function canEdit(){const s=mySeat();return G.st==='play'&&G.ph==='arrange'&&s>=0&&!G.c13Ready?.[s]&&!G.pz&&!ui.waiting&&!ui.busy&&!myAuto&&!AUTO}
-// The thirteen cards always sit in the three rows (no separate hand): dealt in rank order, big cards at the back.
-function dealtRows(hand){const l=(hand||[]).filter(c=>c>=0).sort((a,b)=>b-a);return l.length===13?[l.slice(10),l.slice(5,10),l.slice(0,5)]:[[],[],[]]}
-function resetEditor(){const key=C.handKey();if(ui.key===key)return;const me=mySeat();ui.key=key;ui.rows=G.c13Rows?.[me]?.map(r=>r.slice())||dealtRows(G.c13Hands?.[me]);ui.sel=-1;ui.claim=[null,null,null];ui.last=null;ui.peek=null;ui.combos=null;ui.notice='';ui.waiting=null;ui.busy=false;ui.job++;ui.drag=null;ui.ready=[0,0,0,0];ui.was=(G.c13Ready||[]).slice()}
+// Arranging starts empty (user 2026-11-21): the thirteen cards wait in the hand and the player puts them into the rows.
+function resetEditor(){const key=C.handKey();if(ui.key===key)return;const me=mySeat();ui.key=key;ui.rows=G.c13Rows?.[me]?.map(r=>r.slice())||[[],[],[]];ui.cur=2;ui.sel=-1;ui.last=null;ui.peek=null;ui.combos=null;ui.notice='';ui.waiting=null;ui.busy=false;ui.job++;ui.drag=null;ui.ready=[0,0,0,0];ui.was=(G.c13Ready||[]).slice()}
 // Hand types found in my thirteen cards, strongest first; each candidate is the cards that make the type.
 function combosOf(hand){
  const by=Array.from({length:13},()=>[]),suit=[[],[],[],[]],out=TYPES.map(()=>[]),seen=new Set();for(const c of hand.slice().sort((a,b)=>b-a)){by[c>>2].push(c);suit[c%4].push(c)}
@@ -112,26 +117,31 @@ function combosOf(hand){
  for(let i=0;i<pairs.length;i++)for(let j=i+1;j<pairs.length;j++)put(2,[...by[pairs[i]].slice(0,2),...by[pairs[j]].slice(0,2)]);
  for(const p of pairs)put(1,by[p].slice(0,2));
  return out}
-// Tapping a type puts it straight into a row: the back row first, then the middle; the same type again shows the next one.
+// Cards still in my hand (not yet in a row).
+function left(){const used=new Set(ui.rows.flat());return(G.c13Hands?.[mySeat()]||[]).filter(c=>c>=0&&!used.has(c))}
+// After a row fills up, the next one with room becomes current (back → middle → front).
+function nextRow(){if(ui.rows[ui.cur].length<caps[ui.cur])return;const r=[2,1,0].find(i=>ui.rows[i].length<caps[i]);if(r!==undefined)ui.cur=r}
+function placeCard(c){nextRow();if(ui.rows[ui.cur].length>=caps[ui.cur])return;ui.rows[ui.cur].push(c);ui.moved=[c];ui.last=null;nextRow()}
+function unplace(c){const w=where(c);if(!w)return;ui.rows[w[0]].splice(w[1],1);ui.cur=w[0];ui.last=null}
+// Time is up with cards still in hand: they fill the empty slots as they are (big cards to the back), 倒水 or not.
+function fillRest(){const l=left().sort((a,b)=>b-a);for(const r of [2,1,0])while(ui.rows[r].length<caps[r]&&l.length)ui.rows[r].push(l.shift())}
+// Tapping a type takes it from the hand into the current row (or the first row with room); the same type again swaps in the next one.
 function pickCombo(t){
- const list=ui.combos?.[t]||[];if(!list.length)return null;const n=list[0].length,same=ui.last?.t===t;
- let row=same?ui.last.row:[2,1,0].find(r=>!ui.claim[r]&&caps[r]>=n);if(row===undefined)row=ui.last&&caps[ui.last.row]>=n?ui.last.row:2;
- const busy=new Set(ui.claim.flatMap((c,r)=>c&&r!==row?c:[])),ok=list.filter(cs=>!cs.some(c=>busy.has(c)));if(!ok.length)return null;
- const i=same?(ui.last.i+1)%ok.length:0;return{t,row,i,cards:ok[i]}}
+ const same=ui.last?.t===t&&ui.last.cards.every(c=>ui.rows[ui.last.row].includes(c)),pool=same?left().concat(ui.last.cards):left(),list=combosOf(pool)[t]||[];if(!list.length)return null;const n=list[0].length;
+ const room=r=>ui.rows[r].length-(same&&r===ui.last.row?n:0)+n<=caps[r],row=same?ui.last.row:room(ui.cur)?ui.cur:[2,1,0].find(room);if(row===undefined)return null;
+ const i=same?(ui.last.i+1)%list.length:0;return{t,row,i,cards:list[i],same}}
 function where(c){for(let r=0;r<3;r++){const i=ui.rows[r].indexOf(c);if(i>=0)return[r,i]}return null}
-function staleClaims(){for(let r=0;r<3;r++)if(ui.claim[r]&&!ui.claim[r].every(c=>ui.rows[r].includes(c))){ui.claim[r]=null;if(ui.last?.row===r)ui.last=null}}
-function applyCombo(p){
- const row=ui.rows[p.row],inc=p.cards.filter(c=>!row.includes(c)),out=row.filter(c=>!p.cards.includes(c)).sort((a,b)=>a-b);
- inc.forEach((c,k)=>{const [q,i]=where(c),e=out[k];ui.rows[q][i]=e;row[row.indexOf(e)]=c});
- ui.rows[p.row]=[...p.cards,...row.filter(c=>!p.cards.includes(c)).sort((a,b)=>b-a)];ui.claim[p.row]=p.cards.slice();ui.last={t:p.t,row:p.row,i:p.i};ui.moved=p.cards.slice();staleClaims();ui.sel=-1}
-function swapCards(a,b){const x=where(a),y=where(b);if(!x||!y||a===b)return;ui.rows[x[0]][x[1]]=b;ui.rows[y[0]][y[1]]=a;ui.moved=[a,b];staleClaims();ui.sel=-1}
-function swapRows(){[ui.rows[1],ui.rows[2]]=[ui.rows[2],ui.rows[1]];[ui.claim[1],ui.claim[2]]=[ui.claim[2],ui.claim[1]];if(ui.last&&ui.last.row>0)ui.last.row=3-ui.last.row;ui.moved=[...ui.rows[1],...ui.rows[2]];ui.sel=-1}
+function applyCombo(p){if(p.same)ui.rows[p.row]=ui.rows[p.row].filter(c=>!ui.last.cards.includes(c));ui.rows[p.row].push(...p.cards);ui.cur=p.row;ui.last={t:p.t,row:p.row,i:p.i,cards:p.cards.slice()};ui.moved=p.cards.slice();ui.sel=-1;nextRow()}
+function swapCards(a,b){const x=where(a),y=where(b);if(!x||!y||a===b)return;ui.rows[x[0]][x[1]]=b;ui.rows[y[0]][y[1]]=a;ui.moved=[a,b];ui.last=null;ui.sel=-1}
+function swapRows(){[ui.rows[1],ui.rows[2]]=[ui.rows[2],ui.rows[1]];if(ui.last&&ui.last.row>0)ui.last.row=3-ui.last.row;if(ui.cur>0)ui.cur=3-ui.cur;nextRow();ui.moved=[...ui.rows[1],...ui.rows[2]];ui.sel=-1}
 // A row is marked when it is stronger than the row behind it (倒水).
 function fouls(rows){if(rows.flat().length!==13)return[false,false,false];const e=rows.map(evaluate);return[compare(e[0],e[1])>0,compare(e[1],e[2])>0,false]}
 function portrait(s,key='n'){const a=window.AVATARS?.[chr(s)]||{};if(!a[key])key='n';const wide=(a.nx||[]).includes(key);return `<div class="c13-window ${wide?'c13-wide':''}">${a[key]?`<img alt="${esc(BOTS[chr(s)]||'')}" src="${a[key]}">`:''}</div>`}
 // Seats face each other like the mahjong table. An opponent who finishes arranging changes pose and her name tag lights once.
 function players(){const me=mySeat(),pov=Math.max(0,me),now=Date.now();return ids.map(s=>{const rel=(s-pov+4)%4;if(!rel)return `<div class="c13-player c13-pos0">${portrait(s)}</div>`;const ready=G.ph==='arrange'&&G.c13Ready?.[s];if(ready&&ui.was&&!ui.was[s]){ui.was[s]=true;ui.ready[s]=now}
  return `<div class="c13-player c13-pos${rel} ${ready&&now-ui.ready[s]<900?'c13-readied':''}">${portrait(s,ready?'n2':'n')}<div class="c13-player-info"><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s])}</small><span class="${ready?'c13-ok':''}">${G.st==='over'?'整場結束':G.ph==='end'?(G.rdy?.[s]?'已準備':'已開牌'):ready?'已排好':'排牌中…'}</span></div></div>`}).join('')}
+// On the arranging mask: the other three as small chips (上家, 對家, 下家), lit once when they finish.
+function chips(){const pov=Math.max(0,mySeat()),now=Date.now();return[3,2,1].map(rel=>{const s=(pov+rel)%4,ready=!!G.c13Ready?.[s];return`<span class="c13-chip ${ready?'c13-ok':''} ${ready&&now-ui.ready[s]<900?'c13-readied':''}"><b>${esc(nameOf(s))}</b><i>${ready?'已排好':'排牌中…'}</i></span>`}).join('')}
 function put(id,html){const e=$(id);if(e._h!==html){e._h=html;e.innerHTML=html}}
 function renderC13(){
  const el=mount(),on=G.game==='c13'&&(G.st==='play'||G.st==='over');el.hidden=!on;if(!on)return;
@@ -139,19 +149,25 @@ function renderC13(){
  $('c13-round').textContent=`第 ${Math.min(G.hand+1,cfg().r)}／${cfg().r} 局 · 底 ${cfg().b}`;
  put('c13-players',players());$('c13-auto-toggle').textContent=myAuto?'取消託管':'託管';
  el.style.setProperty('--c13-ww',(RW>=820?100:84)+'px');
- const open=G.ph==='end'||G.st==='over';$('c13-players').hidden=open;$('c13-board').hidden=open;$('c13-dock').hidden=open;$('c13-balance').hidden=open;if(!open)ui.seen=C.handKey();
+ const open=G.ph==='end'||G.st==='over',arr=!open&&me>=0;el.classList.toggle('c13-arr',arr);$('c13-mask').hidden=!arr;$('c13-chips').hidden=!arr;if(arr)put('c13-chips',chips());$('c13-players').hidden=open;$('c13-board').hidden=open;$('c13-dock').hidden=open;$('c13-balance').hidden=open||arr;if(!open)ui.seen=C.handKey();
  const rv=open?revealNow():null;$('c13-rv').hidden=!rv;$('c13-results').hidden=!open||!!rv;
  if(open){if(rv)renderReveal(rv);else renderResults();frameC13();return}
  const submitted=!!G.c13Ready?.[me],current=submitted?(G.c13Rows?.[me]||ui.rows):ui.rows,editable=canEdit(),full=current.flat().length===13,bad=fouls(current),legal=full&&!bad.some(Boolean);
  if(submitted){ui.waiting=null;ui.busy=false}
- if(!ui.combos&&full)ui.combos=combosOf(current.flat());
- // Card size: three rows in the height between the top seat and the buttons, five cards in the width between the side seats.
- const bw=$('c13-board').offsetWidth||520,wide=RW>=820,lw=wide?74:64,tw=wide?86:76,cw=Math.floor(Math.max(34,Math.min((RH-78-62-10)/3/1.42,(bw-lw-tw-22-16)/5)));
- el.style.setProperty('--c13-cw',cw+'px');el.style.setProperty('--c13-ww',(wide?100:84)+'px');el.style.setProperty('--c13-lw',lw+'px');el.style.setProperty('--c13-tw',tw+'px');
+ const hand=submitted?[]:left();ui.combos=combosOf(hand);
+ // The mask covers the table, so the whole screen is for arranging: rows on the left, the hand in the middle, the ladder on the right.
+ // Card size: three rows in the height between the top bar and the buttons; the hand needs at least one card plus four 22px strips.
+ const wide=RW>=820,lw=wide?74:64,tw=wide?100:90,bw=$('c13-board').offsetWidth||RW-80,cw=Math.floor(Math.max(34,Math.min((RH-60-56-10)/3/1.42,(bw-lw-8-20-tw-24-108)/6,96))),pw=Math.max(cw+108,bw-lw-8-5*cw-20-tw-24),step=Math.min(cw+5,(pw-cw)/4);
+ el.style.setProperty('--c13-cw',cw+'px');el.style.setProperty('--c13-ww',(wide?100:84)+'px');el.style.setProperty('--c13-lw',lw+'px');el.style.setProperty('--c13-tw',tw+'px');el.style.setProperty('--c13-pw',pw+'px');
  const peek=ui.peek?.cards||[],moved=ui.moved||[];
- put('c13-hand',current.map((r,i)=>`<div class="c13-row ${bad[i]?'c13-foul':''}"><div class="c13-rl">${i===2&&editable?'<button id="c13-swap" aria-label="中墩和尾墩整排對調"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M8 4v15m0 0l-4-4m4 4l4-4M16 20V5m0 0l-4 4m4-4l4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':''}<b>${rowNames[i]}</b><span>${type(r)}</span>${bad[i]?'<em>倒水</em>':''}</div><div class="c13-rc">${r.map(c=>`<button class="c13-card ${ui.sel===c?'c13-selected':''} ${peek.includes(c)?'c13-peek':''} ${moved.includes(c)?'c13-moved':''}" data-c13-card="${c}" aria-label="${cardLabel(c)}" aria-pressed="${ui.sel===c}" ${editable?'':'disabled'}><img alt="${cardLabel(c)}" src="${cardFace(c)}" draggable="false"></button>`).join('')}</div></div>`).join(''));
- put('c13-types',editable&&ui.combos?[8,7,6,5,4,3,2,1].filter(t=>ui.combos[t].length).map(t=>`<button data-c13-type="${t}" class="${ui.last?.t===t?'c13-on':''}">${TYPES[t]}${ui.combos[t].length>1?`<i>×${ui.combos[t].length}</i>`:''}</button>`).join(''):'');
- $('c13-status').textContent=submitted?'已排好，等其他人':ui.waiting?'送出中…':ui.busy?'排牌中…':ui.notice;
+ const cur=editable&&!full?ui.cur:-1,face=c=>`<img alt="${cardLabel(c)}" src="${cardFace(c)}" draggable="false">`;
+ put('c13-hand',current.map((r,i)=>`<div class="c13-row ${bad[i]?'c13-foul':''} ${i===cur?'c13-cur':''}"><div class="c13-rl" ${editable?`data-c13-row="${i}"`:''}>${i===2&&editable?'<button id="c13-swap" aria-label="中墩和尾墩整排對調"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M8 4v15m0 0l-4-4m4 4l4-4M16 20V5m0 0l-4 4m4-4l4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>':''}<b>${rowNames[i]}</b><span>${typeKey(r,i)}</span>${bad[i]?'<em>倒水</em>':''}</div><div class="c13-rc">${Array.from({length:caps[i]},(_,k)=>{const c=r[k];return c===undefined?`<span class="c13-slot ${i===cur&&k===r.length?'c13-next':''}"></span>`:`<button class="c13-card ${ui.sel===c?'c13-selected':''} ${peek.includes(c)?'c13-peek':''} ${moved.includes(c)?'c13-moved':''}" data-c13-card="${c}" aria-label="${cardLabel(c)}" aria-pressed="${ui.sel===c}" ${editable?'':'disabled'}>${face(c)}</button>`}).join('')}</div></div>`).join(''));
+ // The hand: three lines of overlapping cards (only the big index at the top left shows), by rank or by suit.
+ const order=hand.slice().sort((a,b)=>ui.bySuit?(b%4-a%4)||(b-a):b-a),lines=[order.slice(0,5),order.slice(5,10),order.slice(10)];
+ put('c13-pool',lines.map(l=>`<div class="c13-pl">${l.map((c,k)=>`<button class="c13-card ${peek.includes(c)?'c13-peek':''}" style="left:${Math.round(k*step)}px" data-c13-in="${c}" aria-label="${cardLabel(c)}" ${editable?'':'disabled'}>${face(c)}</button>`).join('')}</div>`).join(''));
+ $('c13-sort').textContent=ui.bySuit?'依大小':'依花色';$('c13-sort').disabled=!editable||!hand.length;
+ put('c13-types',ladder(current,bad,editable));
+ $('c13-status').textContent=submitted?'已排好，等其他人':ui.waiting?'送出中…':ui.busy?'排牌中…':ui.notice||(!editable?'':ui.sel>=0?'點另一張對調・點手牌換上・再點一次收回':full?(legal?"排好了，按確認":"有一墩比後面大，倒水了"):`點手牌放進${rowNames[ui.cur]}・點墩名換墩`);
  $('c13-balance').textContent=`餘額 ${money(G.bk?.[meId()]??W.bal)}`;
  $('c13-submit').disabled=!editable||!legal;$('c13-submit').hidden=submitted;$('c13-clear').disabled=!editable;$('c13-suggest').disabled=!editable;frameC13();
 }
@@ -172,7 +188,7 @@ function onUp(e){
  const el=$('c13-hand').querySelector?.(`[data-c13-card="${d.c}"]`);if(el){el.classList.remove('c13-drag');el.style.transform=''}
  const to=e.type==='pointerup'&&document.elementFromPoint?.(e.clientX,e.clientY)?.closest?.('[data-c13-card]');if(to&&canEdit())swapCards(d.c,+to.dataset.c13Card);renderC13()}
 async function onClick(e){
- const b=e.target.closest('button'),card=e.target.closest('[data-c13-card]'),kind=e.target.closest('[data-c13-type]');
+ const b=e.target.closest('button'),card=e.target.closest('[data-c13-card]'),kind=e.target.closest('[data-c13-type]'),inh=e.target.closest('[data-c13-in]'),rowL=e.target.closest('[data-c13-row]');
  if(b?.id==='c13-settings'){$('cfgBtn').click();return}
  if(b?.id==='c13-auto-toggle'){$('auto').click();return}
  if(revealNow()){ui.rvTapped=1;const h=$('c13-rv-hint');if(h)h.hidden=true;revealSkip();renderC13();return}   // tap anywhere: on to the next part, this screen only
@@ -180,13 +196,17 @@ async function onClick(e){
  if(b?.hasAttribute('data-c13-leave')){leaveRoom();return}
  if(b?.hasAttribute('data-c13-profile')){openProf(chr(+b.dataset.c13Profile));return}
  if(!canEdit()||Date.now()-(ui.dragAt||0)<350)return;ui.moved=null;
- if(card){const c=+card.dataset.c13Card;if(ui.sel<0)ui.sel=c;else if(ui.sel===c)ui.sel=-1;else swapCards(ui.sel,c);renderC13();return}
- if(kind){const p=pickCombo(+kind.dataset.c13Type);if(p)applyCombo(p);else ui.notice='這幾張已經用在別墩了';renderC13();return}
+ if(card){const c=+card.dataset.c13Card;if(ui.sel<0)ui.sel=c;else if(ui.sel===c){unplace(c);ui.sel=-1}else swapCards(ui.sel,c);ui.notice='';renderC13();return}   // tap once: lift; again: back to hand; another: swap
+ if(inh){const c=+inh.dataset.c13In,w=ui.sel>=0&&where(ui.sel);if(w){ui.rows[w[0]][w[1]]=c;ui.moved=[c];ui.last=null;ui.sel=-1}else placeCard(c);ui.notice='';renderC13();return}   // a lifted card in a row is replaced by the hand card
  if(b?.id==='c13-swap'){swapRows();renderC13();return}
- if(b?.id==='c13-clear'){ui.rows=dealtRows(G.c13Hands[mySeat()]);ui.sel=-1;ui.claim=[null,null,null];ui.last=null;ui.notice='';renderC13();return}
+ if(rowL){ui.cur=+rowL.dataset.c13Row;ui.sel=-1;ui.notice='';renderC13();return}
+ if(b?.id==='c13-sort'){ui.bySuit=!ui.bySuit;renderC13();return}
+ if(kind){const p=pickCombo(+kind.dataset.c13Type);if(p){applyCombo(p);ui.notice=''}else ui.notice='放不下了，先收回幾張';renderC13();return}
+ if(b?.id==='c13-swap'){swapRows();renderC13();return}
+ if(b?.id==='c13-clear'){ui.rows=[[],[],[]];ui.cur=2;ui.sel=-1;ui.last=null;ui.notice='';renderC13();return}
  if(b?.id==='c13-submit'&&validLayout(ui.rows)){ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13();return}
  if(b?.id==='c13-suggest'){
-  const key=ui.key,job=++ui.job;ui.busy=true;ui.sel=-1;renderC13();try{const rows=await suggest(G.c13Hands[mySeat()].slice(),profileFor({pat:1,risk:1,agg:1,whim:0}));if(ui.key!==key||ui.job!==job)return;ui.rows=rows;ui.claim=[null,null,null];ui.last=null;ui.notice=''}catch{ui.notice='暫時無法自動排牌'}finally{if(ui.key===key&&ui.job===job){ui.busy=false;renderC13()}}
+  const key=ui.key,job=++ui.job;ui.busy=true;ui.sel=-1;renderC13();try{const rows=await suggest(G.c13Hands[mySeat()].slice(),profileFor({pat:1,risk:1,agg:1,whim:0}));if(ui.key!==key||ui.job!==job)return;ui.rows=rows;ui.cur=2;ui.last=null;ui.notice=''}catch{ui.notice='暫時無法自動排牌'}finally{if(ui.key===key&&ui.job===job){ui.busy=false;renderC13()}}
  }
 }
 // Local reveal position. The host timestamp is used when this client has it; guests count from the moment
@@ -303,8 +323,8 @@ function frameC13(){
  const el=$('c13-game');if(!el||el.hidden)return;
  if(G.st==='play'&&G.ph==='end'){const rv=revealNow();if(rv)renderReveal(rv);else if(!$('c13-rv').hidden)renderC13()}
  const clockEl=$('c13-clock');if(clockEl){clockEl.hidden=G.ph!=='arrange';const left=G.ph==='arrange'?Math.max(0,Math.ceil((G.c13Deadline-Date.now())/1000)):0;const txt=G.ph==='arrange'?`${G.pz?'暫停 ':''}${left}`:'';if(clockEl.textContent!==txt){clockEl.textContent=txt;const hot=left<=10&&!G.pz;clockEl.classList.toggle('c13-hot',hot);if(hot&&clockEl.animate&&!calm())clockEl.animate([{transform:'scale(1.35)'},{transform:'scale(1)'}],{duration:260,easing:'ease-out'})}}
- if(G.ph==='arrange'&&ui.ready.some(t=>t&&Date.now()-t>=900&&Date.now()-t<1200))put('c13-players',players());
- const me=mySeat();if(G.st==='play'&&G.ph==='arrange'&&!G.pz&&me>=0&&!G.c13Ready?.[me]&&!ui.waiting&&!myAuto&&!AUTO&&ui.rows.flat().length===13&&Date.now()>=G.c13Deadline-400){ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13();return}   // time is up: what is on screen goes in
+ if(G.ph==='arrange'&&ui.ready.some(t=>t&&Date.now()-t>=900&&Date.now()-t<1200)){put('c13-players',players());if(!$('c13-chips').hidden)put('c13-chips',chips())}
+ const me=mySeat();if(G.st==='play'&&G.ph==='arrange'&&!G.pz&&me>=0&&!G.c13Ready?.[me]&&!ui.waiting&&!myAuto&&!AUTO&&G.c13Hands?.[me]?.[0]>=0&&Date.now()>=G.c13Deadline-400){fillRest();ui.waiting=ui.rows.map(r=>r.slice());sendDraft();renderC13();return}   // time is up: what is on screen goes in
  if(ui.waiting&&G.ph==='arrange'&&!G.pz&&Date.now()>=ui.retryAt&&!G.c13Ready?.[me])sendDraft();
  const next=$('c13-next-clock');if(next)next.textContent=G.st!=='over'&&(R||myAuto)?` ${Math.max(0,Math.ceil((G.c13NextAt-Date.now())/1000))}`:'';
 }
