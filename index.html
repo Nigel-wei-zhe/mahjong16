@@ -2881,7 +2881,7 @@ function sfx(name){
     case 'lock':tone(t,1600,.05,.07,'square');tone(t+.09,2000,.08,.07,'square');break
     case 'alarm':tone(t,520,.12,.08,'square');tone(t+.13,390,.16,.08,'square');break}}catch(e){}}
 function sndBtn(){const b=$('snd');b.classList.toggle('off',!SND.on);b.textContent=SND.on?'開':'關'}
-const VER='2026.1122.0041';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
+const VER='2026.1122.1228';document.querySelectorAll('.verv').forEach(e=>e.textContent=VER);
 function setPage(pg){document.querySelectorAll('#setm section').forEach(x=>x.hidden=x.dataset.p!==pg);
   if(pg==='net')netShow();
   if(pg==='quit')$('quitTxt').textContent=R?(isHost?'你是房主，離開後包廂會解散，其他人也無法繼續。':'離開後回到主選單，你的位子會改成託管。'):'這一場的進度不會保存，確定回到主選單？'}
