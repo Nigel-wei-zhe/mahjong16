@@ -5,10 +5,11 @@ const css=document.createElement('link');css.rel='stylesheet';css.href=new URL('
 // Big-hand calls (衝三 葫蘆 鐵支 同花順) by one announcer (user 2026-11-22: 4 clips, not per character):
 // games/c13/voices.js sets window.C13V={t3,t6,t7,t8} as mp3 data URLs; decoded on first use with the shell's audio.
 const c13Buf={};
-function c13Voice(t){
- const d=window.C13V?.['t'+t];if(!d||typeof SND==='undefined'||!SND.on)return;const c=audio();if(!c||c.state!=='running')return;
- const b=c13Buf[t];if(b&&b!=='pending'){playBuf(b,1.5);return}if(b)return;c13Buf[t]='pending';
- try{const s=atob(d.split(',')[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);c.decodeAudioData(u.buffer,x=>{c13Buf[t]=x;playBuf(x,1.5)},()=>{c13Buf[t]=null})}catch{c13Buf[t]=null}}
+function c13Decode(t,then){
+ const d=window.C13V?.['t'+t];if(!d||typeof SND==='undefined'||!SND.on)return;const c=audio();if(!c)return;
+ const b=c13Buf[t];if(b&&b!=='pending'){then?.(b);return}if(b)return;c13Buf[t]='pending';
+ try{const s=atob(d.split(',')[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);c.decodeAudioData(u.buffer,x=>{c13Buf[t]=x;then?.(x)},()=>{c13Buf[t]=null})}catch{c13Buf[t]=null}}
+function c13Voice(t){const c=typeof SND!=='undefined'&&SND.on&&audio();if(!c||c.state!=='running')return;c13Decode(t,b=>playBuf(b,1.5))}
 const C=GAMES.c13,ids=[0,1,2,3],caps=[3,5,5],rowNames=['頭墩','中墩','尾墩'];
 const ai=TRAIT.map((t,i)=>({...profileFor(t),g:MEASURED[i].grade}));
 GAME_AI.c13={name:'十三支',ai,stat:MEASURED.map(x=>[x.win,x.shot]),lab:['贏分率','打槍率'],styd:{均衡:'三墩兼顧，先排出不倒水的穩定組合。',尾墩強攻:'把較多牌力留給尾墩，追求強牌與打槍機會。',頭墩搶分:'多照顧頭墩，爭取每一墩的小優勢。',隨性:'偶爾跳過最穩的排法，讓牌局多一點變化。'}};
@@ -41,6 +42,8 @@ function submit(s,rows,late){
 const LATE=1500;   // grace around the deadline for a player's own (possibly foul) layout to arrive
 const RV={flip:600,f0:1200,f1:1500,f2:1500,big:1800,cmp:1000,warn:1500,mine:1500,sus:1600,card:480,hold:500,res:1100,hit:1500,shot:800,hr:1500,tail:300};
 const slowLen=n=>n*RV.card+RV.card*.8+RV.hold;
+// When the last card's face shows (style.css: flip .42s, 35ms apart, face at the end; slow flip .5s each at --d).
+const landFlip=n=>(n-1)*35+420,landSlow=n=>(n-2)*RV.card+RV.card*.8+500;
 function duelOf(res,a,b){return res?.duels?.find(x=>(x.a===a&&x.b===b)||(x.a===b&&x.b===a))}
 function vsMe(res,me,o,row){const d=duelOf(res,me,o);return d?.d?(d.a===me?1:-1)*d.d[row]:0}
 function stakeOf(res,me,o){if(me<0||o===me)return'';const n=vsMe(res,me,o,0)+vsMe(res,me,o,1);return n===2?'aim':n===-2?'danger':''}
@@ -49,7 +52,8 @@ function bigHand(r,row){if(!r||r.length!==caps[row])return false;const t=evaluat
 function revealPlan(res,me=-1){
  const steps=[];let t=0;const add=(ms,x)=>{steps.push({t,...x});t+=ms};
  // Every row opens one seat at a time, 東 first and clockwise (user 2026-11-21); a big hand gets its own beat after the flip.
- const big=(s,row)=>res?.valid?.[s]!==false&&bigHand(typeof G!=='undefined'&&G.c13Rows?.[s]?.[row],row),flip=(ms,row,s,x={})=>{add(ms,{k:'flip',row,s,...x});if(big(s,row))add(RV.big,{k:'big',row,s})};
+ // The big beat (call + cut-in) starts the moment the last card shows its face, not after the seat's turn (user 2026-11-22: felt a beat late).
+ const big=(s,row)=>res?.valid?.[s]!==false&&bigHand(typeof G!=='undefined'&&G.c13Rows?.[s]?.[row],row),flip=(ms,row,s,x={})=>{if(!big(s,row))return add(ms,{k:'flip',row,s,...x});const l=landFlip(caps[row]);add(l,{k:'flip',row,s,...x});add(RV.big+ms-l,{k:'big',row,s})};
  ids.forEach(s=>flip(RV.f0,0,s));add(RV.cmp,{k:'cmp',row:0});
  ids.forEach((s,i)=>flip(RV.f1,1,s,i?{}:{seg:1}));add(RV.cmp,{k:'cmp',row:1});
  const opp=ids.filter(o=>o!==me),aims=opp.filter(o=>stakeOf(res,me,o)==='aim'),dangers=opp.filter(o=>stakeOf(res,me,o)==='danger'),played=new Set();
@@ -59,7 +63,7 @@ function revealPlan(res,me=-1){
   flip(RV.mine,2,me,{seg:1});
   for(const o of opp)if(!aims.includes(o)&&!dangers.includes(o))flip(RV.f2,2,o,{lit:o});
   for(const o of [...aims,...dangers]){const st=stakeOf(res,me,o),d=duelOf(res,me,o);
-   add(RV.sus,{k:'sus',row:2,s:o,st});add(slowLen(3+2),{k:'slow',row:2,s:o,st});if(big(o,2))add(RV.big,{k:'big',row:2,s:o});
+   add(RV.sus,{k:'sus',row:2,s:o,st});if(big(o,2)){add(landSlow(5),{k:'slow',row:2,s:o,st});add(RV.big+slowLen(5)-landSlow(5),{k:'big',row:2,s:o})}else add(slowLen(3+2),{k:'slow',row:2,s:o,st});
    if(d.shot>=0){played.add(d);add(RV.hit,{k:'shot',row:2,s:d.shot,to:d.shot===d.a?d.b:d.a,m:d.multiplier,lit:o,seg:1})}
    else add(RV.res,{k:st==='aim'?'miss':'dodge',row:2,s:o,lit:o,seg:1})}
  }
@@ -242,6 +246,7 @@ function renderReveal(rv){
  const sight='<svg class="c13-rv-sight" viewBox="0 0 92 92" aria-hidden="true"><g fill="none" stroke="#ff8ad8" stroke-width="2.4"><circle cx="46" cy="46" r="36"/><circle cx="46" cy="46" r="4" fill="#fff6fc"/><path d="M46 2v20M46 70v20M2 46h20M70 46h20"/></g></svg>';
  if(el.dataset.key!==key){
   el.dataset.key=key;ui.rvStep=-1;
+  for(const x of ui.rvPlan.steps)if(x.k==='big')c13Decode(evaluate(G.c13Rows[x.s][x.row])[0]);   // decode the calls this hand needs before they play
   // Scores and balance stay at their pre-hand values until the table appears.
   // Head-to-head lights (頭 中 尾, from my side) only for a seated player.
   const h2h=s=>me>=0?`<span class="c13-rv-h2h" id="c13-rv-h2h${s}"><i>頭</i><i>中</i><i>尾</i></span>`:'';
