@@ -341,3 +341,32 @@
 .c13-rv-step.c13-rv-say b{font-size:24px;color:#fff;text-shadow:0 0 6px #7fe9ff,0 0 16px #14c8ff}
 /* Compare beat stacks the points under the title so it fits between two five-card rows. */
 .c13-rv-cmp{flex-direction:column;align-items:center;gap:2px}
+/* Calm reveal (2026-11-22): no money during the reveal; the hand type is the star. */
+#c13-rv .c13-rv-lab b{display:flex;align-items:baseline;gap:5px;color:#e9ddeb}
+#c13-rv .c13-rv-lab b small{font:500 10px var(--ui);color:#8d7a9c;letter-spacing:1px}
+#c13-rv .c13-rv-type{font:900 13px var(--ng);color:#fff6fc;text-shadow:0 0 6px #ffffff40;letter-spacing:.5px}
+#c13-rv .c13-rv-cur .c13-rv-type{font-size:15px}
+#c13-rv .c13-rv-type.c13-rv-bigt{color:#ff8ad8;text-shadow:0 0 8px #ff2fae,0 0 2px #fff6fc}
+#c13-rv .c13-rv-pos1 .c13-rv-lab b{justify-content:flex-end}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-type{font-size:12px}
+#c13-rv .c13-rv-seat:not(.c13-rv-pos0) .c13-rv-cur .c13-rv-type{font-size:14px}
+#c13-rv .c13-rv-lab{line-height:15px}
+/* Result table: win/lose tag in front of the hand type (user 2026-11-22: 勝 green, 負 red; neon-tube look, not flat stickers). */
+.c13-wl{--c:#4dffa6;--g:#00e676;--d:#06251a;display:inline-block;font:900 10px/9px var(--ng);font-style:normal;padding:0 3px;margin-right:5px;border-radius:4px;vertical-align:0;
+ color:#effff6;background:linear-gradient(180deg,#ffffff1f,#ffffff00 55%),var(--d);border:1px solid var(--c);
+ box-shadow:0 0 5px color-mix(in srgb,var(--g) 60%,transparent),inset 0 0 5px color-mix(in srgb,var(--g) 45%,transparent);
+ text-shadow:0 0 4px var(--g),0 0 1px #fff}
+.c13-wl-l{--c:#ff6b7a;--g:#ff2d48;--d:#2a070d;color:#fff0f2}
+.c13-wl-t{--c:#a899ba88;--g:transparent;--d:#1a1324;color:#b9aac9;text-shadow:none;box-shadow:none}
+.c13-reveal>small:has(.c13-wl){margin-top:0;line-height:12px;color:#d9c9e4}
+/* Result table polish (2026-11-22, producer/art pass): one meaning per colour — green/red = win/lose, amber = money, pink = you and big hands. */
+.c13-rv-h2h i.c13-rv-hw{background:linear-gradient(180deg,#ffffff1f,#ffffff00 55%),#06251a;border-color:#4dffa6;color:#effff6;text-shadow:0 0 4px #00e676;box-shadow:0 0 5px #00e67699,inset 0 0 5px #00e67673}
+.c13-rv-h2h i.c13-rv-hl{background:linear-gradient(180deg,#ffffff1f,#ffffff00 55%),#2a070d;border-color:#ff6b7a;color:#fff0f2;text-shadow:0 0 4px #ff2d48;box-shadow:0 0 5px #ff2d4899,inset 0 0 5px #ff2d4873}
+.c13-result-grid>strong{color:#ffc35a;text-shadow:0 0 8px #ffc35a44}
+.c13-result-grid>strong.c13-negative{color:#ff4d5e;text-shadow:0 0 8px #ff4d5e44}
+.c13-result-grid.c13-me{background:linear-gradient(90deg,#ff2fae2e,#ff2fae10 60%,#ff2fae1a);box-shadow:inset 3px 0 0 #ff8ad8,inset 4px 0 8px -2px #ff2fae}
+.c13-result-grid.c13-me>strong{font-size:22px}
+.c13-me .c13-result-person .c13-window::before{content:'你';position:absolute;z-index:2;top:-5px;left:-6px;font:900 10px/13px var(--ng);padding:0 3px;border-radius:4px;color:#fff6fc;background:#46132f;border:1px solid #ff8ad8;box-shadow:0 0 6px #ff2fae99;text-shadow:0 0 4px #ff2fae}
+.c13-bigt{color:#ff8ad8;font-weight:700;text-shadow:0 0 6px #ff2fae}
+.c13-hbal{font-size:10px;color:#ad94bd;margin-right:4px;white-space:nowrap}
+.c13-hbal i{font:13px var(--led);font-style:normal;color:#ffc35a;margin-left:3px}

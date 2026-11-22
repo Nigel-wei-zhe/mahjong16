@@ -250,8 +250,8 @@ function renderReveal(rv){
   // Scores and balance stay at their pre-hand values until the table appears.
   // Head-to-head lights (頭 中 尾, from my side) only for a seated player.
   const h2h=s=>me>=0?`<span class="c13-rv-h2h" id="c13-rv-h2h${s}"><i>頭</i><i>中</i><i>尾</i></span>`:'';
-  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who"><span class="c13-rv-wb" id="c13-rv-win${s}">${portrait(s)}${me>=0?`${sight}<em class="c13-rv-tag c13-rv-tag-a">再一墩就打槍</em><em class="c13-rv-tag c13-rv-tag-d">她在瞄你</em>`:''}</span><b>${esc(nameOf(s))}</b><small>${fmt(G.score[s]-res.d[s])}</small>${h2h(s)}${validLayout(G.c13Rows[s])?'':'<em class="c13-rv-foul">倒水</em>'}</div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
-  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me" id="c13-rv-win${pov}">${portrait(pov)}${me>=0?'<em class="c13-rv-tag c13-rv-tag-d">小心被打槍</em>':''}</div>${seat(pov)}${me>=0?'<div class="c13-rv-sum">本局<i id="c13-rv-sum"></i></div>':''}</div><footer><span>${validLayout(G.c13Rows[pov])?'':'<em class="c13-rv-foul">你倒水了</em> '}餘額 ${money((G.bk?.[meId()]??W.bal)-(me>=0?res.d[me]:0))}</span><span id="c13-rv-hint"${ui.rvTapped?' hidden':''}>點一下跳到下一段</span></footer>`;
+  const seat=s=>`<div class="c13-rv-seat c13-rv-pos${(s-pov+4)%4}" id="c13-rv-seat${s}">${s===pov?'':`<div class="c13-rv-who"><span class="c13-rv-wb" id="c13-rv-win${s}">${portrait(s)}${me>=0?`${sight}<em class="c13-rv-tag c13-rv-tag-a">再一墩就打槍</em><em class="c13-rv-tag c13-rv-tag-d">她在瞄你</em>`:''}</span><b>${esc(nameOf(s))}</b>${h2h(s)}${validLayout(G.c13Rows[s])?'':'<em class="c13-rv-foul">倒水</em>'}</div>`}<div class="c13-rv-rows" id="c13-rv-rows${s}"></div></div>`;
+  el.innerHTML=`${ids.filter(s=>s!==pov).map(seat).join('')}<div class="c13-rv-mid"><div id="c13-rv-banner"></div></div><div class="c13-rv-mine"><div class="c13-rv-me" id="c13-rv-win${pov}">${portrait(pov)}${me>=0?'<em class="c13-rv-tag c13-rv-tag-d">小心被打槍</em>':''}</div>${seat(pov)}</div><footer><span>${validLayout(G.c13Rows[pov])?'':'<em class="c13-rv-foul">你倒水了</em>'}</span><span id="c13-rv-hint"${ui.rvTapped?' hidden':''}>點一下跳到下一段</span></footer>`;
  }
  if(ui.rvStep===rv.i)return;ui.rvStep=rv.i;
  const base=cfg().b,best=row=>Math.max(...ids.map(s=>pts(s,row))),cur=st.row??3,pts=(s,row)=>res.duels.reduce((n,d)=>n+(d.a===s?d.d[row]:d.b===s?-d.d[row]:0),0);
@@ -270,14 +270,13 @@ function renderReveal(rv){
   const slow=st.k==='slow'&&st.s===s;
   $('c13-rv-rows'+s).innerHTML=(G.c13Rows[s]||[[],[],[]]).map((r,row)=>{
    const up=opened(s,row),now=!slow&&st.k==='flip'&&st.row===row&&(st.all||st.s===s),done=row<cur||(row===cur&&(st.k==='cmp'||st.k==='warn'));
-   // Every seat shows its own net for the row (the four add up to zero), in the same unit as the table.
+   // Row result (used for the best-hand frame only; money waits for the table).
    const n=pts(s,row);
-   const mark=done?`<em class="c13-rv-mark ${n>0?'c13-rv-win':n<0?'c13-rv-lose':'c13-rv-tie'} ${row===cur?'c13-rv-pop':''}"><i>${fmt(n*base)}</i></em>`:'';
    // Only the row being compared is shown large; finished and waiting rows shrink to one line (mine: small cards).
    const big=row===cur,sl=slow&&row===2;
    // Only the best hand of the compared row lights up; rows still face down carry no text.
    const frame=done&&big&&n>0&&n===best(row)?'c13-rv-w':'';
-   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${sl?'c13-rv-slow':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}${sl?`;--d:${j*RV.card+(j===r.length-1?RV.card*.8:0)}ms`:''}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b>${rowNames[row]} ${typeKey(r,row)}</b>`:''}${mark}</div></div>`;
+   return `<div class="c13-rv-row ${up?'c13-rv-up':'c13-rv-wait'} ${now?'c13-rv-now':''} ${sl?'c13-rv-slow':''} ${big?'c13-rv-cur':''} ${frame}"><div class="c13-rv-cards">${r.map((c,j)=>`<span class="c13-rv-card" style="--j:${j}${sl?`;--d:${j*RV.card+(j===r.length-1?RV.card*.8:0)}ms`:''}">${up?`<img src="${cardFace(c,big?(s===pov&&j===r.length-1?0:2):1)}" alt="${cardLabel(c)}">`:''}</span>`).join('')}</div><div class="c13-rv-lab">${up?`<b><small>${rowNames[row]}</small><span class="c13-rv-type${bigHand(r,row)&&res.valid?.[s]!==false?' c13-rv-bigt':''}">${typeKey(r,row)}</span></b>`:''}</div></div>`;
   }).join('');
   const role=st.k==='flip'||st.k==='big'?(st.all||st.s===s?'c13-rv-on':''):st.k==='sus'||st.k==='slow'?(st.s===s?'c13-rv-spot':''):st.k==='shot'?(st.s===s?'c13-rv-shooter':st.to===s?'c13-rv-hit':''):st.k==='hr'?(st.s===s?'c13-rv-shooter':'c13-rv-hit'):'';
   const sk=s===me?'':stake(s);
@@ -290,12 +289,6 @@ function renderReveal(rv){
  }
  // My window: red while someone still has me in her sights.
  const mw=$('c13-rv-win'+pov);if(mw&&me>=0)mw.classList?.toggle('c13-rv-danger',ids.some(o=>stake(o)==='danger'));
- const net=me>=0&&st.k==='cmp'?pts(me,st.row):0;
- // Running total of this hand in points: rows compared so far, doubled once the shot or home run has played.
- if(me>=0&&$('c13-rv-sum')){const rowsDone=row=>row<cur||(row===cur&&(st.k==='cmp'||st.k==='warn'));let sum=0;
-  for(const d of res.duels){if(d.a!==me&&d.b!==me)continue;const sign=d.a===me?1:-1,other=d.shot===d.a?d.b:d.a,played=d.shot>=0&&past.some(x=>res.homeruns[d.shot]?x.k==='hr'&&x.s===d.shot:x.k==='shot'&&x.s===d.shot&&x.to===other);
-   sum+=sign*(played?d.total:[0,1,2].reduce((n,row)=>n+(rowsDone(row)?d.d[row]:0),0))}
-  const e=$('c13-rv-sum');e.textContent=fmt(sum*base);e.className=sum<0?'c13-negative':''}
  const art=(s,k,cls)=>{const a=window.AVATARS?.[chr(s)]||{};return a[k]?`<img class="c13-rv-art ${cls}" src="${a[k]}" alt="">`:''};
  const step=(b,sub,cls='')=>`<div class="c13-rv-step ${cls}"><b>${b}</b><span>${sub}</span></div>`,names=l=>l.map(o=>esc(nameOf(o))).join('、');
  const aimL=ids.filter(o=>stakeOf(res,me,o)==='aim'),dgL=ids.filter(o=>stakeOf(res,me,o)==='danger');
@@ -306,7 +299,7 @@ function renderReveal(rv){
   :st.k==='sus'||st.k==='slow'?(st.st==='aim'?step(`${esc(nameOf(st.s))}……`,'贏這墩就打槍','c13-rv-pk'):step(`${esc(nameOf(st.s))}……`,'輸這墩就被打槍','c13-rv-rd'))
   :st.k==='miss'?step('被她逃了',`${esc(nameOf(st.s))} 尾墩 ${type(G.c13Rows[st.s][2])}`)
   :st.k==='dodge'?step('閃過！',`你的${type(G.c13Rows[me][2])}擋下來了`,'c13-rv-pk')
-  :st.k==='cmp'?`<div class="c13-rv-step c13-rv-cmp"><b>${rowNames[st.row]}比牌</b>${me>=0?`<i class="${net<0?'c13-negative':''}">${fmt(net*base)}</i>`:''}</div>`
+  :st.k==='cmp'?`<div class="c13-rv-step c13-rv-cmp"><b>${rowNames[st.row]}比牌</b></div>`
   :st.k==='shot'?`<div class="c13-rv-shot ${st.to===me?'c13-rv-shot-me':''}">${art(st.s,'p','c13-rv-a')}<b>${st.to===me?'被打槍！':'打槍！'}</b><span>${who(st.s)} <u>▶</u> ${who(st.to)} <i>×${st.m}</i></span></div>`
   :`<div class="c13-rv-shot c13-rv-hr">${art(st.s,'W','c13-rv-a')}<b>全壘打！</b><span>${who(st.s)} 通殺三家 <i>×4</i></span></div>`;
 }
@@ -316,7 +309,7 @@ function renderResults(){
  el.classList.toggle('c13-match-over',over);
  const title=over?'今晚的勝負':res?.homeruns?.[me]?'全壘打！':res?.shots?.[me]?'打槍得分！':'三墩見真章';
  const ready=R&&humans().length>1?`<span class="c13-ready">${humans().filter(s=>G.rdy?.[s]).length}／${humans().length} 人準備</span>`:'';
- const head=`<header class="c13-result-head"><div><small>${over?`整場結束 · 共 ${cfg().r} 局`:`第 ${G.hand+1} 局開牌`}</small><h2>${title}</h2></div><div>${ready}<button data-c13-next class="c13-primary" ${R&&G.rdy?.[me]?'disabled':''}>${R&&G.rdy?.[me]?'已準備':over?'再來一場':'下一局'}<span id="c13-next-clock"></span></button><button data-c13-leave>離開</button></div></header>`;
+ const head=`<header class="c13-result-head"><div><small>${over?`整場結束 · 共 ${cfg().r} 局`:`第 ${G.hand+1} 局開牌`}</small><h2>${title}</h2></div><div><span class="c13-hbal">你的餘額 <i>${money(G.bk?.[meId()]??W.bal)}</i></span>${ready}<button data-c13-next class="c13-primary" ${R&&G.rdy?.[me]?'disabled':''}>${R&&G.rdy?.[me]?'已準備':over?'再來一場':'下一局'}<span id="c13-next-clock"></span></button><button data-c13-leave>離開</button></div></header>`;
  const person=(s,note)=>`<button class="c13-result-person" data-c13-profile="${s}">${portrait(s)}<b>${esc(nameOf(s))}</b><small>${note}</small></button>`;
  let body;
  if(over){
@@ -328,14 +321,14 @@ function renderResults(){
  }else{
   body=`<div class="c13-result-grid c13-labels"><span>牌搭子</span><span>頭墩</span><span>中墩</span><span>尾墩</span><span>本局</span></div>`+ids.map(s=>{
    const duel=s===me?null:res.duels.find(x=>x.a===Math.min(s,me)&&x.b===Math.max(s,me));
-   const note=G.rdy?.[s]?'已準備':!validLayout(G.c13Rows[s])?'倒水':res.homeruns[s]?'全壘打 ×4':duel?.shot>=0?`${duel.shot===me?'你':'對方'}打槍 ×${duel.multiplier}`:res.shots[s]?`打槍 ${res.shots[s]} 家`:'已開牌';
+   const note=G.rdy?.[s]?'已準備':!validLayout(G.c13Rows[s])?'倒水':res.homeruns[s]?'全壘打 ×4':duel?.shot>=0?`${duel.shot===me?'你打槍她':'她打槍你'} ×${duel.multiplier}`:res.shots[s]?`打槍 ${res.shots[s]} 家`:'';
    return `<div class="c13-result-grid ${s===me?'c13-me':''}">${person(s,note)}${G.c13Rows[s].map((r,i)=>{
     const d=duel?duel.d[i]*(duel.a===me?1:-1):null;
-    return `<div class="c13-reveal" style="--c13-delay:${i*160}ms"><div class="c13-result-cards">${r.map(c=>`<img src="${cardFace(c,1)}" alt="${cardLabel(c)}">`).join('')}</div><small>${type(r)}${d===null?'':d>0?' · 你贏':d<0?' · 你輸':' · 平手'}</small></div>`;
+    return `<div class="c13-reveal" style="--c13-delay:${i*160}ms"><div class="c13-result-cards">${r.map(c=>`<img src="${cardFace(c,1)}" alt="${cardLabel(c)}">`).join('')}</div><small>${d===null?'':`<i class="c13-wl c13-wl-${d>0?'w':d<0?'l':'t'}">${d>0?'勝':d<0?'負':'和'}</i>`}${bigHand(r,i)&&validLayout(G.c13Rows[s])?`<span class="c13-bigt">${type(r)}</span>`:type(r)}</small></div>`;
    }).join('')}<strong class="${res.d[s]<0?'c13-negative':''}">${fmt(res.d[s])}</strong></div>`;
   }).join('');
  }
- el.innerHTML=head+body+`<footer class="c13-result-foot"><span>你的餘額 ${money(G.bk?.[meId()]??W.bal)}</span><span>每墩 1 分 · 打槍 ×2 · 全壘打再 ×2 · 1 分＝${cfg().b}</span></footer>`;
+ el.innerHTML=head+body;
 }
 
 function frameC13(){

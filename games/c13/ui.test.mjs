@@ -42,11 +42,11 @@ assert(plan.steps.filter(x=>x.k==='big').every(x=>plan.steps.some(y=>(y.k==='fli
  assert.equal(plan.steps.some(x=>x.k==='warn'),stakes.length>0,'gun warning only when someone is 2-0');assert.equal(back.slice(back.length-stakes.length).map(x=>x.k).join(),stakes.map(()=>'sus').join(),'stake seats open last')}
 assert.equal(ctx.G.c13NextAt,t0+maxLen+15000,'next-hand countdown starts when the longest reveal ends');
 assert(el('c13-results').hidden&&!el('c13-rv').hidden,'reveal plays on the table before the result panel');
-assert.deepEqual(upCount(),[[1,0,0],[0,0,0],[0,0,0],[0,0,0]],'東 opens the front row alone');assert(!el('c13-rv-rows0').innerHTML.includes('c13-rv-mark'));
-assert(el('c13-rv').innerHTML.includes('$'+(ctx.G.bk.me-res.d[0])),'balance stays at the pre-hand value during the reveal');
-const tCmp0=plan.steps.find(x=>x.k==='cmp'&&x.row===0).t;now=t0+tCmp0+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===1),'front row compared before the middle row opens');
+assert.deepEqual(upCount(),[[1,0,0],[0,0,0],[0,0,0],[0,0,0]],'東 opens the front row alone');assert(!el('c13-rv-rows0').innerHTML.includes('c13-rv-mark'));assert(!el('c13-rv').innerHTML.includes('c13-rv-sum'),'no money during the reveal');
+assert(!el('c13-rv').innerHTML.includes('$')&&!el('c13-rv').innerHTML.includes('餘額'),'no balance during the reveal');
+const tCmp0=plan.steps.find(x=>x.k==='cmp'&&x.row===0).t;now=t0+tCmp0+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,0,0],[1,0,0],[1,0,0],[1,0,0]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-type/g)||[]).length===1)&&!el('c13-rv').innerHTML.includes('c13-rv-mark'),'front row compared before the middle row opens');
 now=t0+tBack+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,0],[1,1,0],[1,1,0]],'my back row opens first');
-now=t0+tCmp2+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-mark/g)||[]).length===3));
+now=t0+tCmp2+1;ctx.frameC13();assert.deepEqual(upCount(),[[1,1,1],[1,1,1],[1,1,1],[1,1,1]]);assert([0,1,2,3].every(s=>(el('c13-rv-rows'+s).innerHTML.match(/c13-rv-type/g)||[]).length===3));
 now=t0+plan.len-1;ctx.frameC13();assert(el('c13-results').hidden,'table waits for the last beat');
 ctx.myAuto=true;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end');now=t0+maxLen+14999;ctx.GAMES.c13.hostTick();assert.equal(ctx.G.ph,'end','auto-next waits reveal + 15 s');ctx.myAuto=false;
 now=t0+plan.len;ctx.frameC13();assert(!el('c13-results').hidden&&el('c13-rv').hidden);assert(el('c13-results').innerHTML.includes('data-c13-next'));assert(el('c13-results').innerHTML.includes('$'+ctx.G.bk.me),'table shows the new balance');
